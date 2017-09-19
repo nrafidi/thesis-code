@@ -28,11 +28,20 @@ def _tgm_from_preds(preds, labels, labels_to_index, cv_scheme):
     return tgm
 
 
-def _nb_tgm(data, labels, cv_scheme, win_starts, win_len, usis, feature_select=None, feature_select_params=None,
-            dozscore=False, ddof=1, doAvg=False):
-    # if dozscore==True:
-    #  raise ValueError('dozscore is not implemented')
+def nb_tgm(data,
+           labels,
+           kf,
+           win_starts,
+           win_len,
+           feature_select='distance_of_means',
+           feature_select_params={'number_of_features' : num_feats},
+           doZscore=False,
+           doAvg=False):
 
+    """
+
+    :rtype: object
+    """
     labels = np.array(labels)
     cv_scheme = np.array(cv_scheme)
     n_tot = data.shape[0]
@@ -67,7 +76,7 @@ def _nb_tgm(data, labels, cv_scheme, win_starts, win_len, usis, feature_select=N
         print(meow)
         for wi in xrange(n_w):
             train_time = test_windows[wi]
-            if dozscore == 1:
+            if doZscore == 1:
                 new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
                 new_data = new_data / std_full_all[None, :, train_time]
             else:
@@ -227,7 +236,7 @@ def lr_tgm(data, labels, kf, win_starts, win_len, doZscore=False, ddof=1, doAvg=
     return preds, accs, l_index, cv_membership, coef
 
 
-def _lr_tgm_coef(data, labels, win_starts, win_len, dozscore=False, ddof=1, doAvg=False):
+def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg=False):
     labels = np.array(labels)
     n_tot = data.shape[0]
     n_time = data.shape[2]
@@ -255,7 +264,7 @@ def _lr_tgm_coef(data, labels, win_starts, win_len, dozscore=False, ddof=1, doAv
 
     for wi in xrange(n_w):
         train_time = test_windows[wi]
-        if dozscore == 1:
+        if doZscore == 1:
             new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
             new_data = new_data / std_full_all[None, :, train_time]
         else:
