@@ -3,6 +3,7 @@ import load_data
 import models
 import numpy as np
 import os.path
+from random import shuffle
 import sklearn.model_selection.KFold as KFold
 
 SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}'
