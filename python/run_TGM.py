@@ -76,7 +76,7 @@ def run_tgm_exp(experiment,
     if alg == 'LR':
         alg_str = alg
         if mode == 'pred':
-            (preds, coef, l_index,
+            (preds, l_index,
              cv_membership, masks) = models.lr_tgm(data=data,
                                                    labels=labels,
                                                    kf=kf,
@@ -96,19 +96,29 @@ def run_tgm_exp(experiment,
     elif alg == 'GNB':
         alg_str = alg + '-{}'.format(num_feats)
 
-        if mode != 'pred':
-            raise ValueError('coef mode not implemented for GNB')
-
-        (preds, coef, l_index,
-         cv_membership, masks) = models.nb_tgm(data=data,
-                                               labels=labels,
-                                               kf=kf,
-                                               win_starts=win_starts,
-                                               win_len=win_len,
-                                               feature_select='distance_of_means',
-                                               feature_select_params={'number_of_features' : num_feats},
-                                               doZscore=doZscore,
-                                               doAvg=doAvg)
+        if mode == 'pred':
+            (preds, l_index,
+             cv_membership, masks) = models.nb_tgm(data=data,
+                                                   labels=labels,
+                                                   kf=kf,
+                                                   win_starts=win_starts,
+                                                   win_len=win_len,
+                                                   feature_select='distance_of_means',
+                                                   feature_select_params={'number_of_features' : num_feats},
+                                                   doZscore=doZscore,
+                                                   doAvg=doAvg)
+        elif mode == 'coef':
+            coef = models.nb_tgm_coef(data=data,
+                                      labels=labels,
+                                      win_starts=win_starts,
+                                      win_len=win_len,
+                                      feature_select='distance_of_means',
+                                      feature_select_params={'number_of_features' : num_feats},
+                                      doZscore=False,
+                                      doAvg=False,
+                                      ddof=1)
+        else:
+            raise ValueError('invalid mode: must be pred or coef')
     else:
         raise ValueError('invalid alg: must be LR or GNB')
 
@@ -137,16 +147,17 @@ def run_tgm_exp(experiment,
     if mode == 'pred':
         np.savez_compressed(fname,
                             preds=preds,
-                            coef=coef,
                             l_index=l_index,
                             cv_membership=cv_membership,
                             masks=masks,
                             time=time,
+                            win_starts=win_starts,
                             proc=proc)
     elif mode == 'coef':
         np.savez_compressed(fname,
                             coef=coef,
                             time=time,
+                            win_starts=win_starts,
                             proc=proc)
 
 
