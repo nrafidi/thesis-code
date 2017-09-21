@@ -16,6 +16,12 @@ def bool_to_str(bool_var):
     else:
         return 'F'
 
+def str_to_bool(str_bool):
+    if str_bool == 'False':
+        return False
+    else:
+        return True
+
 
 # Runs the TGM experiment
 def run_tgm_exp(experiment,
@@ -173,13 +179,13 @@ if __name__ == '__main__':
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--mode')
-    parser.add_argument('--isPDTW', type=bool, default=False)
-    parser.add_argument('--isPerm', type=bool, default=False)
+    parser.add_argument('--isPDTW', default='False')
+    parser.add_argument('--isPerm', default='False')
     parser.add_argument('--num_folds', type=int, default=2)
     parser.add_argument('--alg', default='LR')
     parser.add_argument('--num_feats', type=int, default=500)
-    parser.add_argument('--doZscore', type=bool, default=False)
-    parser.add_argument('--doAvg', type=bool, default=False)
+    parser.add_argument('--doZscore', default='False')
+    parser.add_argument('--doAvg', default='False')
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
@@ -197,13 +203,13 @@ if __name__ == '__main__':
                 win_len=args.win_len,
                 overlap=args.overlap,
                 mode=args.mode,
-                isPDTW=args.isPDTW,
-                isPerm=args.isPerm,
+                isPDTW=str_to_bool(args.isPDTW),
+                isPerm=str_to_bool(args.isPerm),
                 num_folds=args.num_folds,
                 alg=args.alg,
                 num_feats=args.num_feats,
-                doZscore=args.doZscore,
-                doAvg=args.doAvg,
+                doZscore=str_to_bool(args.doZscore),
+                doAvg=str_to_bool(args.doAvg),
                 num_instances=args.num_instances,
                 reps_to_use=args.reps_to_use,
                 proc=args.proc,
