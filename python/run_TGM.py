@@ -36,7 +36,9 @@ def run_tgm_exp(experiment,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
                 random_state=1):
+    print('in function')
     print(type(isPDTW))
+    print(isPDTW)
     if isPDTW:
         (time_a, time_p, labels,
          active_data_raw, passive_data_raw) = load_data.load_pdtw(subject=subject,
@@ -185,6 +187,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    print('in main')
+    print(type(args.isPDTW))
+    print(args.isPDTW)
     run_tgm_exp(experiment=args.experiment,
                 subject=args.subject,
                 sen_type=args.sen_type,
