@@ -81,5 +81,6 @@ if __name__ == '__main__':
                               avg=grid[13],
                               inst=grid[14],
                               rep=grid[15],
-                              rs=grid[16]))
+                              rs=grid[16]),
+             shell=True)
         job_id += 1
