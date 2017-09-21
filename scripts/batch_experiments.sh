@@ -54,23 +54,8 @@ do
                                                             do
                                                                 for random_state in 1 #2...
                                                                 do
+                                                                    qsub  -q default -N $sen_type-$subject-$win_len-$zscore-$word-$numFeats -v experiment=krns2,sub=$subject,sen_type=$sen_type,word=$word,win_len=$win_len,overlap=$overlap,ddof=1,numFeats=$numFeats,doAvg=$doAvg submit_experiment.sh
 
-
-
-            for doAvg in 1
-            do
-                if [ $doAvg == 1 ]
-                then
-                for numFeats in 0 10 20 50 100 200
-                do
-                    qsub  -q default -N $actORpass-$subject-$win_len-$zscore-$word-$numFeats -v analysis=actORpass_krns2,experiment=krns2,sub=$subject,word=$word,win_len=$win_len,actORpass=$actORpass,doZscore=0,ddof=1,numFeats=$numFeats,doAvg=$doAvg submit_experiment.sh
-                done
-                else
-                for numFeats in 0 100 200 300 400 500 1000 1500 2000 2500 3000
-                do
-                    qsub  -q default  -N $actORpass-$subject-$win_len-$zscore-$word-$numFeats -v analysis=actORpass_krns2,experiment=krns2,sub=$subject,word=$word,win_len=$win_len,actORpass=$actORpass,doZscore=0,ddof=1,numFeats=$numFeats,doAvg=$doAvg submit_experiment.sh
-                done
-                fi
             done
             done
         done
