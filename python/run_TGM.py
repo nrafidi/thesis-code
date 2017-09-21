@@ -36,7 +36,7 @@ def run_tgm_exp(experiment,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
                 random_state=1):
-
+    print(type(isPDTW))
     if isPDTW:
         (time_a, time_p, labels,
          active_data_raw, passive_data_raw) = load_data.load_pdtw(subject=subject,
