@@ -58,7 +58,7 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
     labels = [usis[k]['stimulus'] for k, _ in id_uels]
 
-    _, uels = zip(*ids_uels)
+    _, uels = zip(*id_uels)
 
     tmin = TIME_LIMITS[experiment][word]['tmin']
     tmax = TIME_LIMITS[experiment][word]['tmax']
