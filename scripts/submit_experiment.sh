@@ -22,6 +22,7 @@ source /home/python27/envs/p27default/bin/activate
 
 
 cd /home/nrafidi/thesis-code/python
+echo $isPDTW
 python run_TGM.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word --win_len $win_len --overlap $overlap --mode $mode \
---isPDTW $isPDTW --isPerm $isPerm --num_folds $num_folds --alg $alg --num_feats $num_feats --doZscore $doZscore --doAvg $doAvg \
+--isPDTW false --isPerm $isPerm --num_folds $num_folds --alg $alg --num_feats $num_feats --doZscore $doZscore --doAvg $doAvg \
 --num_instances $num_instances --reps_to_use $reps_to_use --random_state $random_state
