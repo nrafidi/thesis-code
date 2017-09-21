@@ -62,7 +62,7 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
 
     tmin = TIME_LIMITS[experiment][word]['tmin']
     tmax = TIME_LIMITS[experiment][word]['tmax']
-    evokeds = np.array([hippo.io.load_mne_epochs(us, preprocessing=proc, baseline=baseline,
+    evokeds = np.array([hippo.io.load_mne_epochs(us, preprocessing=proc, baseline=None,
                                         tmin=tmin, tmax=tmax) for us in uels])
 
     # Downsample
