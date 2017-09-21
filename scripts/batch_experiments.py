@@ -40,7 +40,7 @@ if __name__ == '__main__':
     random_state = [1]  # range(1, 10)
 
     qsub_call = 'qsub  -q default -N {exp}-{sub}-{sen}-{word}-{id} -v ' \
-                'experiment={exp},sub={sub},sen_type={sen},word={word},win_len={win_len},' \
+                'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},' \
                 'overlap={overlap},mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},' \
                 'alg={alg},num_feats={num_feats},doZscore={z},doAvg={avg},num_instances={inst},' \
                 'reps_to_use={rep},random_state={rs} submit_experiment.sh'
@@ -64,6 +64,24 @@ if __name__ == '__main__':
                                    random_state)
     job_id = 0
     for grid in param_grid:
+        print(qsub_call.format(exp=grid[0],
+                              sub=grid[1],
+                              sen=grid[2],
+                              word=grid[3],
+                              id=job_id,
+                              win_len=grid[4],
+                              overlap=grid[5],
+                              mode=grid[6],
+                              pdtw=grid[7],
+                              perm=grid[8],
+                              nf=grid[9],
+                              alg=grid[10],
+                              num_feats=grid[11],
+                              z=grid[12],
+                              avg=grid[13],
+                              inst=grid[14],
+                              rep=grid[15],
+                              rs=grid[16]))
         call(qsub_call.format(exp=grid[0],
                               sub=grid[1],
                               sen=grid[2],
