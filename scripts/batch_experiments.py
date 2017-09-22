@@ -1,4 +1,5 @@
 import itertools
+import os.path
 from subprocess import call
 
 #parser.add_argument('--experiment')
@@ -39,11 +40,18 @@ if __name__ == '__main__':
     reps_to_use = [15]  # 10
     random_state = [1]  # range(1, 10)
 
-    qsub_call = 'qsub  -q default -N {exp}-{sub}-{sen}-{word}-{id} -v ' \
-                'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},' \
-                'overlap={overlap},mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},' \
-                'alg={alg},num_feats={num_feats},doZscore={z},doAvg={avg},num_instances={inst},' \
-                'reps_to_use={rep},random_state={rs} submit_experiment.sh'
+    job_name = '{exp}-{sub}-{sen}-{word}-{id}'
+
+    job_dir = '/share/volume0/nrafidi/{exp}_jobFiles/'
+    err_file = '{dir}{job_name}.e'
+
+    out_file = '{dir}{exp}_jobFiles/{job_name}.o'
+
+    qsub_call = 'qsub  -q default -N {job_name} -v ' \
+                'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
+                'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},num_feats={num_feats},doZscore={z},' \
+                'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs} ' \
+                '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(experiments,
                                    subjects,
@@ -64,23 +72,38 @@ if __name__ == '__main__':
                                    random_state)
     job_id = 0
     for grid in param_grid:
-        call(qsub_call.format(exp=grid[0],
-                              sub=grid[1],
-                              sen=grid[2],
-                              word=grid[3],
-                              id=job_id,
-                              win_len=grid[4],
-                              overlap=grid[5],
-                              mode=grid[6],
-                              pdtw=grid[7],
-                              perm=grid[8],
-                              nf=grid[9],
-                              alg=grid[10],
-                              num_feats=grid[11],
-                              z=grid[12],
-                              avg=grid[13],
-                              inst=grid[14],
-                              rep=grid[15],
-                              rs=grid[16]),
-             shell=True)
+        job_str = job_name.format(exp=grid[0],
+                                  sub=grid[1],
+                                  sen=grid[2],
+                                  word=grid[3],
+                                  id=job_id)
+
+        dir_str = job_dir.format(exp=grid[0])
+        if not os.path.exists(dir_str):
+            os.mkdir(dir_str)
+
+        err_str = err_file.format(dir=dir_str, job_name=job_str)
+        out_str = out_file.format(dir=dir_str, job_name=job_str)
+
+        call_str = qsub_call.format(exp=grid[0],
+                                    sub=grid[1],
+                                    sen=grid[2],
+                                    word=grid[3],
+                                    job_name=job_str,
+                                    win_len=grid[4],
+                                    overlap=grid[5],
+                                    mode=grid[6],
+                                    pdtw=grid[7],
+                                    perm=grid[8],
+                                    nf=grid[9],
+                                    alg=grid[10],
+                                    num_feats=grid[11],
+                                    z=grid[12],
+                                    avg=grid[13],
+                                    inst=grid[14],
+                                    rep=grid[15],
+                                    rs=grid[16],
+                                    errfile=err_str,
+                                    outfile=out_str)
+        call(call_str, shell=True)
         job_id += 1

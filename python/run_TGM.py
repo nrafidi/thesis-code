@@ -160,6 +160,8 @@ def run_tgm_exp(experiment,
                              rs=random_state,
                              mode=mode)
 
+    print(fname)
+
     if mode == 'pred':
         np.savez_compressed(fname,
                             preds=preds,
