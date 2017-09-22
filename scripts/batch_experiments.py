@@ -64,24 +64,6 @@ if __name__ == '__main__':
                                    random_state)
     job_id = 0
     for grid in param_grid:
-        print(qsub_call.format(exp=grid[0],
-                              sub=grid[1],
-                              sen=grid[2],
-                              word=grid[3],
-                              id=job_id,
-                              win_len=grid[4],
-                              overlap=grid[5],
-                              mode=grid[6],
-                              pdtw=grid[7],
-                              perm=grid[8],
-                              nf=grid[9],
-                              alg=grid[10],
-                              num_feats=grid[11],
-                              z=grid[12],
-                              avg=grid[13],
-                              inst=grid[14],
-                              rep=grid[15],
-                              rs=grid[16]))
         call(qsub_call.format(exp=grid[0],
                               sub=grid[1],
                               sen=grid[2],

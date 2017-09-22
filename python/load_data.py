@@ -67,8 +67,9 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
 
     # Downsample
     evokeds = evokeds[:, :, :, ::2]
-    time = np.arange(tmin, tmax, 2e-3)
-
+    time = np.arange(tmin, tmax+2e-3, 2e-3)
+    print(evokeds.shape[3])
+    print(time.size)
     assert evokeds.shape[3] == time.size
 
     return evokeds, labels, time

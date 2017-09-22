@@ -6,8 +6,8 @@ import os.path
 from random import shuffle
 from sklearn.model_selection import KFold
 
-SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}'
-SAVE_FILE = '{dir}/TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rs{rs}_{mode}'
+SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}/'
+SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rs{rs}_{mode}'
 
 
 def bool_to_str(bool_var):
