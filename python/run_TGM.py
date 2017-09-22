@@ -206,6 +206,7 @@ if __name__ == '__main__':
     is_valid = args.overlap <= args.win_len
     is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
     if args.num_instances != 2:
+        is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
     if is_valid:
         run_tgm_exp(experiment=args.experiment,
                     subject=args.subject,
