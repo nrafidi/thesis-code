@@ -45,7 +45,7 @@ if __name__ == '__main__':
     job_dir = '/share/volume0/nrafidi/{exp}_jobFiles/'
     err_file = '{dir}{job_name}.e'
 
-    out_file = '{dir}{exp}_jobFiles/{job_name}.o'
+    out_file = '{dir}{job_name}.o'
 
     qsub_call = 'qsub  -q default -N {job_name} -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
