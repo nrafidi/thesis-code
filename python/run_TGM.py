@@ -3,18 +3,21 @@ import load_data
 import models
 import numpy as np
 import os.path
-from random import shuffle
+import random
 from sklearn.model_selection import KFold
 
 SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}/'
-SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rs{rs}_{mode}'
+SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_' \
+            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rs{rs}_{mode}'
 
+CV_RAND_STATE = 12191989
 
 def bool_to_str(bool_var):
     if bool_var:
         return 'T'
     else:
         return 'F'
+
 
 def str_to_bool(str_bool):
     if str_bool == 'False':
@@ -42,9 +45,9 @@ def run_tgm_exp(experiment,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
                 random_state=1):
-    print('in function')
-    print(type(isPDTW))
-    print(isPDTW)
+
+    random.seed(random_state)
+
     if isPDTW:
         (time_a, time_p, labels,
          active_data_raw, passive_data_raw) = load_data.load_pdtw(subject=subject,
@@ -71,10 +74,14 @@ def run_tgm_exp(experiment,
                                       experiment=experiment,
                                       num_instances=num_instances,
                                       reps_to_use=reps_to_use)
+
+    if isPerm:
+        random.shuffle(labels)
+
     tmin = time.min()
     tmax = time.max()
 
-    kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state)
+    kf = KFold(n_splits=num_folds, shuffle=True, random_state=CV_RAND_STATE)
 
     total_win = int((tmax - tmin) * 500)
     win_starts = range(0, total_win - win_len, overlap)
@@ -193,24 +200,28 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    print('in main')
-    print(type(args.isPDTW))
-    print(args.isPDTW)
-    run_tgm_exp(experiment=args.experiment,
-                subject=args.subject,
-                sen_type=args.sen_type,
-                word=args.word,
-                win_len=args.win_len,
-                overlap=args.overlap,
-                mode=args.mode,
-                isPDTW=str_to_bool(args.isPDTW),
-                isPerm=str_to_bool(args.isPerm),
-                num_folds=args.num_folds,
-                alg=args.alg,
-                num_feats=args.num_feats,
-                doZscore=str_to_bool(args.doZscore),
-                doAvg=str_to_bool(args.doAvg),
-                num_instances=args.num_instances,
-                reps_to_use=args.reps_to_use,
-                proc=args.proc,
-                random_state=args.random_state)
+    # Check that parameter setting is valid
+    is_valid = args.overlap <= args.win_len
+    is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
+    is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
+    if is_valid:
+        run_tgm_exp(experiment=args.experiment,
+                    subject=args.subject,
+                    sen_type=args.sen_type,
+                    word=args.word,
+                    win_len=args.win_len,
+                    overlap=args.overlap,
+                    mode=args.mode,
+                    isPDTW=str_to_bool(args.isPDTW),
+                    isPerm=str_to_bool(args.isPerm),
+                    num_folds=args.num_folds,
+                    alg=args.alg,
+                    num_feats=args.num_feats,
+                    doZscore=str_to_bool(args.doZscore),
+                    doAvg=str_to_bool(args.doAvg),
+                    num_instances=args.num_instances,
+                    reps_to_use=args.reps_to_use,
+                    proc=args.proc,
+                    random_state=args.random_state)
+    else:
+        print('Experiment parameters not valid. Skipping job.')
