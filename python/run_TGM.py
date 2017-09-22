@@ -205,6 +205,7 @@ if __name__ == '__main__':
     # Check that parameter setting is valid
     is_valid = args.overlap <= args.win_len
     is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
+    is_valid = is_valid and (args.subject in load_data.VALID_SUBS[args.experiment])
     if args.num_instances != 2:
         is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
     if is_valid:

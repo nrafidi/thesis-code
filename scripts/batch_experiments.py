@@ -1,6 +1,7 @@
 import itertools
 import os.path
 from subprocess import call
+import time
 
 #parser.add_argument('--experiment')
 #parser.add_argument('--subject')
@@ -22,16 +23,16 @@ from subprocess import call
 #parser.add_argument('--random_state', type=int, default=1)
 
 if __name__ == '__main__':
-    experiments = ['krns2',  'PassAct2', 'PassAct3']
-    subjects = ['B'] # C D E F G H
-    sen_type = ['active'] # passive']
-    word = ['firstNoun']  #  verb secondNoun
-    win_len = [12]  # 12 25 50 100 150 200 250 300 350
-    overlap = [6]  # 12 25 50 100 150 200 250 300 350
+    experiments = ['krns2'] #,  'PassAct2', 'PassAct3']
+    subjects = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
+    sen_type = ['active', 'passive']
+    word = ['firstNoun', 'verb', 'secondNoun']
+    win_len = [12, 25, 50, 100, 150, 200, 250, 300, 350]
+    overlap = [6, 12, 25, 50, 100, 150, 200, 250, 300, 350]
     mode = ['pred']  # coef
     isPDTW = [False]  # True
     isPerm = [False]  # True
-    num_folds = [2]  # 4 8
+    num_folds = [2, 4, 8]
     alg = ['LR']  # GNB
     num_feats = [50]  # 100 150 200 500
     doZscore = [False]  # True
@@ -107,3 +108,5 @@ if __name__ == '__main__':
                                     outfile=out_str)
         call(call_str, shell=True)
         job_id += 1
+        if job_id % 100 == 0:
+            time.sleep(120)
