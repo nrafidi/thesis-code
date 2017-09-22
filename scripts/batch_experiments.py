@@ -22,7 +22,7 @@ from subprocess import call
 #parser.add_argument('--random_state', type=int, default=1)
 
 if __name__ == '__main__':
-    experiments = ['krns2'] # PassAct2, PassAct3
+    experiments = ['krns2',  'PassAct2', 'PassAct3']
     subjects = ['B'] # C D E F G H
     sen_type = ['active'] # passive']
     word = ['firstNoun']  #  verb secondNoun
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     doZscore = [False]  # True
     doAvg = [False]  # True
     num_instances = [2]  # 5 10
-    reps_to_use = [15]  # 10
+    reps_to_use = [10]  # 10
     random_state = [1]  # range(1, 10)
 
     job_name = '{exp}-{sub}-{sen}-{word}-{id}'
