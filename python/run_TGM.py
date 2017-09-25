@@ -109,6 +109,7 @@ def run_tgm_exp(experiment,
                                       experiment=experiment,
                                       num_instances=num_instances,
                                       reps_to_use=reps_to_use)
+    print(data.shape)
 
     if isPerm:
         random.shuffle(labels)
@@ -196,7 +197,7 @@ if __name__ == '__main__':
     parser.add_argument('--word')
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
-    parser.add_argument('--mode')
+    parser.add_argument('--mode', default='pred')
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--isPerm', default='False')
     parser.add_argument('--num_folds', type=int, default=2)

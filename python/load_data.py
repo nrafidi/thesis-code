@@ -8,7 +8,18 @@ NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
 VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
+
 WORD_INDS = {'firstNoun': 0, 'verb': 1, 'secondNoun': 2}
+
+WORD_POS = {'krns2':
+                    {'active':
+                         {'firstNoun': 1,
+                          'verb': 2,
+                          'secondNoun': 4},
+                     'passive':
+                         {'firstNoun': 1,
+                          'verb': 3,
+                          'secondNoun': 6}}}
 
 WORD_PER_SEN = {'krns2':
                     {'active':
@@ -53,7 +64,8 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     usis = hippo.query.query_usis([('stimuli_set', experiment),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
-                                   ('sentence_id', lambda sid: sid != None)],
+                                   ('sentence_id', lambda sid: sid != None),
+                                   ('word_index_in_sentence', lambda wis : wis == WORD_POS[experiment][sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
     exp_sub = [(experiment, subject)]
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
