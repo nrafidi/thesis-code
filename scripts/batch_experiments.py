@@ -27,7 +27,7 @@ SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
-OVERLAPS = [6, 12, 25, 50, 100, 150, 200, 250, 300, 350]
+OVERLAPS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
 MODES = ['pred']  # coef
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},num_feats={num_feats},doZscore={z},' \
-                'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs} ' \
+                'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs},force=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,

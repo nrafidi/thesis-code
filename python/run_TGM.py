@@ -202,7 +202,7 @@ if __name__ == '__main__':
     parser.add_argument('--isPerm', default='False')
     parser.add_argument('--num_folds', type=int, default=2)
     parser.add_argument('--alg', default='LR')
-    parser.add_argument('--num_feats', type=int, default=500)
+    parser.add_argument('--num_feats', type=int, default=50)
     parser.add_argument('--doZscore', default='False')
     parser.add_argument('--doAvg', default='False')
     parser.add_argument('--num_instances', type=int, default=2)
