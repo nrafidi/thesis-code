@@ -37,9 +37,12 @@ if __name__ == '__main__':
             print('Job {} Failed'.format(job_str))
             with open(err_str, 'r') as fid:
                 print fid.read()
+                print('Overlap = {}'.format(grid[5]))
+                print('Win Len = {}'.format(grid[4]))
         else:
             with open(out_str, 'r') as fid:
-                if 'Skipping job.' in fid.read():
-                    print('Job {} Skipped'.format(job_str))
+                if 'Skipping job.' in fid.read() and grid[5] <= grid[4]:
+                    print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
+
 
         job_id += 1
