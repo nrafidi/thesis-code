@@ -79,7 +79,7 @@ def get_param_str(param_name, param_val):
 
 def tgm_from_preds(preds, l_index, cv_membership, accuracy='abs'):
     print(preds.shape)
-    print(l_index.shape)
+    print(l_index)
     print(cv_membership.shape)
 
 
@@ -116,8 +116,8 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
                     param_val = extract_param(param, f)
                     sub_params[sen_type][word][param].append(param_val)
 
-            print(sub_params)
-
+            # print(sub_params)
+            print(f)
             result = np.load(result_dir + f)
             tgm_from_preds(result['preds'], result['l_index'], result['cv_membership'], accuracy)
             # sub_results[sen_type][word].append(tgm)
