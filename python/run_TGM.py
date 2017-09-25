@@ -127,7 +127,7 @@ def run_tgm_exp(experiment,
     # Run TGM
     if alg == 'LR':
         if mode == 'pred':
-            (preds, l_index,
+            (preds, l_ints,
              cv_membership, masks) = models.lr_tgm(data=data,
                                                    labels=labels,
                                                    kf=kf,
