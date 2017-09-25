@@ -146,7 +146,7 @@ def run_tgm_exp(experiment,
     elif alg == 'GNB':
 
         if mode == 'pred':
-            (preds, l_index,
+            (preds, l_ints,
              cv_membership, masks) = models.nb_tgm(data=data,
                                                    labels=labels,
                                                    kf=kf,
@@ -174,7 +174,7 @@ def run_tgm_exp(experiment,
     if mode == 'pred':
         np.savez_compressed(fname,
                             preds=preds,
-                            l_index=l_index,
+                            l_ints=l_ints,
                             cv_membership=cv_membership,
                             masks=masks,
                             time=time,

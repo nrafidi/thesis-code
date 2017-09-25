@@ -79,8 +79,7 @@ def get_param_str(param_name, param_val):
 
 def tgm_from_preds(preds, l_index, cv_membership, accuracy='abs'):
     print(preds.shape)
-    print(l_index)
-    print(cv_membership.shape)
+    print(cv_membership)
 
 
 def agg_results(exp, mode, accuracy, sub, param_specs=None):

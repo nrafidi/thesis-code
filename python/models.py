@@ -128,7 +128,7 @@ def nb_tgm(data,
                 else:
                     P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :, :], A[None, :, :, :]), axis=(2, 3)) - B
             preds[-1][wi] = P_cGx
-    return preds, l_index, cv_membership, feature_masks
+    return preds, l_ints, cv_membership, feature_masks
 
 
 def nb_tgm_coef(data,
@@ -287,7 +287,7 @@ def lr_tgm(data,
                     test_data = np.reshape(test_data, (test_data.shape[0], -1), 'F')
                 preds[-1][wi, wj] = LR_model.predict_log_proba(test_data)
 
-    return preds, l_index, cv_membership, coef
+    return preds, l_ints, cv_membership, coef
 
 
 def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg=False):
