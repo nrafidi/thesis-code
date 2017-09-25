@@ -41,13 +41,14 @@ def which_sen_type(fname):
 
 
 def extract_param(param_name, fname):
+    print(param_name)
     if param_name == 'alg':
         for alg in PARAM_TYPES[param_name]:
             if alg in fname:
                 return alg
         raise ValueError('Invalid fname')
     if param_name == 'F':
-        m = re.match('_(\d+)F_', fname)
+        m = re.match('.*_(\d+)F_.*', fname)
         if m:
             return m.group(1)
         else:
@@ -59,7 +60,9 @@ def extract_param(param_name, fname):
         raise ValueError('Invalid fname')
 
     match_str = '_{}(\d+)_'.format(param_name)
-    m = re.match(match_str, fname)
+    print(match_str)
+    m = re.match('.*_' + param_name + '(\d+)_.*', fname)
+    print(m)
     if m:
         return m.group(1)
     else:
