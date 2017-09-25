@@ -51,6 +51,13 @@ def run_tgm_exp(experiment,
     if not os.path.exists(saveDir):
         os.mkdir(saveDir)
 
+    if alg == 'LR':
+        alg_str = alg
+    elif alg == 'GNB':
+        alg_str = alg + '-{}'.format(num_feats)
+    else:
+        raise ValueError('invalid alg: must be LR or GNB')
+
     fname = SAVE_FILE.format(dir=saveDir,
                              sub=subject,
                              sen_type=sen_type,
@@ -118,7 +125,6 @@ def run_tgm_exp(experiment,
 
     # Run TGM
     if alg == 'LR':
-        alg_str = alg
         if mode == 'pred':
             (preds, l_index,
              cv_membership, masks) = models.lr_tgm(data=data,
@@ -138,7 +144,6 @@ def run_tgm_exp(experiment,
         else:
             raise ValueError('invalid mode: must be pred or coef')
     elif alg == 'GNB':
-        alg_str = alg + '-{}'.format(num_feats)
 
         if mode == 'pred':
             (preds, l_index,
