@@ -43,7 +43,7 @@ if __name__ == '__main__':
                     print('Win Len = {}'.format(grid[4]))
             else:
                 with open(out_str, 'r') as fid:
-                    if 'Skipping job.' in fid.read() and grid[5] <= grid[4]:
+                    if 'Experiment parameters not valid.' in fid.read() and grid[5] <= grid[4]:
                         print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
 
 

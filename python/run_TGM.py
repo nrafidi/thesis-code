@@ -44,7 +44,35 @@ def run_tgm_exp(experiment,
                 num_instances=2,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
-                random_state=1):
+                random_state=1,
+                force=False):
+    # Save Directory
+    saveDir = SAVE_DIR.format(exp=experiment, sub=subject)
+    if not os.path.exists(saveDir):
+        os.mkdir(saveDir)
+
+    fname = SAVE_FILE.format(dir=saveDir,
+                             sub=subject,
+                             sen_type=sen_type,
+                             word=word,
+                             win_len=win_len,
+                             overlap=overlap,
+                             pdtw=bool_to_str(isPDTW),
+                             perm=bool_to_str(isPerm),
+                             num_folds=num_folds,
+                             alg=alg_str,
+                             zscore=bool_to_str(doZscore),
+                             doAvg=bool_to_str(doAvg),
+                             inst=num_instances,
+                             rep=reps_to_use,
+                             rs=random_state,
+                             mode=mode)
+
+    print(fname)
+
+    if os.path.isfile(fname) and not force:
+        print('Job already completed. Skipping Job.')
+        return
 
     random.seed(random_state)
 
@@ -138,30 +166,6 @@ def run_tgm_exp(experiment,
     else:
         raise ValueError('invalid alg: must be LR or GNB')
 
-    # Save Directory
-    saveDir = SAVE_DIR.format(exp=experiment, sub=subject)
-    if not os.path.exists(saveDir):
-        os.mkdir(saveDir)
-
-    fname = SAVE_FILE.format(dir=saveDir,
-                             sub=subject,
-                             sen_type=sen_type,
-                             word=word,
-                             win_len=win_len,
-                             overlap=overlap,
-                             pdtw=bool_to_str(isPDTW),
-                             perm=bool_to_str(isPerm),
-                             num_folds=num_folds,
-                             alg=alg_str,
-                             zscore=bool_to_str(doZscore),
-                             doAvg=bool_to_str(doAvg),
-                             inst=num_instances,
-                             rep=reps_to_use,
-                             rs=random_state,
-                             mode=mode)
-
-    print(fname)
-
     if mode == 'pred':
         np.savez_compressed(fname,
                             preds=preds,
@@ -199,6 +203,7 @@ if __name__ == '__main__':
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--random_state', type=int, default=1)
+    parser.add_argument('--force', default='False')
 
     args = parser.parse_args()
 
@@ -226,6 +231,7 @@ if __name__ == '__main__':
                     num_instances=args.num_instances,
                     reps_to_use=args.reps_to_use,
                     proc=args.proc,
-                    random_state=args.random_state)
+                    random_state=args.random_state,
+                    force=str_to_bool(args.force))
     else:
         print('Experiment parameters not valid. Skipping job.')
