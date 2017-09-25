@@ -32,17 +32,19 @@ if __name__ == '__main__':
 
         err_str = batch_exp.ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
-
-        if os.stat(err_str).st_size != 0:
-            print('Job {} Failed'.format(job_str))
-            with open(err_str, 'r') as fid:
-                print fid.read()
-                print('Overlap = {}'.format(grid[5]))
-                print('Win Len = {}'.format(grid[4]))
+        if not os.path.isfile(err_str):
+            print('Job {} Did Not Run'.format(job_str))
         else:
-            with open(out_str, 'r') as fid:
-                if 'Skipping job.' in fid.read() and grid[5] <= grid[4]:
-                    print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
+            if os.stat(err_str).st_size != 0:
+                print('Job {} Failed'.format(job_str))
+                with open(err_str, 'r') as fid:
+                    print fid.read()
+                    print('Overlap = {}'.format(grid[5]))
+                    print('Win Len = {}'.format(grid[4]))
+            else:
+                with open(out_str, 'r') as fid:
+                    if 'Skipping job.' in fid.read() and grid[5] <= grid[4]:
+                        print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
 
 
         job_id += 1
