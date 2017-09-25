@@ -118,7 +118,7 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
 
             print(sub_params)
 
-            result = np.load(f)
+            result = np.load(result_dir + f)
             tgm_from_preds(result['preds'], result['l_index'], result['cv_membership'], accuracy)
             # sub_results[sen_type][word].append(tgm)
 
