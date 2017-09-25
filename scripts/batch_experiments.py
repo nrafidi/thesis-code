@@ -5,7 +5,7 @@ import time
 
 #parser.add_argument('--experiment')
 #parser.add_argument('--subject')
-#parser.add_argument('--sen_type')
+#parser.add_argument('--SEN_TYPE')
 #parser.add_argument('--word')
 #parser.add_argument('--win_len', type=int)
 #parser.add_argument('--overlap', type=int)
@@ -22,31 +22,31 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
+SEN_TYPES = ['active', 'passive']
+WORDS = ['firstNoun', 'verb', 'secondNoun']
+WIN_LENS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
+OVERLAPS = [6, 12, 25, 50, 100, 150, 200, 250, 300, 350]
+MODES = ['pred']  # coef
+IS_PDTWS = [False]  # True
+IS_PERMS = [False]  # True
+NUM_FOLDSS = [2, 4, 8]
+ALGS = ['LR']  # GNB
+NUM_FEATSS = [50]  # 100 150 200 500
+DO_ZSCORES = [False]  # True
+DO_AVGS = [False]  # True
+NUM_INSTANCESS = [2]  # 5 10
+REPS_TO_USES = [10]  # 10
+RANDOM_STATES = [1]  # range(1, 10)
+
+JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
+JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
+ERR_FILE = '{dir}{job_name}.e'
+OUT_FILE = '{dir}{job_name}.o'
+
+
 if __name__ == '__main__':
-    experiments = ['krns2'] #,  'PassAct2', 'PassAct3']
-    subjects = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
-    sen_type = ['active', 'passive']
-    word = ['firstNoun', 'verb', 'secondNoun']
-    win_len = [12, 25, 50, 100, 150, 200, 250, 300, 350]
-    overlap = [6, 12, 25, 50, 100, 150, 200, 250, 300, 350]
-    mode = ['pred']  # coef
-    isPDTW = [False]  # True
-    isPerm = [False]  # True
-    num_folds = [2, 4, 8]
-    alg = ['LR']  # GNB
-    num_feats = [50]  # 100 150 200 500
-    doZscore = [False]  # True
-    doAvg = [False]  # True
-    num_instances = [2]  # 5 10
-    reps_to_use = [10]  # 10
-    random_state = [1]  # range(1, 10)
-
-    job_name = '{exp}-{sub}-{sen}-{word}-{id}'
-
-    job_dir = '/share/volume0/nrafidi/{exp}_jobFiles/'
-    err_file = '{dir}{job_name}.e'
-
-    out_file = '{dir}{job_name}.o'
 
     qsub_call = 'qsub  -q default -N {job_name} -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
@@ -54,37 +54,37 @@ if __name__ == '__main__':
                 'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs} ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
-    param_grid = itertools.product(experiments,
-                                   subjects,
-                                   sen_type,
-                                   word,
-                                   win_len,
-                                   overlap,
-                                   mode,
-                                   isPDTW,
-                                   isPerm,
-                                   num_folds,
-                                   alg,
-                                   num_feats,
-                                   doZscore,
-                                   doAvg,
-                                   num_instances,
-                                   reps_to_use,
-                                   random_state)
+    param_grid = itertools.product(EXPERIMENTS,
+                                   SUBJECTS,
+                                   SEN_TYPES,
+                                   WORDS,
+                                   WIN_LENS,
+                                   OVERLAPS,
+                                   MODES,
+                                   IS_PDTWS,
+                                   IS_PERMS,
+                                   NUM_FOLDSS,
+                                   ALGS,
+                                   NUM_FEATSS,
+                                   DO_ZSCORES,
+                                   DO_AVGS,
+                                   NUM_INSTANCESS,
+                                   REPS_TO_USES,
+                                   RANDOM_STATES)
     job_id = 0
     for grid in param_grid:
-        job_str = job_name.format(exp=grid[0],
+        job_str = JOB_NAME.format(exp=grid[0],
                                   sub=grid[1],
                                   sen=grid[2],
                                   word=grid[3],
                                   id=job_id)
 
-        dir_str = job_dir.format(exp=grid[0])
+        dir_str = JOB_DIR.format(exp=grid[0])
         if not os.path.exists(dir_str):
             os.mkdir(dir_str)
 
-        err_str = err_file.format(dir=dir_str, job_name=job_str)
-        out_str = out_file.format(dir=dir_str, job_name=job_str)
+        err_str = ERR_FILE.format(dir=dir_str, job_name=job_str)
+        out_str = OUT_FILE.format(dir=dir_str, job_name=job_str)
 
         call_str = qsub_call.format(exp=grid[0],
                                     sub=grid[1],
@@ -109,4 +109,4 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
         if job_id % 100 == 0:
-            time.sleep(120)
+            time.sleep(300)
