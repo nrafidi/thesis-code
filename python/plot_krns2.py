@@ -21,6 +21,8 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = param_of_interest[ind_spec]
         time_of_interest = time_of_interest[ind_spec]
 
+        print(type(time_of_interest))
+
         sort_inds = np.argsort(param_of_interest)
         tgm_of_interest = tgm_of_interest[sort_inds]
         param_of_interest = param_of_interest[sort_inds]

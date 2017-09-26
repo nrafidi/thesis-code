@@ -1,3 +1,4 @@
+import glob
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -101,7 +102,26 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     sub_params = {}
     sub_time = {}
     result_dir = run_TGM.SAVE_DIR.format(exp=exp, sub=sub)
-    result_files = os.listdir(result_dir)
+
+    fname = result_dir + 'TGM_' + sub + '_' + sen_type + '_' + word + '_'
+    for p in PARAMS_TO_AGG:
+        if param_specs is not None:
+            if p in param_specs:
+                p_val = param_specs[p]
+                if p == 'alg':
+                    fname += p_val + '_'
+                elif p == 'F':
+                    fname += str(p_val) + p + '_'
+                else:
+                    fname += p + str(p_val) + '_'
+            else:
+                fname += p + '*_'
+        else:
+            fname += p + '*_'
+
+    print(fname)
+
+    result_files = glob.glob(fname)
     for f in result_files:
         valid_file = mode in f
         if param_specs is not None:
