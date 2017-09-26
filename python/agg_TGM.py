@@ -1,5 +1,3 @@
-import argparse
-import load_data
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -134,19 +132,17 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
             # print(sub_params)
             print(f)
             result = np.load(result_dir + f)
-            try:
-                tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
 
-                plt.figure(1)
-                plt.imshow(tgm, interpolation='nearest')
-                plt.savefig('foo.png')
+            # plt.figure(1)
+            # plt.imshow(tgm, interpolation='nearest')
+            # plt.savefig('foo.png')
 
-                sub_results[sen_type][word].append(tgm)
-            except:
-                print('meow')
+            sub_results[sen_type][word].append(tgm)
 
             sub_time[sen_type][word]['time'] = result['time']
             sub_time[sen_type][word]['win_starts'] = result['win_starts']
+    return sub_results, sub_params, sub_time
 
 
 if __name__ == '__main__':
