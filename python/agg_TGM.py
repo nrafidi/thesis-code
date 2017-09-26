@@ -1,5 +1,6 @@
 import argparse
 import load_data
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 import re
@@ -133,8 +134,11 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
             print(f)
             result = np.load(result_dir + f)
             tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
-            print(np.max(tgm))
-            print(np.min(tgm))
+
+            plt.figure(1)
+            plt.imshow(tgm, interpolation='nearest')
+            plt.show()
+
             sub_results[sen_type][word].append(tgm)
 
             sub_time[sen_type][word]['time'] = result['time']
