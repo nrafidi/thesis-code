@@ -119,6 +119,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
         else:
             fname += p + '*_'
 
+    fname = fname[:-1] + '.npz'
     print(fname)
 
     result_files = glob.glob(fname)
