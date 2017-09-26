@@ -116,18 +116,18 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
                     fname += p + str(p_val) + '_'
             else:
                 if p == 'alg':
-                    fname += '*_'
+                    fname += '.*_'
                 elif p == 'F':
-                    fname += '*F_'
+                    fname += '.*F_'
                 else:
-                    fname += p + '*_'
+                    fname += p + '.*_'
         else:
             if p == 'alg':
-                fname += '*_'
+                fname += '.*_'
             elif p == 'F':
-                fname += '*F_'
+                fname += '.*F_'
             else:
-                fname += p + '*_'
+                fname += p + '.*_'
 
     fname = fname[:-1] + '.npz'
     print(fname)
