@@ -87,6 +87,7 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
         tgm_total = np.zeros((num_win, num_win))
         for fold in range(num_folds):
             labels = l_ints[cv_membership[fold, :]]
+            print(labels)
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
@@ -133,13 +134,16 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
             # print(sub_params)
             print(f)
             result = np.load(result_dir + f)
-            tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            try:
+                tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
 
-            plt.figure(1)
-            plt.imshow(tgm, interpolation='nearest')
-            plt.show()
+                plt.figure(1)
+                plt.imshow(tgm, interpolation='nearest')
+                plt.savefig('foo.png')
 
-            sub_results[sen_type][word].append(tgm)
+                sub_results[sen_type][word].append(tgm)
+            except:
+                print('meow')
 
             sub_time[sen_type][word]['time'] = result['time']
             sub_time[sen_type][word]['win_starts'] = result['win_starts']
@@ -150,7 +154,7 @@ if __name__ == '__main__':
     mode = 'pred'
     accuracy = 'abs'
     sub = 'B'
-    param_specs = {'w': 100,
+    param_specs = {'w': 12,
                    'o': 12,
                    'pd': 'F',
                    'pr': 'F',
