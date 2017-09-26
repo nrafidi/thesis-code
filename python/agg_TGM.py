@@ -77,9 +77,23 @@ def get_param_str(param_name, param_val):
     return '_{}{}_'.format(param_name, param_val)
 
 
-def tgm_from_preds(preds, l_index, cv_membership, accuracy='abs'):
-    print(preds.shape)
-    print(cv_membership)
+def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
+    num_folds = preds.shape[0]
+    num_win = preds.shape[1]
+
+    if accuracy == 'abs':
+        tgm_corr = np.zeros((num_win, num_win))
+        tgm_total = np.zeros((num_win, num_win))
+        for fold in range(num_folds):
+            labels = l_ints[cv_membership[fold, :]]
+            for i_win in range(num_win):
+                for j_win in range(num_win):
+                    yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
+                    tgm_corr[i_win, j_win] += np.sum(yhat == labels)
+                    tgm_total[i_win, j_win] += cv_membership.shape[1]
+        return np.divide(tgm_corr, tgm_total)
+    else:
+        raise ValueError('Not implemented yet')
 
 
 def agg_results(exp, mode, accuracy, sub, param_specs=None):
@@ -118,8 +132,10 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
             # print(sub_params)
             print(f)
             result = np.load(result_dir + f)
-            tgm_from_preds(result['preds'], result['l_index'], result['cv_membership'], accuracy)
-            # sub_results[sen_type][word].append(tgm)
+            tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            print(np.max(tgm))
+            print(np.min(tgm))
+            sub_results[sen_type][word].append(tgm)
 
             sub_time[sen_type][word]['time'] = result['time']
             sub_time[sen_type][word]['win_starts'] = result['win_starts']
