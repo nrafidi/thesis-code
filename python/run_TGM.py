@@ -4,7 +4,7 @@ import models
 import numpy as np
 import os.path
 import random
-from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 
 SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}/'
 SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_' \
@@ -117,7 +117,7 @@ def run_tgm_exp(experiment,
     tmin = time.min()
     tmax = time.max()
 
-    kf = KFold(n_splits=num_folds, shuffle=True, random_state=CV_RAND_STATE)
+    kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=CV_RAND_STATE)
 
     total_win = int((tmax - tmin) * 500)
     win_starts = range(0, total_win - win_len, overlap)
