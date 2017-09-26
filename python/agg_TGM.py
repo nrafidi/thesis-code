@@ -153,7 +153,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
                     param_val = extract_param(param, f)
                     sub_params[param].append(param_val)
 
-            result = np.load(result_dir + f)
+            result = np.load(f)
             tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
 
             sub_results.append(tgm)
