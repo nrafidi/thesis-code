@@ -115,9 +115,19 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
                 else:
                     fname += p + str(p_val) + '_'
             else:
-                fname += p + '*_'
+                if p == 'alg':
+                    fname += '*_'
+                elif p == 'F':
+                    fname += '*F_'
+                else:
+                    fname += p + '*_'
         else:
-            fname += p + '*_'
+            if p == 'alg':
+                fname += '*_'
+            elif p == 'F':
+                fname += '*F_'
+            else:
+                fname += p + '*_'
 
     fname = fname[:-1] + '.npz'
     print(fname)
