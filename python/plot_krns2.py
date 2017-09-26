@@ -45,7 +45,8 @@ if __name__ == '__main__':
     sub_params = {}
     sub_time = {}
     for sub in ['B']:  # load_data.VALID_SUBS[exp]:
-        param_specs = {'pd': 'F',
+        param_specs = {'o': 12,
+                       'pd': 'F',
                        'pr': 'F',
                        'alg': 'LR',
                        'z': 'F',
@@ -58,3 +59,4 @@ if __name__ == '__main__':
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
+    get_diag_by_param(sub_results, sub_params, sub_time, 'active', 'firstNoun', 'w', {'F': 2})
