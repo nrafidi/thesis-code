@@ -40,7 +40,7 @@ def which_sen_type(fname):
 
 
 def extract_param(param_name, fname):
-    print(param_name)
+    # print(param_name)
     if param_name == 'alg':
         for alg in PARAM_TYPES[param_name]:
             if alg in fname:
@@ -85,7 +85,7 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
         tgm_total = np.zeros((num_win, num_win))
         for fold in range(num_folds):
             labels = l_ints[cv_membership[fold, :]]
-            print(labels)
+            # print(labels)
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
@@ -96,8 +96,8 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
         raise ValueError('Not implemented yet')
 
 
-def agg_results(exp, mode, accuracy, sub, param_specs=None):
-    sub_results = {}
+def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
+    sub_results = []
     sub_params = {}
     sub_time = {}
     result_dir = run_TGM.SAVE_DIR.format(exp=exp, sub=sub)
@@ -107,41 +107,29 @@ def agg_results(exp, mode, accuracy, sub, param_specs=None):
         if param_specs is not None:
             for param_name, param_val in param_specs.iteritems():
                 valid_file = valid_file and (get_param_str(param_name, param_val) in f)
+        valid_file = valid_file and (word == which_word(f))
+        valid_file = valid_file and (sen_type == which_sen_type(f))
         if valid_file:
-            word = which_word(f)
-            sen_type = which_sen_type(f)
-
-            if sen_type not in sub_results:
-                sub_results[sen_type] = {}
-                sub_params[sen_type] = {}
-                sub_time[sen_type] = {}
-            if word not in sub_results[sen_type]:
-                sub_results[sen_type][word] = []
-                sub_params[sen_type][word] = {}
-                sub_time[sen_type][word] = {}
-                for param in PARAMS_TO_AGG:
-                    sub_params[sen_type][word][param] = []
-                sub_time[sen_type][word]['time'] = []
-                sub_time[sen_type][word]['win_starts'] = []
+            for param in PARAMS_TO_AGG:
+                if param not in sub_params:
+                    sub_params[param] = []
+            if 'time' not in sub_time:
+                sub_time['time'] = []
+                sub_time['win_starts'] = []
 
             for param in PARAMS_TO_AGG:
                 if param not in param_specs:
                     param_val = extract_param(param, f)
-                    sub_params[sen_type][word][param].append(param_val)
+                    sub_params[param].append(param_val)
 
-            # print(sub_params)
-            print(f)
             result = np.load(result_dir + f)
             tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
 
-            # plt.figure(1)
-            # plt.imshow(tgm, interpolation='nearest')
-            # plt.savefig('foo.png')
+            sub_results.append(tgm)
 
-            sub_results[sen_type][word].append(tgm)
+            sub_time['time'] = result['time']
+            sub_time['win_starts'] = result['win_starts']
 
-            sub_time[sen_type][word]['time'] = result['time']
-            sub_time[sen_type][word]['win_starts'] = result['win_starts']
     return sub_results, sub_params, sub_time
 
 

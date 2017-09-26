@@ -3,19 +3,19 @@ import numpy as np
 import load_data
 import agg_TGM
 
-def get_diag_by_param(result_dict, param_dict, time_dict, sen_type, word, param, param_specs):
+def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
     diag_by_sub = []
     param_by_sub = []
     time_by_sub = []
     for sub in result_dict:
         diag = []
-        param_of_interest = param_dict[sub][sen_type][word][param]
-        tgm_of_interest = result_dict[sub][sen_type][word]
-        time_of_interest = time_dict[sub][sen_type][word]['win_starts']
+        param_of_interest = param_dict[sub][param]
+        tgm_of_interest = result_dict[sub]
+        time_of_interest = time_dict[sub]['win_starts']
 
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
-            p_of_interest = param_dict[sub][sen_type][word][p]
+            p_of_interest = param_dict[sub][p]
             ind_spec = ind_spec and p_of_interest == param_specs[p]
         tgm_of_interest = tgm_of_interest[ind_spec]
         param_of_interest = param_of_interest[ind_spec]
@@ -40,6 +40,8 @@ def get_diag_by_param(result_dict, param_dict, time_dict, sen_type, word, param,
 if __name__ == '__main__':
     exp = 'krns2'
     mode = 'pred'
+    word = 'firstNoun'
+    sen_type = 'active'
     accuracy = 'abs'
     sub_results = {}
     sub_params = {}
@@ -56,7 +58,9 @@ if __name__ == '__main__':
                        'rs': 1}
         sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                mode,
+                                                                               word,
+                                                                               sen_type,
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
-    get_diag_by_param(sub_results, sub_params, sub_time, 'active', 'firstNoun', 'w', {'F': 2})
+    get_diag_by_param(sub_results, sub_params, sub_time, 'w', {'F': 2})
