@@ -48,7 +48,7 @@ def nb_tgm(data,
     preds = []
     cv_membership = []
     feature_masks = []
-    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1))):
+    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
         cv_membership.append(in_test)
         preds.append(np.zeros((n_w,), dtype=np.object))
         feature_masks.append(np.zeros((n_w,), dtype=np.object))
@@ -230,7 +230,7 @@ def lr_tgm(data,
     preds = []
     cv_membership = []
     coef = []
-    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1))):
+    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
         cv_membership.append(in_test)
         preds.append(np.empty((n_w, n_w), dtype=object))
         coef.append(np.empty((n_w,), dtype=object))
