@@ -172,7 +172,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = param_dict[sub][p]
-            ind_spec = ind_spec and p_of_interest == param_specs[p]
+            ind_spec[p] = ind_spec[p] and p_of_interest == param_specs[p]
         print(ind_spec)
         tgm_of_interest = tgm_of_interest[ind_spec]
         param_of_interest = param_of_interest[ind_spec]

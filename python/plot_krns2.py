@@ -32,5 +32,11 @@ if __name__ == '__main__':
                                                                                param_specs=param_specs)
     diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {'F': 2})
 
+    diag = np.mean(diag, axis=0)
+
+    fig, ax = plt.subplots()
+    ax.imshow(diag, interpolation='nearest')
+    plt.show()
+
 
 
