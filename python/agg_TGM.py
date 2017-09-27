@@ -156,8 +156,8 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
         sub_results.append(tgm)
 
-        sub_time['time'] = result['time']
-        sub_time['win_starts'] = result['win_starts']
+        sub_time['time'].append(result['time'])
+        sub_time['win_starts'].append(result['win_starts'])
         i_f += 1
 
     return sub_results, sub_params, sub_time
