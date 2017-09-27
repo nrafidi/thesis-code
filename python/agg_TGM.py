@@ -161,6 +161,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
             sub_time['time'].append(result['time'])
             sub_time['win_starts'].append(result['win_starts'])
         elif i_f > 5:
+            break
         i_f += 1
 
     return sub_results, sub_params, sub_time
