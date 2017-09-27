@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sub_results = {}
     sub_params = {}
     sub_time = {}
-    for sub in ['B', 'C']:  # load_data.VALID_SUBS[exp]:
+    for sub in ['B', 'D']:  # load_data.VALID_SUBS[exp]:
         param_specs = {'o': 12,
                        'pd': 'F',
                        'pr': 'F',
@@ -37,9 +37,10 @@ if __name__ == '__main__':
 
     diag = np.mean(diag, axis=0)
 
-    fig, ax = plt.subplots()
-    im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    plt.colorbar(im)
+#    fig, ax = plt.subplots()
+  #  im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    #plt.colorbar(im)
+    plt.plot(diag[0, :])
     plt.show()
 
 

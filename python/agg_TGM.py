@@ -96,10 +96,6 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
                     tgm_corr[i_win, j_win] += np.sum(yhat == labels)
                     tgm_total[i_win, j_win] += cv_membership.shape[1]
         tgm = np.divide(tgm_corr, tgm_total)
-        fig, ax = plt.subplots()
-        im = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-        plt.colorbar(im)
-        plt.show()
         return tgm
     else:
         raise ValueError('Not implemented yet')
