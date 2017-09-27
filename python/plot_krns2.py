@@ -18,6 +18,7 @@ if __name__ == '__main__':
                        'pd': 'F',
                        'pr': 'F',
                        'alg': 'LR',
+                       'F': 2,
                        'z': 'F',
                        'avg': 'F',
                        'ni': 2,
@@ -30,7 +31,7 @@ if __name__ == '__main__':
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
-    diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {'F': 2})
+    diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
 
     diag = np.mean(diag, axis=0)
 
