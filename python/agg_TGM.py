@@ -196,12 +196,13 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
             diag.append(np.diag(tgm))
 
         diag = [tgm_diag[:min_size] for tgm_diag in diag]
+        time_of_interest = [time_arr[:min_size] for time_arr in time_of_interest]
         meow = np.array(diag)
         print(meow.shape)
 
-        diag_by_sub.append(diag)
-        param_by_sub.append(param_of_interest)
-        time_by_sub.append(time_of_interest)
+        diag_by_sub.append(np.array(diag))
+        param_by_sub.append(np.array(param_of_interest))
+        time_by_sub.append(np.array(time_of_interest))
     diag = np.array(diag_by_sub)
     param_val = np.array(param_by_sub)
     time = np.array(time_by_sub)
