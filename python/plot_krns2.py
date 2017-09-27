@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -35,6 +36,7 @@ if __name__ == '__main__':
 
     diag = np.mean(diag, axis=0)
 
+    matplotlib.use('GTK')
     fig, ax = plt.subplots()
     ax.imshow(diag, interpolation='nearest')
     plt.show()

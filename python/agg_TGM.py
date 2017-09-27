@@ -172,23 +172,18 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = param_dict[sub][param]
         tgm_of_interest = result_dict[sub]
         time_of_interest = time_dict[sub]['win_starts']
-        print(time_of_interest)
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
-            print(p_of_interest)
             ind_spec = np.logical_and(ind_spec, p_of_interest == str(param_specs[p]))
-            print(ind_spec)
         tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
         param_of_interest = list(compress(param_of_interest, ind_spec))
         time_of_interest = list(compress(time_of_interest, ind_spec))
-        print(time_of_interest)
         sort_inds = np.argsort(param_of_interest)
 
         tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
         param_of_interest = [param_of_interest[i] for i in sort_inds]
         time_of_interest = [np.array(time_of_interest[i]) for i in sort_inds]
-        print(time_of_interest)
 
         min_size = 1000
         for tgm in tgm_of_interest:
@@ -198,8 +193,6 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
 
         diag = [tgm_diag[:min_size] for tgm_diag in diag]
         time_of_interest = [time_arr[:min_size] for time_arr in time_of_interest]
-        meow = np.array(diag)
-        print(meow.shape)
 
         diag_by_sub.append(np.array(diag))
         param_by_sub.append(np.array(param_of_interest))
@@ -207,9 +200,6 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
     diag = np.array(diag_by_sub)
     param_val = np.array(param_by_sub)
     time = np.array(time_by_sub)
-    print(diag.shape)
-    print(param_val.shape)
-    print(time.shape)
     return diag, param_val, time
 
 
