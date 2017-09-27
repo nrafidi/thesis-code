@@ -177,7 +177,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
             print(p_of_interest)
-            ind_spec = np.logical_and(ind_spec, p_of_interest == param_specs[p])
+            ind_spec = np.logical_and(ind_spec, p_of_interest == str(param_specs[p]))
             print(ind_spec)
         tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
         param_of_interest = list(compress(param_of_interest, ind_spec))
