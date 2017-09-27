@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('GTK')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     diag = np.mean(diag, axis=0)
 
     fig, ax = plt.subplots()
-    ax.imshow(diag, interpolation='nearest')
+    ax.imshow(diag, interpolation='nearest', extent=(0, 2, 0, 204))
     plt.show()
 
 
