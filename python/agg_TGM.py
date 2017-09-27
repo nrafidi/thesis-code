@@ -1,4 +1,5 @@
 import glob
+from itertools import compress
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -167,25 +168,23 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = param_dict[sub][param]
         tgm_of_interest = result_dict[sub]
         time_of_interest = time_dict[sub]['win_starts']
-        print(type(time_of_interest))
-        print(time_of_interest)
+
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
-            p_of_interest = param_dict[sub][p]
-            ind_spec[p] = ind_spec[p] and p_of_interest == param_specs[p]
-        print(ind_spec)
-        tgm_of_interest = tgm_of_interest[ind_spec]
-        param_of_interest = param_of_interest[ind_spec]
-        time_of_interest = time_of_interest[ind_spec]
+            p_of_interest = np.array(param_dict[sub][p])
+            ind_spec = np.logical_and(ind_spec, p_of_interest == param_specs[p])
+        tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
+        param_of_interest = list(compress(param_of_interest, ind_spec))
+        time_of_interest = list(compress(time_of_interest, ind_spec))
 
-        print(type(time_of_interest))
-        print(time_of_interest)
         sort_inds = np.argsort(param_of_interest)
-        tgm_of_interest = tgm_of_interest[sort_inds]
-        param_of_interest = param_of_interest[sort_inds]
-        time_of_interest = time_of_interest[sort_inds]
+
+        tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
+        param_of_interest = [param_of_interest[i] for i in sort_inds]
+        time_of_interest = [time_of_interest[i] for i in sort_inds]
 
         for tgm in tgm_of_interest:
+            print(tgm.shape)
             diag.append(np.diag(tgm))
 
         meow = np.array(diag)
