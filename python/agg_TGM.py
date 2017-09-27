@@ -134,34 +134,73 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
     result_files = glob.glob(fname)
     for f in result_files:
-        valid_file = mode in f
-        if param_specs is not None:
-            for param_name, param_val in param_specs.iteritems():
-                valid_file = valid_file and (get_param_str(param_name, param_val) in f)
-        valid_file = valid_file and (word == which_word(f))
-        valid_file = valid_file and (sen_type == which_sen_type(f))
-        if valid_file:
-            for param in PARAMS_TO_AGG:
-                if param not in sub_params:
-                    sub_params[param] = []
-            if 'time' not in sub_time:
-                sub_time['time'] = []
-                sub_time['win_starts'] = []
+        print(f)
+        for param in PARAMS_TO_AGG:
+            if param not in sub_params:
+                sub_params[param] = []
+        if 'time' not in sub_time:
+            sub_time['time'] = []
+            sub_time['win_starts'] = []
 
-            for param in PARAMS_TO_AGG:
-                if param not in param_specs:
-                    param_val = extract_param(param, f)
-                    sub_params[param].append(param_val)
+        for param in PARAMS_TO_AGG:
+            if param not in param_specs:
+                param_val = extract_param(param, f)
+                sub_params[param].append(param_val)
 
-            result = np.load(f)
-            tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+        result = np.load(f)
+        tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
 
-            sub_results.append(tgm)
+        sub_results.append(tgm)
 
-            sub_time['time'] = result['time']
-            sub_time['win_starts'] = result['win_starts']
+        sub_time['time'] = result['time']
+        sub_time['win_starts'] = result['win_starts']
 
     return sub_results, sub_params, sub_time
+
+
+def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
+    diag_by_sub = []
+    param_by_sub = []
+    time_by_sub = []
+    for sub in result_dict:
+        diag = []
+        param_of_interest = param_dict[sub][param]
+        tgm_of_interest = result_dict[sub]
+        time_of_interest = time_dict[sub]['win_starts']
+        print(type(time_of_interest))
+        print(time_of_interest)
+        ind_spec = [True] * len(param_of_interest)
+        for p in param_specs:
+            p_of_interest = param_dict[sub][p]
+            ind_spec = ind_spec and p_of_interest == param_specs[p]
+        print(ind_spec)
+        tgm_of_interest = tgm_of_interest[ind_spec]
+        param_of_interest = param_of_interest[ind_spec]
+        time_of_interest = time_of_interest[ind_spec]
+
+        print(type(time_of_interest))
+        print(time_of_interest)
+        sort_inds = np.argsort(param_of_interest)
+        tgm_of_interest = tgm_of_interest[sort_inds]
+        param_of_interest = param_of_interest[sort_inds]
+        time_of_interest = time_of_interest[sort_inds]
+
+        for tgm in tgm_of_interest:
+            diag.append(np.diag(tgm))
+
+        meow = np.array(diag)
+        print(meow.shape)
+
+        diag_by_sub.append(diag)
+        param_by_sub.append(param_of_interest)
+        time_by_sub.append(time_of_interest)
+    diag = np.array(diag_by_sub)
+    param_val = np.array(param_by_sub)
+    time = np.array(time_by_sub)
+    print(diag.shape)
+    print(param_val.shape)
+    print(time.shape)
+    return diag, param_val, time
 
 
 if __name__ == '__main__':

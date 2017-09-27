@@ -3,41 +3,6 @@ import numpy as np
 import load_data
 import agg_TGM
 
-def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
-    diag_by_sub = []
-    param_by_sub = []
-    time_by_sub = []
-    for sub in result_dict:
-        diag = []
-        param_of_interest = param_dict[sub][param]
-        tgm_of_interest = result_dict[sub]
-        time_of_interest = time_dict[sub]['win_starts']
-
-        ind_spec = [True] * len(param_of_interest)
-        for p in param_specs:
-            p_of_interest = param_dict[sub][p]
-            ind_spec = ind_spec and p_of_interest == param_specs[p]
-        tgm_of_interest = tgm_of_interest[ind_spec]
-        param_of_interest = param_of_interest[ind_spec]
-        time_of_interest = time_of_interest[ind_spec]
-
-        print(type(time_of_interest))
-
-        sort_inds = np.argsort(param_of_interest)
-        tgm_of_interest = tgm_of_interest[sort_inds]
-        param_of_interest = param_of_interest[sort_inds]
-        time_of_interest = time_of_interest[sort_inds]
-
-        for tgm in tgm_of_interest:
-            diag.append(np.diag(tgm))
-
-        meow = np.array(diag)
-        print(meow.shape)
-
-        diag_by_sub.append(diag)
-        param_by_sub.append(param_of_interest)
-        time_by_sub.append(time_of_interest)
-
 
 if __name__ == '__main__':
     exp = 'krns2'
@@ -65,4 +30,7 @@ if __name__ == '__main__':
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
-    get_diag_by_param(sub_results, sub_params, sub_time, 'w', {'F': 2})
+    diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {'F': 2})
+
+
+
