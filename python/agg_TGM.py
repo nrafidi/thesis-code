@@ -134,7 +134,10 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     print(fname)
 
     result_files = glob.glob(fname)
+    i_f = 0
     for f in result_files:
+        if i_f > 5:
+            break
         print(f)
         for param in PARAMS_TO_AGG:
             if param not in sub_params:
@@ -155,6 +158,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
         sub_time['time'] = result['time']
         sub_time['win_starts'] = result['win_starts']
+        i_f += 1
 
     return sub_results, sub_params, sub_time
 
@@ -172,7 +176,9 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
+            print(p_of_interest)
             ind_spec = np.logical_and(ind_spec, p_of_interest == param_specs[p])
+            print(ind_spec)
         tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
         param_of_interest = list(compress(param_of_interest, ind_spec))
         time_of_interest = list(compress(time_of_interest, ind_spec))
