@@ -139,7 +139,9 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        if i_f > 2:
+        if i_f > 5:
+            break
+        elif i_f > 2:
             print(f)
             for param in PARAMS_TO_AGG:
                 if param not in sub_params:
@@ -160,8 +162,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
             sub_time['time'].append(result['time'])
             sub_time['win_starts'].append(result['win_starts'])
-        elif i_f > 5:
-            break
+
         i_f += 1
 
     return sub_results, sub_params, sub_time

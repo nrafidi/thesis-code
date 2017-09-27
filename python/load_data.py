@@ -98,7 +98,7 @@ def avg_data(data_raw, labels_raw, experiment='krns2', num_instances=2, reps_to_
     if len(data_raw.shape) > 3:
         data_list = []
         for i in range(num_instances):
-            data_list.append(np.mean(data_raw[:, range(0, reps_to_use, num_instances), :, :], axis=1))
+            data_list.append(np.mean(data_raw[:, range(i, reps_to_use, num_instances), :, :], axis=1))
         data = np.concatenate(data_list, axis=0)
     else:
         data = np.empty((NUM_SENTENCES * num_instances, data_raw.shape[1], data_raw.shape[2]))
