@@ -136,7 +136,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        if i_f > 5:
+        if i_f > 4:
             break
         print(f)
         for param in PARAMS_TO_AGG:
@@ -189,10 +189,13 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = [param_of_interest[i] for i in sort_inds]
         time_of_interest = [time_of_interest[i] for i in sort_inds]
 
+        min_size = 1000
         for tgm in tgm_of_interest:
-            print(tgm.shape)
+            if tgm.shape[0] < min_size:
+                min_size = tgm.shape[0]
             diag.append(np.diag(tgm))
 
+        diag = [tgm_diag[:min_size] for tgm_diag in diag]
         meow = np.array(diag)
         print(meow.shape)
 
