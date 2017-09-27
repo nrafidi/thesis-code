@@ -1,5 +1,7 @@
 import glob
 from itertools import compress
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -93,7 +95,12 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
                     tgm_corr[i_win, j_win] += np.sum(yhat == labels)
                     tgm_total[i_win, j_win] += cv_membership.shape[1]
-        return np.divide(tgm_corr, tgm_total)
+        tgm = np.divide(tgm_corr, tgm_total)
+        fig, ax = plt.subplots()
+        im = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+        plt.colorbar(im)
+        plt.show()
+        return tgm
     else:
         raise ValueError('Not implemented yet')
 
