@@ -44,8 +44,12 @@ if __name__ == '__main__':
                     print('Win Len = {}'.format(grid[4]))
             else:
                 with open(out_str, 'r') as fid:
-                    if 'Experiment parameters not valid.' in fid.read() and grid[5] <= grid[4]:
-                        print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
+                    if 'Experiment parameters not valid.' in fid.read():
+                        is_valid =  grid[5] <= grid[4]
+                        if grid[6] == 'coef':
+                            is_valid = is_valid and (grid[9] == 2)
+                        if is_valid:
+                            print('Job {} Skipped - Invalid Subject or num_instances'.format(job_str))
 
 
         job_id += 1

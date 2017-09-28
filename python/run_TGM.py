@@ -12,6 +12,7 @@ SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{
 
 CV_RAND_STATE = 12191989
 
+
 def bool_to_str(bool_var):
     if bool_var:
         return 'T'
@@ -219,6 +220,8 @@ if __name__ == '__main__':
     is_valid = is_valid and (args.subject in load_data.VALID_SUBS[args.experiment])
     if args.num_instances != 2:
         is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
+    if args.mode == 'coef':
+        is_valid = is_valid and args.num_folds == 2
     if is_valid:
         run_tgm_exp(experiment=args.experiment,
                     subject=args.subject,
