@@ -52,8 +52,8 @@ def coef_by_param(exp,
             #              plt.show()
             sim_mat[i_win, i_coef - 1] = np.linalg.norm(curr_mat - prev_mat)
     sim_mat = sim_mat[:, 0:(min_win - 1)]
-    meow = np.mean(sim_mat, axis=1)
-    sim_mat -= meow[:, None]
+    meow = np.max(np.abs(sim_mat), axis=1)
+    sim_mat = np.divide(sim_mat, meow[:, None])
     return sim_mat
 
 if __name__ == '__main__':
