@@ -1,7 +1,7 @@
 import glob
 from itertools import compress
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -246,11 +246,19 @@ if __name__ == '__main__':
                                                     accuracy,
                                                     sub,
                                                     param_specs=param_specs)
+    print(sub_params)
     for i, res in enumerate(sub_results):
-        win_size = int(sub_params[i])
-        mat = res[0]
+        win_size = int(sub_params['w'][i])
+        mat = res[1]
         mat = np.sum(mat, axis=0)
-        mat = np.reshape(mat, (306, win_size))
-        meow = np.unravel_index(np.where(mat > 0), (306, win_size))
-        print(meow)
-
+        print(mat.shape)
+        mat = np.reshape(mat, (win_size, 306))
+        f, ax = plt.subplots()
+        ax.imshow(mat, interpolation='nearest')
+        plt.savefig('mat{}_T_next.png'.format(i), bbox_inches='tight')
+        print(mat.shape)
+        woof = np.array(np.where(mat > 0))
+        print(woof.shape)
+        for moo in range(5):
+            print('({}, {})'.format(woof[0, moo], woof[1, moo]))
+            print(mat[woof[0, moo], woof[1, moo]])
