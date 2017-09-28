@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     num_win = sim_mat.shape[0]
 
-    fig, axs = plt.subplots(1, num_win)
+    fig, axs = plt.subplots(num_wim, 1)
     for i_win in range(num_win):
         axs[i_win].plot(diag[i_win, :])
         axs[i_win].plot(sim_mat[i_win, :])
