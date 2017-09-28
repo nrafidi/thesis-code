@@ -139,29 +139,29 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        if i_f > 5:
-            break
-        elif i_f > 2:
-            print(f)
-            for param in PARAMS_TO_AGG:
-                if param not in sub_params:
-                    sub_params[param] = []
-            if 'time' not in sub_time:
-                sub_time['time'] = []
-                sub_time['win_starts'] = []
+        print(i_f)
+        for param in PARAMS_TO_AGG:
+            if param not in sub_params:
+                sub_params[param] = []
+        if 'time' not in sub_time:
+            sub_time['time'] = []
+            sub_time['win_starts'] = []
 
-            for param in PARAMS_TO_AGG:
-                if param not in param_specs:
-                    param_val = extract_param(param, f)
-                    sub_params[param].append(param_val)
+        for param in PARAMS_TO_AGG:
+            if param not in param_specs:
+                param_val = extract_param(param, f)
+                sub_params[param].append(param_val)
 
-            result = np.load(f)
+        result = np.load(f)
+        if mode == 'pred':
             tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+        else:
+            tgm = result['coef']
 
-            sub_results.append(tgm)
+        sub_results.append(tgm)
 
-            sub_time['time'].append(result['time'])
-            sub_time['win_starts'].append(result['win_starts'])
+        sub_time['time'].append(result['time'])
+        sub_time['win_starts'].append(result['win_starts'])
 
         i_f += 1
 

@@ -36,11 +36,13 @@ if __name__ == '__main__':
     diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
 
     diag = np.mean(diag, axis=0)
-
-#    fig, ax = plt.subplots()
-  #  im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    #plt.colorbar(im)
-    plt.plot(diag[0, :])
+    print(param_val.shape)
+    print(time.shape)
+    fig, ax = plt.subplots()
+    im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    ax.YAxis.set_ticks(param_val)
+    plt.colorbar(im)
+    # plt.plot(diag[0, :])
     plt.show()
 
 
