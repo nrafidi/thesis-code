@@ -223,19 +223,30 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
 
 if __name__ == '__main__':
     exp = 'krns2'
-    mode = 'pred'
+    mode = 'coef'
+    word = 'firstNoun'
+    sen_type = 'active'
     accuracy = 'abs'
     sub = 'B'
-    param_specs = {'w': 12,
-                   'o': 12,
+
+    param_specs = {'o': 12,
                    'pd': 'F',
                    'pr': 'F',
-                   'F': 2,
                    'alg': 'LR',
+                   'F': 2,
                    'z': 'F',
                    'avg': 'F',
                    'ni': 2,
                    'nr': 10,
                    'rs': 1}
-    agg_results(exp, mode, accuracy, sub, param_specs=param_specs)
+    sub_results, sub_params, sub_time = agg_TGM.agg_results(exp,
+                                                            mode,
+                                                            word,
+                                                            sen_type,
+                                                            accuracy,
+                                                            sub,
+                                                            param_specs=param_specs)
+    print(len(sub_results))
+    for res in sub_results:
+        print(res.shape)
 
