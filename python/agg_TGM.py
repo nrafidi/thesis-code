@@ -246,7 +246,11 @@ if __name__ == '__main__':
                                                     accuracy,
                                                     sub,
                                                     param_specs=param_specs)
-    for res in sub_results:
-        for mat in res:
-            print(mat.shape)
+    for i, res in enumerate(sub_results):
+        win_size = int(sub_params[i])
+        mat = res[0]
+        mat = np.sum(mat, axis=0)
+        mat = np.reshape(mat, (306, win_size))
+        meow = np.unravel_index(np.where(mat > 0), (306, win_size))
+        print(meow)
 
