@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -36,14 +36,14 @@ if __name__ == '__main__':
     diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
 
     diag = np.mean(diag, axis=0)
-    print(param_val.shape)
-    print(time.shape)
     fig, ax = plt.subplots()
     im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    ax.YAxis.set_ticks(param_val)
+    ax.YAxis.set_ticks(param_val[0, :])
+    ax.XAxis.set_ticks(time[0, 0, :])
     plt.colorbar(im)
+    plt.savefig('plot.pdf', bbox_inches='tight')
     # plt.plot(diag[0, :])
-    plt.show()
+    # plt.show()
 
 
 
