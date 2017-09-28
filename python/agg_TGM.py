@@ -176,7 +176,8 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         diag = []
         param_of_interest = param_dict[sub][param]
         tgm_of_interest = result_dict[sub]
-        time_of_interest = time_dict[sub]['win_starts']
+        time = time_dict[sub]['time']
+        time_of_interest = [time[i] for i in time_dict[sub]['win_starts']]
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
@@ -184,7 +185,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
         param_of_interest = list(compress(param_of_interest, ind_spec))
         time_of_interest = list(compress(time_of_interest, ind_spec))
-        sort_inds = np.argsort(param_of_interest)
+        sort_inds = np.argsort(np.array(param_of_interest).astype('int'))
 
         tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
         param_of_interest = [param_of_interest[i] for i in sort_inds]
