@@ -56,6 +56,8 @@ def coef_by_param(exp,
     meow = np.max(sim_mat, axis=1)
     print(meow)
     sim_mat = np.divide(sim_mat, meow[:, None])
+    woof = np.min(sim_mat, axis=1)
+    sim_mat -= woof[:, None]
     print(sim_mat[0, 0])
     return sim_mat
 
