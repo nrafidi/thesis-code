@@ -178,7 +178,9 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = param_dict[sub][param]
         tgm_of_interest = result_dict[sub]
         time_of_interest = time_dict[sub]['time']
+        
         starts_of_interest = time_dict[sub]['win_starts']
+        
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
@@ -191,7 +193,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
 
         tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
         param_of_interest = [param_of_interest[i] for i in sort_inds]
-        time_of_interest = [np.array(time_of_interest[i]).astype('int') for i in sort_inds]
+        time_of_interest = [np.array(time_of_interest[i]).astype(np.float) for i in sort_inds]
         starts_of_interest = [np.array(starts_of_interest[i]).astype('int') for i in sort_inds]
 
         min_size = 1000
@@ -202,7 +204,11 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
 
         diag = [tgm_diag[:min_size] for tgm_diag in diag]
         starts_of_interest = [start_arr[:min_size] for start_arr in starts_of_interest]
-        time_of_interest = [time_arr[start_arr] for time_arr in time_of_interest for start_arr in starts_of_interest]
+        for i, start_arr in enumerate(starts_of_interest):
+            #print(time_of_interest[i])
+            time_of_interest[i] = time_of_interest[i][start_arr]
+            #print(start_arr)
+            #print(time_of_interest[i])
 
         diag_by_sub.append(np.array(diag))
         param_by_sub.append(np.array(param_of_interest))
