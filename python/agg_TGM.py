@@ -191,8 +191,8 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
 
         tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
         param_of_interest = [param_of_interest[i] for i in sort_inds]
-        time_of_interest = [np.array(time_of_interest[i]) for i in sort_inds]
-        starts_of_interest = [np.array(starts_of_interest[i]) for i in sort_inds]
+        time_of_interest = [np.array(time_of_interest[i]).astype('int') for i in sort_inds]
+        starts_of_interest = [np.array(starts_of_interest[i]).astype('int') for i in sort_inds]
 
         min_size = 1000
         for tgm in tgm_of_interest:
