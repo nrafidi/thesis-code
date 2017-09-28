@@ -1,7 +1,7 @@
 import glob
 from itertools import compress
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os

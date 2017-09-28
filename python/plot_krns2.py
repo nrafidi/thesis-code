@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -43,9 +43,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, time.shape[-1], 25))
     ax.set_xticklabels(np.squeeze(time[0, 0, ::25]))
     plt.colorbar(im)
-    plt.savefig('plot.pdf', bbox_inches='tight')
+    #plt.savefig('plot.pdf', bbox_inches='tight')
     # plt.plot(diag[0, :])
-    # plt.show()
+    plt.show()
 
 
 
