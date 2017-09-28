@@ -172,12 +172,13 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
     diag_by_sub = []
     param_by_sub = []
     time_by_sub = []
+    start_by_sub = []
     for sub in result_dict:
         diag = []
         param_of_interest = param_dict[sub][param]
         tgm_of_interest = result_dict[sub]
-        time = time_dict[sub]['time']
-        time_of_interest = [time[i] for i in time_dict[sub]['win_starts']]
+        time_of_interest = time_dict[sub]['time']
+        starts_of_interest = time_dict[sub]['win_starts']
         ind_spec = [True] * len(param_of_interest)
         for p in param_specs:
             p_of_interest = np.array(param_dict[sub][p])
@@ -185,11 +186,13 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
         param_of_interest = list(compress(param_of_interest, ind_spec))
         time_of_interest = list(compress(time_of_interest, ind_spec))
+        starts_of_interest = list(compress(starts_of_interest, ind_spec))
         sort_inds = np.argsort(np.array(param_of_interest).astype('int'))
 
         tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
         param_of_interest = [param_of_interest[i] for i in sort_inds]
         time_of_interest = [np.array(time_of_interest[i]) for i in sort_inds]
+        starts_of_interest = [np.array(starts_of_interest[i]) for i in sort_inds]
 
         min_size = 1000
         for tgm in tgm_of_interest:
@@ -198,15 +201,18 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
             diag.append(np.diag(tgm))
 
         diag = [tgm_diag[:min_size] for tgm_diag in diag]
-        time_of_interest = [time_arr[:min_size] for time_arr in time_of_interest]
+        starts_of_interest = [start_arr[:min_size] for start_arr in starts_of_interest]
+        time_of_interest = [time_arr[start_arr] for time_arr in time_of_interest for start_arr in starts_of_interest]
 
         diag_by_sub.append(np.array(diag))
         param_by_sub.append(np.array(param_of_interest))
         time_by_sub.append(np.array(time_of_interest))
+        start_by_sub.append(np.array(starts_of_interest))
     diag = np.array(diag_by_sub)
     param_val = np.array(param_by_sub)
     time = np.array(time_by_sub)
-    return diag, param_val, time
+    starts = np.array(start_by_sub)
+    return diag, param_val, time, starts
 
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ if __name__ == '__main__':
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
-    diag, param_val, time = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
+    diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
 
     diag = np.mean(diag, axis=0)
     fig, ax = plt.subplots()
