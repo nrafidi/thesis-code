@@ -75,13 +75,6 @@ if __name__ == '__main__':
                    'ni': 2,
                    'nr': 10,
                    'rs': 1}
-    sub_results, sub_params, sub_time = agg_TGM.agg_results(exp,
-                                                    mode,
-                                                    word,
-                                                    sen_type,
-                                                    accuracy,
-                                                    sub,
-                                                    param_specs=param_specs)
 
     sim_mat = coef_by_param(exp,
                             word,
