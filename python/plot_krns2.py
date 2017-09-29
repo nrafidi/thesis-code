@@ -14,7 +14,7 @@ if __name__ == '__main__':
     word = 'firstNoun'
     sen_type = 'active'
     accuracy = 'abs'
-    param_specs = {'w': 100,
+    param_specs = {'w': 50,
                    'pd': 'F',
                    'pr': 'F',
                    'alg': 'LR',
@@ -36,15 +36,19 @@ if __name__ == '__main__':
                                                                                accuracy,
                                                                                sub,
                                                                                param_specs=param_specs)
-    diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'o', {})
+    diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'o', {}, param_limit=50)
     diag = np.mean(diag, axis=0)
 
-    im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    ax.set_yticks(range(param_val.shape[-1]))
-    ax.set_yticklabels(param_val[0, :].astype('int'))
-    ax.set_xticks(range(0, time.shape[-1], 25))
-    ax.set_xticklabels(np.squeeze(time[0, 0, ::25]))
-    plt.colorbar(im)
+    thing_to_plot = 1
+    fig, ax = plt.subplots()
+    ax.plot(diag[thing_to_plot, :])
+ #   im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+ #   ax.set_yticks(range(param_val.shape[-1]))
+#    ax.set_yticklabels(param_val[0, :].astype('int'))
+    ax.set_xticks(range(0, time.shape[-1], 5))
+    print(time.shape)
+    ax.set_xticklabels(np.squeeze(time[0, thing_to_plot, ::5]))
+ #   plt.colorbar(im)
     #plt.savefig('plot.pdf', bbox_inches='tight')
     # plt.plot(diag[0, :])
     plt.show()

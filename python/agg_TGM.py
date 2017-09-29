@@ -139,6 +139,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
+        #print(f)
         print(i_f)
         for param in PARAMS_TO_AGG:
             if param not in sub_params:
@@ -168,14 +169,14 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     return sub_results, sub_params, sub_time
 
 
-def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
+def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, param_limit=None):
     diag_by_sub = []
     param_by_sub = []
     time_by_sub = []
     start_by_sub = []
     for sub in result_dict:
         diag = []
-        param_of_interest = param_dict[sub][param]
+        param_of_interest = [int(p) for p in param_dict[sub][param]]
         tgm_of_interest = result_dict[sub]
         time_of_interest = time_dict[sub]['time']
         
@@ -195,6 +196,13 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs):
         param_of_interest = [param_of_interest[i] for i in sort_inds]
         time_of_interest = [np.array(time_of_interest[i]).astype(np.float) for i in sort_inds]
         starts_of_interest = [np.array(starts_of_interest[i]).astype('int') for i in sort_inds]
+
+        if param_limit is not None:
+            limit_ind = param_of_interest.index(param_limit) + 1
+            tgm_of_interest = tgm_of_interest[:limit_ind]
+            param_of_interest = param_of_interest[:limit_ind]
+            starts_of_interest = starts_of_interest[:limit_ind]
+            time_of_interest = time_of_interest[:limit_ind]
 
         min_size = 1000
         for tgm in tgm_of_interest:
