@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     accuracy = 'abs'
 
-    for o in [12, 25]:
+    for o in [12]:
         param_specs = {'o': o,
                        'pd': 'F',
                        'pr': 'F',
@@ -41,20 +41,6 @@ if __name__ == '__main__':
         diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
         diag = np.mean(diag, axis=0)
 
-    #     thing_to_plot = 1
-    #     fig, ax = plt.subplots()
-    #     ax.plot(diag[thing_to_plot, :])
-    #  #   im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    #  #   ax.set_yticks(range(param_val.shape[-1]))
-    # #    ax.set_yticklabels(param_val[0, :].astype('int'))
-    #     ax.set_xticks(range(0, time.shape[-1], 5))
-    #     print(time.shape)
-    #     ax.set_xticklabels(np.squeeze(time[0, thing_to_plot, ::5]))
-    #  #   plt.colorbar(im)
-    #     #plt.savefig('plot.pdf', bbox_inches='tight')
-    #     # plt.plot(diag[0, :])
-    #     plt.show()
-
         sim_mat = coef_sim.coef_by_param(exp,
                                          word,
                                          sen_type,
@@ -64,20 +50,42 @@ if __name__ == '__main__':
 
         sim_mat = zscore(sim_mat, axis=1)
         num_win = sim_mat.shape[0]
-
+        new_diag = np.empty(diag.shape)
         fig, axs = plt.subplots(num_win, 1, figsize=(20, 30))
         for i_win in range(num_win):
             diag_to_plot = diag[i_win, :]
-            diag_to_plot[diag_to_plot > 0.25] = 0.5
-            diag_to_plot[diag_to_plot < 0.25] = 0
+            diag_to_plot[diag_to_plot >= 0.375] = 0.5
+            diag_to_plot[diag_to_plot < 0.375] = 0
+            new_diag[i_win, :] = diag_to_plot
             axs[i_win].plot(diag_to_plot)
             sim_to_plot = sim_mat[i_win, :]
-            sim_to_plot[sim_to_plot > 0] = 0.5
-            sim_to_plot[sim_to_plot < 0] = 0
+            sim_to_plot[sim_to_plot > 0] = 0.6
+            sim_to_plot[sim_to_plot < 0] = 0.1
             axs[i_win].plot(sim_to_plot)
-            axs[i_win].set_ylim([0, 0.75])
+            axs[i_win].set_ylim([-0.1, 0.75])
+            axs[i_win].set_title(param_val[0, i_win])
         fig.suptitle('Overlap {}'.format(o))
-        plt.savefig('overlap{}.pdf'.format(o))
+#        plt.savefig('overlap{}.pdf'.format(o))
+        fig, ax = plt.subplots()
+        ax.plot(np.sum(new_diag, axis=0))
+        ax.plot(new_diag[-1, :] + 2)
+        ax.plot(new_diag[0, :] + 1)
+        ax.set_ylim([0, 0.5*num_win + 0.1])
+        ax.set_xticks(range(0, time.shape[-1], 25))
+        ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
+        plt.show()
 
 
-
+    #     thing_to_plot = 1
+    #     fig, ax = plt.subplots()
+    #     ax.plot(diag[thing_to_plot, :])
+    #  #   im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    #  #   ax.set_yticks(range(param_val.shape[-1]))
+    # #    ax.set_yticklabels(param_val[0, :].astype('int'))
+    #     ax.set_xticks(range(0, time.shape[-1], 5))
+    #     print(time.shape)
+   #     ax.set_xticklabels(np.squeeze(time[0, thing_to_plot, ::5]))
+#   plt.colorbar(im)
+ #       plt.savefig('plot.pdf', bbox_inches='tight')
+ #         plt.plot(diag[0, :])
+ #        plt.show()
