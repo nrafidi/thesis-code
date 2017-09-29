@@ -23,12 +23,11 @@ import time
 #parser.add_argument('--random_state', type=int, default=1)
 
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
-OVERLAPS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
-MODES = ['coef']  # pred
+OVERLAPS = [3, 6] #12, 25, 50, 100, 150, 200, 250, 300, 350]
+MODES = ['pred', 'coef']  # pred
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
 NUM_FOLDSS = [2, 4, 8]
@@ -48,7 +47,7 @@ OUT_FILE = '{dir}{job_name}.o'
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00 -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},num_feats={num_feats},doZscore={z},' \
                 'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs},force=True ' \
