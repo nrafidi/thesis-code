@@ -3,6 +3,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.matlib as matlib
+from scipy.stats.mstats import zscore
 import agg_TGM
 
 
@@ -52,13 +53,6 @@ def coef_by_param(exp,
             #              plt.show()
             sim_mat[i_win, i_coef - 1] = np.linalg.norm(curr_mat - prev_mat)
     sim_mat = sim_mat[:, 0:(min_win - 1)]
-    print(sim_mat[0, 0])
-    meow = np.max(sim_mat, axis=1)
-    print(meow)
-    sim_mat = np.divide(sim_mat, meow[:, None])
-    woof = np.min(sim_mat, axis=1)
-    sim_mat -= woof[:, None]
-    print(sim_mat[0, 0])
     return sim_mat
 
 if __name__ == '__main__':
