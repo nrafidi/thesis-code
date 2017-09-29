@@ -3,7 +3,6 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.matlib as matlib
-from scipy.stats.mstats import zscore
 import agg_TGM
 
 

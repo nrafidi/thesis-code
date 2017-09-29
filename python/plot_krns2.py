@@ -3,6 +3,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
+from scipy.stats.mstats import zscore
 import agg_TGM
 import coef_sim
 
@@ -45,12 +46,19 @@ if __name__ == '__main__':
                                      'B',
                                      param_specs)
 
+    sim_mat = zscore(sim_mat, axis=1)
     num_win = sim_mat.shape[0]
 
     fig, axs = plt.subplots(num_win, 1)
     for i_win in range(num_win):
-        axs[i_win].plot(diag[i_win, :])
-        axs[i_win].plot(sim_mat[i_win, :])
+        diag_to_plot = diag[i_win, :]
+        diag_to_plot[diag_to_plot > 0.25] = 0.5
+        diag_to_plot[diag_to_plot < 0.25] = 0
+        axs[i_win].plot(diag_to_plot)
+        sim_to_plot = sim_mat[i_win, :]
+        sim_to_plot[sim_to_plot > 0] = 0.5
+        sim_to_plot[sim_to_plot < 0] = 0
+        axs[i_win].plot(sim_to_plot)
     plt.show()
 
     # im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
