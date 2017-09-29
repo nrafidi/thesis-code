@@ -59,6 +59,7 @@ if __name__ == '__main__':
         sim_to_plot[sim_to_plot > 0] = 0.5
         sim_to_plot[sim_to_plot < 0] = 0
         axs[i_win].plot(sim_to_plot)
+        axs[i_win].set_ylim([0, 0.75])
     plt.show()
 
     # im = ax.imshow(diag, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
