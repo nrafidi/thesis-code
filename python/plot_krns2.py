@@ -80,7 +80,7 @@ if __name__ == '__main__':
         ax.plot(np.sum(np.divide(new_diag, 0.75), axis=0))
         # ax.plot(new_diag[-1, :] + 2)
         # ax.plot(new_diag[0, :] + 1)
-        ax.set_yticks(range(num_win) + 1)
+        ax.set_yticks(range(1, num_win+1))
         ax.set_ylabel('Number of windows')
         ax.set_ylim([0, num_win])
         ax.set_xticks(range(0, time.shape[-1], 25))
