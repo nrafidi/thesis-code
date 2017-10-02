@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     accuracy = 'abs'
 
-    for o in [12, 6, 3]:
+    for o in [6, 3]:
         param_specs = {'o': o,
                        'pd': 'F',
                        'pr': 'F',
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
         ax.set_title('Number of windows above chance over time')
         plt.savefig('overlap{}_comb_acc.pdf'.format(o), bbox_inches='tight')
-        plt.show()
+        # plt.show()
 
 
     #     thing_to_plot = 1
