@@ -22,6 +22,7 @@ if __name__ == '__main__':
                                    batch_exp.REPS_TO_USES,
                                    batch_exp.RANDOM_STATES)
     job_id = 0
+    successful_jobs = 0
     for grid in param_grid:
         job_str = batch_exp.JOB_NAME.format(exp=grid[0],
                                             sub=grid[1],
@@ -51,6 +52,10 @@ if __name__ == '__main__':
                             is_valid = is_valid and (grid[9] == 2)
                         if is_valid:
                             print(meow)
+                    else:
+                        successful_jobs += 1
 
 
         job_id += 1
+
+    print('{}/{} jobs succeeded'.format(successful_jobs, job_id))
