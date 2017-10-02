@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     accuracy = 'abs'
 
-    for o in [12, 3, 6]:
+    for o in [12]:
         param_specs = {'o': o,
                        'pd': 'F',
                        'pr': 'F',
@@ -29,7 +29,8 @@ if __name__ == '__main__':
         sub_results = {}
         sub_params = {}
         sub_time = {}
-        for sub in ['B']:  # load_data.VALID_SUBS[exp]:
+        sub_sim = []
+        for sub in ['B', 'C']: # load_data.VALID_SUBS[exp]:
 
             sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                    mode,
@@ -38,15 +39,17 @@ if __name__ == '__main__':
                                                                                    accuracy,
                                                                                    sub,
                                                                                    param_specs=param_specs)
+            sub_sim.append(coef_sim.coef_by_param(exp,
+                                                  word,
+                                                  sen_type,
+                                                  accuracy,
+                                                  sub,
+                                                  param_specs))
         diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
         diag = np.mean(diag, axis=0)
 
-        sim_mat = coef_sim.coef_by_param(exp,
-                                         word,
-                                         sen_type,
-                                         accuracy,
-                                         'B',
-                                         param_specs)
+        sim_mat = np.mean(np.asarray(sub_sim), axis=0)
+        print(sim_mat.shape)
 
         sim_mat -= np.min(sim_mat, axis=1)[:, None]
         sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
@@ -58,17 +61,18 @@ if __name__ == '__main__':
             win_len = param_val[0, i_win]*0.002
             time_to_plot = plot_time[i_win, :] + win_len*0.5
             diag_to_plot = diag[i_win, :]
-            # diag_to_plot[diag_to_plot >= 0.375] = 0.5
-            # diag_to_plot[diag_to_plot < 0.375] = 0
-            new_diag[i_win, :] = diag_to_plot
             axs[i_win].plot(time_to_plot, diag_to_plot)
             sim_to_plot = sim_mat[i_win, :]
             # sim_to_plot[sim_to_plot > 0] = 0.6
             # sim_to_plot[sim_to_plot < 0] = 0.1
             axs[i_win].plot(time_to_plot[:sim_to_plot.shape[0]], sim_to_plot)
-            axs[i_win].set_ylim([0, 1])
+            axs[i_win].plot(time_to_plot, np.ones(time_to_plot.shape)*0.25, '--')
+            axs[i_win].set_ylim([0.1, 1])
             axs[i_win].set_xlim([np.min(plot_time), np.max(plot_time)])
             axs[i_win].set_title(win_len)
+            diag_to_plot[diag_to_plot >= 0.25] = 0.5
+            diag_to_plot[diag_to_plot < 0.25] = 0
+            new_diag[i_win, :] = diag_to_plot
         fig.suptitle('Overlap {}'.format(o))
 #        plt.savefig('overlap{}.pdf'.format(o))
         fig, ax = plt.subplots()
