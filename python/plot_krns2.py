@@ -50,7 +50,6 @@ if __name__ == '__main__':
 
         sim_mat -= np.min(sim_mat, axis=1)[:, None]
         sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
-        print(sim_mat.shape)
         num_win = sim_mat.shape[0]
         new_diag = np.empty(diag.shape)
         plot_time = np.squeeze(time[0, :, :])
@@ -58,17 +57,15 @@ if __name__ == '__main__':
         for i_win in range(num_win):
             win_len = param_val[0, i_win]*0.002
             time_to_plot = plot_time[i_win, :] + win_len*0.5
-            print(time_to_plot.shape)
             diag_to_plot = diag[i_win, :]
             # diag_to_plot[diag_to_plot >= 0.375] = 0.5
             # diag_to_plot[diag_to_plot < 0.375] = 0
             new_diag[i_win, :] = diag_to_plot
             axs[i_win].plot(time_to_plot, diag_to_plot)
             sim_to_plot = sim_mat[i_win, :]
-            print(sim_to_plot.shape)
             # sim_to_plot[sim_to_plot > 0] = 0.6
             # sim_to_plot[sim_to_plot < 0] = 0.1
-            axs[i_win].plot(time_to_plot, sim_to_plot)
+            axs[i_win].plot(time_to_plot[:sim_to_plot.shape[0]], sim_to_plot)
             axs[i_win].set_ylim([0, 1])
             axs[i_win].set_xlim([np.min(plot_time), np.max(plot_time)])
             axs[i_win].set_title(win_len)
