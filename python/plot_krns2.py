@@ -48,8 +48,8 @@ if __name__ == '__main__':
                                          'B',
                                          param_specs)
 
-        sim_mat -= np.min(sim_mat, axis=1)
-        sim_mat /= np.max(sim_mat, axis=1)
+        sim_mat -= np.min(sim_mat, axis=1)[:, None]
+        sim_mat /= np.max(sim_mat, axis=1)[:, None]
 
         num_win = sim_mat.shape[0]
         new_diag = np.empty(diag.shape)
