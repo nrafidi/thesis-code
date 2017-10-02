@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     accuracy = 'abs'
 
-    for o in [12]:
+    for o in [3, 6, 12]:
         param_specs = {'o': o,
                        'pd': 'F',
                        'pr': 'F',
