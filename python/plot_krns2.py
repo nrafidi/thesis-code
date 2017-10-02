@@ -15,7 +15,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     accuracy = 'abs'
 
-    for o in [12]:
+    for o in [12, 6, 3]:
         param_specs = {'o': o,
                        'pd': 'F',
                        'pr': 'F',
@@ -66,8 +66,8 @@ if __name__ == '__main__':
             # sim_to_plot[sim_to_plot < 0] = 0.1
             axs[i_win].plot(time_to_plot[:sim_to_plot.shape[0]], sim_to_plot)
             axs[i_win].plot(time_to_plot, np.ones(time_to_plot.shape)*0.25, '--')
-            diag_to_plot[diag_to_plot >= 0.25] = 0.75
-            diag_to_plot[diag_to_plot < 0.25] = 0
+            diag_to_plot[diag_to_plot >= 0.3] = 0.75
+            diag_to_plot[diag_to_plot < 0.3] = 0
             axs[i_win].plot(time_to_plot, diag_to_plot, ':')
             new_diag[i_win, :] = diag_to_plot
             axs[i_win].set_ylim([0.1, 1])
@@ -75,14 +75,18 @@ if __name__ == '__main__':
             axs[i_win].set_title(win_len)
 
         fig.suptitle('Overlap {}'.format(o))
-#        plt.savefig('overlap{}.pdf'.format(o))
+        plt.savefig('overlap{}_sim_acc.pdf'.format(o), bbox_inches='tight')
         fig, ax = plt.subplots()
-        ax.plot(np.sum(new_diag, axis=0))
+        ax.plot(np.sum(np.divide(new_diag, 0.75), axis=0))
         # ax.plot(new_diag[-1, :] + 2)
         # ax.plot(new_diag[0, :] + 1)
-        ax.set_ylim([0, 0.5*num_win + 0.1])
+        ax.set_yticks(range(num_win) + 1)
+        ax.set_ylabel('Number of windows')
+        ax.set_ylim([0, num_win])
         ax.set_xticks(range(0, time.shape[-1], 25))
         ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
+        ax.set_title('Number of windows above chance over time')
+        plt.savefig('overlap{}_comb_acc.pdf'.format(o), bbox_inches='tight')
         plt.show()
 
 
