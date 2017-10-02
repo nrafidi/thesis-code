@@ -232,7 +232,6 @@ if __name__ == '__main__':
         is_valid = is_valid and args.num_folds == 2
         if not is_valid:
             print('folds wrong')
-    print('testing')
     if is_valid:
         run_tgm_exp(experiment=args.experiment,
                     subject=args.subject,

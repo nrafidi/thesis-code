@@ -11,15 +11,15 @@ VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H'],
 
 WORD_INDS = {'firstNoun': 0, 'verb': 1, 'secondNoun': 2}
 
-WORD_POS = {'krns2':
-                    {'active':
-                         {'firstNoun': 1,
-                          'verb': 2,
-                          'secondNoun': 4},
-                     'passive':
-                         {'firstNoun': 1,
-                          'verb': 3,
-                          'secondNoun': 6}}}
+WORD_POS = {'active':
+                {'firstNoun': 1,
+                 'verb': 2,
+                 'secondNoun': 4},
+            'passive':
+                {'firstNoun': 1,
+                 'verb': 3,
+                 'secondNoun': 6}}
+
 
 WORD_PER_SEN = {'krns2':
                     {'active':
@@ -29,12 +29,29 @@ WORD_PER_SEN = {'krns2':
                      'passive':
                          {'firstNoun': ['peach','hammer','school','door'],
                           'verb': ['found', 'kicked', 'inspected', 'touched'],
-                          'secondNoun': ['doctor.', 'dog.', 'monkey.', 'student.']}}}
+                          'secondNoun': ['doctor.', 'dog.', 'monkey.', 'student.']}},
+                'PassAct2':
+                    {'active':
+                         {'firstNoun': ['man', 'girl', 'woman', 'boy'],
+                          'verb': ['watched', 'liked', 'despised', 'encouraged'],
+                          'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']},
+                     'passive':
+                         {'firstNoun': ['man', 'girl', 'woman', 'boy'],
+                          'verb': ['watched', 'liked', 'despised', 'encouraged'],
+                          'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']}},
+                'PassAct3':
+                    {'active':
+                         {'firstNoun': ['man', 'girl', 'woman', 'boy'],
+                          'verb': ['kicked', 'helped', 'approached', 'punched'],
+                          'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']},
+                     'passive':
+                         {'firstNoun': ['man', 'girl', 'woman', 'boy'],
+                          'verb': ['kicked', 'helped', 'approached', 'punched'],
+                          'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']}}}
 
-TIME_LIMITS = {'krns2':
-                   {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
-                    'verb': {'tmin': -0.5, 'tmax': 4},
-                    'secondNoun': {'tmin': -0.5, 'tmax': 3}}}
+TIME_LIMITS = {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
+               'verb': {'tmin': -0.5, 'tmax': 4},
+               'secondNoun': {'tmin': -0.5, 'tmax': 3}}
 
 # Old slugs:
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
@@ -65,7 +82,7 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
                                    ('sentence_id', lambda sid: sid != None),
-                                   ('word_index_in_sentence', lambda wis: wis == WORD_POS[experiment][sen_type][word])],
+                                   ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
     exp_sub = [(experiment, subject)]
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
@@ -75,8 +92,8 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
 
     _, uels = zip(*id_uels)
 
-    tmin = TIME_LIMITS[experiment][word]['tmin']
-    tmax = TIME_LIMITS[experiment][word]['tmax']
+    tmin = TIME_LIMITS[word]['tmin']
+    tmax = TIME_LIMITS[word]['tmax']
     evokeds = np.array([hippo.io.load_mne_epochs(us, preprocessing=proc, baseline=None,
                                         tmin=tmin, tmax=tmax) for us in uels])
 
