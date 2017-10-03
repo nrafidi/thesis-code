@@ -32,7 +32,7 @@ if __name__ == '__main__':
                 sub_params = {}
                 sub_time = {}
                 sub_sim = []
-                for sub in ['B']: #load_data.VALID_SUBS[exp]:
+                for sub in load_data.VALID_SUBS[exp]:
 
                     sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                            mode,
