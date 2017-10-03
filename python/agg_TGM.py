@@ -156,6 +156,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
         result = np.load(f)
         if mode == 'pred':
             tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            print(tgm.shape)
         else:
             tgm = result['coef']
 
@@ -213,6 +214,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, pa
         diag = [tgm_diag[:min_size] for tgm_diag in diag]
         starts_of_interest = [start_arr[:min_size] for start_arr in starts_of_interest]
         for i, start_arr in enumerate(starts_of_interest):
+            print(len(time_of_interest[i]))
             #print(time_of_interest[i])
             time_of_interest[i] = time_of_interest[i][start_arr]
             #print(start_arr)

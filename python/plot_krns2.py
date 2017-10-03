@@ -60,8 +60,8 @@ if __name__ == '__main__':
 
                 diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
                 win_sizes = np.array([param_val[0, i_win]*2 for i_win in range(num_win)])
-                print(diag_max.shape)
-                print(win_sizes.shape)
+                # print(diag_max.shape)
+                # print(win_sizes.shape)
                 fig, ax = plt.subplots()
                 ax.plot(win_sizes, diag_max)
                 # plt.show()
@@ -100,7 +100,7 @@ if __name__ == '__main__':
                 ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
                 ax.set_title('Number of windows above chance over time\n{} {} Overlap {}'.format(word, sen_type, o))
                 plt.savefig('overlap{}_{}_{}_comb_acc.pdf'.format(o, word, sen_type), bbox_inches='tight')
-                # plt.show()
+                plt.show()
 
 
             #     thing_to_plot = 1
