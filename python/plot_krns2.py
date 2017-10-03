@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['active', 'passive']:
-            for o in [12, 6, 3]:
+            for o in [12]:
                 param_specs = {'o': o,
                                'pd': 'F',
                                'pr': 'F',
@@ -50,11 +50,20 @@ if __name__ == '__main__':
                 diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
                 diag = np.mean(diag, axis=0)
 
+
+
                 sim_mat = np.mean(np.asarray(sub_sim), axis=0)
 
                 sim_mat -= np.min(sim_mat, axis=1)[:, None]
                 sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
                 num_win = sim_mat.shape[0]
+
+                diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
+                win_sizes = np.array(win*2 for win in param_val)
+                fig, ax = plt.subplots()
+                ax.plot(win_sizes, diag_max)
+                plt.show()
+
                 new_diag = np.empty(diag.shape)
                 plot_time = np.squeeze(time[0, :, :])
                 fig, axs = plt.subplots(num_win, 1, figsize=(20, 30))
