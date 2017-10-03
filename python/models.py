@@ -1,24 +1,123 @@
 import numpy as np
 import sklearn.linear_model
 
+WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 
-# def _tgm_from_preds(preds, labels, labels_to_index, cv_scheme):
-#     cv_scheme = np.array(cv_scheme)
-#     labels = np.array(labels)
-#     n_w = preds[0].shape[0]
-#     # print(preds[0][0].shape)
-#     n_s = 2 * preds[0][0].shape[1]
-#     n_cv = len(np.unique(cv_scheme))
-#     tgm = np.zeros((n_w, n_w, n_s))  # rows define train time
-#
-#     for i in xrange(n_w):
-#         for cvi in xrange(n_cv):
-#             in_cv = cv_scheme == cvi
-#             l_indicies = [labels_to_index[l] for l in labels[in_cv]]
-#             p = np.argmax(preds[cvi][i], axis=2)
-#             tgm[i, :, in_cv] = np.transpose(p == l_indicies)
-#
-#     return tgm
+
+def nb_diag(data,
+            labels,
+            kf,
+            sub_kf,
+            win_starts,
+            feature_select=None,
+            feature_select_params=None,
+            doZscore=False,
+            doAvg=False,
+            ddof=1):
+
+    labels = np.array(labels)
+    n_tot = data.shape[0]
+    n_time = data.shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    in_l = [l_ints == i for i in xrange(n_l)]
+
+    total_win = np.max(win_starts)
+
+    preds = []
+    cv_membership = []
+    feature_masks = []
+    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
+        train_data = data[in_train, :, :]
+        train_labels = l_ints
+        for w_s in win_starts:
+            for in_sub_train, in_sub_test in sub_kf.split
+        test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts if
+                        w_s < (total_win - win_len)]
+        n_w = len(test_windows)
+        cv_membership.append(in_test)
+        preds.append(np.zeros((n_w,), dtype=np.object))
+        feature_masks.append(np.zeros((n_w,), dtype=np.object))
+        mu_full_all = np.mean(data[in_train, :, :], axis=0)
+        std_full_all = np.std(data[in_train, :, :], axis=0, ddof=ddof)
+        for wi in xrange(n_w):
+            train_time = test_windows[wi]
+            if doZscore:
+                new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
+                new_data = new_data / std_full_all[None, :, train_time]
+            else:
+                new_data = data[:, :, train_time]
+            if doAvg:
+                new_data = np.mean(new_data, axis=2)
+                mu_full = np.array([np.mean(
+                    new_data[np.logical_and(in_train, in_l[li]), :],
+                    0) for li in xrange(n_l)])
+                std_full = np.array([np.std(
+                    new_data[np.logical_and(in_train, in_l[li]), :],
+                    axis=0, ddof=ddof) for li in xrange(n_l)])
+            else:
+                mu_full = np.array([np.mean(
+                    new_data[np.logical_and(in_train, in_l[li]), :, :],
+                    0) for li in xrange(n_l)])
+                std_full = np.array([np.std(
+                    new_data[np.logical_and(in_train, in_l[li]), :, :],
+                    axis=0, ddof=ddof) for li in xrange(n_l)])
+
+            std_full = np.mean(std_full, axis=0)
+            double_var_full = 2 * np.square(std_full)
+
+            if doAvg:
+                B_full = np.divide(np.square(mu_full), double_var_full[None, :])
+                A = (2 * mu_full) / double_var_full[None, :]
+            else:
+                B_full = np.divide(np.square(mu_full), double_var_full[None, :, :])
+                A = (2 * mu_full) / double_var_full[None, :, :]
+
+            if feature_select is not None:
+                if feature_select == 'distance_of_means':
+                    mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
+                                     ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
+                                     np.zeros(mu_full[0].shape))
+                    sorted_indices = np.argsort(-mu_diff, axis=None)
+                    nfeatures = feature_select_params['number_of_features']
+                    mask = np.zeros(mu_diff.shape, dtype=np.bool)
+                    mask[np.unravel_index(sorted_indices[0:nfeatures], mu_diff.shape)] = True
+                else:
+                    raise ValueError('Invalid feature selection')
+            else:
+                if doAvg:
+                    mask = np.ones(A[:, :].shape[1:], dtype=np.bool)
+                else:
+                    mask = np.ones(A[:, :, :].shape[1:], dtype=np.bool)
+            feature_masks[-1][wi] = mask
+
+            # This is right, right?
+            if doAvg:
+                A = np.multiply(mask[None, :], A)
+                B = np.sum(np.multiply(B_full, mask[None, :]), axis=1)  # n classes x n time
+            else:
+                A = np.multiply(mask[None, :, :], A)
+                B = np.sum(np.multiply(B_full, mask[None, :, :]), axis=(1, 2))  # n classes x n time
+
+            P_cGx = np.empty([len(test_windows), np.sum(in_test), n_l])
+            test_data_full = data[in_test, :, :]
+            for wj in xrange(n_w):
+                test_time = test_windows[wj]
+                test_data = test_data_full[:, :, test_time]
+                if doZscore:
+                    test_data = test_data - mu_full_all[None, :, train_time]
+                    test_data = test_data / std_full_all[None, :, train_time]
+                if doAvg:
+                    test_data = np.mean(test_data, axis=2)
+                    print(test_data.shape)
+                    P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :], A[None, :, :]), axis=2) - B
+                else:
+                    P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :, :], A[None, :, :, :]), axis=(2, 3)) - B
+            preds[-1][wi] = P_cGx
+    return preds, l_ints, cv_membership, feature_masks
 
 
 def nb_tgm(data,
