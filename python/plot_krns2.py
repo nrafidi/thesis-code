@@ -32,7 +32,7 @@ if __name__ == '__main__':
                 sub_params = {}
                 sub_time = {}
                 sub_sim = []
-                for sub in load_data.VALID_SUBS[exp]:
+                for sub in ['B']: #load_data.VALID_SUBS[exp]:
 
                     sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                            mode,
@@ -60,6 +60,8 @@ if __name__ == '__main__':
 
                 diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
                 win_sizes = np.array(win*2 for win in param_val)
+                print(diag_max.shape)
+                print(win_sizes.shape)
                 fig, ax = plt.subplots()
                 ax.plot(win_sizes, diag_max)
                 plt.show()
