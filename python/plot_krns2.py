@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
                 sim_mat -= np.min(sim_mat, axis=1)[:, None]
                 sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
-                num_win = sim_mat.shape[0]
+                num_win = diag.shape[0]
 
                 diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
                 win_sizes = np.array([param_val[0, i_win]*2 for i_win in range(num_win)])
