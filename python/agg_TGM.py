@@ -204,7 +204,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, pa
             starts_of_interest = starts_of_interest[:limit_ind]
             time_of_interest = time_of_interest[:limit_ind]
 
-        min_size = 1000
+        min_size = 10000
         for tgm in tgm_of_interest:
             if tgm.shape[0] < min_size:
                 min_size = tgm.shape[0]
@@ -226,6 +226,7 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, pa
     param_val = np.array(param_by_sub)
     time = np.array(time_by_sub)
     starts = np.array(start_by_sub)
+    print(time.shape)
     return diag, param_val, time, starts
 
 
@@ -245,7 +246,7 @@ def get_coef_by_param(exp,
                                                             param_specs=param_specs)
 
     sim_mat = np.empty((len(sub_results), len(sub_results[0]) - 1))
-    min_win = 1000
+    min_win = 10000
     for i_win, res in enumerate(sub_results):
         win_size = int(sub_params['w'][i_win])
         if len(res) < min_win:

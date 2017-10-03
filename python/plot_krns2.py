@@ -16,7 +16,7 @@ if __name__ == '__main__':
     accuracy = 'abs'
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
-        for sen_type in ['active', 'passive']:
+        for sen_type in ['passive', 'active']:
             for o in [12]:
                 param_specs = {'o': o,
                                'pd': 'F',
@@ -32,7 +32,7 @@ if __name__ == '__main__':
                 sub_params = {}
                 sub_time = {}
                 sub_sim = []
-                for sub in load_data.VALID_SUBS[exp]:
+                for sub in ['B']: #load_data.VALID_SUBS[exp]:
 
                     sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                            mode,
@@ -64,7 +64,7 @@ if __name__ == '__main__':
                 print(win_sizes.shape)
                 fig, ax = plt.subplots()
                 ax.plot(win_sizes, diag_max)
-                plt.show()
+                # plt.show()
 
                 new_diag = np.empty(diag.shape)
                 plot_time = np.squeeze(time[0, :, :])
