@@ -49,9 +49,12 @@ WORD_PER_SEN = {'krns2':
                           'verb': ['kicked', 'helped', 'approached', 'punched'],
                           'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']}}}
 
-TIME_LIMITS = {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
-               'verb': {'tmin': -0.5, 'tmax': 4},
-               'secondNoun': {'tmin': -0.5, 'tmax': 3}}
+TIME_LIMITS = {'active': {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
+                          'verb': {'tmin': -0.5, 'tmax': 4},
+                          'secondNoun': {'tmin': -0.5, 'tmax': 3}},
+               'passive': {'firstNoun': {'tmin': -0.5, 'tmax': 5.5},
+                           'verb': {'tmin': -0.5, 'tmax': 4.5},
+                           'secondNoun': {'tmin': -0.5, 'tmax': 4}}}
 
 # Old slugs:
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
@@ -92,8 +95,8 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
 
     _, uels = zip(*id_uels)
 
-    tmin = TIME_LIMITS[word]['tmin']
-    tmax = TIME_LIMITS[word]['tmax']
+    tmin = TIME_LIMITS[sen_type][word]['tmin']
+    tmax = TIME_LIMITS[sen_type][word]['tmax']
     evokeds = np.array([hippo.io.load_mne_epochs(us, preprocessing=proc, baseline=None,
                                         tmin=tmin, tmax=tmax) for us in uels])
 
