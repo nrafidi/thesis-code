@@ -59,7 +59,7 @@ if __name__ == '__main__':
                 num_win = sim_mat.shape[0]
 
                 diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
-                win_sizes = np.array(win*2 for win in param_val)
+                win_sizes = np.array([param_val[0, i_win]*2 for i_win in range(num_win)])
                 print(diag_max.shape)
                 print(win_sizes.shape)
                 fig, ax = plt.subplots()
