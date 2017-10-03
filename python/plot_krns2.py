@@ -46,8 +46,8 @@ if __name__ == '__main__':
                                                           sen_type,
                                                           accuracy,
                                                           sub,
-                                                          param_specs))
-                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
+                                                          param_specs, param_limit=200))
+                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {}, param_limit=200)
                 diag = np.mean(diag, axis=0)
 
 
