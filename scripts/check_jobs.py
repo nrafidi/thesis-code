@@ -15,7 +15,6 @@ if __name__ == '__main__':
                                    batch_exp.IS_PERMS,
                                    batch_exp.NUM_FOLDSS,
                                    batch_exp.ALGS,
-                                   batch_exp.NUM_FEATSS,
                                    batch_exp.DO_ZSCORES,
                                    batch_exp.DO_AVGS,
                                    batch_exp.NUM_INSTANCESS,
