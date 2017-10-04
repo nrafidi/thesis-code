@@ -165,24 +165,17 @@ def nb_tgm(data,
             if doAvg:
                 new_data = np.mean(new_data, axis=2)
                 mu_full = np.array([np.mean(
-                    new_data[np.logical_and(in_train, in_l[li]), :],
+                    new_data[in_l[li][in_train], :],
                     0) for li in xrange(n_l)])
                 std_full = np.array([np.std(
-                    new_data[np.logical_and(in_train, in_l[li]), :],
+                    new_data[in_l[li][in_train], :],
                     axis=0, ddof=ddof) for li in xrange(n_l)])
             else:
-                try:
-                    mu_full = np.array([np.mean(
-                        new_data[np.logical_and(in_train, in_l[li]), :, :],
-                        0) for li in xrange(n_l)])
-                except:
-                    print(new_data.shape)
-                    print(in_train)
-                    print(in_l[li])
-                    print(li)
-                    raise ValueError('Shit is not working.')
+                mu_full = np.array([np.mean(
+                    new_data[in_l[li][in_train], :, :],
+                    0) for li in xrange(n_l)])
                 std_full = np.array([np.std(
-                    new_data[np.logical_and(in_train, in_l[li]), :, :],
+                    new_data[in_l[li][in_train], :, :],
                     axis=0, ddof=ddof) for li in xrange(n_l)])
 
             std_full = np.mean(std_full, axis=0)
@@ -221,7 +214,7 @@ def nb_tgm(data,
                 A = np.multiply(mask[None, :, :], A)
                 B = np.sum(np.multiply(B_full, mask[None, :, :]), axis=(1, 2))  # n classes x n time
 
-            P_cGx = np.empty([len(test_windows), np.sum(in_test), n_l])
+            P_cGx = np.empty([len(test_windows), len(in_test), n_l])
             test_data_full = data[in_test, :, :]
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
