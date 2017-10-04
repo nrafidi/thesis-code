@@ -139,6 +139,8 @@ def nb_tgm(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
+    print(l_ints.shape)
+    print(n_tot)
     in_l = [l_ints == i for i in xrange(n_l)]
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
