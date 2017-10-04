@@ -171,9 +171,16 @@ def nb_tgm(data,
                     new_data[np.logical_and(in_train, in_l[li]), :],
                     axis=0, ddof=ddof) for li in xrange(n_l)])
             else:
-                mu_full = np.array([np.mean(
-                    new_data[np.logical_and(in_train, in_l[li]), :, :],
-                    0) for li in xrange(n_l)])
+                try:
+                    mu_full = np.array([np.mean(
+                        new_data[np.logical_and(in_train, in_l[li]), :, :],
+                        0) for li in xrange(n_l)])
+                except:
+                    print(new_data.shape)
+                    print(in_train)
+                    print(in_l[li])
+                    print(li)
+                    raise ValueError('Shit is not working.')
                 std_full = np.array([np.std(
                     new_data[np.logical_and(in_train, in_l[li]), :, :],
                     axis=0, ddof=ddof) for li in xrange(n_l)])
