@@ -89,7 +89,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     sub_results = []
     sub_params = {}
     sub_time = {}
-    result_dir = run_TGM.SAVE_DIR.format(exp=exp, sub=sub)
+    result_dir = run_TGM.SAVE_DIR.format(top_dir=run_TGM.TOP_DIR.format(exp=exp), sub=sub)
 
     fname = result_dir + 'TGM_' + sub + '_' + sen_type + '_' + word + '_'
     for p in PARAMS_TO_AGG:
