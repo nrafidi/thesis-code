@@ -65,11 +65,11 @@ def run_tgm_exp(experiment,
         os.mkdir(save_dir)
 
     if alg not in VALID_ALGS:
-        raise ValueError('invalid alg: must be {}'.format(VALID_ALGS))
+        raise ValueError('invalid alg {}: must be {}'.format(alg, VALID_ALGS))
     if sen_type not in VALID_SEN_TYPE:
-        raise ValueError('invalid sen_type: must be {}'.format(VALID_SEN_TYPE))
-    if sen_type not in VALID_MODE:
-        raise ValueError('invalid mode: must be {}'.format(VALID_MODE))
+        raise ValueError('invalid sen_type {}: must be {}'.format(sen_type, VALID_SEN_TYPE))
+    if mode not in VALID_MODE:
+        raise ValueError('invalid mode {}: must be {}'.format(mode, VALID_MODE))
 
     if alg == 'GNB' and doFeatSelect:
         alg_str = alg + '-FS'
