@@ -96,11 +96,11 @@ if __name__ == '__main__':
                                     perm=grid[8],
                                     nf=grid[9],
                                     alg=grid[10],
-                                    z=grid[12],
-                                    avg=grid[13],
-                                    inst=grid[14],
-                                    rep=grid[15],
-                                    rs=grid[16],
+                                    z=grid[11],
+                                    avg=grid[12],
+                                    inst=grid[13],
+                                    rep=grid[14],
+                                    rs=grid[15],
                                     errfile=err_str,
                                     outfile=out_str)
         call(call_str, shell=True)
