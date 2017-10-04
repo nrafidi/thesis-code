@@ -15,7 +15,7 @@ PARAM_TYPES = {'w':'\d+',
                'pd':['T', 'F'],
                'pr':['T', 'F'],
                'F':'\d+',
-               'alg':['LR', 'GNB'],
+               'alg':['LASSO', 'GNB'],
                'z':['T', 'F'],
                'avg':['T', 'F'],
                'ni':'\d+',
@@ -45,24 +45,12 @@ def which_sen_type(fname):
 
 def extract_param(param_name, fname):
     # print(param_name)
-    if param_name == 'alg':
-        for alg in PARAM_TYPES[param_name]:
-            if alg in fname:
-                return alg
-        raise ValueError('Invalid fname')
-    if param_name == 'F':
-        m = re.match('.*_(\d+)F_.*', fname)
-        if m:
-            return m.group(1)
-        else:
-            raise ValueError('Invalid fname')
     if isinstance(PARAM_TYPES[param_name], list):
         for val in PARAM_TYPES[param_name]:
             if param_name + val in fname:
                 return val
         raise ValueError('Invalid fname')
 
-    match_str = '_{}(\d+)_'.format(param_name)
     m = re.match('.*_' + param_name + '(\d+)_.*', fname)
     if m:
         return m.group(1)
@@ -70,10 +58,6 @@ def extract_param(param_name, fname):
         raise ValueError('Invalid fname')
 
 def get_param_str(param_name, param_val):
-    if param_name == 'alg':
-        return param_val
-    if param_name == 'F':
-        return '_{}F_'.format(param_val)
     if isinstance(PARAM_TYPES[param_name], list):
         return param_name + param_val
 
@@ -112,26 +96,11 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
         if param_specs is not None:
             if p in param_specs:
                 p_val = param_specs[p]
-                if p == 'alg':
-                    fname += p_val + '_'
-                elif p == 'F':
-                    fname += str(p_val) + p + '_'
-                else:
-                    fname += p + str(p_val) + '_'
-            else:
-                if p == 'alg':
-                    fname += '*_'
-                elif p == 'F':
-                    fname += '*F_'
-                else:
-                    fname += p + '*_'
-        else:
-            if p == 'alg':
-                fname += '*_'
-            elif p == 'F':
-                fname += '*F_'
+                fname += p + str(p_val) + '_'
             else:
                 fname += p + '*_'
+        else:
+            fname += p + '*_'
 
     fname += mode + '.npz'
     print(fname)

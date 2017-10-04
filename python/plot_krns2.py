@@ -17,11 +17,11 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
-            for o in [12]:
+            for o in [3]:
                 param_specs = {'o': o,
                                'pd': 'F',
                                'pr': 'F',
-                               'alg': 'LR',
+                               'alg': 'GNB',
                                'F': 2,
                                'z': 'F',
                                'avg': 'F',
@@ -41,66 +41,69 @@ if __name__ == '__main__':
                                                                                            accuracy,
                                                                                            sub,
                                                                                            param_specs=param_specs)
-                    sub_sim.append(coef_sim.coef_by_param(exp,
-                                                          word,
-                                                          sen_type,
-                                                          accuracy,
-                                                          sub,
-                                                          param_specs, param_limit=200))
-                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {}, param_limit=200)
+                    # sub_sim.append(coef_sim.coef_by_param(exp,
+                    #                                       word,
+                    #                                       sen_type,
+                    #                                       accuracy,
+                    #                                       sub,
+                    #                                       param_specs, param_limit=200))
+                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
                 diag = np.mean(diag, axis=0)
-
-
-
-                sim_mat = np.mean(np.asarray(sub_sim), axis=0)
-
-                sim_mat -= np.min(sim_mat, axis=1)[:, None]
-                sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
-                num_win = diag.shape[0]
-
-                diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
-                win_sizes = np.array([param_val[0, i_win]*2 for i_win in range(num_win)])
-                # print(diag_max.shape)
-                # print(win_sizes.shape)
-                fig, ax = plt.subplots()
-                ax.plot(win_sizes, diag_max)
-                # plt.show()
-
-                new_diag = np.empty(diag.shape)
-                plot_time = np.squeeze(time[0, :, :])
-                fig, axs = plt.subplots(num_win, 1, figsize=(20, 30))
-                for i_win in range(num_win):
-                    win_len = param_val[0, i_win]*0.002
-                    time_to_plot = plot_time[i_win, :] + win_len*0.5
-                    diag_to_plot = diag[i_win, :]
-                    axs[i_win].plot(time_to_plot, diag_to_plot)
-                    sim_to_plot = sim_mat[i_win, :]
-                    # sim_to_plot[sim_to_plot > 0] = 0.6
-                    # sim_to_plot[sim_to_plot < 0] = 0.1
-                    axs[i_win].plot(time_to_plot[:sim_to_plot.shape[0]], sim_to_plot)
-                    axs[i_win].plot(time_to_plot, np.ones(time_to_plot.shape)*0.25, '--')
-                    diag_to_plot[diag_to_plot >= 0.3] = 0.75
-                    diag_to_plot[diag_to_plot < 0.3] = 0
-                    axs[i_win].plot(time_to_plot, diag_to_plot, ':')
-                    new_diag[i_win, :] = diag_to_plot
-                    axs[i_win].set_ylim([0.1, 1])
-                    axs[i_win].set_xlim([np.min(plot_time), np.max(plot_time)])
-                    axs[i_win].set_title(win_len)
-
-                fig.suptitle('{} {}\nOverlap {}'.format(word, sen_type, o), fontsize=16)
-                plt.savefig('overlap{}_{}_{}_sim_acc.pdf'.format(o, word, sen_type), bbox_inches='tight')
-                fig, ax = plt.subplots()
-                ax.plot(np.sum(np.divide(new_diag, 0.75), axis=0))
-                # ax.plot(new_diag[-1, :] + 2)
-                # ax.plot(new_diag[0, :] + 1)
-                ax.set_yticks(range(1, num_win+1))
-                ax.set_ylabel('Number of windows')
-                ax.set_ylim([0, num_win])
-                ax.set_xticks(range(0, time.shape[-1], 25))
-                ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
-                ax.set_title('Number of windows above chance over time\n{} {} Overlap {}'.format(word, sen_type, o))
-                plt.savefig('overlap{}_{}_{}_comb_acc.pdf'.format(o, word, sen_type), bbox_inches='tight')
+                for i_win in range(diag.shape[0]):
+                    fig, ax = plt.subplots()
+                    ax.plot(diag[i_win, :])
                 plt.show()
+
+
+                # sim_mat = np.mean(np.asarray(sub_sim), axis=0)
+                #
+                # sim_mat -= np.min(sim_mat, axis=1)[:, None]
+                # sim_mat = np.divide(sim_mat, np.max(sim_mat, axis=1)[:, None])
+                # num_win = diag.shape[0]
+                #
+                # diag_max = np.array([np.max(diag[i_win, :]) for i_win in range(num_win)])
+                # win_sizes = np.array([param_val[0, i_win]*2 for i_win in range(num_win)])
+                # # print(diag_max.shape)
+                # # print(win_sizes.shape)
+                # fig, ax = plt.subplots()
+                # ax.plot(win_sizes, diag_max)
+                # # plt.show()
+                #
+                # new_diag = np.empty(diag.shape)
+                # plot_time = np.squeeze(time[0, :, :])
+                # fig, axs = plt.subplots(num_win, 1, figsize=(20, 30))
+                # for i_win in range(num_win):
+                #     win_len = param_val[0, i_win]*0.002
+                #     time_to_plot = plot_time[i_win, :] + win_len*0.5
+                #     diag_to_plot = diag[i_win, :]
+                #     axs[i_win].plot(time_to_plot, diag_to_plot)
+                #     sim_to_plot = sim_mat[i_win, :]
+                #     # sim_to_plot[sim_to_plot > 0] = 0.6
+                #     # sim_to_plot[sim_to_plot < 0] = 0.1
+                #     axs[i_win].plot(time_to_plot[:sim_to_plot.shape[0]], sim_to_plot)
+                #     axs[i_win].plot(time_to_plot, np.ones(time_to_plot.shape)*0.25, '--')
+                #     diag_to_plot[diag_to_plot >= 0.3] = 0.75
+                #     diag_to_plot[diag_to_plot < 0.3] = 0
+                #     axs[i_win].plot(time_to_plot, diag_to_plot, ':')
+                #     new_diag[i_win, :] = diag_to_plot
+                #     axs[i_win].set_ylim([0.1, 1])
+                #     axs[i_win].set_xlim([np.min(plot_time), np.max(plot_time)])
+                #     axs[i_win].set_title(win_len)
+                #
+                # fig.suptitle('{} {}\nOverlap {}'.format(word, sen_type, o), fontsize=16)
+                # plt.savefig('overlap{}_{}_{}_sim_acc.pdf'.format(o, word, sen_type), bbox_inches='tight')
+                # fig, ax = plt.subplots()
+                # ax.plot(np.sum(np.divide(new_diag, 0.75), axis=0))
+                # # ax.plot(new_diag[-1, :] + 2)
+                # # ax.plot(new_diag[0, :] + 1)
+                # ax.set_yticks(range(1, num_win+1))
+                # ax.set_ylabel('Number of windows')
+                # ax.set_ylim([0, num_win])
+                # ax.set_xticks(range(0, time.shape[-1], 25))
+                # ax.set_xticklabels(np.squeeze(time[0, -1, ::25]))
+                # ax.set_title('Number of windows above chance over time\n{} {} Overlap {}'.format(word, sen_type, o))
+                # plt.savefig('overlap{}_{}_{}_comb_acc.pdf'.format(o, word, sen_type), bbox_inches='tight')
+                # plt.show()
 
 
             #     thing_to_plot = 1
