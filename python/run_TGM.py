@@ -222,9 +222,9 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
-    parser.add_argument('--random_state_perm', type=int, default=1)
-    parser.add_argument('--random_state_cv', type=int, default=CV_RAND_STATE)
-    parser.add_argument('--random_state_sub', type=int, default=SUB_CV_RAND_STATE)
+    parser.add_argument('--perm_random_state', type=int, default=1)
+    parser.add_argument('--cv_random_state', type=int, default=CV_RAND_STATE)
+    parser.add_argument('--sub_random_state', type=int, default=SUB_CV_RAND_STATE)
     parser.add_argument('--force', default='False')
 
     args = parser.parse_args()
@@ -265,9 +265,9 @@ if __name__ == '__main__':
                     num_instances=args.num_instances,
                     reps_to_use=args.reps_to_use,
                     proc=args.proc,
-                    random_state_perm=args.random_state_perm,
-                    random_state_cv=args.random_state_cv,
-                    random_state_sub=args.random_state_sub,
+                    random_state_perm=args.perm_random_state,
+                    random_state_cv=args.cv_random_state,
+                    random_state_sub=args.sub_random_state,
                     force=str_to_bool(args.force))
     else:
         print('Experiment parameters not valid. Skipping job.')
