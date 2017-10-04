@@ -6,11 +6,17 @@ import os.path
 import random
 from sklearn.model_selection import StratifiedKFold
 
-SAVE_DIR = '/share/volume0/nrafidi/{exp}_TGM/{sub}/'
-SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_{num_folds}F_{alg}_' \
-            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rs{rs}_{mode}'
+TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM/'
+SAVE_DIR = '{top_dir}/{sub}/'
+SAVE_FILE = '{dir}TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
+            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}_rsSCV{rsS}_{mode}'
 
 CV_RAND_STATE = 12191989
+SUB_CV_RAND_STATE = 2282015
+
+VALID_ALGS = ['LASSO', 'ENET', 'GNB']
+VALID_SEN_TYPE = ['active', 'passive']
+VALID_MODE = ['pred', 'coef']
 
 
 def bool_to_str(bool_var):
@@ -38,28 +44,41 @@ def run_tgm_exp(experiment,
                 isPDTW = False,
                 isPerm = False,
                 num_folds = 2,
-                alg='LR',
-                num_feats = 500,
+                alg='GNB',
+                doFeatSelect=False,
                 doZscore=False,
                 doAvg=False,
                 num_instances=2,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
-                random_state=1,
+                random_state_perm=1,
+                random_state_cv=CV_RAND_STATE,
+                random_state_sub=SUB_CV_RAND_STATE,
                 force=False):
+
     # Save Directory
-    saveDir = SAVE_DIR.format(exp=experiment, sub=subject)
-    if not os.path.exists(saveDir):
-        os.mkdir(saveDir)
+    top_dir = TOP_DIR.format(exp=experiment)
+    if not os.path.exists(top_dir):
+        os.mkdir(top_dir)
+    save_dir = SAVE_DIR.format(top_dir=top_dir, sub=subject)
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
 
-    if alg == 'LR':
-        alg_str = alg
-    elif alg == 'GNB':
-        alg_str = alg + '-{}'.format(num_feats)
+    if alg not in VALID_ALGS:
+        raise ValueError('invalid alg: must be {}'.format(VALID_ALGS))
+    if sen_type not in VALID_SEN_TYPE:
+        raise ValueError('invalid sen_type: must be {}'.format(VALID_SEN_TYPE))
+    if sen_type not in VALID_MODE:
+        raise ValueError('invalid mode: must be {}'.format(VALID_MODE))
+
+    if alg == 'GNB' and doFeatSelect:
+        alg_str = alg + '-FS'
+        feature_select = 'distance_of_means'
     else:
-        raise ValueError('invalid alg: must be LR or GNB')
+        alg_str = alg
+        feature_select = None
 
-    fname = SAVE_FILE.format(dir=saveDir,
+    fname = SAVE_FILE.format(dir=save_dir,
                              sub=subject,
                              sen_type=sen_type,
                              word=word,
@@ -73,16 +92,16 @@ def run_tgm_exp(experiment,
                              doAvg=bool_to_str(doAvg),
                              inst=num_instances,
                              rep=reps_to_use,
-                             rs=random_state,
+                             rsP=random_state_perm,
+                             rsC=random_state_cv,
+                             rsS=random_state_sub,
                              mode=mode)
-
-    print(fname)
 
     if os.path.isfile(fname) and not force:
         print('Job already completed. Skipping Job.')
+        print(fname)
         return
 
-    random.seed(random_state)
 
     if isPDTW:
         (time_a, time_p, labels,
@@ -93,11 +112,9 @@ def run_tgm_exp(experiment,
         if sen_type == 'active':
             data_raw = active_data_raw
             time = time_a
-        elif sen_type == 'passive':
+        else:
             data_raw = passive_data_raw
             time = time_p
-        else:
-            raise ValueError('invalid sen_type: must be active or passive')
     else:
         data_raw, labels, time = load_data.load_raw(subject=subject,
                                                     word=word,
@@ -113,6 +130,7 @@ def run_tgm_exp(experiment,
     print(data.shape)
 
     if isPerm:
+        random.seed(random_state_perm)
         random.shuffle(labels)
 
     tmin = time.min()
@@ -126,8 +144,8 @@ def run_tgm_exp(experiment,
     assert total_win <= len(time)
 
     # Run TGM
-    if alg == 'LR':
-        if mode == 'pred':
+    if mode == 'pred':
+        if alg == 'LASSO':
             (preds, l_ints,
              cv_membership, masks) = models.lr_tgm(data=data,
                                                    labels=labels,
@@ -136,44 +154,20 @@ def run_tgm_exp(experiment,
                                                    win_len=win_len,
                                                    doZscore=doZscore,
                                                    doAvg=doAvg)
-        elif mode == 'coef':
-            coef = models.lr_tgm_coef(data=data,
-                                      labels=labels,
-                                      win_starts=win_starts,
-                                      win_len=win_len,
-                                      doZscore=doZscore,
-                                      doAvg=doAvg)
-        else:
-            raise ValueError('invalid mode: must be pred or coef')
-    elif alg == 'GNB':
-
-        if mode == 'pred':
+        elif alg == 'GNB':
             (preds, l_ints,
              cv_membership, masks) = models.nb_tgm(data=data,
                                                    labels=labels,
                                                    kf=kf,
                                                    win_starts=win_starts,
                                                    win_len=win_len,
-                                                   feature_select='distance_of_means',
-                                                   feature_select_params={'number_of_features' : num_feats},
+                                                   feature_select=feature_select,
+                                                   feature_select_params={'number_of_features': 50},  #Change after models.py is modified
                                                    doZscore=doZscore,
                                                    doAvg=doAvg)
-        elif mode == 'coef':
-            coef = models.nb_tgm_coef(data=data,
-                                      labels=labels,
-                                      win_starts=win_starts,
-                                      win_len=win_len,
-                                      feature_select='distance_of_means',
-                                      feature_select_params={'number_of_features' : num_feats},
-                                      doZscore=False,
-                                      doAvg=False,
-                                      ddof=1)
         else:
-            raise ValueError('invalid mode: must be pred or coef')
-    else:
-        raise ValueError('invalid alg: must be LR or GNB')
+            raise ValueError('ENET not implemented yet.')
 
-    if mode == 'pred':
         np.savez_compressed(fname,
                             preds=preds,
                             l_ints=l_ints,
@@ -182,7 +176,26 @@ def run_tgm_exp(experiment,
                             time=time,
                             win_starts=win_starts,
                             proc=proc)
-    elif mode == 'coef':
+    else:
+        if alg == 'LASSO':
+            coef = models.lr_tgm_coef(data=data,
+                                      labels=labels,
+                                      win_starts=win_starts,
+                                      win_len=win_len,
+                                      doZscore=doZscore,
+                                      doAvg=doAvg)
+        elif alg == 'GNB':
+            coef = models.nb_tgm_coef(data=data,
+                                      labels=labels,
+                                      win_starts=win_starts,
+                                      win_len=win_len,
+                                      feature_select=feature_select,
+                                      feature_select_params={'number_of_features': 50},  #  Change after models.py is modified
+                                      doZscore=doZscore,
+                                      doAvg=doAvg)
+        else:
+            raise ValueError('ENET not implemented yet.')
+
         np.savez_compressed(fname,
                             coef=coef,
                             time=time,
@@ -203,13 +216,15 @@ if __name__ == '__main__':
     parser.add_argument('--isPerm', default='False')
     parser.add_argument('--num_folds', type=int, default=2)
     parser.add_argument('--alg', default='LR')
-    parser.add_argument('--num_feats', type=int, default=50)
+    parser.add_argument('--doFeatSelect', default='False')
     parser.add_argument('--doZscore', default='False')
     parser.add_argument('--doAvg', default='False')
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
-    parser.add_argument('--random_state', type=int, default=1)
+    parser.add_argument('--random_state_perm', type=int, default=1)
+    parser.add_argument('--random_state_cv', type=int, default=CV_RAND_STATE)
+    parser.add_argument('--random_state_sub', type=int, default=SUB_CV_RAND_STATE)
     parser.add_argument('--force', default='False')
 
     args = parser.parse_args()
@@ -244,13 +259,15 @@ if __name__ == '__main__':
                     isPerm=str_to_bool(args.isPerm),
                     num_folds=args.num_folds,
                     alg=args.alg,
-                    num_feats=args.num_feats,
+                    doFeatSelect=str_to_bool(args.doFeatSelect),
                     doZscore=str_to_bool(args.doZscore),
                     doAvg=str_to_bool(args.doAvg),
                     num_instances=args.num_instances,
                     reps_to_use=args.reps_to_use,
                     proc=args.proc,
-                    random_state=args.random_state,
+                    random_state_perm=args.random_state_perm,
+                    random_state_cv=args.random_state_cv,
+                    random_state_sub=args.random_state_sub,
                     force=str_to_bool(args.force))
     else:
         print('Experiment parameters not valid. Skipping job.')

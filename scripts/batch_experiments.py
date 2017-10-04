@@ -24,7 +24,7 @@ import time
 
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
-SEN_TYPES = ['passive'] #, 'active']
+SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [12, 25, 50, 100, 150, 200, 250, 300, 350]
 OVERLAPS = [12, 6, 3] #12, 25, 50, 100, 150, 200, 250, 300, 350]
@@ -32,8 +32,7 @@ MODES = ['pred', 'coef']  # pred
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
 NUM_FOLDSS = [2]
-ALGS = ['LR']  # GNB
-NUM_FEATSS = [50]  # 100 150 200 500
+ALGS = ['GNB']  # GNB
 DO_ZSCORES = [False]  # True
 DO_AVGS = [False]  # True
 NUM_INSTANCESS = [2]  # 5 10
@@ -50,8 +49,8 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
-                'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},num_feats={num_feats},doZscore={z},' \
-                'doAvg={avg},num_instances={inst},reps_to_use={rep},random_state={rs},force=True ' \
+                'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},doZscore={z},' \
+                'doAvg={avg},num_instances={inst},reps_to_use={rep},random_stat_perm={rs} force=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -65,7 +64,6 @@ if __name__ == '__main__':
                                    IS_PERMS,
                                    NUM_FOLDSS,
                                    ALGS,
-                                   NUM_FEATSS,
                                    DO_ZSCORES,
                                    DO_AVGS,
                                    NUM_INSTANCESS,
@@ -98,7 +96,6 @@ if __name__ == '__main__':
                                     perm=grid[8],
                                     nf=grid[9],
                                     alg=grid[10],
-                                    num_feats=grid[11],
                                     z=grid[12],
                                     avg=grid[13],
                                     inst=grid[14],
