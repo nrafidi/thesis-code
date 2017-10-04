@@ -14,7 +14,6 @@ import time
 #parser.add_argument('--isPerm', type=bool, default=False)
 #parser.add_argument('--num_folds', type=int, default=2)
 #parser.add_argument('--alg', default='LR')
-#parser.add_argument('--num_feats', type=int, default=500)
 #parser.add_argument('--doZscore', type=bool, default=False)
 #parser.add_argument('--doAvg', type=bool, default=False)
 #parser.add_argument('--num_instances', type=int, default=2)
@@ -103,7 +102,7 @@ if __name__ == '__main__':
                                     rs=grid[15],
                                     errfile=err_str,
                                     outfile=out_str)
-        print(call_str)
+        # print(call_str)
         call(call_str, shell=True)
         job_id += 1
         if job_id % 100 == 0:
