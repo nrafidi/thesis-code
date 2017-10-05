@@ -148,7 +148,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
         result = np.load(f)
         if mode == 'pred':
-            if sub_params['alg'][-1] == 'GNB':
+            if 'GNB' in f:
                 tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             else:
                 tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
