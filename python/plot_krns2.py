@@ -55,7 +55,8 @@ if __name__ == '__main__':
                 for i_win in range(diag.shape[0]):
                     fig, ax = plt.subplots()
                     ax.plot(diag[i_win, :])
-                plt.show()
+                    plt.savefig('overlap{}_GNB{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
+                # plt.show()
 
 
                 # sim_mat = np.mean(np.asarray(sub_sim), axis=0)
