@@ -9,7 +9,7 @@ import re
 import run_TGM
 
 
-PARAMS_TO_AGG = ['w', 'o', 'pd', 'pr', 'F', 'alg', 'z', 'avg', 'ni', 'nr', 'rs']
+PARAMS_TO_AGG = ['w', 'o', 'pd', 'pr', 'F', 'alg', 'z', 'avg', 'ni', 'nr', 'rsPerm', 'rsCV', 'rsSCV']
 PARAM_TYPES = {'w':'\d+',
                'o':'\d+',
                'pd':['T', 'F'],
