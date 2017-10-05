@@ -20,6 +20,9 @@ WORD_POS = {'active':
                  'verb': 3,
                  'secondNoun': 6}}
 
+USI_NAME = {'krns2': 'krns2',
+            'PassAct2': 'pass-act-2',
+            'PassAct3': 'pass-act-3'}
 
 WORD_PER_SEN = {'krns2':
                     {'active':
@@ -81,7 +84,7 @@ def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
 
 
 def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
-    usis = hippo.query.query_usis([('stimuli_set', experiment),
+    usis = hippo.query.query_usis([('stimuli_set', USI_NAME[experiment]),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
                                    ('sentence_id', lambda sid: sid != None),
