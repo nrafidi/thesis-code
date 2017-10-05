@@ -20,7 +20,9 @@ PARAM_TYPES = {'w':'\d+',
                'avg':['T', 'F'],
                'ni':'\d+',
                'nr':'\d+',
-               'rs':'\d+'}
+               'rsPerm':'\d+',
+               'rsCV': '\d+',
+               'rsSCV':'\d+'}
 
 
 def which_word(fname):
