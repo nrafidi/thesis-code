@@ -66,6 +66,28 @@ def get_param_str(param_name, param_val):
     return '_{}{}_'.format(param_name, param_val)
 
 
+def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
+    num_folds = preds.shape[0]
+    num_win = preds.shape[1]
+
+    if accuracy == 'abs':
+        tgm_corr = np.zeros((num_win, num_win))
+        tgm_total = np.zeros((num_win, num_win))
+        for fold in range(num_folds):
+            labels = l_ints[cv_membership[fold, :]]
+            # print(labels)
+            for i_win in range(num_win):
+                for j_win in range(num_win):
+                    yhat = np.argmax(np.squeeze(preds[fold, i_win][j_win, :, :]), axis=1)
+                    print(yhat.shape)
+                    tgm_corr[i_win, j_win] += np.sum(yhat == labels)
+                    tgm_total[i_win, j_win] += cv_membership.shape[1]
+        tgm = np.divide(tgm_corr, tgm_total)
+        return tgm
+    else:
+        raise ValueError('Not implemented yet')
+
+
 def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
@@ -126,7 +148,10 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
         result = np.load(f)
         if mode == 'pred':
-            tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            if sub_params['alg'][-1] == 'GNB':
+                tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            else:
+                tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             print(tgm.shape)
         else:
             tgm = result['coef']
