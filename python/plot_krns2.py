@@ -5,6 +5,7 @@ import numpy as np
 import load_data
 from scipy.stats.mstats import zscore
 import agg_TGM
+import run_TGM
 import coef_sim
 
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
-            for o in [3]:
+            for o in [6]:
                 param_specs = {'o': o,
                                'pd': 'F',
                                'pr': 'F',
@@ -27,7 +28,9 @@ if __name__ == '__main__':
                                'avg': 'F',
                                'ni': 2,
                                'nr': 10,
-                               'rs': 1}
+                               'rsPerm': 1,
+                               'rsCV': run_TGM.CV_RAND_STATE,
+                               'rsSCV': run_TGM.SUB_CV_RAND_STATE}
                 sub_results = {}
                 sub_params = {}
                 sub_time = {}
