@@ -55,7 +55,7 @@ def extract_param(param_name, fname):
     if m:
         return m.group(1)
     else:
-        raise ValueError('Invalid fname')
+        raise ValueError('Invalid fname for param {}'.format(param_name))
 
 def get_param_str(param_name, param_val):
     if isinstance(PARAM_TYPES[param_name], list):
