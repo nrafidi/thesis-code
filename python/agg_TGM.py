@@ -79,7 +79,7 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(np.squeeze(preds[fold, i_win][j_win, :, :]), axis=1)
-                    print(yhat.shape)
+                    # print(yhat.shape)
                     tgm_corr[i_win, j_win] += np.sum(yhat == labels)
                     tgm_total[i_win, j_win] += cv_membership.shape[1]
         tgm = np.divide(tgm_corr, tgm_total)
