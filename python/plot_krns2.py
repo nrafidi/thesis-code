@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -7,6 +7,18 @@ from scipy.stats.mstats import zscore
 import agg_TGM
 import run_TGM
 import coef_sim
+
+
+def avg_over_sub(sub_results):
+    subjects = sub_results.keys()
+    num_param = len(sub_results[subjects[0]])
+    result_by_param = []
+    for i_param in range(num_param):
+        result_by_sub = []
+        for sub in subjects:
+            result_by_sub.append(sub_results[sub][i_param])
+        result_by_param.append(np.mean(np.array(result_by_sub), axis=0))
+    return result_by_param
 
 
 if __name__ == '__main__':
@@ -18,7 +30,7 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
-            for o in [6]:
+            for o in [3, 6, 12]:
                 param_specs = {'o': o,
                                'pd': 'F',
                                'pr': 'F',
@@ -32,10 +44,11 @@ if __name__ == '__main__':
                                'rsCV': run_TGM.CV_RAND_STATE,
                                'rsSCV': run_TGM.SUB_CV_RAND_STATE}
                 sub_results = {}
+                sub_res_list = []
                 sub_params = {}
                 sub_time = {}
                 sub_sim = []
-                for sub in ['B']: #load_data.VALID_SUBS[exp]:
+                for sub in load_data.VALID_SUBS[exp]:
 
                     sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
                                                                                            mode,
@@ -44,22 +57,22 @@ if __name__ == '__main__':
                                                                                            accuracy,
                                                                                            sub,
                                                                                            param_specs=param_specs)
-                    print('meow')
-                    print(len(sub_results[sub]))
-                    print(sub_results[sub][0].shape)
                     # sub_sim.append(coef_sim.coef_by_param(exp,
                     #                                       word,
                     #                                       sen_type,
                     #                                       accuracy,
                     #                                       sub,
                     #                                       param_specs, param_limit=200))
+                sub_avg_list = avg_over_sub(sub_results)
                 diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
                 diag = np.mean(diag, axis=0)
                 for i_win in range(diag.shape[0]):
                     fig, ax = plt.subplots()
-                    ax.imshow(sub_results[sub][i_win], interpolation='nearest')
-                    plt.savefig('TGM_overlap{}_GNB{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
-                # plt.show()
+                    ax.imshow(sub_avg_list[i_win], interpolation='nearest')
+                    fig, ax = plt.subplots()
+                    ax.plot(diag[i_win, :])
+                    # plt.savefig('TGM_overlap{}_GNB{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
+                plt.show()
 
 
                 # sim_mat = np.mean(np.asarray(sub_sim), axis=0)
