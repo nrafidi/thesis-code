@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -44,6 +44,9 @@ if __name__ == '__main__':
                                                                                            accuracy,
                                                                                            sub,
                                                                                            param_specs=param_specs)
+                    print('meow')
+                    print(len(sub_results[sub]))
+                    print(sub_results[sub][0].shape)
                     # sub_sim.append(coef_sim.coef_by_param(exp,
                     #                                       word,
                     #                                       sen_type,
@@ -54,8 +57,8 @@ if __name__ == '__main__':
                 diag = np.mean(diag, axis=0)
                 for i_win in range(diag.shape[0]):
                     fig, ax = plt.subplots()
-                    ax.plot(diag[i_win, :])
-                    plt.savefig('overlap{}_GNB{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
+                    ax.imshow(sub_results[sub][i_win], interpolation='nearest')
+                    plt.savefig('TGM_overlap{}_GNB{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
                 # plt.show()
 
 
