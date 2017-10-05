@@ -21,7 +21,7 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
-EXPERIMENTS = ['PassAct2', 'krns2']  # ,  'PassAct2', 'PassAct3']
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
@@ -33,7 +33,7 @@ IS_PERMS = [False]  # True
 NUM_FOLDSS = [2]
 ALGS = ['GNB']  # GNB
 DO_ZSCORES = [False]  # True
-DO_AVGS = [False, True]  # True
+DO_AVGS = [True]  # True
 NUM_INSTANCESS = [2]  # 5 10
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]  # range(1, 10)
