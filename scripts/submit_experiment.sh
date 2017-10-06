@@ -24,4 +24,5 @@ source /home/python27/envs/p27default/bin/activate
 cd /home/nrafidi/thesis-code/python
 python run_TGM.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word --win_len $win_len --overlap $overlap --mode $mode \
 --isPDTW $isPDTW --isPerm $isPerm --num_folds $num_folds --alg $alg --doZscore $doZscore --doAvg $doAvg \
---num_instances $num_instances --reps_to_use $reps_to_use --perm_random_state $perm_random_state
+--num_instances $num_instances --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force \
+--doFeatSelect $doFeatSelect
