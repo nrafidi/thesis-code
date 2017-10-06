@@ -83,7 +83,7 @@ def nb_tgm(data,
 
             if feature_select:
                 num_feat_opts = flatten_list(NUM_FEAT_OPTIONS)
-                num_feat_accs = np.empty((len(num_feat_opts), sub_kf.get_n_splits))
+                num_feat_accs = np.empty((len(num_feat_opts), sub_kf.get_n_splits()))
                 # Inner CV for Feature Selection
                 i_split = 0
                 for in_sub_train, in_sub_test in sub_kf.split(train_data, train_l_ints):
