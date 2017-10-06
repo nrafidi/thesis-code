@@ -129,7 +129,10 @@ def nb_tgm(data,
                 feature_masks[i_top_split, wi] = mask
                 num_feat_selected[i_top_split, wi] = feat_num
                 A_top = np.multiply(mask[None, ...], A_top)
-                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=tuple(range(1, len(mask.shape))))
+                if doAvg:
+                    B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
+                else:
+                    B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -143,10 +146,14 @@ def nb_tgm(data,
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
 
-                pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
-                                   axis=tuple(range(2, len(test_data.shape)))) - B_top
+                if doAvg:
+                    pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
+                                       axis=2) - B_top
+                else:
+                    pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
+                                      axis=(2, 3)) - B_top
                 preds[i_top_split, wi, wj] = pred_top
-                i_top_split += 1
+        i_top_split += 1
     return preds, l_ints, cv_membership, feature_masks
 
 
