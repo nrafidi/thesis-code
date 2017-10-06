@@ -126,7 +126,7 @@ def nb_tgm(data,
                     i_split += 1
 
                 best_feat_ind = np.argmax(np.mean(num_feat_accs, axis=1))
-                feat_num = num_feat_opts[best_feat_ind[0]]
+                feat_num = num_feat_opts[best_feat_ind]
                 mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full_top[lis[0]] - mu_full_top[lis[1]]),
                                  ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
                                  np.zeros(mu_full_top[0].shape))
