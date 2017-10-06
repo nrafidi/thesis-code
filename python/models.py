@@ -2,131 +2,40 @@ import numpy as np
 import sklearn.linear_model
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+NUM_FEAT_OPTIONS = [range(50, 500, 50), range(500, 2000, 500), range(2000, 20000, 2000)]
 
 
-# def nb_diag(data,
-#             labels,
-#             kf,
-#             sub_kf,
-#             win_starts,
-#             feature_select=None,
-#             feature_select_params=None,
-#             doZscore=False,
-#             doAvg=False,
-#             ddof=1):
-#
-#     labels = np.array(labels)
-#     n_tot = data.shape[0]
-#     n_time = data.shape[2]
-#
-#     l_set = np.unique(labels)
-#     n_l = len(l_set)
-#     l_index = {l_set[i]: i for i in xrange(n_l)}
-#     l_ints = np.array([l_index[l] for l in labels])
-#     in_l = [l_ints == i for i in xrange(n_l)]
-#
-#     total_win = np.max(win_starts)
-#
-#     preds = []
-#     cv_membership = []
-#     feature_masks = []
-#     for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
-#         train_data = data[in_train, :, :]
-#         train_labels = l_ints
-#         for w_s in win_starts:
-#             for in_sub_train, in_sub_test in sub_kf.split
-#         test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts if
-#                         w_s < (total_win - win_len)]
-#         n_w = len(test_windows)
-#         cv_membership.append(in_test)
-#         preds.append(np.zeros((n_w,), dtype=np.object))
-#         feature_masks.append(np.zeros((n_w,), dtype=np.object))
-#         mu_full_all = np.mean(data[in_train, :, :], axis=0)
-#         std_full_all = np.std(data[in_train, :, :], axis=0, ddof=ddof)
-#         for wi in xrange(n_w):
-#             train_time = test_windows[wi]
-#             if doZscore:
-#                 new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
-#                 new_data = new_data / std_full_all[None, :, train_time]
-#             else:
-#                 new_data = data[:, :, train_time]
-#             if doAvg:
-#                 new_data = np.mean(new_data, axis=2)
-#                 mu_full = np.array([np.mean(
-#                     new_data[np.logical_and(in_train, in_l[li]), :],
-#                     0) for li in xrange(n_l)])
-#                 std_full = np.array([np.std(
-#                     new_data[np.logical_and(in_train, in_l[li]), :],
-#                     axis=0, ddof=ddof) for li in xrange(n_l)])
-#             else:
-#                 mu_full = np.array([np.mean(
-#                     new_data[np.logical_and(in_train, in_l[li]), :, :],
-#                     0) for li in xrange(n_l)])
-#                 std_full = np.array([np.std(
-#                     new_data[np.logical_and(in_train, in_l[li]), :, :],
-#                     axis=0, ddof=ddof) for li in xrange(n_l)])
-#
-#             std_full = np.mean(std_full, axis=0)
-#             double_var_full = 2 * np.square(std_full)
-#
-#             if doAvg:
-#                 B_full = np.divide(np.square(mu_full), double_var_full[None, :])
-#                 A = (2 * mu_full) / double_var_full[None, :]
-#             else:
-#                 B_full = np.divide(np.square(mu_full), double_var_full[None, :, :])
-#                 A = (2 * mu_full) / double_var_full[None, :, :]
-#
-#             if feature_select is not None:
-#                 if feature_select == 'distance_of_means':
-#                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
-#                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
-#                                      np.zeros(mu_full[0].shape))
-#                     sorted_indices = np.argsort(-mu_diff, axis=None)
-#                     nfeatures = feature_select_params['number_of_features']
-#                     mask = np.zeros(mu_diff.shape, dtype=np.bool)
-#                     mask[np.unravel_index(sorted_indices[0:nfeatures], mu_diff.shape)] = True
-#                 else:
-#                     raise ValueError('Invalid feature selection')
-#             else:
-#                 if doAvg:
-#                     mask = np.ones(A[:, :].shape[1:], dtype=np.bool)
-#                 else:
-#                     mask = np.ones(A[:, :, :].shape[1:], dtype=np.bool)
-#             feature_masks[-1][wi] = mask
-#
-#             # This is right, right?
-#             if doAvg:
-#                 A = np.multiply(mask[None, :], A)
-#                 B = np.sum(np.multiply(B_full, mask[None, :]), axis=1)  # n classes x n time
-#             else:
-#                 A = np.multiply(mask[None, :, :], A)
-#                 B = np.sum(np.multiply(B_full, mask[None, :, :]), axis=(1, 2))  # n classes x n time
-#
-#             P_cGx = np.empty([len(test_windows), np.sum(in_test), n_l])
-#             test_data_full = data[in_test, :, :]
-#             for wj in xrange(n_w):
-#                 test_time = test_windows[wj]
-#                 test_data = test_data_full[:, :, test_time]
-#                 if doZscore:
-#                     test_data = test_data - mu_full_all[None, :, train_time]
-#                     test_data = test_data / std_full_all[None, :, train_time]
-#                 if doAvg:
-#                     test_data = np.mean(test_data, axis=2)
-#                     print(test_data.shape)
-#                     P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :], A[None, :, :]), axis=2) - B
-#                 else:
-#                     P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :, :], A[None, :, :, :]), axis=(2, 3)) - B
-#             preds[-1][wi] = P_cGx
-#     return preds, l_ints, cv_membership, feature_masks
+def flatten_list(list_of_lists):
+    lst = []
+    for item in list_of_lists:
+        lst.extend(item)
+    return lst
+
+
+def gnb_model(data, label_membership):
+    mu_full = np.array([np.mean(data[label_in, ...], axis=0) for label_in in label_membership])
+    std_full = np.array([np.std(data[label_in, ...], axis=0, ddof=ddof) for label_in in label_membership])
+
+    std_full = np.mean(std_full, axis=0)
+    double_var_full = 2 * np.square(std_full)
+
+    B = np.divide(np.square(mu_full), double_var_full[None, :, :])
+    A = (2 * mu_full) / double_var_full[None, :, :]
+    return A, B, mu_full
+
+
+def get_pred_acc(preds, labels):
+    label_est = np.argmax(preds, axis=1)
+    return np.sum(label_est == labels)/len(labels)
 
 
 def nb_tgm(data,
            labels,
            kf,
+           sub_kf,
            win_starts,
            win_len,
-           feature_select=None,
-           feature_select_params=None,
+           feature_select=False,
            doZscore=False,
            doAvg=False,
            ddof=1):
@@ -139,96 +48,103 @@ def nb_tgm(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
-    print(l_ints.shape)
-    print(n_tot)
     in_l = [l_ints == i for i in xrange(n_l)]
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
 
-    preds = []
-    cv_membership = []
-    feature_masks = []
+    preds = np.empty((kf.get_n_splits(), n_w, n_w), dtype=np.object)
+    cv_membership = np.empty((kf.get_n_splits(),), dtype=np.object)
+    feature_masks = np.empty((kf.get_n_splits(), n_w), dtype=np.object)
+    num_feat_selected = np.empty((kf.get_n_splits(), n_w))
+    # Top-level CV
+    i_top_split = 0
     for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
-        cv_membership.append(in_test)
-        preds.append(np.zeros((n_w,), dtype=np.object))
-        feature_masks.append(np.zeros((n_w,), dtype=np.object))
-        mu_full_all = np.mean(data[in_train, :, :], axis=0)
-        std_full_all = np.std(data[in_train, :, :], axis=0, ddof=ddof)
+        cv_membership[i_top_split] = in_test
+        # Iterate over full time grid
         for wi in xrange(n_w):
             train_time = test_windows[wi]
+            train_data = data[in_train, :, train_time]
+            if doAvg:
+                train_data = np.mean(train_data, axis=2)
             if doZscore:
-                new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
-                new_data = new_data / std_full_all[None, :, train_time]
+                mu_full_all = np.mean(train_data, axis=0)
+                std_full_all = np.std(train_data, axis=0, ddof=ddof)
+                train_data_z = train_data - mu_full_all[None, ...]
+                train_data_z /= std_full_all[None, ...]
             else:
-                new_data = data[:, :, train_time]
-            if doAvg:
-                new_data = np.mean(new_data, axis=2)
-                mu_full = np.array([np.mean(
-                    new_data[in_l[li][in_train], :],
-                    0) for li in xrange(n_l)])
-                std_full = np.array([np.std(
-                    new_data[in_l[li][in_train], :],
-                    axis=0, ddof=ddof) for li in xrange(n_l)])
-            else:
-                mu_full = np.array([np.mean(
-                    new_data[in_l[li][in_train], :, :],
-                    0) for li in xrange(n_l)])
-                std_full = np.array([np.std(
-                    new_data[in_l[li][in_train], :, :],
-                    axis=0, ddof=ddof) for li in xrange(n_l)])
+                train_data_z = train_data
 
-            std_full = np.mean(std_full, axis=0)
-            double_var_full = 2 * np.square(std_full)
+            train_l_ints = l_ints[in_train]
+            train_in_l = [in_l[li][in_train] for li in xrange(n_l)]
 
-            if doAvg:
-                B_full = np.divide(np.square(mu_full), double_var_full[None, :])
-                A = (2 * mu_full) / double_var_full[None, :]
-            else:
-                B_full = np.divide(np.square(mu_full), double_var_full[None, :, :])
-                A = (2 * mu_full) / double_var_full[None, :, :]
+            A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l)
 
-            if feature_select is not None:
-                if feature_select == 'distance_of_means':
+            if feature_select:
+                num_feat_opts = flatten_list(NUM_FEAT_OPTIONS)
+                num_feat_accs = np.empty((len(num_feat_opts), sub_kf.get_n_splits))
+                # Inner CV for Feature Selection
+                i_split = 0
+                for in_sub_train, in_sub_test in sub_kf.split(train_data, train_l_ints):
+                    sub_train_data = train_data[in_sub_train, ...]
+                    sub_test_data = train_data[in_sub_test, ...]
+                    sub_test_ints = train_l_ints[in_sub_test]
+                    sub_train_in_l = [train_in_l[li][in_sub_train] for li in xrange(n_l)]
+
+                    if doZscore:
+                        mu_full_all = np.mean(sub_train_data, axis=0)
+                        std_full_all = np.std(sub_train_data, axis=0, ddof=ddof)
+                        sub_train_data -= mu_full_all[None, ...]
+                        sub_train_data /= std_full_all[None, ...]
+                        sub_test_data -= mu_full_all[None, ...]
+                        sub_test_data /= std_full_all[None, ...]
+
+                    A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l)
                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
                                      np.zeros(mu_full[0].shape))
                     sorted_indices = np.argsort(-mu_diff, axis=None)
-                    nfeatures = feature_select_params['number_of_features']
-                    mask = np.zeros(mu_diff.shape, dtype=np.bool)
-                    mask[np.unravel_index(sorted_indices[0:nfeatures], mu_diff.shape)] = True
-                else:
-                    raise ValueError('Invalid feature selection')
-            else:
-                if doAvg:
-                    mask = np.ones(A[:, :].shape[1:], dtype=np.bool)
-                else:
-                    mask = np.ones(A[:, :, :].shape[1:], dtype=np.bool)
-            feature_masks[-1][wi] = mask
 
-            # This is right, right?
-            if doAvg:
-                A = np.multiply(mask[None, :], A)
-                B = np.sum(np.multiply(B_full, mask[None, :]), axis=1)  # n classes x n time
-            else:
-                A = np.multiply(mask[None, :, :], A)
-                B = np.sum(np.multiply(B_full, mask[None, :, :]), axis=(1, 2))  # n classes x n time
+                    for i_feat_num, feat_num in enumerate(num_feat_opts):
+                        if feat_num > len(sorted_indices):
+                            break
+                        mask = np.zeros(mu_diff.shape, dtype=np.bool)
+                        mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
+                        A_mask = np.multiply(mask[None, ...], A)
+                        B_mask = np.sum(np.multiply(B, mask[None, ...]), axis=range(1, len(mask.shape)))
+                        pred_mask = np.sum(np.multiply(sub_test_data[:, None, ...], A_mask[None, ...]),
+                                           axis=range(2, len(sub_test_data.shape))) - B_mask
+                        num_feat_accs[i_feat_num, i_split] = get_pred_acc(pred_mask, sub_test_ints)
+                    i_split += 1
 
-            P_cGx = np.empty([len(test_windows), len(in_test), n_l])
-            test_data_full = data[in_test, :, :]
+                best_feat_ind = np.argmax(np.mean(num_feat_accs, axis=1))
+                feat_num = num_feat_opts[best_feat_ind[0]]
+                mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full_top[lis[0]] - mu_full_top[lis[1]]),
+                                 ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
+                                 np.zeros(mu_full_top[0].shape))
+                sorted_indices = np.argsort(-mu_diff, axis=None)
+                mask = np.zeros(mu_diff.shape, dtype=np.bool)
+                mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
+                feature_masks[i_top_split, wi] = mask
+                num_feat_selected[i_top_split, wi] = feat_num
+                A_top = np.multiply(mask[None, ...], A_top)
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=range(1, len(mask.shape)))
+
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
-                test_data = test_data_full[:, :, test_time]
-                if doZscore:
-                    test_data = test_data - mu_full_all[None, :, train_time]
-                    test_data = test_data / std_full_all[None, :, train_time]
+                test_data = data[in_test, :, test_time]
                 if doAvg:
                     test_data = np.mean(test_data, axis=2)
-                    # print(test_data.shape)
-                    P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :], A[None, :, :]), axis=2) - B
-                else:
-                    P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :, :], A[None, :, :, :]), axis=(2, 3)) - B
-            preds[-1][wi] = P_cGx
+                if doZscore:
+                    mu_full_all = np.mean(train_data, axis=0)
+                    std_full_all = np.std(train_data, axis=0, ddof=ddof)
+                    test_data -= mu_full_all[None, ...]
+                    test_data /= std_full_all[None, ...]
+
+                pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
+                                   axis=range(2, len(test_data.shape))) - B_top
+                preds[i_top_split, wi, wj] = pred_top
+                i_top_split += 1
     return preds, l_ints, cv_membership, feature_masks
 
 

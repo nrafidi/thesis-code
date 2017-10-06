@@ -73,10 +73,8 @@ def run_tgm_exp(experiment,
 
     if alg == 'GNB' and doFeatSelect:
         alg_str = alg + '-FS'
-        feature_select = 'distance_of_means'
     else:
         alg_str = alg
-        feature_select = None
 
     fname = SAVE_FILE.format(dir=save_dir,
                              sub=subject,
@@ -137,6 +135,7 @@ def run_tgm_exp(experiment,
     tmax = time.max()
 
     kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=CV_RAND_STATE)
+    sub_kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=SUB_CV_RAND_STATE)
 
     total_win = int((tmax - tmin) * 500)
     win_starts = range(0, total_win - win_len, overlap)
@@ -159,10 +158,10 @@ def run_tgm_exp(experiment,
              cv_membership, masks) = models.nb_tgm(data=data,
                                                    labels=labels,
                                                    kf=kf,
+                                                   sub_kf=sub_kf,
                                                    win_starts=win_starts,
                                                    win_len=win_len,
-                                                   feature_select=feature_select,
-                                                   feature_select_params={'number_of_features': 50},  #Change after models.py is modified
+                                                   feature_select=doFeatSelect,
                                                    doZscore=doZscore,
                                                    doAvg=doAvg)
         else:
@@ -189,7 +188,7 @@ def run_tgm_exp(experiment,
                                       labels=labels,
                                       win_starts=win_starts,
                                       win_len=win_len,
-                                      feature_select=feature_select,
+                                      feature_select=doFeatSelect,
                                       feature_select_params={'number_of_features': 50},  #  Change after models.py is modified
                                       doZscore=doZscore,
                                       doAvg=doAvg)
