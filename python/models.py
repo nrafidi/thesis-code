@@ -64,7 +64,8 @@ def nb_tgm(data,
         # Iterate over full time grid
         for wi in xrange(n_w):
             train_time = test_windows[wi]
-            train_data = data[in_train, :, train_time]
+            train_data = data[in_train, :, :]
+            train_data = train_data[:, :, train_time]
             if doAvg:
                 train_data = np.mean(train_data, axis=2)
             if doZscore:
@@ -132,7 +133,8 @@ def nb_tgm(data,
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
-                test_data = data[in_test, :, test_time]
+                test_data = data[in_test, :, :]
+                test_data = test_data[:, :, test_time]
                 if doAvg:
                     test_data = np.mean(test_data, axis=2)
                 if doZscore:
