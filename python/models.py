@@ -112,9 +112,16 @@ def nb_tgm(data,
                         mask = np.zeros(mu_diff.shape, dtype=np.bool)
                         mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
                         A_mask = np.multiply(mask[None, ...], A)
-                        B_mask = np.sum(np.multiply(B, mask[None, ...]), axis=range(1, len(mask.shape)))
-                        pred_mask = np.sum(np.multiply(sub_test_data[:, None, ...], A_mask[None, ...]),
-                                           axis=range(2, len(sub_test_data.shape))) - B_mask
+                        if doAvg:
+                            B_mask = np.sum(np.multiply(B, mask[None, ...]), axis=1)
+                        else:
+                            B_mask = np.sum(np.multiply(B, mask[None, ...]), axis=(1, 2))
+                        if doAvg:
+                            pred_mask = np.sum(np.multiply(sub_test_data[:, None, ...], A_mask[None, ...]),
+                                               axis=2) - B_mask
+                        else:
+                            pred_mask = np.sum(np.multiply(sub_test_data[:, None, ...], A_mask[None, ...]),
+                                               axis=(2, 3)) - B_mask
                         num_feat_accs[i_feat_num, i_split] = get_pred_acc(pred_mask, sub_test_ints)
                     i_split += 1
 
@@ -128,11 +135,14 @@ def nb_tgm(data,
                 mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
                 feature_masks[i_top_split, wi] = mask
                 num_feat_selected[i_top_split, wi] = feat_num
-                A_top = np.multiply(mask[None, ...], A_top)
-                if doAvg:
-                    B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
-                else:
-                    B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
+            else:
+                mask = np.ones(A_top.shape[1:], dtype=np.bool)
+
+            A_top = np.multiply(mask[None, ...], A_top)
+            if doAvg:
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
+            else:
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -154,7 +164,7 @@ def nb_tgm(data,
                                       axis=(2, 3)) - B_top
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
-    return preds, l_ints, cv_membership, feature_masks
+    return preds, l_ints, cv_membership, feature_masks, num_feat_selected
 
 
 def nb_tgm_coef(data,

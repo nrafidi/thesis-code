@@ -73,8 +73,8 @@ def run_tgm_exp(experiment,
 
     if alg == 'GNB' and doFeatSelect:
         alg_str = alg + '-FS'
-        print('meow')
     else:
+        raise ValueError('Args are not being parsed correctly {}, {}'.format(doFeatSelect, type(doFeatSelect)))
         alg_str = alg
 
     fname = SAVE_FILE.format(dir=save_dir,
