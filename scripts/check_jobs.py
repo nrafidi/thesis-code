@@ -51,6 +51,8 @@ if __name__ == '__main__':
                             is_valid = is_valid and (grid[9] == 2)
                         if is_valid:
                             print(meow)
+                    elif 'meow' not in meow:
+                        print('fishy...')
                     else:
                         successful_jobs += 1
                         print(job_id)

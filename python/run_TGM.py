@@ -73,6 +73,7 @@ def run_tgm_exp(experiment,
 
     if alg == 'GNB' and doFeatSelect:
         alg_str = alg + '-FS'
+        print('meow')
     else:
         alg_str = alg
 
