@@ -19,8 +19,8 @@ def gnb_model(data, label_membership, ddof):
     std_full = np.mean(std_full, axis=0)
     double_var_full = 2 * np.square(std_full)
 
-    B = np.divide(np.square(mu_full), double_var_full[None, :, :])
-    A = (2 * mu_full) / double_var_full[None, :, :]
+    B = np.divide(np.square(mu_full), double_var_full[None, ...])
+    A = (2 * mu_full) / double_var_full[None, ...]
     return A, B, mu_full
 
 
@@ -129,7 +129,7 @@ def nb_tgm(data,
                 feature_masks[i_top_split, wi] = mask
                 num_feat_selected[i_top_split, wi] = feat_num
                 A_top = np.multiply(mask[None, ...], A_top)
-                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=range(1, len(mask.shape)))
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=tuple(range(1, len(mask.shape))))
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -144,7 +144,7 @@ def nb_tgm(data,
                     test_data /= std_full_all[None, ...]
 
                 pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
-                                   axis=range(2, len(test_data.shape))) - B_top
+                                   axis=tuple(range(2, len(test_data.shape)))) - B_top
                 preds[i_top_split, wi, wj] = pred_top
                 i_top_split += 1
     return preds, l_ints, cv_membership, feature_masks
