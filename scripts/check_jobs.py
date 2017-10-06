@@ -53,6 +53,7 @@ if __name__ == '__main__':
                             print(meow)
                     else:
                         successful_jobs += 1
+                        print(job_id)
 
 
         job_id += 1

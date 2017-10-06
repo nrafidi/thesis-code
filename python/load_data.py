@@ -73,7 +73,7 @@ PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pd
 
 def get_sen_num_from_id(sen_id):
     m = re.match('.*sentence-(\d+)', sen_id)
-    return m.group(1)
+    return int(m.group(1))
 
 
 def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
