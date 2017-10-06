@@ -12,7 +12,7 @@ def flatten_list(list_of_lists):
     return lst
 
 
-def gnb_model(data, label_membership):
+def gnb_model(data, label_membership, ddof):
     mu_full = np.array([np.mean(data[label_in, ...], axis=0) for label_in in label_membership])
     std_full = np.array([np.std(data[label_in, ...], axis=0, ddof=ddof) for label_in in label_membership])
 
@@ -79,7 +79,7 @@ def nb_tgm(data,
             train_l_ints = l_ints[in_train]
             train_in_l = [in_l[li][in_train] for li in xrange(n_l)]
 
-            A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l)
+            A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l, ddof)
 
             if feature_select:
                 num_feat_opts = flatten_list(NUM_FEAT_OPTIONS)
@@ -100,7 +100,7 @@ def nb_tgm(data,
                         sub_test_data -= mu_full_all[None, ...]
                         sub_test_data /= std_full_all[None, ...]
 
-                    A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l)
+                    A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l, ddof)
                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
                                      np.zeros(mu_full[0].shape))
