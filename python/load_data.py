@@ -2,6 +2,7 @@ import numpy as np
 import hippo.io
 import hippo.query
 import h5py
+import re
 
 NUM_SENTENCES = 16
 NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
@@ -70,6 +71,11 @@ DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-
 PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pdtwSyn.mat'
 
 
+def get_sen_num_from_id(sen_id):
+    m = re.match('.*sentence-(\d+)', sen_id)
+    return m.group(1)
+
+
 def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
     fname = PDTW_FILE.format(exp=experiment, sub=subject, proc=proc, word=word)
     loadVars = h5py.File(fname)
@@ -90,7 +96,7 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     usis = hippo.query.query_usis([('stimuli_set', USI_NAME[experiment]),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
-                                   ('sentence_id', lambda sid: sid != None), # and sid in SEN_ID_RANGE[sen_type]),
+                                   ('sentence_id', lambda sid: sid != None and get_sen_num_from_id(sid) in SEN_ID_RANGE[sen_type]),
                                    ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
     print(usis)

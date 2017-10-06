@@ -224,7 +224,7 @@ def nb_tgm(data,
                     test_data = test_data / std_full_all[None, :, train_time]
                 if doAvg:
                     test_data = np.mean(test_data, axis=2)
-                    print(test_data.shape)
+                    # print(test_data.shape)
                     P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :], A[None, :, :]), axis=2) - B
                 else:
                     P_cGx[wj, :, :] = np.sum(np.multiply(test_data[:, None, :, :], A[None, :, :, :]), axis=(2, 3)) - B
