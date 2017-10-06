@@ -21,7 +21,7 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+EXPERIMENTS = ['PassAct2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
