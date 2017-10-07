@@ -5,6 +5,7 @@ import numpy as np
 import os.path
 import random
 from sklearn.model_selection import StratifiedKFold
+import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM/'
 SAVE_DIR = '{top_dir}/{sub}/'
@@ -55,7 +56,7 @@ def run_tgm_exp(experiment,
                 random_state_cv=CV_RAND_STATE,
                 random_state_sub=SUB_CV_RAND_STATE,
                 force=False):
-
+    warnings.filterwarnings('error')
     # Save Directory
     top_dir = TOP_DIR.format(exp=experiment)
     if not os.path.exists(top_dir):
