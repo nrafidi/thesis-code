@@ -99,7 +99,7 @@ def nb_tgm(data,
                         sub_train_data /= std_full_all[None, ...]
                         sub_test_data -= mu_full_all[None, ...]
                         sub_test_data /= std_full_all[None, ...]
-
+                    print('{}/{}'.format(wi, n_w))
                     A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l, ddof)
                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
