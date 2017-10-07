@@ -153,28 +153,37 @@ def run_tgm_exp(experiment,
                                                    win_len=win_len,
                                                    doZscore=doZscore,
                                                    doAvg=doAvg)
+            np.savez_compressed(fname,
+                                preds=preds,
+                                l_ints=l_ints,
+                                cv_membership=cv_membership,
+                                masks=masks,
+                                time=time,
+                                win_starts=win_starts,
+                                proc=proc)
         elif alg == 'GNB':
             (preds, l_ints,
-             cv_membership, masks) = models.nb_tgm(data=data,
-                                                   labels=labels,
-                                                   kf=kf,
-                                                   sub_kf=sub_kf,
-                                                   win_starts=win_starts,
-                                                   win_len=win_len,
-                                                   feature_select=doFeatSelect,
-                                                   doZscore=doZscore,
-                                                   doAvg=doAvg)
+             cv_membership, masks, num_feats) = models.nb_tgm(data=data,
+                                                              labels=labels,
+                                                              kf=kf,
+                                                              sub_kf=sub_kf,
+                                                              win_starts=win_starts,
+                                                              win_len=win_len,
+                                                              feature_select=doFeatSelect,
+                                                              doZscore=doZscore,
+                                                              doAvg=doAvg)
+            np.savez_compressed(fname,
+                                preds=preds,
+                                l_ints=l_ints,
+                                cv_membership=cv_membership,
+                                masks=masks,
+                                time=time,
+                                win_starts=win_starts,
+                                proc=proc,
+                                num_feats=num_feats)
         else:
             raise ValueError('ENET not implemented yet.')
 
-        np.savez_compressed(fname,
-                            preds=preds,
-                            l_ints=l_ints,
-                            cv_membership=cv_membership,
-                            masks=masks,
-                            time=time,
-                            win_starts=win_starts,
-                            proc=proc)
     else:
         if alg == 'LASSO':
             coef = models.lr_tgm_coef(data=data,
