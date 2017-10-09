@@ -71,7 +71,9 @@ def get_param_str(param_name, param_val):
 def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
-
+    print(preds.shape)
+    print(l_ints.shape)
+    print(cv_membership.shape)
     if accuracy == 'abs':
         tgm_corr = np.zeros((num_win, num_win))
         tgm_total = np.zeros((num_win, num_win))
