@@ -2,7 +2,7 @@ import numpy as np
 import sklearn.linear_model
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
-NUM_FEAT_OPTIONS = [range(50, 500, 50), range(500, 2000, 500), range(2000, 20000, 2000)]
+NUM_FEAT_OPTIONS = [range(50, 500, 50), range(500, 2000, 500), range(2000, 40000, 2000)]
 
 
 def flatten_list(list_of_lists):
@@ -67,6 +67,7 @@ def nb_tgm(data,
             train_time = test_windows[wi]
             train_data = data[in_train, :, :]
             train_data = train_data[:, :, train_time]
+            print(train_data.shape)
             if doAvg:
                 train_data = np.mean(train_data, axis=2)
             if doZscore:
