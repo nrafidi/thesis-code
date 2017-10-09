@@ -86,9 +86,20 @@ def nb_tgm(data,
                 num_feat_opts = flatten_list(NUM_FEAT_OPTIONS)
                 num_feat_accs = np.empty((len(num_feat_opts), sub_kf.get_n_splits()))
                 # Inner CV for Feature Selection
+                meow = np.reshape(train_data, (train_data.shape[0], -1))
                 i_split = 0
-                for in_sub_train, in_sub_test in sub_kf.split(np.reshape(train_data, (train_data.shape[0], -1)), train_l_ints):
-                    assert (len(in_sub_train) == len(in_sub_test))
+                for in_sub_train, in_sub_test in sub_kf.split(meow, train_l_ints):
+
+                    try:
+                        assert (len(in_sub_train) == len(in_sub_test))
+                    except:
+                        print(data.shape[0])
+                        print(meow.shape[0])
+                        print(len(in_train))
+                        print(len(in_test))
+                        print(len(in_sub_train))
+                        print(len(in_sub_test))
+                        raise AssertionError('not a clean split')
                     sub_train_data = train_data[in_sub_train, ...]
                     sub_test_data = train_data[in_sub_test, ...]
                     sub_test_ints = train_l_ints[in_sub_test]
