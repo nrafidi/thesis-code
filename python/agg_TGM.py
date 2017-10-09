@@ -173,54 +173,55 @@ def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, pa
     time_by_sub = []
     start_by_sub = []
     for sub in result_dict:
-        diag = []
-        param_of_interest = [int(p) for p in param_dict[sub][param]]
-        tgm_of_interest = result_dict[sub]
-        time_of_interest = time_dict[sub]['time']
-        
-        starts_of_interest = time_dict[sub]['win_starts']
-        
-        ind_spec = [True] * len(param_of_interest)
-        for p in param_specs:
-            p_of_interest = np.array(param_dict[sub][p])
-            ind_spec = np.logical_and(ind_spec, p_of_interest == str(param_specs[p]))
-        tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
-        param_of_interest = list(compress(param_of_interest, ind_spec))
-        time_of_interest = list(compress(time_of_interest, ind_spec))
-        starts_of_interest = list(compress(starts_of_interest, ind_spec))
-        sort_inds = np.argsort(np.array(param_of_interest).astype('int'))
+        if param_dict[sub]:
+            diag = []
+            param_of_interest = [int(p) for p in param_dict[sub][param]]
+            tgm_of_interest = result_dict[sub]
+            time_of_interest = time_dict[sub]['time']
 
-        tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
-        param_of_interest = [param_of_interest[i] for i in sort_inds]
-        time_of_interest = [np.array(time_of_interest[i]).astype(np.float) for i in sort_inds]
-        starts_of_interest = [np.array(starts_of_interest[i]).astype('int') for i in sort_inds]
+            starts_of_interest = time_dict[sub]['win_starts']
 
-        if param_limit is not None:
-            limit_ind = param_of_interest.index(param_limit) + 1
-            tgm_of_interest = tgm_of_interest[:limit_ind]
-            param_of_interest = param_of_interest[:limit_ind]
-            starts_of_interest = starts_of_interest[:limit_ind]
-            time_of_interest = time_of_interest[:limit_ind]
+            ind_spec = [True] * len(param_of_interest)
+            for p in param_specs:
+                p_of_interest = np.array(param_dict[sub][p])
+                ind_spec = np.logical_and(ind_spec, p_of_interest == str(param_specs[p]))
+            tgm_of_interest = list(compress(tgm_of_interest, ind_spec))
+            param_of_interest = list(compress(param_of_interest, ind_spec))
+            time_of_interest = list(compress(time_of_interest, ind_spec))
+            starts_of_interest = list(compress(starts_of_interest, ind_spec))
+            sort_inds = np.argsort(np.array(param_of_interest).astype('int'))
 
-        min_size = 10000
-        for tgm in tgm_of_interest:
-            if tgm.shape[0] < min_size:
-                min_size = tgm.shape[0]
-            diag.append(np.diag(tgm))
+            tgm_of_interest = [tgm_of_interest[i] for i in sort_inds]
+            param_of_interest = [param_of_interest[i] for i in sort_inds]
+            time_of_interest = [np.array(time_of_interest[i]).astype(np.float) for i in sort_inds]
+            starts_of_interest = [np.array(starts_of_interest[i]).astype('int') for i in sort_inds]
 
-        diag = [tgm_diag[:min_size] for tgm_diag in diag]
-        starts_of_interest = [start_arr[:min_size] for start_arr in starts_of_interest]
-        for i, start_arr in enumerate(starts_of_interest):
-            print(len(time_of_interest[i]))
-            #print(time_of_interest[i])
-            time_of_interest[i] = time_of_interest[i][start_arr]
-            #print(start_arr)
-            #print(time_of_interest[i])
+            if param_limit is not None:
+                limit_ind = param_of_interest.index(param_limit) + 1
+                tgm_of_interest = tgm_of_interest[:limit_ind]
+                param_of_interest = param_of_interest[:limit_ind]
+                starts_of_interest = starts_of_interest[:limit_ind]
+                time_of_interest = time_of_interest[:limit_ind]
 
-        diag_by_sub.append(np.array(diag))
-        param_by_sub.append(np.array(param_of_interest))
-        time_by_sub.append(np.array(time_of_interest))
-        start_by_sub.append(np.array(starts_of_interest))
+            min_size = 10000
+            for tgm in tgm_of_interest:
+                if tgm.shape[0] < min_size:
+                    min_size = tgm.shape[0]
+                diag.append(np.diag(tgm))
+
+            diag = [tgm_diag[:min_size] for tgm_diag in diag]
+            starts_of_interest = [start_arr[:min_size] for start_arr in starts_of_interest]
+            for i, start_arr in enumerate(starts_of_interest):
+                print(len(time_of_interest[i]))
+                #print(time_of_interest[i])
+                time_of_interest[i] = time_of_interest[i][start_arr]
+                #print(start_arr)
+                #print(time_of_interest[i])
+
+            diag_by_sub.append(np.array(diag))
+            param_by_sub.append(np.array(param_of_interest))
+            time_by_sub.append(np.array(time_of_interest))
+            start_by_sub.append(np.array(starts_of_interest))
     diag = np.array(diag_by_sub)
     param_val = np.array(param_by_sub)
     time = np.array(time_by_sub)

@@ -63,7 +63,7 @@ if __name__ == '__main__':
                     #                                       accuracy,
                     #                                       sub,
                     #                                       param_specs, param_limit=200))
-                print(sub_params)
+
                 sub_avg_list = avg_over_sub(sub_results)
                 diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
                 diag = np.mean(diag, axis=0)
