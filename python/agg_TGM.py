@@ -54,6 +54,8 @@ def extract_param(param_name, fname):
         raise ValueError('Invalid fname')
 
     m = re.match('.*_' + param_name + '(\d+)_.*', fname)
+    if param_name == 'w' and not m:
+        m = re.match('.*_' + param_name + '(-\d+)_.*', fname)
     if m:
         return m.group(1)
     else:
@@ -132,7 +134,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        #print(f)
+        print(f)
         print(i_f)
         for param in PARAMS_TO_AGG:
             if param not in sub_params:
