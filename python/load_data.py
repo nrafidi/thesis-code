@@ -25,8 +25,15 @@ USI_NAME = {'krns2': 'krns2',
             'PassAct2': 'pass-act-2',
             'PassAct3': 'pass-act-3'}
 
-SEN_ID_RANGE = {'active': range(16),
-                'passive': range(16, 32)}
+SEN_ID_RANGE = {'krns2':
+                    {'active': range(4, 20),
+                    'passive': range(20, 36)},
+                'PassAct2':
+                    {'active': range(16),
+                    'passive': range(16, 32)},
+                'PassAct3':
+                    {'active': range(16),
+                    'passive': range(16, 32)}}
 
 WORD_PER_SEN = {'krns2':
                     {'active':
@@ -96,8 +103,8 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     usis = hippo.query.query_usis([('stimuli_set', USI_NAME[experiment]),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
-                                   ('sentence_id', lambda sid: sid != None)],# and (get_sen_num_from_id(sid) in SEN_ID_RANGE[sen_type]))],
-                                   # ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
+                                   ('sentence_id', lambda sid: sid != None and (get_sen_num_from_id(sid) in SEN_ID_RANGE[experiment][sen_type])),
+                                   ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
     print(len(usis.keys()))
     for usi in usis:
