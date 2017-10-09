@@ -61,6 +61,7 @@ def nb_tgm(data,
     i_top_split = 0
     for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
         cv_membership[i_top_split] = in_test
+        assert(len(in_train) == len(in_test))
         # Iterate over full time grid
         for wi in xrange(n_w):
             train_time = test_windows[wi]
@@ -87,6 +88,7 @@ def nb_tgm(data,
                 # Inner CV for Feature Selection
                 i_split = 0
                 for in_sub_train, in_sub_test in sub_kf.split(np.reshape(train_data, (train_data.shape[0], -1)), train_l_ints):
+                    assert (len(in_sub_train) == len(in_sub_test))
                     sub_train_data = train_data[in_sub_train, ...]
                     sub_test_data = train_data[in_sub_test, ...]
                     sub_test_ints = train_l_ints[in_sub_test]
