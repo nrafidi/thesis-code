@@ -70,10 +70,10 @@ if __name__ == '__main__':
                 # diag = np.mean(diag, axis=0)
                 # for i_win in range(diag.shape[0]):
                 fig, axs = plt.subplots(1, 2)
-                h = axs[0].imshow(sub_avg_list[0], interpolation='nearest')
+                h = axs[0].imshow(sub_avg_list[0], interpolation='nearest', vmin=0, vmax=1)
                 plt.colorbar(h)
                 axs[1].plot(np.diag(sub_avg_list[0]))
-                plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, 100, word, sen_type))
+                plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_specs['w'], word, sen_type))
                 plt.show()
 
 
