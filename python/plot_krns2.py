@@ -69,9 +69,10 @@ if __name__ == '__main__':
                 # diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
                 # diag = np.mean(diag, axis=0)
                 # for i_win in range(diag.shape[0]):
-                fig, axs = plt.subplots()
-                h = axs.imshow(sub_avg_list[0], interpolation='nearest')
+                fig, axs = plt.subplots(1, 2)
+                h = axs[0].imshow(sub_avg_list[0], interpolation='nearest')
                 plt.colorbar(h)
+                axs[1].plot(np.diag(sub_avg_list[0]))
                 plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, 100, word, sen_type))
                 plt.show()
 
