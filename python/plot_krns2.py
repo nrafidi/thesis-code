@@ -30,8 +30,8 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
-            for o in [12]:
-                for w in [250, 500, 750, 1000, 1250]:
+            for o in [3]:
+                for w in [3, 6, 12, 25, 50]:
                     param_specs = {'o': o,
                                    'w': w,
                                    'pd': 'F',
