@@ -245,7 +245,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Check that parameter setting is valid
-    is_valid = args.overlap <= args.win_len
+    if args.win_len > 0:
+        is_valid = args.overlap <= args.win_len
+    else:
+        is_valid = True
     if not is_valid:
         print('overlap wrong')
     is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
