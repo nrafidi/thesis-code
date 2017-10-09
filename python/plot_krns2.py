@@ -32,7 +32,7 @@ if __name__ == '__main__':
         for sen_type in ['passive', 'active']:
             for o in [12]:
                 param_specs = {'o': o,
-                               'w': 100,
+                               'w': -1,
                                'pd': 'F',
                                'pr': 'F',
                                'alg': 'GNB-FS',
