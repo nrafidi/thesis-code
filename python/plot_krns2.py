@@ -31,49 +31,51 @@ if __name__ == '__main__':
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
             for o in [12]:
-                param_specs = {'o': o,
-                               'pd': 'F',
-                               'pr': 'F',
-                               'alg': 'GNB-FS',
-                               'F': 2,
-                               'z': 'F',
-                               'avg': 'F',
-                               'ni': 2,
-                               'nr': 10,
-                               'rsPerm': 1,
-                               'rsCV': run_TGM.CV_RAND_STATE,
-                               'rsSCV': run_TGM.SUB_CV_RAND_STATE}
-                sub_results = {}
-                sub_res_list = []
-                sub_params = {}
-                sub_time = {}
-                sub_sim = []
-                for sub in load_data.VALID_SUBS[exp]:
+                for w in [250, 500, 750, 1000, 1250]:
+                    param_specs = {'o': o,
+                                   'w': w,
+                                   'pd': 'F',
+                                   'pr': 'F',
+                                   'alg': 'GNB-FS',
+                                   'F': 2,
+                                   'z': 'F',
+                                   'avg': 'F',
+                                   'ni': 2,
+                                   'nr': 10,
+                                   'rsPerm': 1,
+                                   'rsCV': run_TGM.CV_RAND_STATE,
+                                   'rsSCV': run_TGM.SUB_CV_RAND_STATE}
+                    sub_results = {}
+                    sub_res_list = []
+                    sub_params = {}
+                    sub_time = {}
+                    sub_sim = []
+                    for sub in load_data.VALID_SUBS[exp]:
 
-                    sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
-                                                                                           mode,
-                                                                                           word,
-                                                                                           sen_type,
-                                                                                           accuracy,
-                                                                                           sub,
-                                                                                           param_specs=param_specs)
-                    # sub_sim.append(coef_sim.coef_by_param(exp,
-                    #                                       word,
-                    #                                       sen_type,
-                    #                                       accuracy,
-                    #                                       sub,
-                    #                                       param_specs, param_limit=200))
+                        sub_results[sub], sub_params[sub], sub_time[sub] = agg_TGM.agg_results(exp,
+                                                                                               mode,
+                                                                                               word,
+                                                                                               sen_type,
+                                                                                               accuracy,
+                                                                                               sub,
+                                                                                               param_specs=param_specs)
+                        # sub_sim.append(coef_sim.coef_by_param(exp,
+                        #                                       word,
+                        #                                       sen_type,
+                        #                                       accuracy,
+                        #                                       sub,
+                        #                                       param_specs, param_limit=200))
 
-                sub_avg_list = avg_over_sub(sub_results)
-                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
-                diag = np.mean(diag, axis=0)
-                for i_win in range(diag.shape[0]):
+                    sub_avg_list = avg_over_sub(sub_results)
+                    # diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
+                    # diag = np.mean(diag, axis=0)
+                    # for i_win in range(diag.shape[0]):
                     fig, axs = plt.subplots(1, 2)
-                    h = axs[0].imshow(sub_avg_list[i_win], interpolation='nearest', vmin=0, vmax=1)
+                    h = axs[0].imshow(sub_avg_list[0], interpolation='nearest', vmin=0, vmax=1)
                     plt.colorbar(h)
-                    axs[1].plot(np.diag(sub_avg_list[i_win]))
-                    plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_val[i_win], word, sen_type))
-                # plt.show()
+                    axs[1].plot(np.diag(sub_avg_list[0]))
+                    plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_specs['w'], word, sen_type))
+                    # plt.show()
 
 
                 # sim_mat = np.mean(np.asarray(sub_sim), axis=0)
