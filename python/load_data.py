@@ -96,8 +96,8 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     usis = hippo.query.query_usis([('stimuli_set', USI_NAME[experiment]),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
-                                   ('sentence_id', lambda sid: sid != None and (get_sen_num_from_id(sid) in SEN_ID_RANGE[sen_type])),
-                                   ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
+                                   ('sentence_id', lambda sid: sid != None and (get_sen_num_from_id(sid) in SEN_ID_RANGE[sen_type]))],
+                                   # ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
     print(len(usis.keys()))
     for usi in usis:
