@@ -129,7 +129,6 @@ def run_tgm_exp(experiment,
                                       num_instances=num_instances,
                                       reps_to_use=reps_to_use)
     print(data.shape)
-    assert(data.shape[0] == 32) # remove after this debugging is over
 
     if isPerm:
         random.seed(random_state_perm)
@@ -142,6 +141,10 @@ def run_tgm_exp(experiment,
     sub_kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=SUB_CV_RAND_STATE)
 
     total_win = int((tmax - tmin) * 500)
+
+    if win_len < 0:
+        win_len = total_win - overlap
+
     win_starts = range(0, total_win - win_len, overlap)
 
     assert total_win <= len(time)

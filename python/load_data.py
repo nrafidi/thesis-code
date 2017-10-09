@@ -106,10 +106,6 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
                                    ('sentence_id', lambda sid: sid != None and (get_sen_num_from_id(sid) in SEN_ID_RANGE[experiment][sen_type])),
                                    ('word_index_in_sentence', lambda wis: wis == WORD_POS[sen_type][word])],
                                   include_annotations=['stimulus', 'sentence_id'])  # excludes questions
-    print(len(usis.keys()))
-    for usi in usis:
-        print(usi)
-        print(usis[usi])
     exp_sub = [(experiment, subject)]
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
     uels = {k: v for (k, v) in uels.iteritems() if len(v) > 0}  # checking for empties
