@@ -71,21 +71,18 @@ def get_param_str(param_name, param_val):
 def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
-    print(preds.shape)
-    print(l_ints.shape)
-    print(cv_membership.shape)
     if accuracy == 'abs':
         tgm_corr = np.zeros((num_win, num_win))
         tgm_total = np.zeros((num_win, num_win))
         for fold in range(num_folds):
-            labels = l_ints[cv_membership[fold, :]]
+            labels = l_ints[cv_membership[fold]]
             # print(labels)
             for i_win in range(num_win):
                 for j_win in range(num_win):
-                    yhat = np.argmax(np.squeeze(preds[fold, i_win][j_win, :, :]), axis=1)
+                    yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
                     # print(yhat.shape)
                     tgm_corr[i_win, j_win] += np.sum(yhat == labels)
-                    tgm_total[i_win, j_win] += cv_membership.shape[1]
+                    tgm_total[i_win, j_win] += preds[fold, i_win, j_win].shape[0]
         tgm = np.divide(tgm_corr, tgm_total)
         return tgm
     else:
