@@ -121,12 +121,15 @@ def run_tgm_exp(experiment,
                                                     experiment=experiment,
                                                     proc=proc)
 
+    print(data_raw.shape)
+
     data, labels = load_data.avg_data(data_raw=data_raw,
                                       labels_raw=labels,
                                       experiment=experiment,
                                       num_instances=num_instances,
                                       reps_to_use=reps_to_use)
     print(data.shape)
+    assert(data.shape[0] == 32) # remove after this debugging is over
 
     if isPerm:
         random.seed(random_state_perm)
