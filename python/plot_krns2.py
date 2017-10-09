@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
-            for o in [3, 6, 12]:
+            for o in [12]:
                 param_specs = {'o': o,
                                'pd': 'F',
                                'pr': 'F',
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                     fig, axs = plt.subplots(2, 1)
                     axs[0].imshow(sub_avg_list[i_win], interpolation='nearest')
                     axs[1].plot(diag[i_win, :])
-                    plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, i_win, word, sen_type))
+                    plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_val[i_win], word, sen_type))
                 plt.show()
 
 
