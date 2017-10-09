@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -10,7 +10,7 @@ import coef_sim
 
 
 def avg_over_sub(sub_results):
-    subjects = sub_results.keys()
+    subjects = [sub_key for sub_key in sub_results.keys() if sub_results[sub_key]]
     num_param = len(sub_results[subjects[0]])
     result_by_param = []
     for i_param in range(num_param):
