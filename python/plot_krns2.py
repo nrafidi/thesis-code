@@ -32,6 +32,7 @@ if __name__ == '__main__':
         for sen_type in ['passive', 'active']:
             for o in [12]:
                 param_specs = {'o': o,
+                               'w': 100,
                                'pd': 'F',
                                'pr': 'F',
                                'alg': 'GNB-FS',
@@ -65,13 +66,13 @@ if __name__ == '__main__':
                     #                                       param_specs, param_limit=200))
 
                 sub_avg_list = avg_over_sub(sub_results)
-                diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
-                diag = np.mean(diag, axis=0)
-                for i_win in range(diag.shape[0]):
-                    fig, axs = plt.subplots(2, 1)
-                    axs[0].imshow(sub_avg_list[i_win], interpolation='nearest')
-                    axs[1].plot(diag[i_win, :])
-                    plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_val[i_win], word, sen_type))
+                # diag, param_val, time, _ = agg_TGM.get_diag_by_param(sub_results, sub_params, sub_time, 'w', {})
+                # diag = np.mean(diag, axis=0)
+                # for i_win in range(diag.shape[0]):
+                fig, axs = plt.subplots()
+                h = axs.imshow(sub_avg_list[0], interpolation='nearest')
+                plt.colorbar(h)
+                plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, 100, word, sen_type))
                 plt.show()
 
 
