@@ -179,6 +179,7 @@ def run_tgm_exp(experiment,
                                                               feature_select=doFeatSelect,
                                                               doZscore=doZscore,
                                                               doAvg=doAvg)
+            print(num_feats)
             np.savez_compressed(fname,
                                 preds=preds,
                                 l_ints=l_ints,

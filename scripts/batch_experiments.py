@@ -25,8 +25,8 @@ EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
-WIN_LENS = [-1, 3, 6, 12, 25] #, 2000]
-OVERLAPS = [3, 6, 12] #12, 25, 50, 100, 150, 200, 250, 300, 350]
+WIN_LENS = [100] #-1, 3, 6, 12, 25] #, 2000]
+OVERLAPS = [12] #12, 25, 50, 100, 150, 200, 250, 300, 350]
 MODES = ['pred']  # pred
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},doZscore={z},' \
-                'doAvg={avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False,doFeatSelect=True ' \
+                'doAvg={avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True,doFeatSelect=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
