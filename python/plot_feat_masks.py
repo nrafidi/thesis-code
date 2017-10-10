@@ -70,20 +70,22 @@ if __name__ == '__main__':
                 print(diag.shape)
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
                 print(time.shape)
+                num_time = time.shape[0]
                 fulltime = sub_time['time'][0]
                 print(fulltime.shape)
+                num_fulltime = fulltime.shape[0]
                 masks = np.sum(sub_masks[0], axis=0)
                 print(masks.shape)
                 accum_mask = accum_over_time(masks, o)
                 print(accum_mask.shape)
-                accum_mask = accum_mask[:, :fulltime.shape[0]]
+                accum_mask = accum_mask[:, :num_fulltime]
 
                 fig, ax = plt.subplots()
-                h = ax.imshow(tgm, interpolation='nearest', vmin=0, vmax=1)
-                ax.set_yticks(time)
+                h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+                ax.set_yticks(range(num_time))
                 ax.set_yticklabels(time[::25])
                 ax.set_ylabel('Train Window Start')
-                ax.set_xticks(time)
+                ax.set_xticks(range(num_time))
                 ax.set_xticklabels(time[::25])
                 ax.set_xlabel('Test Window Start')
                 plt.colorbar(h)
@@ -97,13 +99,13 @@ if __name__ == '__main__':
                 plt.savefig('Diag_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
 
                 fig, ax = plt.subplots()
-                h = ax.imshow(accum_mask, interpolation='nearest', vmin=0, vmax=15)
+                h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=10)
                 ax.set_yticks(range(306))
                 ax.set_yticklabels(range(0, 306, 25))
                 ax.set_ylabel('Sensors')
-                ax.set_xticks(fulltime)
+                ax.set_xticks(range(num_fulltime))
                 ax.set_xticklabels(fulltime[::25])
                 ax.set_xlabel('Time')
                 plt.colorbar(h)
-                plt.savefig('Masks_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
+                plt.savefig('Masks_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type), bbox_inches='tight')
                 # plt.show()
