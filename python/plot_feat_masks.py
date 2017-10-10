@@ -24,7 +24,7 @@ def accum_over_time(masks, overlap):
     num_time = masks.shape[0]*overlap
     (num_sensors, win_len) = masks[0].shape
     accum_mask = np.zeros((num_sensors, num_time + win_len))
-    for t in range(num_time):
+    for t in range(masks.shape[0]):
         start_ind = t*overlap
         end_ind = start_ind + win_len
         accum_mask[:, start_ind:end_ind] += masks[t]
