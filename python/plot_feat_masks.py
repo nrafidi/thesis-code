@@ -40,7 +40,7 @@ def sort_sensors():
     sensor_reg = load_var['sensor_reg']
     sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
     sorted_inds = np.argsort(sensor_reg)
-    sorted_reg = sensor_reg[sorted_ids]
+    sorted_reg = sensor_reg[sorted_inds]
     return sorted_inds, sorted_reg
 
 
@@ -50,7 +50,9 @@ if __name__ == '__main__':
     accuracy = 'abs'
     o = 12
     w = 100
-    sort_sensors()
+    sorted_inds, sorted_reg = sort_sensors()
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
@@ -91,6 +93,7 @@ if __name__ == '__main__':
                 accum_mask = accum_over_time(masks, o)
                 print(accum_mask.shape)
                 accum_mask = accum_mask[:, :num_fulltime]
+                accum_mask = accum_mask[sorted_inds, :]
 
                 fig, ax = plt.subplots()
                 h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
@@ -112,8 +115,8 @@ if __name__ == '__main__':
 
                 fig, ax = plt.subplots()
                 h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=15)
-                ax.set_yticks(range(0, 306, 25))
-                ax.set_yticklabels(range(0, 306, 25))
+                ax.set_yticks(yticks_sens)
+                ax.set_yticklabels(uni_reg)
                 ax.set_ylabel('Sensors')
                 ax.set_xticks(range(0, num_fulltime, 250))
                 ax.set_xticklabels(fulltime[::250])
