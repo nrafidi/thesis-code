@@ -38,8 +38,10 @@ def accum_over_time(masks, overlap):
 def sort_sensors():
     load_var = sio.loadmat(SENSOR_MAP)
     sensor_reg = load_var['sensor_reg']
-    print(type(sensor_reg))
-    print(sensor_reg)
+    sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
+    sorted_inds = np.argsort(sensor_reg)
+    sorted_reg = sensor_reg[sorted_ids]
+    return sorted_inds, sorted_reg
 
 
 if __name__ == '__main__':
