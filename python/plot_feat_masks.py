@@ -23,7 +23,7 @@ def accum_over_sub(sub_results):
 def accum_over_time(masks, overlap):
     num_time = masks.shape[0]*overlap
     (num_sensors, win_len) = masks[0].shape
-    accum_mask = np.zeros(num_sensors, num_time + win_len)
+    accum_mask = np.zeros((num_sensors, num_time + win_len))
     for t in range(num_time):
         start_ind = t*overlap
         end_ind = start_ind + win_len
@@ -76,13 +76,28 @@ if __name__ == '__main__':
                 print(masks.shape)
                 accum_mask = accum_over_time(masks, o)
                 print(accum_mask.shape)
+                accum_mask = accum_mask[:, :fulltime.shape[0]]
 
-
-
-
-                    # fig, axs = plt.subplots(1, 2)
-                    # h = axs[0].imshow(sub_avg_list[0], interpolation='nearest', vmin=0, vmax=1)
-                    # plt.colorbar(h)
-                    # axs[1].plot(np.diag(sub_avg_list[0]))
-                    # plt.savefig('TGM_overlap{}_GNB-FS_{}_{}_{}.pdf'.format(o, param_specs['w'], word, sen_type))
-                    # # plt.show()
+                fig, axs = plt.subplots(3, 1)
+                h = axs[0].imshow(tgm, interpolation='nearest', vmin=0, vmax=1)
+                axs[0].set_yticks(time)
+                axs[0].set_yticklabels(time[::25])
+                axs[0].set_ylabel('Train Window Start')
+                axs[0].set_xticks(time)
+                axs[0].set_xticklabels(time[::25])
+                axs[0].set_xlabel('Test Window Start')
+                plt.colorbar(h)
+                axs[1].plot(time, diag)
+                axs[1].set_ylim([0, 1])
+                axs[1].set_ylabel('Accuracy')
+                axs[1].set_xlabel('Train Window Start')
+                h = axs[2].imshow(accum_mask, interpolation='nearest', vmin=0, vmax=20)
+                axs[2].set_yticks(range(306))
+                axs[2].set_yticklabels(range(0, 306, 25))
+                axs[2].set_ylabel('Sensors')
+                axs[2].set_xticks(fulltime)
+                axs[2].set_xticklabels(fulltime[::25])
+                axs[2].set_xlabel('Time')
+                plt.colorbar(h)
+                plt.savefig('TGM_coef_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
+                # plt.show()
