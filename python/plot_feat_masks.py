@@ -20,6 +20,18 @@ def accum_over_sub(sub_results):
     return result_by_param
 
 
+def accum_over_time(masks, overlap):
+    num_time = masks.shape[0]*overlap
+    (num_sensors, win_len) = masks[0].shape
+    accum_mask = np.zeros(num_sensors, num_time + win_len)
+    for t in range(num_time):
+        start_ind = t*overlap
+        end_ind = start_ind + win_len
+        accum_mask[:, start_ind:end_ind] += masks[t]
+    return accum_mask
+
+
+
 if __name__ == '__main__':
     exp = 'krns2'
     mode = 'pred'
@@ -52,11 +64,21 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
+                print(tgm.shape)
                 diag = np.diag(tgm)
+                print(diag.shape)
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
+                print(time.shape)
+                fulltime = sub_time['time']
+                print(fulltime.shape)
                 masks = np.sum(sub_masks[0], axis=0)
                 print(masks.shape)
-                print(masks[0].shape)
+                accum_mask = accum_over_time(masks, o)
+                print(accum_mask.shape)
+
+
+
+
                     # fig, axs = plt.subplots(1, 2)
                     # h = axs[0].imshow(sub_avg_list[0], interpolation='nearest', vmin=0, vmax=1)
                     # plt.colorbar(h)
