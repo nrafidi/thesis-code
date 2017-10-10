@@ -63,13 +63,14 @@ if __name__ == '__main__':
                                                                           accuracy,
                                                                           sub,
                                                                           param_specs=param_specs)
+                print('meow')
                 tgm = sub_results[0]
                 print(tgm.shape)
                 diag = np.diag(tgm)
                 print(diag.shape)
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
                 print(time.shape)
-                fulltime = sub_time['time']
+                fulltime = sub_time['time'][0]
                 print(fulltime.shape)
                 masks = np.sum(sub_masks[0], axis=0)
                 print(masks.shape)
