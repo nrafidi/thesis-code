@@ -51,7 +51,6 @@ if __name__ == '__main__':
     o = 12
     w = 100
     sorted_inds, sorted_reg = sort_sensors()
-    print(sorted_inds)
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
@@ -97,7 +96,6 @@ if __name__ == '__main__':
                 accum_mask = accum_mask[:, :num_fulltime]
                 meow = accum_mask
                 accum_mask = accum_mask[sorted_inds, :]
-                print(np.all(meow == accum_mask))
 
                 fig, ax = plt.subplots()
                 h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
