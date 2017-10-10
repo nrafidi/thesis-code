@@ -4,9 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import load_data
 from scipy.stats.mstats import zscore
+import scipy.io as sio
 import agg_TGM
 import run_TGM
 import coef_sim
+
+
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
 
 def accum_over_sub(sub_results):
@@ -31,6 +35,12 @@ def accum_over_time(masks, overlap):
     return accum_mask
 
 
+def sort_sensors():
+    load_var = sio.loadmat(SENSOR_MAP)
+    sensor_reg = load_var['sensor_reg']
+    print(type(sensor_reg))
+    print(sensor_reg)
+
 
 if __name__ == '__main__':
     exp = 'krns2'
@@ -38,7 +48,7 @@ if __name__ == '__main__':
     accuracy = 'abs'
     o = 12
     w = 100
-
+    sort_sensors()
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
@@ -103,8 +113,8 @@ if __name__ == '__main__':
                 ax.set_yticks(range(0, 306, 25))
                 ax.set_yticklabels(range(0, 306, 25))
                 ax.set_ylabel('Sensors')
-                ax.set_xticks(range(0, num_fulltime, 25))
-                ax.set_xticklabels(fulltime[::25])
+                ax.set_xticks(range(0, num_fulltime, 250))
+                ax.set_xticklabels(fulltime[::250])
                 ax.set_xlabel('Time')
                 plt.colorbar(h)
                 plt.savefig('Masks_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type), bbox_inches='tight')
