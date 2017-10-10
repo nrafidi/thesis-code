@@ -54,7 +54,9 @@ if __name__ == '__main__':
                 tgm = sub_results[0]
                 diag = np.diag(tgm)
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
-                print(sub_masks[0].shape)
+                masks = np.sum(sub_masks[0], axis=0)
+                print(masks.shape)
+                print(masks[0].shape)
                     # fig, axs = plt.subplots(1, 2)
                     # h = axs[0].imshow(sub_avg_list[0], interpolation='nearest', vmin=0, vmax=1)
                     # plt.colorbar(h)
