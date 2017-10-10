@@ -112,6 +112,7 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
 
 def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     sub_results = []
+    sub_masks = []
     sub_params = {}
     sub_time = {}
     result_dir = run_TGM.SAVE_DIR.format(top_dir=run_TGM.TOP_DIR.format(exp=exp), sub=sub)
@@ -153,6 +154,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
                 tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             else:
                 tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+            sub_masks.append(result['masks'])
             print(tgm.shape)
         else:
             tgm = result['coef']
@@ -164,7 +166,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
 
         i_f += 1
 
-    return sub_results, sub_params, sub_time
+    return sub_results, sub_params, sub_time, sub_masks
 
 
 def get_diag_by_param(result_dict, param_dict, time_dict, param, param_specs, param_limit=None):
