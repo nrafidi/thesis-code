@@ -40,7 +40,7 @@ def sort_sensors():
     sensor_reg = load_var['sensor_reg']
     sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
     sorted_inds = np.argsort(sensor_reg)
-    sorted_reg = sensor_reg[sorted_inds]
+    sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
     return sorted_inds, sorted_reg
 
 
