@@ -5,6 +5,7 @@ import numpy as np
 import os.path
 import random
 from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import KFold
 import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM/'
@@ -137,7 +138,10 @@ def run_tgm_exp(experiment,
     tmin = time.min()
     tmax = time.max()
 
-    kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
+    if num_folds > 8:
+        kf = KFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
+    else:
+        kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
 
     total_win = int((tmax - tmin) * 500)
 

@@ -1,6 +1,6 @@
 import numpy as np
 import sklearn.linear_model
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import KFold
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
@@ -61,7 +61,7 @@ def nb_tgm(data,
     # Top-level CV
     i_top_split = 0
     for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
-        sub_kf = StratifiedKFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
+        sub_kf = KFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
         cv_membership[i_top_split] = in_test
         # Iterate over full time grid
         for wi in xrange(n_w):
