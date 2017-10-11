@@ -1,5 +1,6 @@
 import numpy as np
 import sklearn.linear_model
+from sklearn.model_selection import StratifiedKFold
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
@@ -32,7 +33,7 @@ def get_pred_acc(preds, labels):
 def nb_tgm(data,
            labels,
            kf,
-           sub_kf,
+           sub_rs,
            win_starts,
            win_len,
            feature_select=False,
@@ -60,8 +61,8 @@ def nb_tgm(data,
     # Top-level CV
     i_top_split = 0
     for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
+        sub_kf = StratifiedKFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
         cv_membership[i_top_split] = in_test
-        assert(len(in_train) == len(in_test))
         # Iterate over full time grid
         for wi in xrange(n_w):
             train_time = test_windows[wi]
@@ -90,17 +91,6 @@ def nb_tgm(data,
                 meow = np.reshape(train_data, (train_data.shape[0], -1))
                 i_split = 0
                 for in_sub_train, in_sub_test in sub_kf.split(meow, train_l_ints):
-
-                    try:
-                        assert (len(in_sub_train) == len(in_sub_test))
-                    except:
-                        print(data.shape[0])
-                        print(meow.shape[0])
-                        print(len(in_train))
-                        print(len(in_test))
-                        print(len(in_sub_train))
-                        print(len(in_sub_test))
-                        raise AssertionError('not a clean split')
                     sub_train_data = train_data[in_sub_train, ...]
                     sub_test_data = train_data[in_sub_test, ...]
                     sub_test_ints = train_l_ints[in_sub_test]

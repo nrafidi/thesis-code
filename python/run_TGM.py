@@ -137,8 +137,7 @@ def run_tgm_exp(experiment,
     tmin = time.min()
     tmax = time.max()
 
-    kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=CV_RAND_STATE)
-    sub_kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=SUB_CV_RAND_STATE)
+    kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
 
     total_win = int((tmax - tmin) * 500)
 
@@ -173,7 +172,7 @@ def run_tgm_exp(experiment,
              cv_membership, masks, num_feats) = models.nb_tgm(data=data,
                                                               labels=labels,
                                                               kf=kf,
-                                                              sub_kf=sub_kf,
+                                                              sub_rs=random_state_sub,
                                                               win_starts=win_starts,
                                                               win_len=win_len,
                                                               feature_select=doFeatSelect,
