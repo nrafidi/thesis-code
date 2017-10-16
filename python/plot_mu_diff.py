@@ -77,6 +77,7 @@ if __name__ == '__main__':
                                                                           accuracy,
                                                                           sub,
                                                                           param_specs=param_specs)
+                print('meow')
                 print(len(sub_results))
                 print(len(sub_results[0]))
                 # tgm = sub_results[0]
