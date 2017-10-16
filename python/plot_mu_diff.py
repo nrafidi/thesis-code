@@ -78,16 +78,18 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
-                print(mu_diff.shape)
+                mu_diff = mu_diff[sorted_inds, :]
+                fulltime = sub_time['time'][0]
+                fulltime[np.abs(fulltime) < 1e-15] = 0
+                print(fulltime.shape)
                 # tgm = sub_results[0]
                 # print(tgm.shape)
                 # diag = np.diag(tgm)
                 # print(diag.shape)
-                # time = sub_time['time'][0][sub_time['win_starts'][0]]
+                #
                 # print(time.shape)
                 # num_time = time.shape[0]
-                # fulltime = sub_time['time'][0]
-                # fulltime[np.abs(fulltime) < 1e-15] = 0
+
                 # print(fulltime.shape)
                 # num_fulltime = fulltime.shape[0]
                 # masks = np.sum(sub_masks[0], axis=0)
