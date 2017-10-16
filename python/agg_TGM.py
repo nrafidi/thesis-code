@@ -157,7 +157,10 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
             sub_masks.append(result['masks'])
             print(tgm.shape)
         else:
-            tgm = result['coef']
+            if 'GNB' in f:
+                tgm = [result['mu_win'], result['std_win'], result['mu_diff_win']]
+            else:
+                tgm = result['coef']
 
         sub_results.append(tgm)
 
