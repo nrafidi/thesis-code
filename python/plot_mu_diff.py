@@ -53,15 +53,15 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
 
     # mags
-    sorted_inds = sorted_inds[2::3]
-    sorted_reg = sorted_reg[2::3]
-
+    # sorted_inds = sorted_inds[2::3]
+    # sorted_reg = sorted_reg[2::3]
 
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
+            sub_mu_diff = []
             for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
@@ -85,21 +85,26 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
                 mu_diff = mu_diff[sorted_inds, :]
+                sub_mu_diff.append(zscore(mu_diff))
+
                 num_time = mu_diff.shape[1]
                 fulltime = sub_time['time'][0]
                 fulltime[np.abs(fulltime) < 1e-15] = 0
                 fulltime = fulltime[:num_time]
 
-                fig, ax = plt.subplots()
-                h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto')
-                ax.set_yticks(yticks_sens)
-                ax.set_yticklabels(uni_reg)
-                ax.set_ylabel('Sensors')
-                ax.set_xticks(range(0, num_time, 250))
-                ax.set_xticklabels(fulltime[::250])
-                ax.set_xlabel('Time')
-                plt.colorbar(h)
-                plt.show()
+            mu_diff = np.array(sub_mu_diff)
+            print(mu_diff.shape)
+            mu_diff = np.mean(mu_diff, axis=0)
+            fig, ax = plt.subplots()
+            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto')
+            ax.set_yticks(yticks_sens)
+            ax.set_yticklabels(uni_reg)
+            ax.set_ylabel('Sensors')
+            ax.set_xticks(range(0, num_time, 250))
+            ax.set_xticklabels(fulltime[::250])
+            ax.set_xlabel('Time')
+            plt.colorbar(h)
+            plt.show()
 
 
                 # tgm = sub_results[0]
