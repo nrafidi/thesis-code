@@ -176,8 +176,6 @@ def nb_tgm_coef(data,
                 labels,
                 win_starts,
                 win_len,
-                feature_select,
-                feature_select_params,
                 doZscore=False,
                 doAvg=False,
                 ddof=1):
@@ -193,7 +191,9 @@ def nb_tgm_coef(data,
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
 
-    feature_masks = np.empty((n_w,), dtype=np.object)
+    mu_win = np.empty((n_w,), dtype=np.object)
+    mu_diff_win = np.empty((n_w,), dtype=np.object)
+    std_win = np.empty((n_w,), dtype=np.object)
     mu_full_all = np.mean(data, axis=0)
     std_full_all = np.std(data, axis=0, ddof=ddof)
     for wi in xrange(n_w):
@@ -219,33 +219,14 @@ def nb_tgm_coef(data,
                 new_data[in_l[li], :, :],
                 axis=0, ddof=ddof) for li in xrange(n_l)])
 
-        std_full = np.mean(std_full, axis=0)
-        double_var_full = 2 * np.square(std_full)
+        std_win[wi] = np.mean(std_full, axis=0)
+        mu_win[wi] = mu_full
 
-        if doAvg:
-            A = (2 * mu_full) / double_var_full[None, :]
-        else:
-            A = (2 * mu_full) / double_var_full[None, :, :]
+        mu_diff_win[wi] = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
+                         ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
+                         np.zeros(mu_full[0].shape))
 
-        if feature_select is not None:
-            if feature_select == 'distance_of_means':
-                mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
-                                 ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
-                                 np.zeros(mu_full[0].shape))
-                sorted_indices = np.argsort(-mu_diff, axis=None)
-                nfeatures = feature_select_params['number_of_features']
-                mask = np.zeros(mu_diff.shape, dtype=np.bool)
-                mask[np.unravel_index(sorted_indices[0:nfeatures], mu_diff.shape)] = True
-            else:
-                raise ValueError('Invalid feature selection')
-        else:
-            if doAvg:
-                mask = np.ones(A[:, :].shape[1:], dtype=np.bool)
-            else:
-                mask = np.ones(A[:, :, :].shape[1:], dtype=np.bool)
-        feature_masks[wi] = mask
-
-    return feature_masks
+    return mu_win, std_win, mu_diff_win
 
 
 def lr_tgm(data,

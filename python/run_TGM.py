@@ -203,23 +203,27 @@ def run_tgm_exp(experiment,
                                       win_len=win_len,
                                       doZscore=doZscore,
                                       doAvg=doAvg)
+            np.savez_compressed(fname,
+                                coef=coef,
+                                time=time,
+                                win_starts=win_starts,
+                                proc=proc)
         elif alg == 'GNB':
-            coef = models.nb_tgm_coef(data=data,
-                                      labels=labels,
-                                      win_starts=win_starts,
-                                      win_len=win_len,
-                                      feature_select=doFeatSelect,
-                                      feature_select_params={'number_of_features': 50},  #  Change after models.py is modified
-                                      doZscore=doZscore,
-                                      doAvg=doAvg)
+            mu_win, std_win, mu_diff_win = models.nb_tgm_coef(data=data,
+                                                              labels=labels,
+                                                              win_starts=win_starts,
+                                                              win_len=win_len,
+                                                              doZscore=doZscore,
+                                                              doAvg=doAvg)
+            np.savez_compressed(fname,
+                                mu_win=mu_win,
+                                std_win=std_win,
+                                mu_diff_win=mu_diff_win,
+                                time=time,
+                                win_starts=win_starts,
+                                proc=proc)
         else:
             raise ValueError('ENET not implemented yet.')
-
-        np.savez_compressed(fname,
-                            coef=coef,
-                            time=time,
-                            win_starts=win_starts,
-                            proc=proc)
 
 
 if __name__ == '__main__':
