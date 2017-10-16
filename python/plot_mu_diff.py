@@ -77,9 +77,8 @@ if __name__ == '__main__':
                                                                           accuracy,
                                                                           sub,
                                                                           param_specs=param_specs)
-                print('meow')
-                print(len(sub_results))
-                print(len(sub_results[0]))
+                mu_diff = sub_results[0][-1]
+                print(mu_diff.shape)
                 # tgm = sub_results[0]
                 # print(tgm.shape)
                 # diag = np.diag(tgm)
