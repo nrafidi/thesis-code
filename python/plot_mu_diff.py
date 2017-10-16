@@ -105,7 +105,7 @@ if __name__ == '__main__':
                 fulltime = fulltime[:num_time]
 
             mu_diff = np.array(sub_mu_diff)
-            mu_diff = np.mean(mu_diff, axis=0)
+            mu_diff = np.log(np.mean(mu_diff, axis=0))
             fig, ax = plt.subplots()
             h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=1.4e-11)
             ax.set_yticks(yticks_sens)
