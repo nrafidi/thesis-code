@@ -47,7 +47,7 @@ def sort_sensors():
 if __name__ == '__main__':
     exp = 'krns2'
     mode = 'coef'
-    sens = 'all'
+    sens = 'grad2'
     accuracy = 'abs'
     o = 3
     w = -1
@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
 
 
-            plt.show()
+            #plt.show()
 
 
                 # tgm = sub_results[0]
