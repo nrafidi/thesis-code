@@ -79,9 +79,23 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
                 mu_diff = mu_diff[sorted_inds, :]
+                num_time = mu_diff.shape[1]
                 fulltime = sub_time['time'][0]
                 fulltime[np.abs(fulltime) < 1e-15] = 0
-                print(fulltime.shape)
+                fulltime = fulltime[:num_time]
+
+                fig, ax = plt.subplots()
+                h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto')
+                ax.set_yticks(yticks_sens)
+                ax.set_yticklabels(uni_reg)
+                ax.set_ylabel('Sensors')
+                ax.set_xticks(range(0, num_time, 250))
+                ax.set_xticklabels(fulltime[::250])
+                ax.set_xlabel('Time')
+                plt.colorbar(h)
+                plt.show()
+
+
                 # tgm = sub_results[0]
                 # print(tgm.shape)
                 # diag = np.diag(tgm)
@@ -100,8 +114,7 @@ if __name__ == '__main__':
                 # meow = accum_mask
                 # accum_mask = accum_mask[sorted_inds, :]
                 #
-                # fig, ax = plt.subplots()
-                # h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+
                 # ax.set_yticks(range(0, num_time, 25))
                 # ax.set_yticklabels(time[::25])
                 # ax.set_ylabel('Train Window Start')
