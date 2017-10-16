@@ -107,7 +107,7 @@ if __name__ == '__main__':
             mu_diff = np.array(sub_mu_diff)
             mu_diff = np.log(np.mean(mu_diff, axis=0))
             fig, ax = plt.subplots()
-            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=1.4e-11)
+            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto') #, vmin=0, vmax=1.4e-11)
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
