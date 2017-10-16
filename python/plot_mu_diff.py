@@ -53,8 +53,8 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
 
     # mags
-    # sorted_inds = sorted_inds[2::3]
-    # sorted_reg = sorted_reg[2::3]
+    sorted_inds = sorted_inds[2::3]
+    sorted_reg = sorted_reg[2::3]
 
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -84,8 +84,9 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
+                mu_diff = mu_diff/np.max(np.abs(mu_diff))
                 mu_diff = mu_diff[sorted_inds, :]
-                sub_mu_diff.append(mu_diff/np.max(np.abs(mu_diff)))
+                sub_mu_diff.append(mu_diff)
 
                 num_time = mu_diff.shape[1]
                 fulltime = sub_time['time'][0]
