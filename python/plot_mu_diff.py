@@ -105,9 +105,9 @@ if __name__ == '__main__':
                 fulltime = fulltime[:num_time]
 
             mu_diff = np.array(sub_mu_diff)
-            mu_diff = np.log(np.mean(mu_diff, axis=0))
+            mu_diff = np.mean(mu_diff, axis=0)
             fig, ax = plt.subplots()
-            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto') #, vmin=0, vmax=1.4e-11)
+            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=1.4e-11)
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
@@ -116,7 +116,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.colorbar(h)
-            # plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
+            plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
 
             # mu_diff_co = np.array(sub_mu_diff_co)
             # mu_diff_co = np.mean(mu_diff_co, axis=0)
