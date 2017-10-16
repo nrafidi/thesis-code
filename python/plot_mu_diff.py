@@ -51,6 +51,12 @@ if __name__ == '__main__':
     o = 3
     w = -1
     sorted_inds, sorted_reg = sort_sensors()
+
+    # mags
+    sorted_inds = sorted_inds[::3]
+    sorted_reg = sorted_reg[::3]
+
+
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
