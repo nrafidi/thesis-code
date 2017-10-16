@@ -47,14 +47,22 @@ def sort_sensors():
 if __name__ == '__main__':
     exp = 'krns2'
     mode = 'coef'
+    sens = 'all'
     accuracy = 'abs'
     o = 3
     w = -1
     sorted_inds, sorted_reg = sort_sensors()
 
     # mags
-    sorted_inds = sorted_inds[2::3]
-    sorted_reg = sorted_reg[2::3]
+    if sens == 'mags':
+        sorted_inds = sorted_inds[2::3]
+        sorted_reg = sorted_reg[2::3]
+    elif sens == 'grad1':
+        sorted_inds = sorted_inds[0::3]
+        sorted_reg = sorted_reg[0::3]
+    elif sens == 'grad2':
+        sorted_inds = sorted_inds[1::3]
+        sorted_reg = sorted_reg[1::3]
 
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -97,14 +105,16 @@ if __name__ == '__main__':
             print(mu_diff.shape)
             mu_diff = np.mean(mu_diff, axis=0)
             fig, ax = plt.subplots()
-            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto')
+            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmin=0.5)
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
             ax.set_xlabel('Time')
+            ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.colorbar(h)
+            # plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
             plt.show()
 
 
