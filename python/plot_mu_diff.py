@@ -85,7 +85,7 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
                 mu_diff = mu_diff[sorted_inds, :]
-                sub_mu_diff.append(zscore(mu_diff))
+                sub_mu_diff.append(mu_diff/np.max(np.abs(mu_diff)))
 
                 num_time = mu_diff.shape[1]
                 fulltime = sub_time['time'][0]
