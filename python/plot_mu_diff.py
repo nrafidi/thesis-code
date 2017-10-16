@@ -69,6 +69,7 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
+            sub_mu_diff_co = []
             sub_mu_diff = []
             for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
@@ -92,9 +93,11 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 mu_diff = sub_results[0][-1][0]
+                sub_mu_diff.append(mu_diff[sorted_inds, :])
+
                 mu_diff = mu_diff/np.max(np.abs(mu_diff))
                 mu_diff = mu_diff[sorted_inds, :]
-                sub_mu_diff.append(mu_diff)
+                sub_mu_diff_co.append(mu_diff)
 
                 num_time = mu_diff.shape[1]
                 fulltime = sub_time['time'][0]
@@ -102,10 +105,9 @@ if __name__ == '__main__':
                 fulltime = fulltime[:num_time]
 
             mu_diff = np.array(sub_mu_diff)
-            print(mu_diff.shape)
             mu_diff = np.mean(mu_diff, axis=0)
             fig, ax = plt.subplots()
-            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
+            h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto')
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
@@ -115,6 +117,23 @@ if __name__ == '__main__':
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.colorbar(h)
             # plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
+
+            mu_diff_co = np.array(sub_mu_diff_co)
+            mu_diff_co = np.mean(mu_diff_co, axis=0)
+            fig, ax = plt.subplots()
+            h = ax.imshow(mu_diff_co, interpolation='nearest', aspect='auto', vmin=0, vmax=0.45)
+            ax.set_yticks(yticks_sens)
+            ax.set_yticklabels(uni_reg)
+            ax.set_ylabel('Sensors')
+            ax.set_xticks(range(0, num_time, 250))
+            ax.set_xticklabels(fulltime[::250])
+            ax.set_xlabel('Time')
+            ax.set_title('{} {} {}'.format(word, sen_type, sens))
+            plt.colorbar(h)
+            # plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
+
+
+
             plt.show()
 
 
