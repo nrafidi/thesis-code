@@ -53,8 +53,8 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
 
     # mags
-    sorted_inds = sorted_inds[::3]
-    sorted_reg = sorted_reg[::3]
+    sorted_inds = sorted_inds[2::3]
+    sorted_reg = sorted_reg[2::3]
 
 
     uni_reg = np.unique(sorted_reg)
