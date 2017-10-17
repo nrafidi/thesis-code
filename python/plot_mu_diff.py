@@ -121,10 +121,10 @@ if __name__ == '__main__':
             mu_diff_maxes = np.max(mu_diff, axis=0)
 
             above_thresh = np.where(mu_diff_maxes >= 1.2e-11)
-            print(above_thresh.shape)
+            print(above_thresh)
             fig, ax = plt.subplots()
             ax.plot(mu_diff_maxes)
-            for i in range(above_thresh.shape[0]):
+            for i in range(len(above_thresh)):
                 loc = above_thresh[i]
                 plt.text(loc, mu_diff_maxes[loc], sorted_reg[loc], axes=ax)
             ax.set_ylabel('Mu Diff Max over Sensors')
