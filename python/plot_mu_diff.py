@@ -47,7 +47,7 @@ def sort_sensors():
 if __name__ == '__main__':
     exp = 'krns2'
     mode = 'coef'
-    sens = 'all'
+    sens = 'mags'
     accuracy = 'abs'
     o = 3
     w = -1
