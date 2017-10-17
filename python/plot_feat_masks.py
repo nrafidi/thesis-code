@@ -93,7 +93,7 @@ if __name__ == '__main__':
                 # print(fulltime.shape)
                 num_fulltime = fulltime.shape[0]
                 masks = np.sum(sub_masks[0], axis=0)
-                print(np.max(masks))
+                print(masks.shape)
                 accum_mask = accum_over_time(masks, o)
                 # print(accum_mask.shape)
                 accum_mask = accum_mask[:, :num_fulltime]
