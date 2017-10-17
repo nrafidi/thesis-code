@@ -134,9 +134,9 @@ if __name__ == '__main__':
             sub_mask = np.sum(np.array(sub_mask_add), axis=0)
 
             if w > 0:
-                vmax = (w/o)*len(load_data.VALID_SUBS[exp])
+                vmax = (w/o)*len(load_data.VALID_SUBS[exp])*param_specs['F']
             else:
-                vmax = len(load_data.VALID_SUBS[exp])
+                vmax = len(load_data.VALID_SUBS[exp])*param_specs['F']
 
             fig, ax = plt.subplots()
             h = ax.imshow(sub_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
