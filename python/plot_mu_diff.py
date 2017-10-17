@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
