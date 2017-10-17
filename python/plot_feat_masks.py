@@ -93,10 +93,11 @@ if __name__ == '__main__':
                 # print(fulltime.shape)
                 num_fulltime = fulltime.shape[0]
                 masks = np.sum(sub_masks[0], axis=0)
-                # print(masks.shape)
+                print(np.max(masks))
                 accum_mask = accum_over_time(masks, o)
                 # print(accum_mask.shape)
                 accum_mask = accum_mask[:, :num_fulltime]
+                print(np.max(accum_mask))
                 meow = accum_mask
                 accum_mask = accum_mask[sorted_inds, :]
                 sub_mask_add.append(accum_mask)
