@@ -48,8 +48,8 @@ if __name__ == '__main__':
     exp = 'krns2'
     mode = 'pred'
     accuracy = 'abs'
-    o = 3
-    w = -1
+    o = 12
+    w = 100
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -133,6 +133,11 @@ if __name__ == '__main__':
             sub_tgm = np.mean(np.array(sub_tgm_avg), axis=0)
             sub_mask = np.sum(np.array(sub_mask_add), axis=0)
 
+            if w > 0:
+                vmax = (w/o)*len(load_data.VALID_SUBS[exp])
+            else:
+                vmax = len(load_data.VALID_SUBS[exp])
+
             fig, ax = plt.subplots()
             h = ax.imshow(sub_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
             ax.set_yticks(range(0, num_time, 25))
@@ -145,7 +150,7 @@ if __name__ == '__main__':
             plt.savefig('TGM_subAvg_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(o, w, word, sen_type, param_specs['F']))
 
             fig, ax = plt.subplots()
-            h = ax.imshow(sub_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[exp]))
+            h = ax.imshow(sub_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=vmax)
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
