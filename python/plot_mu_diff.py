@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
             mu_diff_maxes = np.max(mu_diff, axis=0)
             mu_diff_max_sensors = np.argmax(mu_diff, axis=0)
-            above_thresh = np.where(mu_diff_maxes >= 1.2e-11)
+            above_thresh = np.where(mu_diff_maxes >= 1.3e-11)
             above_thresh = above_thresh[0]
             fig, ax = plt.subplots()
             ax.plot(mu_diff_maxes)
