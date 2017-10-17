@@ -135,7 +135,7 @@ if __name__ == '__main__':
             sub_mask = np.sum(np.array(sub_mask_add), axis=0)
 
             if w > 0:
-                vmax = (w/o)*len(load_data.VALID_SUBS[exp])*param_specs['F']
+                vmax = 100 #(w/o)*len(load_data.VALID_SUBS[exp])*param_specs['F']
             else:
                 vmax = len(load_data.VALID_SUBS[exp])*param_specs['F']
 
