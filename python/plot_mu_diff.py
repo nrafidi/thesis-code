@@ -127,7 +127,7 @@ if __name__ == '__main__':
             for i in range(above_thresh.shape[0]):
                 loc = above_thresh[i]
                 sloc = mu_diff_max_sensors[loc]
-                plt.text(loc, mu_diff_maxes[loc], sorted_reg[sloc], axes=ax)
+                plt.text(loc, mu_diff_maxes[loc], sorted_reg[sloc][0:3], axes=ax)
             ax.set_ylabel('Mu Diff Max over Sensors')
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
