@@ -56,6 +56,8 @@ if __name__ == '__main__':
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
+            sub_mask_add = []
+            sub_tgm_avg = []
             for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
@@ -79,6 +81,7 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 print('meow')
                 tgm = sub_results[0]
+                sub_tgm_avg.append(tgm)
                 # print(tgm.shape)
                 diag = np.diag(tgm)
                 print(diag)
@@ -96,33 +99,59 @@ if __name__ == '__main__':
                 accum_mask = accum_mask[:, :num_fulltime]
                 meow = accum_mask
                 accum_mask = accum_mask[sorted_inds, :]
-
-                fig, ax = plt.subplots()
-                h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-                ax.set_yticks(range(0, num_time, 25))
-                ax.set_yticklabels(time[::25])
-                ax.set_ylabel('Train Window Start')
-                ax.set_xticks(range(0, num_time, 25))
-                ax.set_xticklabels(time[::25])
-                ax.set_xlabel('Test Window Start')
-                plt.colorbar(h)
-                plt.savefig('TGM_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
+                sub_mask_add.append(accum_mask)
 
                 # fig, ax = plt.subplots()
-                # ax.plot(time, diag)
-                # ax.set_ylim([0, 1])
-                # ax.set_ylabel('Accuracy')
-                # ax.set_xlabel('Train Window Start')
-                # plt.savefig('Diag_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
+                # h = ax.imshow(tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+                # ax.set_yticks(range(0, num_time, 25))
+                # ax.set_yticklabels(time[::25])
+                # ax.set_ylabel('Train Window Start')
+                # ax.set_xticks(range(0, num_time, 25))
+                # ax.set_xticklabels(time[::25])
+                # ax.set_xlabel('Test Window Start')
+                # plt.colorbar(h)
+                # plt.savefig('TGM_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
+                #
+                # # fig, ax = plt.subplots()
+                # # ax.plot(time, diag)
+                # # ax.set_ylim([0, 1])
+                # # ax.set_ylabel('Accuracy')
+                # # ax.set_xlabel('Train Window Start')
+                # # plt.savefig('Diag_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
+                #
+                # fig, ax = plt.subplots()
+                # h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+                # ax.set_yticks(yticks_sens)
+                # ax.set_yticklabels(uni_reg)
+                # ax.set_ylabel('Sensors')
+                # ax.set_xticks(range(0, num_fulltime, 250))
+                # ax.set_xticklabels(fulltime[::250])
+                # ax.set_xlabel('Time')
+                # plt.colorbar(h)
+                # plt.savefig('Masks_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']), bbox_inches='tight')
+                # # plt.show()
+            sub_tgm = np.mean(np.array(sub_tgm_avg), axis=0)
+            sub_mask = np.sum(np.array(sub_mask_add), axis=0)
 
-                fig, ax = plt.subplots()
-                h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-                ax.set_yticks(yticks_sens)
-                ax.set_yticklabels(uni_reg)
-                ax.set_ylabel('Sensors')
-                ax.set_xticks(range(0, num_fulltime, 250))
-                ax.set_xticklabels(fulltime[::250])
-                ax.set_xlabel('Time')
-                plt.colorbar(h)
-                plt.savefig('Masks_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']), bbox_inches='tight')
-                # plt.show()
+            fig, ax = plt.subplots()
+            h = ax.imshow(sub_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+            ax.set_yticks(range(0, num_time, 25))
+            ax.set_yticklabels(time[::25])
+            ax.set_ylabel('Train Window Start')
+            ax.set_xticks(range(0, num_time, 25))
+            ax.set_xticklabels(time[::25])
+            ax.set_xlabel('Test Window Start')
+            plt.colorbar(h)
+            plt.savefig('TGM_subAvg_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(o, w, word, sen_type, param_specs['F']))
+
+            fig, ax = plt.subplots()
+            h = ax.imshow(sub_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[exp]))
+            ax.set_yticks(yticks_sens)
+            ax.set_yticklabels(uni_reg)
+            ax.set_ylabel('Sensors')
+            ax.set_xticks(range(0, num_fulltime, 250))
+            ax.set_xticklabels(fulltime[::250])
+            ax.set_xlabel('Time')
+            plt.colorbar(h)
+            plt.savefig('Masks_subAvg_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(o, w, word, sen_type, param_specs['F']), bbox_inches='tight')
+            # plt.show()
