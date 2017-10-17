@@ -79,20 +79,20 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 print('meow')
                 tgm = sub_results[0]
-                print(tgm.shape)
+                # print(tgm.shape)
                 diag = np.diag(tgm)
-                print(diag.shape)
+                print(diag)
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
-                print(time.shape)
+                # print(time.shape)
                 num_time = time.shape[0]
                 fulltime = sub_time['time'][0]
                 fulltime[np.abs(fulltime) < 1e-15] = 0
-                print(fulltime.shape)
+                # print(fulltime.shape)
                 num_fulltime = fulltime.shape[0]
                 masks = np.sum(sub_masks[0], axis=0)
-                print(masks.shape)
+                # print(masks.shape)
                 accum_mask = accum_over_time(masks, o)
-                print(accum_mask.shape)
+                # print(accum_mask.shape)
                 accum_mask = accum_mask[:, :num_fulltime]
                 meow = accum_mask
                 accum_mask = accum_mask[sorted_inds, :]
@@ -108,15 +108,15 @@ if __name__ == '__main__':
                 plt.colorbar(h)
                 plt.savefig('TGM_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
 
-                fig, ax = plt.subplots()
-                ax.plot(time, diag)
-                ax.set_ylim([0, 1])
-                ax.set_ylabel('Accuracy')
-                ax.set_xlabel('Train Window Start')
-                plt.savefig('Diag_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
+                # fig, ax = plt.subplots()
+                # ax.plot(time, diag)
+                # ax.set_ylim([0, 1])
+                # ax.set_ylabel('Accuracy')
+                # ax.set_xlabel('Train Window Start')
+                # plt.savefig('Diag_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
 
                 fig, ax = plt.subplots()
-                h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=15)
+                h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
                 ax.set_yticks(yticks_sens)
                 ax.set_yticklabels(uni_reg)
                 ax.set_ylabel('Sensors')
