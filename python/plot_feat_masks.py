@@ -48,8 +48,8 @@ if __name__ == '__main__':
     exp = 'krns2'
     mode = 'pred'
     accuracy = 'abs'
-    o = 12
-    w = 100
+    o = 3
+    w = -1
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -62,7 +62,7 @@ if __name__ == '__main__':
                                'pd': 'F',
                                'pr': 'F',
                                'alg': 'GNB-FS',
-                               'F': 2,
+                               'F': 32,
                                'z': 'F',
                                'avg': 'F',
                                'ni': 2,
@@ -106,14 +106,14 @@ if __name__ == '__main__':
                 ax.set_xticklabels(time[::25])
                 ax.set_xlabel('Test Window Start')
                 plt.colorbar(h)
-                plt.savefig('TGM_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
+                plt.savefig('TGM_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
 
                 fig, ax = plt.subplots()
                 ax.plot(time, diag)
                 ax.set_ylim([0, 1])
                 ax.set_ylabel('Accuracy')
                 ax.set_xlabel('Train Window Start')
-                plt.savefig('Diag_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
+                plt.savefig('Diag_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']))
 
                 fig, ax = plt.subplots()
                 h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=15)
@@ -124,5 +124,5 @@ if __name__ == '__main__':
                 ax.set_xticklabels(fulltime[::250])
                 ax.set_xlabel('Time')
                 plt.colorbar(h)
-                plt.savefig('Masks_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type), bbox_inches='tight')
+                plt.savefig('Masks_{}_o{}_w{}_{}_{}_{}F_GNB-FS.pdf'.format(sub, o, w, word, sen_type, param_specs['F']), bbox_inches='tight')
                 # plt.show()
