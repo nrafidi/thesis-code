@@ -119,14 +119,15 @@ if __name__ == '__main__':
             plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
 
             mu_diff_maxes = np.max(mu_diff, axis=0)
-
+            mu_diff_max_sensors = np.argmax(mu_diff, axis=0)
             above_thresh = np.where(mu_diff_maxes >= 1.2e-11)
             above_thresh = above_thresh[0]
             fig, ax = plt.subplots()
             ax.plot(mu_diff_maxes)
             for i in range(above_thresh.shape[0]):
                 loc = above_thresh[i]
-                plt.text(loc, mu_diff_maxes[loc], sorted_reg[loc], axes=ax)
+                sloc = mu_diff_max_sensors[loc]
+                plt.text(loc, mu_diff_maxes[loc], sorted_reg[sloc], axes=ax)
             ax.set_ylabel('Mu Diff Max over Sensors')
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
