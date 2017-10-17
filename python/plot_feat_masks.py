@@ -84,7 +84,7 @@ if __name__ == '__main__':
                 sub_tgm_avg.append(tgm)
                 # print(tgm.shape)
                 diag = np.diag(tgm)
-                print(diag)
+                print(np.max(diag))
                 time = sub_time['time'][0][sub_time['win_starts'][0]]
                 # print(time.shape)
                 num_time = time.shape[0]
