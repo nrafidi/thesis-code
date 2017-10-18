@@ -8,6 +8,7 @@ import scipy.io as sio
 from scipy.spatial.distance import pdist, squareform
 
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
@@ -18,12 +19,16 @@ if __name__ == '__main__':
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
 
-    word = 'firstNoun'
+    word = 'secondNoun'
 
     evokeds, labels, time = load_data.load_raw(args.subject, word, 'active',
                                                experiment=args.experiment, proc=args.proc)
     act_data, labels_act = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
+
+    label_sort_inds = np.argsort(labels_act)
+
+    act_data = act_data[label_sort_inds, :, :]
 
     print(act_data.shape)
     evokeds, labels, _ = load_data.load_raw(args.subject, word, 'passive',
@@ -32,7 +37,9 @@ if __name__ == '__main__':
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
     pass_data = pass_data[:, :, :time.shape[0]]
+    pass_data = pass_data[label_sort_inds]
     print(pass_data.shape)
+
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
 
