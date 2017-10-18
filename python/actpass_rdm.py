@@ -5,7 +5,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
-import scipy.spatial.distance.pdist as pdist
+from scipy.spatial.distance import pdist
 
 
 if __name__ == '__main__':
