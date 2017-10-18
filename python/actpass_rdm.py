@@ -25,7 +25,7 @@ if __name__ == '__main__':
                                                experiment=args.experiment, proc=args.proc)
     act_data, labels_act = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
-
+    labels_act = np.array(labels_act)
     label_sort_inds = np.argsort(labels_act)
 
     act_data = act_data[label_sort_inds, :, :]
@@ -35,14 +35,14 @@ if __name__ == '__main__':
                                                experiment=args.experiment, proc=args.proc)
     pass_data, labels_pass = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
-
+    labels_pass = np.array(labels_pass)
     pass_data = pass_data[:, :, :time.shape[0]]
     pass_data = pass_data[label_sort_inds, :, :]
     print(pass_data.shape)
 
     print(label_sort_inds)
-    print(labels_act.sorted())
-    # print(labels_pass[label_sort_inds])
+    print(labels_act[label_sort_inds])
+    print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
