@@ -52,5 +52,5 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     for i_sen in range(num_sentences):
         label_ind = uni_labels.index(labels_avg[i_sen])
-        ax.plot(time[::10], sensor_to_plot[i_sen, ::10], COLORS[label_ind])
+        ax.plot(time[::25], sensor_to_plot[i_sen, ::25], COLORS[label_ind])
     plt.show()
