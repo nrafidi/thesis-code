@@ -20,6 +20,12 @@ def sort_sensors():
     return sorted_inds, sorted_reg
 
 
+def baseline_correct(evokeds, time):
+    baseline = np.mean(evokeds[:, :, time < 0], axis=2)
+    evokeds -= baseline
+    return evokeds
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
@@ -34,6 +40,7 @@ if __name__ == '__main__':
 
     evokeds, labels, time = load_data.load_raw(args.subject, args.word, args.sen_type,
                                                experiment=args.experiment, proc=args.proc)
+    evokeds = baseline_correct(evokeds, time)
 
     avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
