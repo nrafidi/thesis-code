@@ -5,7 +5,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
-from scipy.spatial.distance import pdist
+from scipy.spatial.distance import pdist, squareform
 
 
 if __name__ == '__main__':
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
 
-    rdm = pdist(total_data)
+    rdm = squareform(pdist(total_data))
 
     fig, ax = plt.subplots()
     h = ax.imshow(rdm, interpolation='nearest')
