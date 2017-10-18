@@ -23,17 +23,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--subject', default='B')
+    parser.add_argument('--word', default='secondNoun')
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
 
-    word = 'secondNoun'
+    word = args.word
     sorted_inds, sorted_reg = sort_sensors()
 
     evokeds, labels, time, sen_ids = load_data.load_raw(args.subject, word, 'active',
-                                               experiment=args.experiment, proc=args.proc, tmin=0.0, tmax=0.2)
+                                               experiment=args.experiment, proc=args.proc, tmin=0.1, tmax=0.2)
     act_data, labels_act, sen_ids_act = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
     labels_act = np.array(labels_act)
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
     print(act_data.shape)
     evokeds, labels, _, sen_ids = load_data.load_raw(args.subject, word, 'passive',
-                                               experiment=args.experiment, proc=args.proc, tmin=0.0, tmax=0.2)
+                                               experiment=args.experiment, proc=args.proc, tmin=0.1, tmax=0.2)
     pass_data, labels_pass, sen_ids_pass = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
     labels_pass = np.array(labels_pass)
@@ -58,14 +59,14 @@ if __name__ == '__main__':
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
 
-    for reg in set(sorted_reg):
+    for reg in ['L_Occipital', 'R_Occipital']:
         locs = [i for i, x in enumerate(sorted_reg) if x == reg]
         reshaped_data = np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
 
         rdm = squareform(pdist(reshaped_data))
 
         fig, ax = plt.subplots()
-        h = ax.imshow(rdm, interpolation='nearest', vmin=0, vmax=3e-10)
+        h = ax.imshow(rdm, interpolation='nearest')
         ax.set_title(reg)
         plt.colorbar(h)
     plt.show()
