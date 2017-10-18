@@ -25,13 +25,14 @@ if __name__ == '__main__':
     act_data, labels_act = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
+    print(act_data.shape)
     evokeds, labels, _ = load_data.load_raw(args.subject, word, 'passive',
                                                experiment=args.experiment, proc=args.proc)
     pass_data, labels_pass = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
-    pass_data = pass_data[:, :, time.shape[0]]
-
+    pass_data = pass_data[:, :, :time.shape[0]]
+    print(pass_data.shape)
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
 
