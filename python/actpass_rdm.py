@@ -50,6 +50,6 @@ if __name__ == '__main__':
     rdm = squareform(pdist(total_data))
 
     fig, ax = plt.subplots()
-    h = ax.imshow(rdm, interpolation='nearest')
+    h = ax.imshow(rdm, interpolation='nearest', vmin=1.2e-9)
     plt.colorbar(h)
     plt.show()
