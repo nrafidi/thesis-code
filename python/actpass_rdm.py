@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     act_data = act_data[label_sort_inds, :, :]
     act_data = act_data[:, sorted_inds, :]
-    act_data = np.squeeze(np.mean(act_data, axis=2))
+    # act_data = np.squeeze(np.mean(act_data, axis=2))
 
     print(act_data.shape)
     evokeds, labels, _, sen_ids = load_data.load_raw(args.subject, word, 'passive',
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     print(labels_act[label_sort_inds])
     pass_data = pass_data[label_sort_inds, :, :]
     pass_data = pass_data[:, sorted_inds, :]
-    pass_data = np.squeeze(np.mean(pass_data, axis=2))
+    # pass_data = np.squeeze(np.mean(pass_data, axis=2))
     print(pass_data.shape)
 
 
@@ -64,13 +64,14 @@ if __name__ == '__main__':
     total_data = np.concatenate((act_data, pass_data), axis=0)
 
     for reg in ['L_Occipital', 'R_Occipital']:
-        locs = [i for i, x in enumerate(sorted_reg) if x == reg]
-        reshaped_data = total_data[:, locs] #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
+        for t in range(0, total_data.shape[2], 25):
+            locs = [i for i, x in enumerate(sorted_reg) if x == reg]
+            reshaped_data = np.squeeze(total_data[:, locs, t]) #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
 
-        rdm = squareform(pdist(reshaped_data))
+            rdm = squareform(pdist(reshaped_data))
 
-        fig, ax = plt.subplots()
-        h = ax.imshow(rdm, interpolation='nearest')
-        ax.set_title(reg)
-        plt.colorbar(h)
+            fig, ax = plt.subplots()
+            h = ax.imshow(rdm, interpolation='nearest')
+            ax.set_title(reg)
+            plt.colorbar(h)
     plt.show()
