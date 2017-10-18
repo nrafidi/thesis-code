@@ -49,8 +49,17 @@ if __name__ == '__main__':
 
     num_sentences = avg_data.shape[0]
 
+    avg_over_labels = np.empty((len(uni_labels), sensor_to_plot.shape[1]))
     fig, ax = plt.subplots()
-    for i_sen in range(num_sentences):
-        label_ind = uni_labels.index(labels_avg[i_sen])
-        ax.plot(time[::25], sensor_to_plot[i_sen, ::25], COLORS[label_ind])
+    for lab in uni_labels:
+        inds =[i for i, x in enumerate(labels_avg) if x == lab]
+        label_ind = uni_labels.index(lab)
+        avg_over_labels[label_ind, :] = np.mean(sensor_to_plot[inds, :], axis=0)
+        ax.plot(time[::25], avg_over_labels[label_ind, ::25], COLORS[label_ind])
     plt.show()
+
+    # fig, ax = plt.subplots()
+    # for i_sen in range(num_sentences):
+    #     label_ind = uni_labels.index(labels_avg[i_sen])
+    #     ax.plot(time[::25], sensor_to_plot[i_sen, ::25], COLORS[label_ind])
+    # plt.show()
