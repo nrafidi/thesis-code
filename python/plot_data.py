@@ -51,7 +51,7 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
     avg_data = avg_data[:, sorted_inds, :]
 
-    first_r_p = sorted_reg.index('R_Parietal')
+    first_r_p = sorted_reg.index('R_Parietal') + 1
 
     sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
 
