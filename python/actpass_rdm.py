@@ -34,7 +34,7 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
 
     evokeds, labels, time, sen_ids = load_data.load_raw(args.subject, word, 'active',
-                                               experiment=args.experiment, proc=args.proc, tmin=0.1, tmax=0.2)
+                                               experiment=args.experiment, proc=args.proc, tmin=0.0, tmax=0.2)
     act_data, labels_act, sen_ids_act = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
     labels_act = np.array(labels_act)
@@ -46,18 +46,19 @@ if __name__ == '__main__':
 
     print(act_data.shape)
     evokeds, labels, _, sen_ids = load_data.load_raw(args.subject, word, 'passive',
-                                               experiment=args.experiment, proc=args.proc, tmin=0.1, tmax=0.2)
+                                               experiment=args.experiment, proc=args.proc, tmin=0.0, tmax=0.2)
     pass_data, labels_pass, sen_ids_pass = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
     labels_pass = np.array(labels_pass)
     pass_data = pass_data[:, :, :time.shape[0]]
     label_sort_inds = np.argsort(labels_pass)
+    print(labels_act[label_sort_inds])
     pass_data = pass_data[label_sort_inds, :, :]
     pass_data = pass_data[:, sorted_inds, :]
     pass_data = np.squeeze(np.mean(pass_data, axis=2))
     print(pass_data.shape)
 
-    print(labels_act[label_sort_inds])
+
     print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
