@@ -116,11 +116,11 @@ def run_tgm_exp(experiment,
             data_raw = passive_data_raw
             time = time_p
     else:
-        data_raw, labels, time = load_data.load_raw(subject=subject,
-                                                    word=word,
-                                                    sen_type=sen_type,
-                                                    experiment=experiment,
-                                                    proc=proc)
+        data_raw, labels, time, _ = load_data.load_raw(subject=subject,
+                                                       word=word,
+                                                       sen_type=sen_type,
+                                                       experiment=experiment,
+                                                       proc=proc)
 
     print(data_raw.shape)
 

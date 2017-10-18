@@ -111,6 +111,7 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     uels = {k: v for (k, v) in uels.iteritems() if len(v) > 0}  # checking for empties
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
     labels = [usis[k]['stimulus'] for k, _ in id_uels]
+    sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
 
     _, uels = zip(*id_uels)
 
@@ -126,10 +127,10 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
     print(time.size)
     assert evokeds.shape[3] == time.size
 
-    return evokeds, labels, time
+    return evokeds, labels, time, sentence_ids
 
 
-def avg_data(data_raw, labels_raw, experiment='krns2', num_instances=2, reps_to_use=-1):
+def avg_data(data_raw, labels_raw, sentence_ids_raw=None, experiment='krns2', num_instances=2, reps_to_use=-1):
     num_reps = NUM_REPS[experiment]
     if reps_to_use == -1:
         reps_to_use = num_reps
@@ -148,9 +149,12 @@ def avg_data(data_raw, labels_raw, experiment='krns2', num_instances=2, reps_to_
                 data[s + (NUM_SENTENCES*i), :, :] = np.mean(data_raw[(startInd + i):endInd:num_instances, :, :], axis=0)
 
     labels = []
+    sentence_ids = []
     for i in range(num_instances):
         labels.extend(labels_raw)
+        if sentence_ids_raw is not None:
+            sentence_ids.extend(sentence_ids_raw)
 
-    return data, labels
+    return data, labels, sentence_ids
 
 

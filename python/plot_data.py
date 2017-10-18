@@ -39,8 +39,8 @@ if __name__ == '__main__':
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
 
-    evokeds, labels, time = load_data.load_raw(args.subject, args.word, args.sen_type,
-                                               experiment=args.experiment, proc=args.proc)
+    evokeds, labels, time, _ = load_data.load_raw(args.subject, args.word, args.sen_type,
+                                                  experiment=args.experiment, proc=args.proc)
     evokeds = baseline_correct(evokeds, time)
 
     avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
