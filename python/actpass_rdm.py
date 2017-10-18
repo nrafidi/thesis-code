@@ -40,8 +40,9 @@ if __name__ == '__main__':
     pass_data = pass_data[label_sort_inds, :, :]
     print(pass_data.shape)
 
-    print(labels_act[label_sort_inds])
-    print(labels_pass[label_sort_inds])
+    print(label_sort_inds)
+    print(labels_act.sorted())
+    # print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
