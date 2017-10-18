@@ -4,8 +4,21 @@ import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.io as sio
 
 COLORS = ['r', 'b', 'g', 'k', 'c', 'm']
+
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+
+
+def sort_sensors():
+    load_var = sio.loadmat(SENSOR_MAP)
+    sensor_reg = load_var['sensor_reg']
+    sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
+    sorted_inds = np.argsort(sensor_reg)
+    sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
+    return sorted_inds, sorted_reg
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -24,8 +37,20 @@ if __name__ == '__main__':
 
     avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
-    print(avg_data.shape)
-    print(labels_avg)
-    print(type(labels_avg))
 
-    # fig, ax = plt.subplots()
+    uni_labels = set(labels_avg)
+
+    sorted_inds, sorted_reg = sort_sensors()
+    avg_data = avg_data[:, sorted_inds, :]
+
+    first_r_p = sorted_reg.index('R_Parietal')
+
+    sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
+
+    num_sentences = avg_data.shape[0]
+
+    fig, ax = plt.subplots()
+    for i_sen in range(num_sentences):
+        label_ind = uni_labels.index(labels_avg[i_sen])
+        ax.plot(time, sensor_to_plot, COLORS[label_ind])
+    plt.show()
