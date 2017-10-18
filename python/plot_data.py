@@ -38,7 +38,7 @@ if __name__ == '__main__':
     avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
-    uni_labels = set(labels_avg)
+    uni_labels = [lab for lab in set(labels_avg)]
 
     sorted_inds, sorted_reg = sort_sensors()
     avg_data = avg_data[:, sorted_inds, :]
