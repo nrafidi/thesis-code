@@ -41,7 +41,9 @@ if __name__ == '__main__':
     print(pass_data.shape)
 
     print(label_sort_inds)
+    print(labels_act)
     print(labels_act[label_sort_inds])
+    print(labels_pass)
     print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)

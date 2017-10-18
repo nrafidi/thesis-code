@@ -37,13 +37,13 @@ SEN_ID_RANGE = {'krns2':
 
 WORD_PER_SEN = {'krns2':
                     {'active':
-                         {'firstNoun': ['doctor','dog','monkey','student'],
+                         {'firstNoun': ['dog','doctor','student','monkey'],
                           'verb': ['found', 'kicked','inspected','touched'],
-                          'secondNoun': ['peach.','hammer.','school.','door.']},
+                          'secondNoun': ['peach.','school.','hammer.','door.']},
                      'passive':
                          {'firstNoun': ['peach','hammer','school','door'],
                           'verb': ['found', 'kicked', 'inspected', 'touched'],
-                          'secondNoun': ['doctor.', 'dog.', 'monkey.', 'student.']}},
+                          'secondNoun': ['dog.', 'doctor.', 'student.', 'monkey.']}},
                 'PassAct2':
                     {'active':
                          {'firstNoun': ['man', 'girl', 'woman', 'boy'],
