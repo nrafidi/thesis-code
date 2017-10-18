@@ -21,7 +21,7 @@ def sort_sensors():
 
 
 def baseline_correct(evokeds, time):
-    baseline = np.mean(evokeds[:, :, time < 0], axis=2)
+    baseline = np.mean(evokeds[:, :, :, time < 0], axis=3)
     evokeds -= baseline
     return evokeds
 
