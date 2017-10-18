@@ -37,8 +37,11 @@ if __name__ == '__main__':
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
     pass_data = pass_data[:, :, :time.shape[0]]
-    pass_data = pass_data[label_sort_inds]
+    pass_data = pass_data[label_sort_inds, :, :]
     print(pass_data.shape)
+
+    print(labels_act[label_sort_inds])
+    print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_data = np.reshape(total_data, (total_data.shape[0], -1))
