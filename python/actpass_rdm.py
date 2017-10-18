@@ -65,7 +65,7 @@ if __name__ == '__main__':
         rdm = squareform(pdist(reshaped_data))
 
         fig, ax = plt.subplots()
-        h = ax.imshow(rdm, interpolation='nearest', vmin=1e-10, vmax=5e-10)
+        h = ax.imshow(rdm, interpolation='nearest', vmin=5e-11, vmax=2e-10)
         ax.set_title(reg)
         plt.colorbar(h)
     plt.show()
