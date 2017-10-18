@@ -99,7 +99,8 @@ def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
     return time_a, time_p, labels, active_data_raw, passive_data_raw
 
 
-def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
+def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC,
+             tmin=TIME_LIMITS[sen_type][word]['tmin'], tmax=TIME_LIMITS[sen_type][word]['tmax']):
     usis = hippo.query.query_usis([('stimuli_set', USI_NAME[experiment]),
                                    ('stimulus', lambda s: s in WORD_PER_SEN[experiment][sen_type][word]),
                                    # without periods, gets the first noun
@@ -115,8 +116,6 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC):
 
     _, uels = zip(*id_uels)
 
-    tmin = TIME_LIMITS[sen_type][word]['tmin']
-    tmax = TIME_LIMITS[sen_type][word]['tmax']
     evokeds = np.array([hippo.io.load_mne_epochs(us, preprocessing=proc, baseline=None,
                                         tmin=tmin, tmax=tmax) for us in uels])
 
