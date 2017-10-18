@@ -129,7 +129,10 @@ def load_raw(subject, word, sen_type, experiment='krns2', proc=DEFAULT_PROC,
     time = np.arange(tmin, tmax+2e-3, 2e-3)
     print(evokeds.shape[3])
     print(time.size)
-    assert evokeds.shape[3] == time.size
+    if evokeds.shape[3] != time.size:
+        min_size = np.min([evokeds.shape[3], time.size])
+        evokeds = evokeds[:, :, :, :min_size]
+        time = time[:min_size]
 
     return evokeds, labels, time, sentence_ids
 
