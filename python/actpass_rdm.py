@@ -66,6 +66,6 @@ if __name__ == '__main__':
 
         fig, ax = plt.subplots()
         h = ax.imshow(rdm, interpolation='nearest')
-        ax.title(reg)
+        ax.set_title(reg)
         plt.colorbar(h)
     plt.show()
