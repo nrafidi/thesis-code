@@ -99,7 +99,7 @@ if __name__ == '__main__':
             score_rdm[t], _ = kendalltau(rdm, word_rdm)
             rdm_list.append(rdm)
 
-        best_rdm = np.argmin(score_rdm)
+        best_rdm = np.argmax(score_rdm)
         print(score_rdm[best_rdm])
         fig, ax = plt.subplots()
         h = ax.imshow(rdm_list[best_rdm], interpolation='nearest')
