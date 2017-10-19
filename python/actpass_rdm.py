@@ -122,20 +122,30 @@ if __name__ == '__main__':
             rdm_list.append(rdm)
 
         best_rdm_len = np.argmax(score_rdm_len)
-        fig, ax = plt.subplots(2, 1)
-        h = ax[0].imshow(rdm_list[best_rdm_len], interpolation='nearest', aspect='auto')
+        fig, ax = plt.subplots()
+        h = ax.imshow(rdm_list[best_rdm_len], interpolation='nearest', aspect='auto')
         plt.colorbar(h)
-        ax[1].plot(time_act, score_rdm_len)
-        plt.suptitle('{} {} {}'.format(reg, time_act[best_rdm_len],
+        ax.set_title('{} {} {} word len'.format(reg, time_act[best_rdm_len],
                                        score_rdm_len[best_rdm_len]))
         plt.savefig('RDM_len_{}_{}.pdf'.format(reg, best_rdm_len))
 
+        fig, ax = plt.subplots()
+        ax.plot(time_act, score_rdm_len)
+        ax.set_title('{} word len'.format(reg))
+        ax.set_ylim(0, 0.5)
+        plt.savefig('Score_len_{}.pdf'.format(reg))
+
         best_rdm_id = np.argmax(score_rdm_id)
-        fig, ax = plt.subplots(2, 1)
-        h = ax[0].imshow(rdm_list[best_rdm_id], interpolation='nearest', aspect='auto')
+        fig, ax = plt.subplots()
+        h = ax.imshow(rdm_list[best_rdm_id], interpolation='nearest', aspect='auto')
         plt.colorbar(h)
-        ax[1].plot(time_act, score_rdm_id)
-        plt.suptitle('{} {} {}'.format(reg, time_act[best_rdm_id],
+        ax.set_title('{} {} {}'.format(reg, time_act[best_rdm_id],
                                        score_rdm_id[best_rdm_id]))
         plt.savefig('RDM_id_{}_{}.pdf'.format(reg, best_rdm_id))
+
+        fig, ax = plt.subplots()
+        ax.plot(time_act, score_rdm_id)
+        ax.set_ylim(0, 0.5)
+        ax.set_title('{} word id'.format(reg))
+        plt.savefig('Score_id_{}.pdf'.format(reg))
     # plt.show()
