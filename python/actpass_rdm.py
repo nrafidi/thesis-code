@@ -97,7 +97,7 @@ if __name__ == '__main__':
         best_rdm = np.argmin(score_rdm)
         fig, ax = plt.subplots()
         h = ax.imshow(rdm_list[best_rdm], interpolation='nearest')
-        ax.set_title('{} {}'.format(reg, time_act(best_rdm)))
+        ax.set_title('{} {}'.format(reg, time_act[best_rdm]))
         plt.colorbar(h)
         plt.savefig('RDM_{}_{}.pdf'.format(reg, best_rdm))
     # plt.show()
