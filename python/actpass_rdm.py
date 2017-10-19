@@ -24,7 +24,11 @@ def word_len_rdm(words):
     num_words = words.size
     rdm = np.zeros((num_words, num_words))
     for i in range(num_words):
+        print(words[i])
+        print(len(words[i]))
         for j in range(num_words):
+            print(words[j])
+            print(len(words[j]))
             rdm[i, j] = np.abs(len(words[i]) - len(words[j]))
     return rdm
 
