@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import kendalltau
 import string
+import Mantel
 
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 SENTENCES = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_with_unk_final.txt'
@@ -56,6 +57,10 @@ if __name__ == '__main__':
     ktau, pval = kendalltau(vec_rdm, ap_rdm)
 
     print('Kendall tau is {} with pval {}'.format(ktau, pval))
+
+    r, p, z = Mantel.test(vec_rdm, ap_rdm)
+
+    print('Pearson is {} with pval {} and zval {} from Mantel test'.format(r, p, z))
 
     fig, ax = plt.subplots()
     h = ax.imshow(vec_rdm, interpolation='nearest')
