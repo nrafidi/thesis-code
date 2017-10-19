@@ -91,7 +91,7 @@ if __name__ == '__main__':
             reshaped_data = np.squeeze(total_data[:, locs, t]) #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
 
             rdm = squareform(pdist(reshaped_data))
-            score_rdm[t] = kendalltau(rdm, word_rdm)
+            score_rdm[t], _ = kendalltau(rdm, word_rdm)
             rdm_list.append(rdm)
 
         best_rdm = np.argmin(score_rdm)
