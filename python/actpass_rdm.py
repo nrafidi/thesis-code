@@ -10,6 +10,8 @@ from scipy.stats import kendalltau
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
+ANIMATE = ['dog', 'doctor', 'student', 'monkey']
+INANIMATE = ['door', 'hammer', 'peach', 'school']
 
 def sort_sensors():
     load_var = sio.loadmat(SENSOR_MAP)
@@ -41,6 +43,26 @@ def word_id_rdm(words):
                 rdm[i, j] = 1
     return rdm
 
+
+def ani_rdm(words):
+    print(words)
+    num_words = words.size
+    rdm = np.zeros((num_words, num_words))
+    for i in range(num_words):
+        wordi = words[i]
+        if '.' in wordi:
+            wordi = wordi[:-1]
+        for j in range(num_words):
+            wordj = words[j]
+            if '.' in wordj:
+                wordj = wordj[:-1]
+            if wordi in ANIMATE and wordj in ANIMATE:
+                rdm[i, j] = 0
+            elif wordi in INANIMATE and wordj in INANIMATE:
+                rdm[i, j] = 0
+            else:
+                rdm[i, j] = 1
+    return rdm
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -98,20 +120,27 @@ if __name__ == '__main__':
     h = ax.imshow(word_rdm_len, interpolation='nearest')
     ax.set_title('Word len RDM')
     plt.colorbar(h)
-    plt.savefig('RDM_word_len.pdf')
+    plt.savefig('RDM_word_len_{}.pdf'.format(word))
 
     word_rdm_id = word_id_rdm(total_labels)
     fig, ax = plt.subplots()
     h = ax.imshow(word_rdm_id, interpolation='nearest')
     ax.set_title('Word id RDM')
     plt.colorbar(h)
-    plt.savefig('RDM_word_id.pdf')
+    plt.savefig('RDM_word_id_{}.pdf'.format(word))
 
+    word_rdm_ani = ani_rdm(total_labels)
+    fig, ax = plt.subplots()
+    h = ax.imshow(word_rdm_ani, interpolation='nearest')
+    ax.set_title('Word ani RDM')
+    plt.colorbar(h)
+    plt.savefig('RDM_word_ani_{}.pdf'.format(word))
 
     for reg in set(sorted_reg): #['L_Occipital', 'R_Occipital']:
         rdm_list = []
         score_rdm_len = np.zeros((total_data.shape[2],))
         score_rdm_id = np.zeros((total_data.shape[2],))
+        score_rdm_ani = np.zeros((total_data.shape[2],))
         for t in range(0, total_data.shape[2]):
             locs = [i for i, x in enumerate(sorted_reg) if x == reg]
             reshaped_data = np.squeeze(total_data[:, locs, t]) #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
@@ -119,33 +148,48 @@ if __name__ == '__main__':
             rdm = squareform(pdist(reshaped_data))
             score_rdm_len[t], _ = kendalltau(rdm, word_rdm_len)
             score_rdm_id[t], _ = kendalltau(rdm, word_rdm_id)
+            score_rdm_ani[t], _ = kendalltau(rdm, word_rdm_ani)
             rdm_list.append(rdm)
 
         best_rdm_len = np.argmax(score_rdm_len)
         fig, ax = plt.subplots()
         h = ax.imshow(rdm_list[best_rdm_len], interpolation='nearest', aspect='auto')
         plt.colorbar(h)
-        ax.set_title('{} {} {} word len'.format(reg, time_act[best_rdm_len],
-                                       score_rdm_len[best_rdm_len]))
-        plt.savefig('RDM_len_{}_{}.pdf'.format(reg, best_rdm_len))
+        ax.set_title('{} {} {} {} len'.format(reg, time_act[best_rdm_len],
+                                       score_rdm_len[best_rdm_len], word))
+        plt.savefig('RDM_len_{}_{}_{}.pdf'.format(reg, best_rdm_len, word))
 
         fig, ax = plt.subplots()
         ax.plot(time_act, score_rdm_len)
-        ax.set_title('{} word len'.format(reg))
+        ax.set_title('{} {} len'.format(reg, word))
         ax.set_ylim(0, 0.5)
-        plt.savefig('Score_len_{}.pdf'.format(reg))
+        plt.savefig('Score_len_{}_{}.pdf'.format(reg, word))
 
         best_rdm_id = np.argmax(score_rdm_id)
         fig, ax = plt.subplots()
         h = ax.imshow(rdm_list[best_rdm_id], interpolation='nearest', aspect='auto')
         plt.colorbar(h)
-        ax.set_title('{} {} {}'.format(reg, time_act[best_rdm_id],
-                                       score_rdm_id[best_rdm_id]))
-        plt.savefig('RDM_id_{}_{}.pdf'.format(reg, best_rdm_id))
+        ax.set_title('{} {} {} {} id'.format(reg, time_act[best_rdm_id],
+                                       score_rdm_id[best_rdm_id], word))
+        plt.savefig('RDM_id_{}_{}_{}.pdf'.format(reg, best_rdm_id, word))
 
         fig, ax = plt.subplots()
         ax.plot(time_act, score_rdm_id)
         ax.set_ylim(0, 0.5)
-        ax.set_title('{} word id'.format(reg))
-        plt.savefig('Score_id_{}.pdf'.format(reg))
+        ax.set_title('{} {} id'.format(reg, word))
+        plt.savefig('Score_id_{}_{}.pdf'.format(reg, word))
+
+        best_rdm_ani = np.argmax(score_rdm_ani)
+        fig, ax = plt.subplots()
+        h = ax.imshow(rdm_list[best_rdm_ani], interpolation='nearest', aspect='auto')
+        plt.colorbar(h)
+        ax.set_title('{} {} {} {} ani'.format(reg, time_act[best_rdm_ani],
+                                             score_rdm_id[best_rdm_ani], word))
+        plt.savefig('RDM_ani_{}_{}_{}.pdf'.format(reg, best_rdm_ani, word))
+
+        fig, ax = plt.subplots()
+        ax.plot(time_act, score_rdm_ani)
+        ax.set_ylim(0, 0.5)
+        ax.set_title('{} {} ani'.format(reg, word))
+        plt.savefig('Score_ani_{}_{}.pdf'.format(reg, word))
     # plt.show()
