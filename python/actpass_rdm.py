@@ -29,6 +29,18 @@ def word_len_rdm(words):
             rdm[i, j] = np.abs(len(words[i]) - len(words[j]))
     return rdm
 
+def word_id_rdm(words):
+    print(words)
+    num_words = words.size
+    rdm = np.zeros((num_words, num_words))
+    for i in range(num_words):
+        for j in range(num_words):
+            if words[i] == words[j]:
+                rdm[i, j] = 0
+            else:
+                rdm[i, j] = 1
+    return rdm
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -81,29 +93,47 @@ if __name__ == '__main__':
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_labels = np.concatenate((labels_act, labels_pass), axis=0)
 
-    word_rdm = word_len_rdm(total_labels)
+    word_rdm_len = word_len_rdm(total_labels)
     fig, ax = plt.subplots()
-    h = ax.imshow(word_rdm, interpolation='nearest')
-    ax.set_title('Word RDM')
+    h = ax.imshow(word_rdm_len, interpolation='nearest')
+    ax.set_title('Word len RDM')
     plt.colorbar(h)
-    plt.savefig('RDM_word.pdf')
+    plt.savefig('RDM_word_len.pdf')
 
-    for reg in ['L_Occipital', 'R_Occipital']:
+    word_rdm_id = word_id_rdm(total_labels)
+    fig, ax = plt.subplots()
+    h = ax.imshow(word_rdm_id, interpolation='nearest')
+    ax.set_title('Word id RDM')
+    plt.colorbar(h)
+    plt.savefig('RDM_word_id.pdf')
+
+
+    for reg in set(sorted_reg): #['L_Occipital', 'R_Occipital']:
         rdm_list = []
-        score_rdm = np.zeros((total_data.shape[2],))
+        score_rdm_len = np.zeros((total_data.shape[2],))
+        score_rdm_id = np.zeros((total_data.shape[2],))
         for t in range(0, total_data.shape[2]):
             locs = [i for i, x in enumerate(sorted_reg) if x == reg]
             reshaped_data = np.squeeze(total_data[:, locs, t]) #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
 
             rdm = squareform(pdist(reshaped_data))
-            score_rdm[t], _ = kendalltau(rdm, word_rdm)
+            score_rdm_len[t], _ = kendalltau(rdm, word_rdm_len)
+            score_rdm_id[t], _ = kendalltau(rdm, word_rdm_id)
             rdm_list.append(rdm)
 
-        best_rdm = np.argmax(score_rdm)
-        print(score_rdm[best_rdm])
+        best_rdm_len = np.argmax(score_rdm_len)
         fig, ax = plt.subplots()
-        h = ax.imshow(rdm_list[best_rdm], interpolation='nearest')
-        ax.set_title('{} {}'.format(reg, time_act[best_rdm]))
+        h = ax.imshow(rdm_list[best_rdm_len], interpolation='nearest')
+        ax.set_title('{} {} {}'.format(reg, time_act[best_rdm_len],
+                                       score_rdm_len[best_rdm_len]))
         plt.colorbar(h)
-        plt.savefig('RDM_{}_{}.pdf'.format(reg, best_rdm))
+        plt.savefig('RDM_len_{}_{}.pdf'.format(reg, best_rdm_len))
+
+        best_rdm_id = np.argmax(score_rdm_id)
+        fig, ax = plt.subplots()
+        h = ax.imshow(rdm_list[best_rdm_id], interpolation='nearest')
+        ax.set_title('{} {} {}'.format(reg, time_act[best_rdm_id],
+                                       score_rdm_id[best_rdm_id]))
+        plt.colorbar(h)
+        plt.savefig('RDM_id_{}_{}.pdf'.format(reg, best_rdm_id))
     # plt.show()
