@@ -21,14 +21,11 @@ def sort_sensors():
 
 
 def word_len_rdm(words):
+    print(words)
     num_words = words.size
     rdm = np.zeros((num_words, num_words))
     for i in range(num_words):
-        print(words[i])
-        print(len(words[i]))
         for j in range(num_words):
-            print(words[j])
-            print(len(words[j]))
             rdm[i, j] = np.abs(len(words[i]) - len(words[j]))
     return rdm
 
@@ -53,7 +50,7 @@ if __name__ == '__main__':
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
     labels_act = np.array(labels_act)
     label_sort_inds = np.argsort(labels_act)
-    print(labels_act[label_sort_inds])
+    labels_act = labels_act[label_sort_inds]
     act_data = act_data[label_sort_inds, :, :]
     act_data = act_data[:, sorted_inds, :]
     # act_data = np.squeeze(np.mean(act_data, axis=2))
@@ -79,7 +76,7 @@ if __name__ == '__main__':
     print(pass_data.shape)
 
 
-    print(labels_pass[label_sort_inds])
+    labels_pass = labels_pass[label_sort_inds]
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
     total_labels = np.concatenate((labels_act, labels_pass), axis=0)
