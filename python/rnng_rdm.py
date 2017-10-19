@@ -66,11 +66,12 @@ if __name__ == '__main__':
     h = ax.imshow(vec_rdm, interpolation='nearest')
     plt.colorbar(h)
     ax.set_title('Vector RDM over Active and Passive Sentences')
-
+    fig.savefig('vector_rdm_actpass.pdf', bbox_inches='tight')
     fig, ax = plt.subplots()
     h = ax.imshow(ap_rdm, interpolation='nearest')
     plt.colorbar(h)
     ax.set_title('Approx Syntax RDM over Active and Passive Sentences')
+    fig.savefig('syntax_rdm_actpass.pdf', bbox_inches='tight')
 
     plt.show()
 
