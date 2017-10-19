@@ -1,11 +1,12 @@
 import argparse
 import load_data
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
 from scipy.spatial.distance import pdist, squareform
+from scipy.stats import kendalltau
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -17,6 +18,15 @@ def sort_sensors():
     sorted_inds = np.argsort(sensor_reg)
     sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
     return sorted_inds, sorted_reg
+
+
+def word_len_rdm(words):
+    num_words = words.size
+    rdm = np.zeros((num_words, num_words))
+    for i in range(num_words):
+        for j in range(num_words):
+            rdm[i, j] = np.abs(len(words[i]) - len(words[j]))
+    return rdm
 
 
 if __name__ == '__main__':
@@ -68,16 +78,26 @@ if __name__ == '__main__':
     print(labels_pass[label_sort_inds])
 
     total_data = np.concatenate((act_data, pass_data), axis=0)
+    total_labels = np.concatenate((labels_act, labels_pass), axis=0)
+
+    word_rdm = word_len_rdm(total_labels)
+
 
     for reg in ['L_Occipital', 'R_Occipital']:
-        for t in range(0, total_data.shape[2], 25):
+        rdm_list = []
+        score_rdm = np.zeros((total_data.shape[2],))
+        for t in range(0, total_data.shape[2]):
             locs = [i for i, x in enumerate(sorted_reg) if x == reg]
             reshaped_data = np.squeeze(total_data[:, locs, t]) #np.reshape(total_data[:, locs, :], (total_data.shape[0], -1))
 
             rdm = squareform(pdist(reshaped_data))
+            score_rdm[t] = kendalltau(rdm, word_rdm)
+            rdm_list.append(rdm)
 
-            fig, ax = plt.subplots()
-            h = ax.imshow(rdm, interpolation='nearest')
-            ax.set_title(reg)
-            plt.colorbar(h)
-    plt.show()
+        best_rdm = np.argmin(score_rdm)
+        fig, ax = plt.subplots()
+        h = ax.imshow(rdm_list[best_rdm], interpolation='nearest')
+        ax.set_title('{} {}'.format(reg, time_act(best_rdm)))
+        plt.colorbar(h)
+        plt.savefig('RDM_{}_{}.pdf'.format(reg, best_rdm))
+    # plt.show()
