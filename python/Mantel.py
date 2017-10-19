@@ -177,4 +177,4 @@ def test(X, Y, perms=10000, method='pearson', tail='two-tail'):
   # Calculate the standard score.
   z = (covariances[0] - covariances.mean()) / covariances.std()
 
-return r, p, z
+  return r, p, z
