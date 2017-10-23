@@ -47,16 +47,24 @@ def sem_rdm(sen_list):
                 break
             key_words_j = [j_sen[j_word] for j_word in KEY_WORDS[SEN_LENS[len(j_sen)]]]
             if i_sen == j_sen:
+                print(key_words_i)
+                print(key_words_j)
+                print('Getting value 0 Because Sens are Equal')
                 ap_rdm[i, j] = 0.0
             elif key_words_i == key_words_j.reverse():
                 print(key_words_i)
                 print(key_words_j)
-                print('Getting value 0')
+                print('Getting value 0 Because Reverse Keywords are Equal')
+                ap_rdm[i, j] = 0.0
+            elif key_words_i == key_words_j:
+                print(key_words_i)
+                print(key_words_j)
+                print('Getting value 0 Because Keywords are Equal')
                 ap_rdm[i, j] = 0.0
             elif key_words_i[0] == key_words_j[0] and key_words_i[1] == key_words_j[1]:
                 print(key_words_i)
                 print(key_words_j)
-                print('Getting value 0.5')
+                print('Getting value 0.5 Because Some Keywords are Equal')
                 ap_rdm[i, j] = 0.5
             else:
                 ap_rdm[i, j] = 1.0
