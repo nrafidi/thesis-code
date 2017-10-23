@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
 
     for i_reg in range(rdm.shape[0]):
-        print(sorted_reg[i_reg])
+        print(sorted_reg[i_reg]) # BUG HERE
         syn_scores = np.empty((rdm.shape[1],))
         sem_scores = np.empty((rdm.shape[1],))
         for i_t in range(rdm.shape[1]):
