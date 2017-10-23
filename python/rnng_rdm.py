@@ -49,8 +49,14 @@ def sem_rdm(sen_list):
             if i_sen == j_sen:
                 ap_rdm[i, j] = 0.0
             elif key_words_i == key_words_j.reverse():
+                print(key_words_i)
+                print(key_words_j)
+                print('Getting value 0')
                 ap_rdm[i, j] = 0.0
             elif key_words_i[0] == key_words_j[0] and key_words_i[1] == key_words_j[1]:
+                print(key_words_i)
+                print(key_words_j)
+                print('Getting value 0.5')
                 ap_rdm[i, j] = 0.5
             else:
                 ap_rdm[i, j] = 1.0
