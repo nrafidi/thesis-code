@@ -45,7 +45,7 @@ def sort_sensors():
 
 
 if __name__ == '__main__':
-    exp = 'krns2'
+    exp = 'PassAct2'
     mode = 'coef'
     sens = 'all'
     accuracy = 'abs'
@@ -116,7 +116,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.colorbar(h)
-            plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
+            plt.savefig('MuDiffs_subAvg_{}_o{}_w{}_{}_{}_{}.pdf'.format(exp, o, w, word, sen_type, sens), bbox_inches='tight')
 
             mu_diff_maxes = np.max(mu_diff, axis=0)
             mu_diff_max_sensors = np.argmax(mu_diff, axis=0)
@@ -133,7 +133,7 @@ if __name__ == '__main__':
             ax.set_xticklabels(fulltime[::250])
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
-            plt.savefig('MuDiffMaxes_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
+            plt.savefig('MuDiffMaxes_subAvg_{}_o{}_w{}_{}_{}_{}.pdf'.format(exp, o, w, word, sen_type, sens), bbox_inches='tight')
             # mu_diff_co = np.array(sub_mu_diff_co)
             # mu_diff_co = np.mean(mu_diff_co, axis=0)
             # fig, ax = plt.subplots()
