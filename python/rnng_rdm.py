@@ -48,10 +48,10 @@ def sem_rdm(sen_list):
                 break
             key_words_j = [j_sen[j_word] for j_word in KEY_WORDS[SEN_LENS[len(j_sen)]]]
             print(key_words_j)
-            print(key_words_j.reverse())
+            print(reversed(key_words_j))
             if i_sen == j_sen:
                 ap_rdm[i, j] = 0.0
-            elif key_words_i == key_words_j.reverse():
+            elif key_words_i == reversed(key_words_j):
                 ap_rdm[i, j] = 0.0
             elif key_words_i == key_words_j:
                 ap_rdm[i, j] = 0.0
