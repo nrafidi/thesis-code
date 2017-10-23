@@ -124,11 +124,11 @@ def run_tgm_exp(experiment,
 
     print(data_raw.shape)
 
-    data, labels = load_data.avg_data(data_raw=data_raw,
-                                      labels_raw=labels,
-                                      experiment=experiment,
-                                      num_instances=num_instances,
-                                      reps_to_use=reps_to_use)
+    data, labels, _ = load_data.avg_data(data_raw=data_raw,
+                                         labels_raw=labels,
+                                         experiment=experiment,
+                                         num_instances=num_instances,
+                                         reps_to_use=reps_to_use)
     print(data.shape)
 
     if isPerm:
