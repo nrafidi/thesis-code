@@ -143,17 +143,35 @@ if __name__ == '__main__':
     rdm = np.concatenate(rdm_by_sub_list)
     print(rdm.shape)
     rdm = np.squeeze(np.mean(rdm, axis=0))
-    print(rdm.shape)
+
+    ap_list, sen_list = rnng_rdm.get_sen_lists()
+
+    ap_rdm = rnng_rdm.syn_rdm(ap_list)
+    ap_rdm = ap_rdm[EXP_INDS[args.experiment], :]
+    ap_rdm = ap_rdm[:, EXP_INDS[args.experiment]]
+    print(ap_rdm.shape)
+    print(matrix_rank(ap_rdm))
+    semantic_rdm = rnng_rdm.sem_rdm(sen_list, ap_list)
+    semantic_rdm = semantic_rdm[EXP_INDS[args.experiment], :]
+    semantic_rdm = semantic_rdm[:, EXP_INDS[args.experiment]]
+    print(semantic_rdm.shape)
+    print(matrix_rank(semantic_rdm))
+
 
     for i_reg in range(rdm.shape[0]):
         print(sorted_reg[i_reg])
+        syn_scores = np.empty((rdm.shape[1],))
+        sem_scores = np.empty((rdm.shape[1],))
         for i_t in range(rdm.shape[1]):
-            print(matrix_rank(np.squeeze(rdm[i_reg, i_t, :, :])))
+            syn_scores[i_t], _ = kendalltau(rdm, ap_rdm)
+            sem_scores[i_t], _ = kendalltau(rdm, semantic_rdm)
+        fig, ax = plt.subplots()
+        ax.plot(time_act, syn_scores)
+        ax.plot(time_act, sem_scores)
+        ax.set_title(sorted_reg[i_reg])
+    plt.show()
 
-    # ap_list, sen_list = rnng_rdm.get_sen_lists()
-    #
-    # ap_rdm = rnng_rdm.syn_rdm(ap_list)
-    # semantic_rdm = rnng_rdm.sem_rdm(sen_list, ap_list)
+
     #
     #
     #
