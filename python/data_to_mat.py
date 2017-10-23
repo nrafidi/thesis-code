@@ -35,7 +35,9 @@ if __name__ == '__main__':
 
     sio.savemat(fname_raw, mdict={'evokeds': evokeds, 'labels': labels, 'time': time, 'sentence_ids': sentence_ids})
 
-    avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
-                                              num_instances=args.num_instances, reps_to_use=args.reps_to_use)
+    avg_data, labels_avg, sentence_ids = load_data.avg_data(evokeds, labels, sentence_ids_raw=sentence_ids, experiment=args.experiment,
+                                                            num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
     fname_avg = SAVE_FNAME.format(args.experiment, args.subject, args.sen_type, args.word, 'avg' + str(args.reps_to_use))
+
+    sio.savemat(fname_avg, mdict={'avg_data': avg_data, 'labels_avg': labels_avg, 'time': time, 'sentence_ids_avg': sentence_ids})
