@@ -132,14 +132,14 @@ if __name__ == '__main__':
                 locs = [i for i, x in enumerate(sorted_reg) if x == reg]
                 reshaped_data = np.squeeze(total_data[:, locs, t])
                 rdm = squareform(pdist(reshaped_data))
-                rdm_by_time_list.append(rdm)
-            time_rdm = np.stack(rdm_by_time_list)
+                rdm_by_time_list.append(rdm[None, :, :])
+            time_rdm = np.concatenate(rdm_by_time_list)
             print(time_rdm.shape)
-            rdm_by_reg_list.append(time_rdm)
-        reg_rdm = np.stack(rdm_by_reg_list)
+            rdm_by_reg_list.append(time_rdm[None, :, :])
+        reg_rdm = np.concatenate(rdm_by_reg_list)
         print(reg_rdm.shape)
-        rdm_by_sub_list.append(reg_rdm)
-    rdm = np.stack(rdm_by_sub_list)
+        rdm_by_sub_list.append(reg_rdm[None, :, :])
+    rdm = np.concatenate(rdm_by_sub_list)
 
     print(rdm.shape)
 
