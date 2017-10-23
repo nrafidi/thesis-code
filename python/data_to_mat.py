@@ -4,7 +4,9 @@ import numpy as np
 import scipy.io as sio
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
-SAVE_FNAME = '/share/volume0/newmeg/{}/tom/{}_{}_{}_{}.mat'
+SAVE_DIR = '/share/volume0/newmeg/{}/tom/'
+DATA_FNAME = '{}{}_{}_{}_{}.mat'
+SENSOR_FNAME = '{}sensor_sort.mat'
 
 
 def sort_sensors():
@@ -28,16 +30,22 @@ if __name__ == '__main__':
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
 
+    save_dir = SAVE_DIR.format(args.experiment)
+
     evokeds, labels, time, sentence_ids = load_data.load_raw(args.subject, args.word, args.sen_type,
                                                              experiment=args.experiment, proc=args.proc)
 
-    fname_raw = SAVE_FNAME.format(args.experiment, args.subject, args.sen_type, args.word, 'raw')
+    fname_raw = DATA_FNAME.format(save_dir, args.subject, args.sen_type, args.word, 'raw')
 
     sio.savemat(fname_raw, mdict={'evokeds': evokeds, 'labels': labels, 'time': time, 'sentence_ids': sentence_ids})
 
     avg_data, labels_avg, sentence_ids = load_data.avg_data(evokeds, labels, sentence_ids_raw=sentence_ids, experiment=args.experiment,
                                                             num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
-    fname_avg = SAVE_FNAME.format(args.experiment, args.subject, args.sen_type, args.word, 'avg' + str(args.reps_to_use))
+    fname_avg = DATA_FNAME.format(save_dir, args.subject, args.sen_type, args.word, 'avg' + str(args.reps_to_use))
 
     sio.savemat(fname_avg, mdict={'avg_data': avg_data, 'labels_avg': labels_avg, 'time': time, 'sentence_ids_avg': sentence_ids})
+
+    sorted_inds, sorted_reg = sort_sensors()
+
+    sio.savemat(SENSOR_FNAME.format(save_dir), mdict={'sorted_inds': sorted_inds, 'sorted_reg': sorted_reg})
