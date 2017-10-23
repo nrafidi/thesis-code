@@ -36,7 +36,7 @@ def syn_rdm(ap_list):
     return ap_rdm
 
 
-def sem_rdm(sen_list):
+def sem_rdm(sen_list, ap_list):
     ap_rdm = np.empty((NUMAP, NUMAP))
     for i, i_sen in enumerate(sen_list):
         if i >= NUMAP:
@@ -51,11 +51,9 @@ def sem_rdm(sen_list):
             print(list(reversed(key_words_j)))
             if i_sen == j_sen:
                 ap_rdm[i, j] = 0.0
-            elif key_words_i == list(reversed(key_words_j)):
+            elif (ap_list[i] != ap_list[j]) and (key_words_i == list(reversed(key_words_j))):
                 ap_rdm[i, j] = 0.0
-            elif key_words_i == key_words_j:
-                ap_rdm[i, j] = 0.0
-            elif key_words_i[0] == key_words_j[0] and key_words_i[1] == key_words_j[1]:
+            elif (ap_list[i] in ap_list[j] or ap_list[j] in ap_list[i]) and (key_words_i[0] == key_words_j[0] and key_words_i[1] == key_words_j[1]):
                 ap_rdm[i, j] = 0.5
             else:
                 ap_rdm[i, j] = 1.0
@@ -108,6 +106,10 @@ if __name__ == '__main__':
     r, p, z = Mantel.test(vec_rdm, semantic_rdm)
 
     print('Semantic Pearson is {} with pval {} and zval {} from Mantel test'.format(r, p, z))
+
+    r, p, z = Mantel.test(ap_rdm, semantic_rdm)
+
+    print('Semantic vs Syntax Pearson is {} with pval {} and zval {} from Mantel test'.format(r, p, z))
 
     fig, ax = plt.subplots()
     h = ax.imshow(vec_rdm, interpolation='nearest')
