@@ -46,9 +46,22 @@ if __name__ == '__main__':
     avg_data, labels_avg, _ = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
+    sorted_inds, sorted_reg = sort_sensors()
+    avg_data = avg_data[:, sorted_inds, :]
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    num_time = time.size()
+
     for i in range(avg_data.shape[0]):
         fig, ax = plt.subplots()
         h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto')
+        ax.set_yticks(yticks_sens)
+        ax.set_yticklabels(uni_reg)
+        ax.set_ylabel('Sensors')
+        ax.set_xticks(range(0, num_time, 250))
+        ax.set_xticklabels(time[::250])
+        ax.set_xlabel('Time')
         plt.colorbar(h)
     plt.show()
 
