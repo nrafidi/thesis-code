@@ -166,9 +166,10 @@ if __name__ == '__main__':
             syn_scores[i_t], _ = kendalltau(rdm, ap_rdm)
             sem_scores[i_t], _ = kendalltau(rdm, semantic_rdm)
         fig, ax = plt.subplots()
-        ax.plot(time_act, syn_scores)
-        ax.plot(time_act, sem_scores)
+        h1 = ax.plot(time_act, syn_scores)
+        h2 = ax.plot(time_act, sem_scores)
         ax.set_title(sorted_reg[i_reg])
+        ax.legend([h1, h2], ['Syntax', 'Semantics'])
     plt.show()
 
 
