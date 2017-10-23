@@ -42,11 +42,11 @@ def sem_rdm(sen_list):
         if i >= NUMAP:
             break
         key_words_i = [i_sen[i_word] for i_word in KEY_WORDS[SEN_LENS[len(i_sen)]]]
-        print(key_words_i)
         for j, j_sen in enumerate(sen_list):
             if j >= NUMAP:
                 break
             key_words_j = [j_sen[j_word] for j_word in KEY_WORDS[SEN_LENS[len(j_sen)]]]
+            print(key_words_i)
             print(key_words_j)
             print(list(reversed(key_words_j)))
             if i_sen == j_sen:
