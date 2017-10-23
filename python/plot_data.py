@@ -53,17 +53,17 @@ if __name__ == '__main__':
 
     num_time = time.size
 
-    # for i in range(avg_data.shape[0]):
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto', vmin=-0.4e-11, vmax=0.4e-11)
-    #     ax.set_yticks(yticks_sens)
-    #     ax.set_yticklabels(uni_reg)
-    #     ax.set_ylabel('Sensors')
-    #     ax.set_xticks(range(0, num_time, 250))
-    #     ax.set_xticklabels(time[::250])
-    #     ax.set_xlabel('Time')
-    #     plt.colorbar(h)
-    # plt.show()
+    for i in range(2):
+        fig, ax = plt.subplots()
+        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto', vmin=-0.4e-11, vmax=0.4e-11)
+        ax.set_yticks(yticks_sens)
+        ax.set_yticklabels(uni_reg)
+        ax.set_ylabel('Sensors')
+        ax.set_xticks(range(0, num_time, 250))
+        ax.set_xticklabels(time[::250])
+        ax.set_xlabel('Time')
+        plt.colorbar(h)
+    plt.show()
 
     uni_labels = [lab for lab in set(labels_avg)]
 
