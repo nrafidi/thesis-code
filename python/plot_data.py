@@ -43,7 +43,7 @@ if __name__ == '__main__':
                                                   experiment=args.experiment, proc=args.proc)
     evokeds = baseline_correct(evokeds, time)
 
-    avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
+    avg_data, labels_avg, _ = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
     for i in range(avg_data.shape[0]):
