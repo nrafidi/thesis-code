@@ -46,9 +46,9 @@ def sem_rdm(sen_list, ap_list):
             if j >= NUMAP:
                 break
             key_words_j = [j_sen[j_word] for j_word in KEY_WORDS[SEN_LENS[len(j_sen)]]]
-            print(key_words_i)
-            print(key_words_j)
-            print(list(reversed(key_words_j)))
+            # print(key_words_i)
+            # print(key_words_j)
+            # print(list(reversed(key_words_j)))
             if i_sen == j_sen:
                 ap_rdm[i, j] = 0.0
             elif (ap_list[i] != ap_list[j]) and (key_words_i == list(reversed(key_words_j))):
@@ -57,7 +57,7 @@ def sem_rdm(sen_list, ap_list):
                 ap_rdm[i, j] = 0.5
             else:
                 ap_rdm[i, j] = 1.0
-            print(ap_rdm[i, j])
+            # print(ap_rdm[i, j])
     return ap_rdm
 
 

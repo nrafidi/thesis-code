@@ -163,8 +163,8 @@ if __name__ == '__main__':
         syn_scores = np.empty((rdm.shape[1],))
         sem_scores = np.empty((rdm.shape[1],))
         for i_t in range(rdm.shape[1]):
-            syn_scores[i_t], _ = kendalltau(rdm, ap_rdm)
-            sem_scores[i_t], _ = kendalltau(rdm, semantic_rdm)
+            syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
+            sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
         fig, ax = plt.subplots()
         h1 = ax.plot(time_act, syn_scores)
         h2 = ax.plot(time_act, sem_scores)
