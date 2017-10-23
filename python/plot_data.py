@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     for i in range(avg_data.shape[0]):
         fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest')
+        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto')
         plt.colorbar(h)
     plt.show()
 
