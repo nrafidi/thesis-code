@@ -61,12 +61,7 @@ def sem_rdm(sen_list, ap_list):
     return ap_rdm
 
 
-if __name__ == '__main__':
-    vectors = np.loadtxt(VECTORS)
-    vectors = vectors[:NUMAP, :]
-
-    vec_rdm = squareform(pdist(vectors))
-
+def get_sen_lists():
     ap_list = []
     sen_list = []
     with open(SENTENCES) as f:
@@ -82,6 +77,17 @@ if __name__ == '__main__':
                     ap_list.append('AS')
                 else:
                     ap_list.append('A')
+    return ap_list, sen_list
+
+
+
+if __name__ == '__main__':
+    vectors = np.loadtxt(VECTORS)
+    vectors = vectors[:NUMAP, :]
+
+    vec_rdm = squareform(pdist(vectors))
+
+    ap_list, sen_list = get_sen_lists()
 
     ap_rdm = syn_rdm(ap_list)
     semantic_rdm = sem_rdm(sen_list, ap_list)
