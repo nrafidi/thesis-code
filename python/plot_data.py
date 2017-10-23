@@ -53,37 +53,37 @@ if __name__ == '__main__':
 
     num_time = time.size
 
-    for i in range(avg_data.shape[0]):
-        fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto', vmin=-0.4e-11, vmax=0.4e-11)
-        ax.set_yticks(yticks_sens)
-        ax.set_yticklabels(uni_reg)
-        ax.set_ylabel('Sensors')
-        ax.set_xticks(range(0, num_time, 250))
-        ax.set_xticklabels(time[::250])
-        ax.set_xlabel('Time')
-        plt.colorbar(h)
-    plt.show()
-
-    # uni_labels = [lab for lab in set(labels_avg)]
-    #
-    # sorted_inds, sorted_reg = sort_sensors()
-    # avg_data = avg_data[:, sorted_inds, :]
-    #
-    # first_r_p = sorted_reg.index('R_Parietal') + 1
-    #
-    # sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
-    #
-    # num_sentences = avg_data.shape[0]
-    #
-    # avg_over_labels = np.empty((len(uni_labels), sensor_to_plot.shape[1]))
-    # fig, ax = plt.subplots()
-    # for lab in uni_labels:
-    #     inds =[i for i, x in enumerate(labels_avg) if x == lab]
-    #     label_ind = uni_labels.index(lab)
-    #     avg_over_labels[label_ind, :] = np.mean(sensor_to_plot[inds, :], axis=0)
-    #     ax.plot(time[::25], avg_over_labels[label_ind, ::25], COLORS[label_ind])
+    # for i in range(avg_data.shape[0]):
+    #     fig, ax = plt.subplots()
+    #     h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto', vmin=-0.4e-11, vmax=0.4e-11)
+    #     ax.set_yticks(yticks_sens)
+    #     ax.set_yticklabels(uni_reg)
+    #     ax.set_ylabel('Sensors')
+    #     ax.set_xticks(range(0, num_time, 250))
+    #     ax.set_xticklabels(time[::250])
+    #     ax.set_xlabel('Time')
+    #     plt.colorbar(h)
     # plt.show()
+
+    uni_labels = [lab for lab in set(labels_avg)]
+
+    sorted_inds, sorted_reg = sort_sensors()
+    avg_data = avg_data[:, sorted_inds, :]
+
+    first_r_p = sorted_reg.index('R_Parietal') + 1
+
+    sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
+
+    num_sentences = avg_data.shape[0]
+
+    avg_over_labels = np.empty((len(uni_labels), sensor_to_plot.shape[1]))
+    fig, ax = plt.subplots()
+    for lab in uni_labels:
+        inds =[i for i, x in enumerate(labels_avg) if x == lab]
+        label_ind = uni_labels.index(lab)
+        avg_over_labels[label_ind, :] = np.mean(sensor_to_plot[inds, :], axis=0)
+        ax.plot(time[::25], avg_over_labels[label_ind, ::25], COLORS[label_ind])
+    plt.show()
 
     # fig, ax = plt.subplots()
     # for i_sen in range(num_sentences):
