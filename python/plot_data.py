@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     for i in range(avg_data.shape[0]):
         fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto')
+        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest', aspect='auto', vmin=-0.4e-11, vmax=0.4e-11)
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
         ax.set_ylabel('Sensors')
