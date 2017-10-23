@@ -46,25 +46,31 @@ if __name__ == '__main__':
     avg_data, labels_avg = load_data.avg_data(evokeds, labels, experiment=args.experiment,
                                               num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
-    uni_labels = [lab for lab in set(labels_avg)]
-
-    sorted_inds, sorted_reg = sort_sensors()
-    avg_data = avg_data[:, sorted_inds, :]
-
-    first_r_p = sorted_reg.index('R_Parietal') + 1
-
-    sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
-
-    num_sentences = avg_data.shape[0]
-
-    avg_over_labels = np.empty((len(uni_labels), sensor_to_plot.shape[1]))
-    fig, ax = plt.subplots()
-    for lab in uni_labels:
-        inds =[i for i, x in enumerate(labels_avg) if x == lab]
-        label_ind = uni_labels.index(lab)
-        avg_over_labels[label_ind, :] = np.mean(sensor_to_plot[inds, :], axis=0)
-        ax.plot(time[::25], avg_over_labels[label_ind, ::25], COLORS[label_ind])
+    for i in range(avg_data.shape[0]):
+        fig, ax = plt.subplots()
+        h = ax.imshow(np.squeeze(avg_data[i, :, :]), interpolation='nearest')
+        plt.colorbar(h)
     plt.show()
+
+    # uni_labels = [lab for lab in set(labels_avg)]
+    #
+    # sorted_inds, sorted_reg = sort_sensors()
+    # avg_data = avg_data[:, sorted_inds, :]
+    #
+    # first_r_p = sorted_reg.index('R_Parietal') + 1
+    #
+    # sensor_to_plot = np.squeeze(avg_data[:, first_r_p, :])
+    #
+    # num_sentences = avg_data.shape[0]
+    #
+    # avg_over_labels = np.empty((len(uni_labels), sensor_to_plot.shape[1]))
+    # fig, ax = plt.subplots()
+    # for lab in uni_labels:
+    #     inds =[i for i, x in enumerate(labels_avg) if x == lab]
+    #     label_ind = uni_labels.index(lab)
+    #     avg_over_labels[label_ind, :] = np.mean(sensor_to_plot[inds, :], axis=0)
+    #     ax.plot(time[::25], avg_over_labels[label_ind, ::25], COLORS[label_ind])
+    # plt.show()
 
     # fig, ax = plt.subplots()
     # for i_sen in range(num_sentences):
