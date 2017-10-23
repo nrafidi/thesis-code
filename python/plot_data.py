@@ -51,7 +51,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    num_time = time.size()
+    num_time = time.size
 
     for i in range(avg_data.shape[0]):
         fig, ax = plt.subplots()
