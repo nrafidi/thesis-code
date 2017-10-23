@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
+from numpy.linalg import matrix_rank
 import scipy.io as sio
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import kendalltau
@@ -104,7 +105,7 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
 
     rdm_by_sub_list = []
-    for subject in load_data.VALID_SUBS[args.experiment]:
+    for subject in ['B', 'C']: #load_data.VALID_SUBS[args.experiment]:
 
 
         act_data, labels_act, time_act = load_sentence_data(subject, args.word, 'active', args.experiment, args.proc,
@@ -135,13 +136,19 @@ if __name__ == '__main__':
                 rdm_by_time_list.append(rdm[None, :, :])
             time_rdm = np.concatenate(rdm_by_time_list)
             print(time_rdm.shape)
-            rdm_by_reg_list.append(time_rdm[None, :, :])
+            rdm_by_reg_list.append(time_rdm[None, ...])
         reg_rdm = np.concatenate(rdm_by_reg_list)
         print(reg_rdm.shape)
-        rdm_by_sub_list.append(reg_rdm[None, :, :])
+        rdm_by_sub_list.append(reg_rdm[None, ...])
     rdm = np.concatenate(rdm_by_sub_list)
-
     print(rdm.shape)
+    rdm = np.squeeze(np.mean(rdm, axis=0))
+    print(rdm.shape)
+
+    for i_reg in range(rdm.shape[0]):
+        print(sorted_reg[i_reg])
+        for i_t in range(rdm.shape[1]):
+            print(matrix_rank(np.squeeze(rdm[i_reg, i_t, :, :])))
 
     # ap_list, sen_list = rnng_rdm.get_sen_lists()
     #
