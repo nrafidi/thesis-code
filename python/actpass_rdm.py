@@ -169,7 +169,7 @@ if __name__ == '__main__':
         h1 = ax.plot(time_act, syn_scores)
         h2 = ax.plot(time_act, sem_scores)
         ax.set_title(sorted_reg[i_reg])
-        ax.legend([h1, h2], ['Syntax', 'Semantics'])
+        # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     plt.show()
 
 
