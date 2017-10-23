@@ -84,7 +84,7 @@ if __name__ == '__main__':
                     ap_list.append('A')
 
     ap_rdm = syn_rdm(ap_list)
-    semantic_rdm = sem_rdm(sen_list)
+    semantic_rdm = sem_rdm(sen_list, ap_list)
     fig, ax = plt.subplots()
     h = ax.imshow(semantic_rdm, interpolation='nearest')
     plt.colorbar(h)
