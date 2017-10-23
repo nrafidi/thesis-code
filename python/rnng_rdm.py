@@ -81,6 +81,11 @@ if __name__ == '__main__':
 
     ap_rdm = syn_rdm(ap_list)
     semantic_rdm = sem_rdm(sen_list)
+    fig, ax = plt.subplots()
+    h = ax.imshow(semantic_rdm, interpolation='nearest')
+    plt.colorbar(h)
+    ax.set_title('Approx Semantic RDM over Active and Passive Sentences')
+    fig.savefig('semantic_rdm_actpass.pdf', bbox_inches='tight')
 
     ktau, pval = kendalltau(vec_rdm, ap_rdm)
 
@@ -108,10 +113,6 @@ if __name__ == '__main__':
     plt.colorbar(h)
     ax.set_title('Approx Syntax RDM over Active and Passive Sentences')
     fig.savefig('syntax_rdm_actpass.pdf', bbox_inches='tight')
-    fig, ax = plt.subplots()
-    h = ax.imshow(semantic_rdm, interpolation='nearest')
-    plt.colorbar(h)
-    ax.set_title('Approx Semantic RDM over Active and Passive Sentences')
-    fig.savefig('semantic_rdm_actpass.pdf', bbox_inches='tight')
+
     # plt.show()
 
