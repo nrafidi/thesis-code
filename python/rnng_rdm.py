@@ -14,6 +14,9 @@ NUMAP = 96
 WAS = 'was'
 BY = 'by'
 
+SEN_LENS = {'A': 5, 'P': 7, 'AS': 4, }
+
+
 
 def syn_rdm(ap_list):
     ap_rdm = np.empty((NUMAP, NUMAP))
@@ -31,6 +34,25 @@ def syn_rdm(ap_list):
                 ap_rdm[i, j] = 1.0
     return ap_rdm
 
+# def sem_rdm(sen_list):
+#     ap_rdm = np.empty((NUMAP, NUMAP))
+#     for i, i_sen in enumerate(ap_list):
+#         if i >= NUMAP:
+#             break
+#         words_i = string.split(i_sen)
+#         if len(words_i) ==
+#         for j, j_sen in enumerate(ap_list):
+#             if j >= NUMAP:
+#                 break
+#
+#             if i_sen == j_sen:
+#                 ap_rdm[i, j] = 0.0
+#             elif i_sen in j_sen or j_sen in i_sen:
+#                 ap_rdm[i, j] = 0.5
+#             else:
+#                 ap_rdm[i, j] = 1.0
+#     return ap_rdm
+
 
 if __name__ == '__main__':
     vectors = np.loadtxt(VECTORS)
@@ -41,6 +63,7 @@ if __name__ == '__main__':
     ap_list = []
     with open(SENTENCES) as f:
         for line in f:
+            print(string.split(line))
             if WAS in line:
                 if BY in line:
                     ap_list.append('P')
