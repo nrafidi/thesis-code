@@ -133,13 +133,13 @@ if __name__ == '__main__':
                 reshaped_data = np.squeeze(total_data[:, locs, t])
                 rdm = squareform(pdist(reshaped_data))
                 rdm_by_time_list.append(rdm)
-            time_rdm = np.concatenate(rdm_by_time_list)
+            time_rdm = np.stack(rdm_by_time_list)
             print(time_rdm.shape)
             rdm_by_reg_list.append(time_rdm)
-        reg_rdm = np.concatenate(rdm_by_reg_list)
+        reg_rdm = np.stack(rdm_by_reg_list)
         print(reg_rdm.shape)
         rdm_by_sub_list.append(reg_rdm)
-    rdm = np.concatenate(rdm_by_sub_list)
+    rdm = np.stack(rdm_by_sub_list)
 
     print(rdm.shape)
 
