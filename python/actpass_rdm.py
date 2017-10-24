@@ -157,9 +157,9 @@ if __name__ == '__main__':
     print(semantic_rdm.shape)
     print(matrix_rank(semantic_rdm))
 
-
+    uni_reg = np.unique(sorted_reg)
     for i_reg in range(rdm.shape[0]):
-        print(sorted_reg[i_reg]) # BUG HERE
+        print(uni_reg[i_reg]) # BUG HERE
         syn_scores = np.empty((rdm.shape[1],))
         sem_scores = np.empty((rdm.shape[1],))
         for i_t in range(rdm.shape[1]):
@@ -168,7 +168,7 @@ if __name__ == '__main__':
         fig, ax = plt.subplots()
         h1 = ax.plot(time_act, syn_scores)
         h2 = ax.plot(time_act, sem_scores)
-        ax.set_title(sorted_reg[i_reg])
+        ax.set_title(uni_reg[i_reg])
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     plt.show()
 
