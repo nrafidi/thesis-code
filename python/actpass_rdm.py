@@ -75,7 +75,7 @@ def ani_rdm(words):
 def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use, sorted_inds=None):
     evokeds, labels, time, sen_ids = load_data.load_raw(subject, word, sen_type,
                                                         experiment=experiment, proc=proc,
-                                                        tmin=0.0, tmax=2.0)
+                                                        tmin=-0.5, tmax=1.5)
     data, labels, sen_ids = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids,
                                                            experiment=experiment,
                                                            num_instances=num_instances,
@@ -158,16 +158,21 @@ if __name__ == '__main__':
     print(matrix_rank(semantic_rdm))
 
     uni_reg = np.unique(sorted_reg)
-    for i_reg in range(rdm.shape[0]):
-        print(uni_reg[i_reg]) # BUG HERE
+    num_reg = rdm.shape[0]
+    fig, axs = plt.subplots(num_reg, 1)
+    for i_reg in range(num_reg):
+        print(uni_reg[i_reg])
+        ax = axs[i_reg]
         syn_scores = np.empty((rdm.shape[1],))
         sem_scores = np.empty((rdm.shape[1],))
         for i_t in range(rdm.shape[1]):
             syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
             sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
-        fig, ax = plt.subplots()
         h1 = ax.plot(time_act, syn_scores)
         h2 = ax.plot(time_act, sem_scores)
+        h1.set_label('Syntax')
+        h2.set_label('Semantics')
+        ax.legend()
         ax.set_title(uni_reg[i_reg])
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     plt.show()
