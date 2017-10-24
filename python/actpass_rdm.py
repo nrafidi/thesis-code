@@ -169,6 +169,8 @@ if __name__ == '__main__':
             syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
             sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
         h1 = ax.plot(time_act, syn_scores)
+        print(h1)
+        print(type(h1))
         h2 = ax.plot(time_act, sem_scores)
         h1.set_label('Syntax')
         h2.set_label('Semantics')
