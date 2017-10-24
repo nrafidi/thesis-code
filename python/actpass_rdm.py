@@ -9,8 +9,10 @@ import scipy.io as sio
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import kendalltau
 import rnng_rdm
+import os.path
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
@@ -72,10 +74,11 @@ def ani_rdm(words):
     return rdm
 
 
-def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use, sorted_inds=None):
+def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use,
+                       tmin, tmax, sorted_inds=None):
     evokeds, labels, time, sen_ids = load_data.load_raw(subject, word, sen_type,
                                                         experiment=experiment, proc=proc,
-                                                        tmin=-0.5, tmax=1.5)
+                                                        tmin=tmin, tmax=tmax)
     data, labels, sen_ids = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids,
                                                            experiment=experiment,
                                                            num_instances=num_instances,
@@ -95,6 +98,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--word', default='secondNoun')
+    parser.add_argument('--tmin', type=float, default=-0.5)
+    parser.add_argument('--tmax', type=float, default=1.5)
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
@@ -104,46 +109,54 @@ if __name__ == '__main__':
     word = args.word
     sorted_inds, sorted_reg = sort_sensors()
 
-    rdm_by_sub_list = []
-    for subject in ['B', 'C']: #load_data.VALID_SUBS[args.experiment]:
+    fname = SAVE_RDM.format(tmin=args.tmin, tmax=args.tmax, word=args.word)
+
+    if os.path.isfile(fname):
+        result = np.load(fname)
+        rdm = result['rdm']
+    else:
+        rdm_by_sub_list = []
+        for subject in load_data.VALID_SUBS[args.experiment]:
 
 
-        act_data, labels_act, time_act = load_sentence_data(subject, args.word, 'active', args.experiment, args.proc,
-                                                            args.num_instances, args.reps_to_use,
-                                                            sorted_inds=sorted_inds)
+            act_data, labels_act, time_act = load_sentence_data(subject, args.word, 'active', args.experiment, args.proc,
+                                                                args.num_instances, args.reps_to_use, args.tmin, args.tmax,
+                                                                sorted_inds=sorted_inds)
 
-        pass_data, labels_pass, time_pass = load_sentence_data(subject, args.word, 'passive', args.experiment, args.proc,
-                                                               args.num_instances, args.reps_to_use,
-                                                               sorted_inds=sorted_inds)
+            pass_data, labels_pass, time_pass = load_sentence_data(subject, args.word, 'passive', args.experiment, args.proc,
+                                                                   args.num_instances, args.reps_to_use, args.tmin, args.tmax,
+                                                                   sorted_inds=sorted_inds)
 
-        min_time = np.min([time_act.size, time_pass.size])
-        act_data = act_data[:, :, :min_time]
-        pass_data = pass_data[:, :, :min_time]
+            min_time = np.min([time_act.size, time_pass.size])
+            act_data = act_data[:, :, :min_time]
+            pass_data = pass_data[:, :, :min_time]
 
-        total_data = np.concatenate((act_data, pass_data), axis=0)
-        total_labels = np.concatenate((labels_act, labels_pass), axis=0)
+            total_data = np.concatenate((act_data, pass_data), axis=0)
+            total_labels = np.concatenate((labels_act, labels_pass), axis=0)
 
-        rdm_by_reg_list = []
-        for reg in set(sorted_reg):
-            rdm_by_time_list = []
-            score_rdm_len = np.zeros((total_data.shape[2],))
-            score_rdm_id = np.zeros((total_data.shape[2],))
-            score_rdm_ani = np.zeros((total_data.shape[2],))
-            for t in range(0, total_data.shape[2]):
-                locs = [i for i, x in enumerate(sorted_reg) if x == reg]
-                reshaped_data = np.squeeze(total_data[:, locs, t])
-                rdm = squareform(pdist(reshaped_data))
-                rdm_by_time_list.append(rdm[None, :, :])
-            time_rdm = np.concatenate(rdm_by_time_list)
-            print(time_rdm.shape)
-            rdm_by_reg_list.append(time_rdm[None, ...])
-        reg_rdm = np.concatenate(rdm_by_reg_list)
-        print(reg_rdm.shape)
-        rdm_by_sub_list.append(reg_rdm[None, ...])
-    rdm = np.concatenate(rdm_by_sub_list)
-    print(rdm.shape)
+            rdm_by_reg_list = []
+            for reg in set(sorted_reg):
+                rdm_by_time_list = []
+                score_rdm_len = np.zeros((total_data.shape[2],))
+                score_rdm_id = np.zeros((total_data.shape[2],))
+                score_rdm_ani = np.zeros((total_data.shape[2],))
+                for t in range(0, total_data.shape[2]):
+                    locs = [i for i, x in enumerate(sorted_reg) if x == reg]
+                    reshaped_data = np.squeeze(total_data[:, locs, t])
+                    rdm = squareform(pdist(reshaped_data))
+                    rdm_by_time_list.append(rdm[None, :, :])
+                time_rdm = np.concatenate(rdm_by_time_list)
+                print(time_rdm.shape)
+                rdm_by_reg_list.append(time_rdm[None, ...])
+            reg_rdm = np.concatenate(rdm_by_reg_list)
+            print(reg_rdm.shape)
+            rdm_by_sub_list.append(reg_rdm[None, ...])
+        rdm = np.concatenate(rdm_by_sub_list)
+        print(rdm.shape)
+
+        np.savez_compressed(fname, rdm=rdm)
+
     rdm = np.squeeze(np.mean(rdm, axis=0))
-
     ap_list, sen_list = rnng_rdm.get_sen_lists()
 
     ap_rdm = rnng_rdm.syn_rdm(ap_list)
