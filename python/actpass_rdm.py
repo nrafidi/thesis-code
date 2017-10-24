@@ -13,6 +13,7 @@ import os.path
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}.npz'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
@@ -172,22 +173,43 @@ if __name__ == '__main__':
 
     uni_reg = np.unique(sorted_reg)
     num_reg = rdm.shape[0]
+
+
+
     fig, axs = plt.subplots(num_reg, 1)
+    min_reg = np.empty((num_reg,))
+    max_reg = np.empty((num_reg,))
     for i_reg in range(num_reg):
         print(uni_reg[i_reg])
         ax = axs[i_reg]
-        syn_scores = np.empty((rdm.shape[1],))
-        sem_scores = np.empty((rdm.shape[1],))
-        for i_t in range(rdm.shape[1]):
-            syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
-            sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
+        fname = SAVE_SCORES.format(reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+        if os.path.isfile(fname):
+            result = np.load(fname)
+            syn_scores = result['syn_scores']
+            sem_scores = result['sem_scores']
+        else:
+            syn_scores = np.empty((rdm.shape[1],))
+            sem_scores = np.empty((rdm.shape[1],))
+            for i_t in range(rdm.shape[1]):
+                syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
+                sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
+            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores)
+        min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
+        max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
         h1 = ax.plot(time_act, syn_scores)
         h2 = ax.plot(time_act, sem_scores)
         h1[0].set_label('Syntax')
         h2[0].set_label('Semantics')
         ax.legend()
         ax.set_title(uni_reg[i_reg])
+        ax.set_xlim(args.tmin, args.tmax)
+        ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
+    max_val = np.max(max_reg)
+    min_val = np.min(min_reg)
+    for i_reg in range(num_reg):
+        axs[i_reg].set_ylim(min_val, max_val)
+
     plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
     plt.show()
 
