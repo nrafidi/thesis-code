@@ -97,9 +97,9 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
-    parser.add_argument('--word', default='secondNoun')
+    parser.add_argument('--word', default='firstNoun')
     parser.add_argument('--tmin', type=float, default=-0.5)
-    parser.add_argument('--tmax', type=float, default=1.5)
+    parser.add_argument('--tmax', type=float, default=4.0)
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
@@ -188,6 +188,7 @@ if __name__ == '__main__':
         ax.legend()
         ax.set_title(uni_reg[i_reg])
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
+    plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
     plt.show()
 
 
