@@ -202,7 +202,7 @@ if __name__ == '__main__':
         h2[0].set_label('Semantics')
         ax.legend()
         ax.set_title(uni_reg[i_reg])
-        ax.set_xlim(args.tmin, args.tmax)
+        ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     max_val = np.max(max_reg)
