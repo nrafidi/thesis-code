@@ -177,6 +177,7 @@ if __name__ == '__main__':
 
 
     fig, axs = plt.subplots(num_reg, 1)
+    time = np.arange(args.tmin, args.tmax, 0.002)
     min_reg = np.empty((num_reg,))
     max_reg = np.empty((num_reg,))
     for i_reg in range(num_reg):
@@ -196,8 +197,8 @@ if __name__ == '__main__':
             np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores)
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
-        h1 = ax.plot(time_act, syn_scores)
-        h2 = ax.plot(time_act, sem_scores)
+        h1 = ax.plot(time, syn_scores)
+        h2 = ax.plot(time, sem_scores)
         h1[0].set_label('Syntax')
         h2[0].set_label('Semantics')
         ax.legend()
