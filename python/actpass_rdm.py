@@ -177,7 +177,7 @@ if __name__ == '__main__':
 
 
     fig, axs = plt.subplots(num_reg, 1)
-    time = np.arange(args.tmin, args.tmax, 0.002)
+    time = np.arange(args.tmin, args.tmax+0.002, 0.002)
     print(time.shape)
     min_reg = np.empty((num_reg,))
     max_reg = np.empty((num_reg,))
