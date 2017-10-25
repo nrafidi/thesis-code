@@ -89,7 +89,7 @@ if __name__ == '__main__':
                                'pd': 'F',
                                'pr': 'F',
                                'alg': 'GNB-FS',
-                               'F': 2,
+                               'F': 32,
                                'z': 'F',
                                'avg': 'F',
                                'ni': 2,
