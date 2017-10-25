@@ -185,6 +185,7 @@ def nb_tgm_uni(data,
                kf,
                win_starts,
                win_len,
+               doAvg=False,
                doZscore=False,
                ddof=1):
     print('uni')
@@ -224,6 +225,13 @@ def nb_tgm_uni(data,
             train_in_l = [in_l[li][in_train] for li in xrange(n_l)]
 
             A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l, ddof)
+
+            mask = np.ones(A_top.shape[1:], dtype=np.bool)
+            A_top = np.multiply(mask[None, ...], A_top)
+            if doAvg:
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
+            else:
+                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -414,7 +422,7 @@ def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg
     mu_full_all = np.mean(data, axis=0)
     std_full_all = np.std(data, axis=0, ddof=ddof)
 
-    cv_sub = np.ones((len(labels),), dtype=np.int);
+    cv_sub = np.ones((len(labels),), dtype=np.int)
     for l in list(set(labels)):
         indLabel = [i for i, x in enumerate(labels) if x == l]
         cv_sub[indLabel[0::2]] = 0
@@ -458,5 +466,4 @@ if __name__ == '__main__':
     kf = KFold(n_splits=16)
     win_starts = range(0, 3, 3)
     win_len = 97
-    nb_tgm(data, labels, kf, 1, win_starts, win_len)
     nb_tgm_uni(data, labels, kf, win_starts, win_len)
