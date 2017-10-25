@@ -162,9 +162,12 @@ def nb_tgm(data,
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
                 print(test_data.shape)
+                print('A')
                 print(A_top.shape)
+                print('B')
                 print(B_top.shape)
                 meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
+                print('meow')
                 print(meow.shape)
                 if doAvg:
                     pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
@@ -184,7 +187,7 @@ def nb_tgm_uni(data,
                win_len,
                doZscore=False,
                ddof=1):
-
+    print('uni')
     labels = np.array(labels)
     n_tot = data.shape[0]
     n_time = data.shape[2]
