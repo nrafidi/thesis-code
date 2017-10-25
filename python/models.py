@@ -1,6 +1,7 @@
 import numpy as np
 import sklearn.linear_model
 from sklearn.model_selection import KFold
+from numpy.random import rand
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
@@ -442,3 +443,12 @@ def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg
         coef[wi] = LR_model.coef_
 
     return coef
+
+
+if __name__ == '__main__':
+    data = rand(16, 306, 100)
+    labels = np.array([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4])
+    kf = KFold(n_splits=16)
+    win_starts = range(0, 3, 3)
+    win_len = 97
+    nb_tgm_uni(data, labels, kf, win_starts, win_len)
