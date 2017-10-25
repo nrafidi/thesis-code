@@ -172,6 +172,73 @@ def nb_tgm(data,
     return preds, l_ints, cv_membership, feature_masks, num_feat_selected
 
 
+def nb_tgm_uni(data,
+               labels,
+               kf,
+               win_starts,
+               win_len,
+               doZscore=False,
+               ddof=1):
+
+    labels = np.array(labels)
+    n_tot = data.shape[0]
+    n_time = data.shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    in_l = [l_ints == i for i in xrange(n_l)]
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    preds = np.empty((kf.get_n_splits(), n_w, n_w), dtype=np.object)
+    cv_membership = np.empty((kf.get_n_splits(),), dtype=np.object)
+    # Top-level CV
+    i_top_split = 0
+    for in_train, in_test in kf.split(np.reshape(data, (n_tot, -1)), l_ints):
+        cv_membership[i_top_split] = in_test
+        # Iterate over full time grid
+        for wi in xrange(n_w):
+            train_time = test_windows[wi]
+            train_data = data[in_train, :, :]
+            train_data = train_data[:, :, train_time]
+            print(train_data.shape)
+            if doZscore:
+                mu_full_all = np.mean(train_data, axis=0)
+                std_full_all = np.std(train_data, axis=0, ddof=ddof)
+                train_data_z = train_data - mu_full_all[None, ...]
+                train_data_z /= std_full_all[None, ...]
+            else:
+                train_data_z = train_data
+
+            train_in_l = [in_l[li][in_train] for li in xrange(n_l)]
+
+            A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l, ddof)
+
+            for wj in xrange(n_w):
+                test_time = test_windows[wj]
+                test_data = data[in_test, :, :]
+                test_data = test_data[:, :, test_time]
+                if doZscore:
+                    mu_full_all = np.mean(train_data, axis=0)
+                    std_full_all = np.std(train_data, axis=0, ddof=ddof)
+                    test_data -= mu_full_all[None, ...]
+                    test_data /= std_full_all[None, ...]
+                print(test_data.shape)
+                print(A_top.shape)
+                meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
+                print(meow.shape)
+                print(B_top.shape)
+                assert 1 == 0
+                pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
+                                  axis=(2, 3)) - B_top
+                preds[i_top_split, wi, wj] = pred_top
+        i_top_split += 1
+    return preds, l_ints, cv_membership
+
+
 def nb_tgm_coef(data,
                 labels,
                 win_starts,
