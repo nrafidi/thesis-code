@@ -103,8 +103,7 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=0)
-                    print(yhat.shape)
-                    tgm[i_win, j_win] += np.sum(yhat == labels[:, None, None])/preds[fold, i_win, j_win].shape[0]
+                    tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None])/num_folds
         return tgm
     else:
         raise ValueError('Not implemented yet')
