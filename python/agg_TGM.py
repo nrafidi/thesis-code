@@ -89,6 +89,26 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
         raise ValueError('Not implemented yet')
 
 
+def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
+    num_folds = preds.shape[0]
+    num_win = preds.shape[1]
+    print(preds[0, 0, 0].shape)
+    pred_shape1 = preds[0, 0, 0].shape[1]
+    pred_shape2 = preds[0, 0, 0].shape[2]
+    tgm = np.zeros((num_win, num_win, pred_shape1, pred_shape2))
+    if accuracy == 'abs':
+        for fold in range(num_folds):
+            labels = l_ints[cv_membership[fold]]
+            for i_win in range(num_win):
+                for j_win in range(num_win):
+                    yhat = np.argmax(preds[fold, i_win, j_win], axis=0)
+                    print(yhat.shape)
+                    tgm[i_win, j_win] += np.sum(yhat == labels[:, None, None])/preds[fold, i_win, j_win].shape[0]
+        return tgm
+    else:
+        raise ValueError('Not implemented yet')
+
+
 def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
@@ -149,19 +169,20 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
                 sub_params[param].append(param_val)
 
         result = np.load(f)
-        if mode == 'pred':
+        if mode == 'coef':
+            if 'GNB' in f:
+                tgm = [result['mu_win'], result['std_win'], result['mu_diff_win']]
+            else:
+                tgm = result['coef']
+        elif mode == 'uni':
+            tgm = tgm_from_preds_GNB_uni(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+        else:
             if 'GNB' in f:
                 tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             else:
                 tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             sub_masks.append(result['masks'])
             print(tgm.shape)
-        else:
-            if 'GNB' in f:
-                tgm = [result['mu_win'], result['std_win'], result['mu_diff_win']]
-            else:
-                tgm = result['coef']
-
         sub_results.append(tgm)
 
         sub_time['time'].append(result['time'])
