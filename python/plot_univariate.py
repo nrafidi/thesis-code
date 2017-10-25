@@ -83,7 +83,7 @@ if __name__ == '__main__':
         for sen_type in ['passive', 'active']:
             sub_mu_diff_co = []
             sub_mu_diff = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['B']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
