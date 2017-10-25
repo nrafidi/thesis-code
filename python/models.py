@@ -226,15 +226,21 @@ def nb_tgm_uni(data,
                     std_full_all = np.std(train_data, axis=0, ddof=ddof)
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
+                print('test data')
                 print(test_data.shape)
+                print('A_top')
                 print(A_top.shape)
                 meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
+                print('meow')
                 print(meow.shape)
                 woof = np.sum(meow, axis=(2,3))
+                print('woof')
                 print(woof.shape)
+                print('B_top')
                 print(B_top.shape)
                 pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
                                   axis=(2, 3)) - B_top
+                print('pred_top')
                 print(pred_top.shape)
                 assert 1 == 0
 
