@@ -230,10 +230,14 @@ def nb_tgm_uni(data,
                 print(A_top.shape)
                 meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
                 print(meow.shape)
+                woof = np.sum(meow, axis=(2,3))
+                print(woof.shape)
                 print(B_top.shape)
-                assert 1 == 0
                 pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
                                   axis=(2, 3)) - B_top
+                print(pred_top.shape)
+                assert 1 == 0
+
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
     return preds, l_ints, cv_membership
