@@ -161,7 +161,11 @@ def nb_tgm(data,
                     std_full_all = np.std(train_data, axis=0, ddof=ddof)
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
-
+                print(test_data.shape)
+                print(A_top.shape)
+                print(B_top.shape)
+                meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
+                print(meow.shape)
                 if doAvg:
                     pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
                                        axis=2) - B_top
@@ -451,4 +455,5 @@ if __name__ == '__main__':
     kf = KFold(n_splits=16)
     win_starts = range(0, 3, 3)
     win_len = 97
+    nb_tgm(data, labels, kf, 1, win_starts, win_len)
     nb_tgm_uni(data, labels, kf, win_starts, win_len)
