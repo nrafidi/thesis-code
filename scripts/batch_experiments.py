@@ -21,16 +21,16 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
-EXPERIMENTS = ['PassAct2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['A', 'B', 'C'] #, 'D', 'E', 'F', 'G', 'H']
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
 OVERLAPS = [3] #12, 25, 50, 100, 150, 200, 250, 300, 350]
-MODES = ['coef']  # pred
+MODES = ['uni']  # pred
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
-NUM_FOLDSS = [2]
+NUM_FOLDSS = [32]
 ALGS = ['GNB']  # GNB
 DO_ZSCORES = [False]  # True
 DO_AVGS = [False]  # True

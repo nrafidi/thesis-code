@@ -18,7 +18,7 @@ SUB_CV_RAND_STATE = 2282015
 
 VALID_ALGS = ['LASSO', 'ENET', 'GNB']
 VALID_SEN_TYPE = ['active', 'passive']
-VALID_MODE = ['pred', 'coef']
+VALID_MODE = ['pred', 'coef', 'uni']
 
 
 def bool_to_str(bool_var):
@@ -194,7 +194,24 @@ def run_tgm_exp(experiment,
                                 num_feats=num_feats)
         else:
             raise ValueError('ENET not implemented yet.')
-
+    elif mode == 'uni':
+        if alg == 'GNB':
+            (preds, l_ints, cv_membership) = models.nb_tgm_uni(data=data,
+                                                           labels=labels,
+                                                           kf=kf,
+                                                           win_starts=win_starts,
+                                                           win_len=win_len,
+                                                           doZscore=doZscore,
+                                                           doAvg=doAvg)
+            np.savez_compressed(fname,
+                                preds=preds,
+                                l_ints=l_ints,
+                                cv_membership=cv_membership,
+                                time=time,
+                                win_starts=win_starts,
+                                proc=proc)
+        else:
+            raise ValueError('Only GNB available.')
     else:
         if alg == 'LASSO':
             coef = models.lr_tgm_coef(data=data,

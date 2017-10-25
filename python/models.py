@@ -216,6 +216,8 @@ def nb_tgm_uni(data,
             train_time = test_windows[wi]
             train_data = data[in_train, :, :]
             train_data = train_data[:, :, train_time]
+            if doAvg:
+                train_data = np.mean(train_data, axis=2)
             print(train_data.shape)
             if doZscore:
                 mu_full_all = np.mean(train_data, axis=0)
@@ -240,16 +242,19 @@ def nb_tgm_uni(data,
                 test_time = test_windows[wj]
                 test_data = data[in_test, :, :]
                 test_data = test_data[:, :, test_time]
+                if doAvg:
+                    test_data = np.mean(test_data, axis=2)
                 if doZscore:
                     mu_full_all = np.mean(train_data, axis=0)
                     std_full_all = np.std(train_data, axis=0, ddof=ddof)
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
-                # pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
-                #                   axis=(2, 3)) - B_top
-                pred_top = np.squeeze(np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None, None])
+                if doAvg:
+                    pred_top = np.squeeze(
+                        np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None])
+                else:
+                    pred_top = np.squeeze(np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None, None])
                 print(pred_top.shape)
-                return pred_top
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
     return preds, l_ints, cv_membership
@@ -459,5 +464,5 @@ if __name__ == '__main__':
     pred_top = nb_tgm_uni(data, labels, kf, win_starts, win_len)
     for i in range(pred_top.shape[0]):
         fig, ax = plt.subplots()
-        ax.imshow(np.squeeze(pred_top[i, ...]), interpolation='nearest')
+        ax.imshow(np.squeeze(pred_top[i, ...]), interpolation='nearest', aspect='auto')
     plt.show()
