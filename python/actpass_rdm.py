@@ -220,7 +220,7 @@ if __name__ == '__main__':
                 sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
                 glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), glove_rdm)
                 w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), w2v_rdm)
-            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores)
+            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores, w2v_scores=w2v_scores)
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
         h1 = ax.plot(time, syn_scores)
