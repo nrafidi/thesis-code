@@ -120,6 +120,10 @@ if __name__ == '__main__':
 
     print('Semantic Pearson is {} with pval {} and zval {} from Mantel test'.format(r, p, z))
 
+    ktau, pval = rank_correlate_rdms(ap_rdm, semantic_rdm)
+
+    print('Semantic vs Syntax Kendall tau is {} with pval {}'.format(ktau, pval))
+
     r, p, z = Mantel.test(ap_rdm, semantic_rdm)
 
     print('Semantic vs Syntax Pearson is {} with pval {} and zval {} from Mantel test'.format(r, p, z))
