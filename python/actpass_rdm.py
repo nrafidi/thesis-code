@@ -14,8 +14,9 @@ import pickle
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_semantics_corr.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_corr.npz'
 SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
+VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
@@ -121,6 +122,11 @@ if __name__ == '__main__':
 
     fname = SAVE_RDM.format(tmin=args.tmin, tmax=args.tmax, word=args.word)
 
+    vectors = np.loadtxt(VECTORS)
+    vectors = vectors[EXP_INDS[args.experiment], :]
+
+    vec_rdm = squareform(pdist(vectors))
+
     glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
     glove_rdm = glove_rdm_list[1]
     glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
@@ -215,27 +221,32 @@ if __name__ == '__main__':
             sem_scores = result['sem_scores']
             glove_scores = result['glove_scores']
             w2v_scores = result['w2v_scores']
+            rnng_scores = result['rnng_scores']
         else:
             syn_scores = np.empty((rdm.shape[1],))
             sem_scores = np.empty((rdm.shape[1],))
             glove_scores = np.empty((rdm.shape[1],))
             w2v_scores = np.empty((rdm.shape[1],))
+            rnng_scores = np.empty((rdm.shape[1],))
             for i_t in range(rdm.shape[1]):
                 syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
                 sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
                 glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), glove_rdm)
                 w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), w2v_rdm)
-            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores, w2v_scores=w2v_scores)
+                rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
+            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores, w2v_scores=w2v_scores, rnng_scores=rnng_scores)
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
         h1 = ax.plot(time, syn_scores)
         h2 = ax.plot(time, sem_scores)
         h3 = ax.plot(time, glove_scores)
         h4 = ax.plot(time, w2v_scores)
+        h5 = ax.plot(time, rnng_scores)
         h1[0].set_label('Syntax')
         h2[0].set_label('Simple Semantics')
         h3[0].set_label('glove Semantics')
         h4[0].set_label('w2v Semantics')
+        h5[0].set_label('RNNG Semantics')
         ax.legend()
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
