@@ -6,6 +6,7 @@ from scipy.spatial.distance import pdist, squareform
 from scipy.stats import kendalltau
 import string
 import Mantel
+from numpy.linalg import matrix_rank
 
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 SENTENCES = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_with_unk_final.txt'
@@ -93,11 +94,14 @@ if __name__ == '__main__':
     vectors = vectors[:NUMAP, :]
 
     vec_rdm = squareform(pdist(vectors))
+    print(matrix_rank(vec_rdm))
 
     ap_list, sen_list = get_sen_lists()
 
     ap_rdm = syn_rdm(ap_list)
+    print(matrix_rank(ap_rdm))
     semantic_rdm = sem_rdm(sen_list, ap_list)
+    print(matrix_rank(semantic_rdm))
     fig, ax = plt.subplots()
     h = ax.imshow(semantic_rdm, interpolation='nearest')
     plt.colorbar(h)
