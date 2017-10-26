@@ -1,7 +1,7 @@
 import argparse
 import load_data
 import matplotlib
-matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.linalg import matrix_rank
@@ -125,11 +125,16 @@ if __name__ == '__main__':
     glove_rdm = glove_rdm_list[1]
     glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
     glove_rdm = glove_rdm[:, EXP_INDS[args.experiment]]
+    fig, ax = plt.subplots()
+    ax.imshow(glove_rdm, interpolation='nearest')
 
     w2v_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='w2v')))
     w2v_rdm = w2v_rdm_list[1]
     w2v_rdm = w2v_rdm[EXP_INDS[args.experiment], :]
     w2v_rdm = w2v_rdm[:, EXP_INDS[args.experiment]]
+    fig, ax = plt.subplots()
+    ax.imshow(w2v_rdm, interpolation='nearest')
+    plt.show()
 
     if os.path.isfile(fname):
         result = np.load(fname)
