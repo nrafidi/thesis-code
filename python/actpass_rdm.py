@@ -13,7 +13,7 @@ import os.path
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_corr.npz'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
@@ -73,6 +73,13 @@ def ani_rdm(words):
             else:
                 rdm[i, j] = 1
     return rdm
+
+
+def rank_correlate_rdms(rdm1, rdm2):
+    diagonal_offset = -1 # exclude the main diagonal
+    lower_tri_inds = np.tril_indices(rdm1.shape[0], diagonal_offset)
+    rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[lower_tri_inds],rdm2[lower_tri_inds])
+    return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
 
 def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use,
@@ -193,8 +200,8 @@ if __name__ == '__main__':
             syn_scores = np.empty((rdm.shape[1],))
             sem_scores = np.empty((rdm.shape[1],))
             for i_t in range(rdm.shape[1]):
-                syn_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
-                sem_scores[i_t], _ = kendalltau(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
+                syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
+                sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
             np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores)
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])

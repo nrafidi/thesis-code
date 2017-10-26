@@ -80,6 +80,13 @@ def get_sen_lists():
     return ap_list, sen_list
 
 
+def rank_correlate_rdms(rdm1, rdm2):
+    diagonal_offset = -1 # exclude the main diagonal
+    lower_tri_inds = np.tril_indices(rdm1.shape[0], diagonal_offset)
+    rdm_kendall_tau, rdm_kendall_tau_pvalue =kendalltau(rdm1[lower_tri_inds],rdm2[lower_tri_inds])
+    return rdm_kendall_tau, rdm_kendall_tau_pvalue
+
+
 
 if __name__ == '__main__':
     vectors = np.loadtxt(VECTORS)
@@ -97,11 +104,11 @@ if __name__ == '__main__':
     ax.set_title('Approx Semantic RDM over Active and Passive Sentences')
     fig.savefig('semantic_rdm_actpass.pdf', bbox_inches='tight')
 
-    ktau, pval = kendalltau(vec_rdm, ap_rdm)
+    ktau, pval = rank_correlate_rdms(vec_rdm, ap_rdm)
 
     print('Syntactic Kendall tau is {} with pval {}'.format(ktau, pval))
 
-    ktau, pval = kendalltau(vec_rdm, semantic_rdm)
+    ktau, pval = rank_correlate_rdms(vec_rdm, semantic_rdm)
 
     print('Semantic Kendall tau is {} with pval {}'.format(ktau, pval))
 
