@@ -246,7 +246,7 @@ if __name__ == '__main__':
         # h2[0].set_label('Simple Semantics')
         h3[0].set_label('glove Semantics')
         # h4[0].set_label('w2v Semantics')
-        h5[0].set_label('RNNG Semantics')
+        h5[0].set_label('RNNG')
         ax.legend()
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
