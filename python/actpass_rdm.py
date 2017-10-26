@@ -218,7 +218,7 @@ if __name__ == '__main__':
     min_val = np.min(min_reg)
     for i_reg in range(num_reg):
         axs[i_reg].set_ylim(min_val, max_val)
-
+    plt.tight_layout()
     plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
     plt.show()
 
