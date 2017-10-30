@@ -90,7 +90,7 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
 
 
 def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
-    print('in agg')
+    # print('in agg')
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
     pred_shape2 = preds[0, 0, 0].shape[2]
@@ -103,18 +103,18 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
                     # print(yhat.shape)
-                    if not np.all(yhat == yhat[0, 0, 0]):
-                        print('not all the same')
-                    meow = yhat == labels[:, None, None]
-                    # print(meow.shape)
-                    woof = np.sum(meow, axis=0)
-                    print('woof')
-                    print(woof.shape)
-                    print(np.max(woof))
-                    print(num_folds)
+                    # if not np.all(yhat == yhat[0, 0, 0]):
+                    #     print('not all the same')
+                    # meow = yhat == labels[:, None, None]
+                    # # print(meow.shape)
+                    # woof = np.sum(meow, axis=0)
+                    # print('woof')
+                    # print(woof.shape)
+                    # print(np.max(woof))
+                    # print(num_folds)
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0)/float(num_folds)
-                    if np.max(tgm[i_win, j_win, :, :]) > 0:
-                        print('success')
+                    # if np.max(tgm[i_win, j_win, :, :]) > 0:
+                    #     print('success')
         return tgm
     else:
         raise ValueError('Not implemented yet')
