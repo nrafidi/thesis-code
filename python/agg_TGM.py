@@ -99,12 +99,16 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
     if accuracy == 'abs':
         for fold in range(num_folds):
             labels = l_ints[cv_membership[fold]]
-            print(labels.shape)
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=0)
+
+                    if not np.all(yhat == yhat[0, 0]):
+                        print('not all the same')
+
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[0])/num_folds
-                    print(np.max(tgm[i_win, j_win, :, :]))
+                    if np.max(tgm[i_win, j_win, :, :]) > 0:
+                        print('success')
         return tgm
     else:
         raise ValueError('Not implemented yet')
