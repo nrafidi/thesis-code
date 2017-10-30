@@ -1,6 +1,6 @@
 import argparse
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -109,6 +109,7 @@ if __name__ == '__main__':
                 fig, ax = plt.subplots()
                 h = ax.imshow(tgm[0, 0, :, :], interpolation='nearest', aspect='auto')
                 plt.colorbar(h)
+                plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sub), bbox_inches='tight')
                 # plt.show()
                 # fulltime = sub_time['time'][0]
                 # fulltime[np.abs(fulltime) < 1e-15] = 0
