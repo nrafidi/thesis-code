@@ -7,7 +7,10 @@ import numpy as np
 import os
 import re
 import run_TGM
+import scipy.io as sio
 
+
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
 PARAMS_TO_AGG = ['w', 'o', 'pd', 'pr', 'F', 'alg', 'z', 'avg', 'ni', 'nr', 'rsPerm', 'rsCV', 'rsSCV']
 PARAM_TYPES = {'w':'\d+',
@@ -89,7 +92,18 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
         raise ValueError('Not implemented yet')
 
 
+def sort_sensors():
+    load_var = sio.loadmat(SENSOR_MAP)
+    sensor_reg = load_var['sensor_reg']
+    sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
+    sorted_inds = np.argsort(sensor_reg)
+    sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
+    return sorted_inds, sorted_reg
+
+
 def comb_over_sens(preds):
+    sorted_inds, _ = sort_sensors()
+    preds = preds[:, :, sorted_inds, :]
     (s0, s1, s2, s3) = preds.shape
     new_preds = np.empty((s0, s1, s2 / 3, s3))
     i_new = 0

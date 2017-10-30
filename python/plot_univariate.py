@@ -94,12 +94,10 @@ if __name__ == '__main__':
         sorted_reg = sorted_reg[1::3]
         accuracy = 'abs'
     elif sens == 'avg' or sens == 'max':
-        sorted_inds = sorted_inds[0::3]
         sorted_reg = sorted_reg[0::3]
         accuracy = 'abs'
     elif sens == 'comb':
         sorted_reg = sorted_reg[0::3]
-        sorted_inds = sorted_inds[0::3]
         accuracy = 'abs-sens'
 
     uni_reg = np.unique(sorted_reg)
@@ -130,9 +128,10 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
+                if sens != 'comb':
+                    tgm = tgm[:, :, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
-                tgm = tgm[:, :, sorted_inds, :]
                 tgm_by_sub.append(tgm)
 
             avg_tgm = np.concatenate(tgm_by_sub)
