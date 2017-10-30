@@ -148,6 +148,8 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
                         preds_to_use = comb_over_sens(preds[fold, i_win, j_win])
                     elif 'reg' in accuracy:
                         preds_to_use = comb_over_reg(preds[fold, i_win, j_win])
+                    elif 'wb' in accuracy:
+                        preds_to_use = np.sum(preds[fold, i_win, j_win], axis=2)
                     else:
                         preds_to_use = preds[fold, i_win, j_win]
                     yhat = np.argmax(preds_to_use, axis=1)
