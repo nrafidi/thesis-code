@@ -138,6 +138,8 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
             tgm = np.zeros((num_win, num_win, pred_shape2/3, pred_shape3))
         elif 'reg' in accuracy:
             tgm = np.zeros((num_win, num_win, 9, pred_shape3))
+        elif 'wb' in accuracy:
+            tgm = np.zeros((num_win, num_win, 1, pred_shape3))
         else:
             tgm = np.zeros((num_win, num_win, pred_shape2, pred_shape3))
         for fold in range(num_folds):
