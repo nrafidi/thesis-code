@@ -109,7 +109,7 @@ if __name__ == '__main__':
                 fig, ax = plt.subplots()
                 h = ax.imshow(tgm[0, 0, :, :], interpolation='nearest', aspect='auto')
                 plt.colorbar(h)
-                plt.show()
+                # plt.show()
                 # fulltime = sub_time['time'][0]
                 # fulltime[np.abs(fulltime) < 1e-15] = 0
                 # fulltime = fulltime[:num_time]
