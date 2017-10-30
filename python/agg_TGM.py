@@ -117,7 +117,7 @@ def comb_over_reg(preds):
     uni_reg = np.unique(sorted_reg).tolist()
     (s0, s1, s2, s3) = preds.shape
     new_preds = np.empty((s0, s1, len(uni_reg), s3))
-    print(new_preds.shape)
+    # print(new_preds.shape)
     for i_reg, reg in enumerate(uni_reg):
         inds_to_sum = [sorted_inds[j] for j, j_reg in enumerate(sorted_reg) if j_reg == reg]
         # print(inds_to_sum)
