@@ -120,9 +120,9 @@ def comb_over_reg(preds):
     print(new_preds.shape)
     for i_reg, reg in enumerate(uni_reg):
         inds_to_sum = [sorted_inds[j] for j, j_reg in enumerate(sorted_reg) if j_reg == reg]
-        print(inds_to_sum)
+        # print(inds_to_sum)
         meow = np.sum(preds[:, :, inds_to_sum, :], axis=2)
-        print(meow.shape)
+        # print(meow.shape)
         new_preds[:, :, i_reg, :] = np.sum(preds[:, :, inds_to_sum, :], axis=2)
     return new_preds
 
