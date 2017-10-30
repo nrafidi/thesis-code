@@ -102,14 +102,16 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
-                    print(yhat.shape)
+                    # print(yhat.shape)
                     if not np.all(yhat == yhat[0, 0, 0]):
                         print('not all the same')
                     meow = yhat == labels[:, None, None]
                     # print(meow.shape)
                     woof = np.sum(meow, axis=0)
+                    print('woof')
+                    print(woof.shape)
                     print(np.max(woof))
-                    # print(woof.shape)
+
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0)/num_folds
                     if np.max(tgm[i_win, j_win, :, :]) > 0:
                         print('success')
