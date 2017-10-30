@@ -90,7 +90,9 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
 
 
 def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
+    print('in agg')
     print(preds.shape)
+    print(preds[0, 0, 0].shape)
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
     pred_shape1 = preds[0, 0, 0].shape[1]
