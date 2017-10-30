@@ -192,6 +192,7 @@ def nb_tgm_uni(data,
                doZscore=False,
                ddof=1):
     print('uni')
+    print(data.shape)
     labels = np.array(labels)
     n_tot = data.shape[0]
     n_time = data.shape[2]
@@ -204,6 +205,7 @@ def nb_tgm_uni(data,
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
+    print(n_w)
 
     preds = np.empty((kf.get_n_splits(), n_w, n_w), dtype=np.object)
     cv_membership = np.empty((kf.get_n_splits(),), dtype=np.object)
@@ -218,7 +220,6 @@ def nb_tgm_uni(data,
             train_data = train_data[:, :, train_time]
             if doAvg:
                 train_data = np.mean(train_data, axis=2)
-            print(train_data.shape)
             if doZscore:
                 mu_full_all = np.mean(train_data, axis=0)
                 std_full_all = np.std(train_data, axis=0, ddof=ddof)
@@ -233,10 +234,13 @@ def nb_tgm_uni(data,
 
             mask = np.ones(A_top.shape[1:], dtype=np.bool)
             A_top = np.multiply(mask[None, ...], A_top)
+            print(B_top.shape)
             if doAvg:
                 B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
             else:
                 B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
+            print(B_top.shape)
+            print(B_top)
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
