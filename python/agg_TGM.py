@@ -111,8 +111,8 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
                     print('woof')
                     print(woof.shape)
                     print(np.max(woof))
-
-                    tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0)/num_folds
+                    print(num_folds)
+                    tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0) #/num_folds
                     if np.max(tgm[i_win, j_win, :, :]) > 0:
                         print('success')
         return tgm
