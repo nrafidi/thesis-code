@@ -1,6 +1,6 @@
 import argparse
 import matplotlib
-matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import load_data
@@ -147,7 +147,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
-            # plt.show()
+            plt.show()
             # mu_diff = np.array(sub_mu_diff)
             # mu_diff = np.mean(mu_diff, axis=0)
             # fig, ax = plt.subplots()
