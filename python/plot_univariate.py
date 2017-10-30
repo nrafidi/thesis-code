@@ -110,8 +110,9 @@ if __name__ == '__main__':
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    for word in ['firstNoun', 'verb', 'secondNoun']:
-        for sen_type in ['passive', 'active']:
+    for sen_type in ['passive', 'active']:
+        tgm_by_word = []
+        for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
@@ -164,6 +165,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
+
             plt.show()
             # mu_diff = np.array(sub_mu_diff)
             # mu_diff = np.mean(mu_diff, axis=0)
