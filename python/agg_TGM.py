@@ -106,9 +106,10 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
                     if not np.all(yhat == yhat[0, 0, 0]):
                         print('not all the same')
                     meow = yhat == labels[:, None, None]
-                    print(meow.shape)
+                    # print(meow.shape)
                     woof = np.sum(meow, axis=0)
-                    print(woof.shape)
+                    print(np.max(woof))
+                    # print(woof.shape)
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0)/num_folds
                     if np.max(tgm[i_win, j_win, :, :]) > 0:
                         print('success')
