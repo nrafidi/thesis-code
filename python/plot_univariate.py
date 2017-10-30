@@ -44,6 +44,20 @@ def sort_sensors():
     sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
     return sorted_inds, sorted_reg
 
+def comb_by_loc(tgm, sens):
+    (s0, s1, s2, s3) = tgm.shape
+    new_tgm = np.empty((s0, s1, s2/3, s3))
+    i_new = 0
+    for i in range(0, s2, 3):
+        moo = tgm[:, :, i:(i+3), :]
+        assert moo.shape[2] == 3
+        if sens == 'avg':
+            new_tgm[:, :, i_new, :] = np.mean(tgm[:, :, i:(i+3), :], axis=2)
+        else:
+            new_tgm[:, :, i_new, :] = np.max(tgm[:, :, i:(i + 3), :], axis=2)
+        i_new += 1
+    return new_tgm
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -75,6 +89,8 @@ if __name__ == '__main__':
     elif sens == 'grad2':
         sorted_inds = sorted_inds[1::3]
         sorted_reg = sorted_reg[1::3]
+    elif sens == 'avg' or sens == 'max':
+        sorted_reg = sorted_reg[0::3]
 
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -104,7 +120,11 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                tgm_by_sub.append(tgm[:, :, sorted_inds, :])
+                if sens == 'avg' or sens == 'max':
+                    tgm = comb_by_loc(tgm, sens)
+                else:
+                    tgm = tgm[:, :, sorted_inds, :]
+                tgm_by_sub.append(tgm)
 
             avg_tgm = np.concatenate(tgm_by_sub)
             print(avg_tgm.shape)
