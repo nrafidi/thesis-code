@@ -14,9 +14,10 @@ import pickle
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_corr.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
 SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
+LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
@@ -127,6 +128,11 @@ if __name__ == '__main__':
 
     vec_rdm = squareform(pdist(vectors))
 
+    lstm = np.loadtxt(LSTM)
+    lstm = lstm[EXP_INDS[args.experiment], :]
+
+    lstm_rdm = squareform(pdist(lstm))
+
     glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
     glove_rdm = glove_rdm_list[1]
     glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
@@ -168,9 +174,6 @@ if __name__ == '__main__':
             rdm_by_reg_list = []
             for reg in set(sorted_reg):
                 rdm_by_time_list = []
-                score_rdm_len = np.zeros((total_data.shape[2],))
-                score_rdm_id = np.zeros((total_data.shape[2],))
-                score_rdm_ani = np.zeros((total_data.shape[2],))
                 for t in range(0, total_data.shape[2]):
                     locs = [i for i, x in enumerate(sorted_reg) if x == reg]
                     reshaped_data = np.squeeze(total_data[:, locs, t])
@@ -222,31 +225,37 @@ if __name__ == '__main__':
             glove_scores = result['glove_scores']
             w2v_scores = result['w2v_scores']
             rnng_scores = result['rnng_scores']
+            lstm_scores = result['lstm_scores']
         else:
             syn_scores = np.empty((rdm.shape[1],))
             sem_scores = np.empty((rdm.shape[1],))
             glove_scores = np.empty((rdm.shape[1],))
             w2v_scores = np.empty((rdm.shape[1],))
             rnng_scores = np.empty((rdm.shape[1],))
+            lstm_scores = np.empty((rdm.shape[1],))
             for i_t in range(rdm.shape[1]):
                 syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
                 sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
                 glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), glove_rdm)
                 w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), w2v_rdm)
                 rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
-            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores, w2v_scores=w2v_scores, rnng_scores=rnng_scores)
+                lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
+            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores,
+                                w2v_scores=w2v_scores, rnng_scores=rnng_scores, lstm_scores=lstm_scores)
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
-        h1 = ax.plot(time[::2], syn_scores[::2])
+        h1 = ax.plot(time, syn_scores)
         # h2 = ax.plot(time, sem_scores)
-        h3 = ax.plot(time[::2], glove_scores[::2])
+        h3 = ax.plot(time, glove_scores)
         # h4 = ax.plot(time, w2v_scores)
-        h5 = ax.plot(time[::2], rnng_scores[::2])
+        h5 = ax.plot(time, rnng_scores)
+        h6 = ax.plot(time, lstm_scores)
         h1[0].set_label('Syntax')
         # h2[0].set_label('Simple Semantics')
         h3[0].set_label('glove Semantics')
         # h4[0].set_label('w2v Semantics')
         h5[0].set_label('RNNG')
+        h6[0].set_label('LSTM')
         ax.legend()
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
