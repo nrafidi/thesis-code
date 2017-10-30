@@ -112,7 +112,7 @@ if __name__ == '__main__':
             print(avg_tgm.shape)
             num_time = avg_tgm.shape[-1]
             fig, ax = plt.subplots()
-            h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto')
+            h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
             plt.colorbar(h)
 
             fulltime = sub_time['time'][0]
@@ -125,14 +125,15 @@ if __name__ == '__main__':
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
             ax.set_xlabel('Time')
-            plt.savefig('uni_{}_{}.pdf'.format(word, sen_type), bbox_inches='tight')
+            ax.set_title('{} {} {}'.format(word, sen_type, sens))
+            plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
             # plt.show()
             # mu_diff = np.array(sub_mu_diff)
             # mu_diff = np.mean(mu_diff, axis=0)
             # fig, ax = plt.subplots()
             # h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=1.4e-11)
 
-            # ax.set_title('{} {} {}'.format(word, sen_type, sens))
+
             # plt.colorbar(h)
             # plt.savefig('MuDiffs_subAvg_{}_o{}_w{}_{}_{}_{}.pdf'.format(exp, o, w, word, sen_type, sens), bbox_inches='tight')
             #
