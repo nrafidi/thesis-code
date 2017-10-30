@@ -74,7 +74,8 @@ if __name__ == '__main__':
     exp = args.experiment
     mode = 'uni'
     sens = args.sensors
-    accuracy = 'abs'
+
+
     o = 3
     w = -1
     sorted_inds, sorted_reg = sort_sensors()
@@ -83,14 +84,23 @@ if __name__ == '__main__':
     if sens == 'mags':
         sorted_inds = sorted_inds[2::3]
         sorted_reg = sorted_reg[2::3]
+        accuracy = 'abs'
     elif sens == 'grad1':
         sorted_inds = sorted_inds[0::3]
         sorted_reg = sorted_reg[0::3]
+        accuracy = 'abs'
     elif sens == 'grad2':
         sorted_inds = sorted_inds[1::3]
         sorted_reg = sorted_reg[1::3]
+        accuracy = 'abs'
     elif sens == 'avg' or sens == 'max':
+        sorted_inds = sorted_inds[0::3]
         sorted_reg = sorted_reg[0::3]
+        accuracy = 'abs'
+    elif sens == 'comb':
+        sorted_reg = sorted_reg[0::3]
+        sorted_inds = sorted_inds[0::3]
+        accuracy = 'abs-sens'
 
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
@@ -122,8 +132,7 @@ if __name__ == '__main__':
                 tgm = sub_results[0]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
-                else:
-                    tgm = tgm[:, :, sorted_inds, :]
+                tgm = tgm[:, :, sorted_inds, :]
                 tgm_by_sub.append(tgm)
 
             avg_tgm = np.concatenate(tgm_by_sub)

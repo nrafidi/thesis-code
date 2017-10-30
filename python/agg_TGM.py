@@ -89,32 +89,37 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
         raise ValueError('Not implemented yet')
 
 
+def comb_over_sens(preds):
+    (s0, s1, s2, s3) = preds.shape
+    new_preds = np.empty((s0, s1, s2 / 3, s3))
+    i_new = 0
+    for i in range(0, s2, 3):
+        new_preds[:, :, i_new, :] = np.sum(preds[:, :, i:(i + 3), :], axis=2)
+        i_new += 1
+    return new_preds
+
+
 def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
     # print('in agg')
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
     pred_shape2 = preds[0, 0, 0].shape[2]
     pred_shape3 = preds[0, 0, 0].shape[3]
-    tgm = np.zeros((num_win, num_win, pred_shape2, pred_shape3))
-    if accuracy == 'abs':
+    if 'abs' in accuracy:
+        if 'sens' in accuracy:
+            tgm = np.zeros((num_win, num_win, pred_shape2/3, pred_shape3))
+        else:
+            tgm = np.zeros((num_win, num_win, pred_shape2, pred_shape3))
         for fold in range(num_folds):
             labels = l_ints[cv_membership[fold]]
             for i_win in range(num_win):
                 for j_win in range(num_win):
-                    yhat = np.argmax(preds[fold, i_win, j_win], axis=1)
-                    # print(yhat.shape)
-                    # if not np.all(yhat == yhat[0, 0, 0]):
-                    #     print('not all the same')
-                    # meow = yhat == labels[:, None, None]
-                    # # print(meow.shape)
-                    # woof = np.sum(meow, axis=0)
-                    # print('woof')
-                    # print(woof.shape)
-                    # print(np.max(woof))
-                    # print(num_folds)
+                    if 'sens' in accuracy:
+                        preds_to_use = comb_over_sens(preds[fold, i_win, j_win])
+                    else:
+                        preds_to_use = preds[fold, i_win, j_win]
+                    yhat = np.argmax(preds_to_use, axis=1)
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None], axis=0)/float(num_folds)
-                    # if np.max(tgm[i_win, j_win, :, :]) > 0:
-                    #     print('success')
         return tgm
     else:
         raise ValueError('Not implemented yet')
