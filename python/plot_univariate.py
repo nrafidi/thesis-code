@@ -105,6 +105,8 @@ if __name__ == '__main__':
     if sens == 'reg':
         yticks_sens = range(uni_reg.size)
         accuracy = 'abs-reg'
+    elif sens == 'wb':
+        accuracy = 'abs-wb'
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
@@ -133,7 +135,7 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                if sens != 'comb' and sens != 'reg':
+                if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
@@ -144,17 +146,19 @@ if __name__ == '__main__':
             avg_tgm = np.squeeze(np.mean(avg_tgm, axis=0))
             print(avg_tgm.shape)
             num_time = avg_tgm.shape[-1]
-            fig, ax = plt.subplots()
-            h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
-            plt.colorbar(h)
-
             fulltime = sub_time['time'][0]
             fulltime[np.abs(fulltime) < 1e-15] = 0
             fulltime = fulltime[:num_time]
+            fig, ax = plt.subplots()
+            if sens != 'wb':
+                h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
+                plt.colorbar(h)
+                ax.set_yticks(yticks_sens)
+                ax.set_yticklabels(uni_reg)
+                ax.set_ylabel('Sensors')
+            else:
+                ax.plot(fulltime, avg_tgm)
 
-            ax.set_yticks(yticks_sens)
-            ax.set_yticklabels(uni_reg)
-            ax.set_ylabel('Sensors')
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
             ax.set_xlabel('Time')
