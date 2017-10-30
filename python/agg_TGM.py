@@ -112,6 +112,16 @@ def comb_over_sens(preds):
         i_new += 1
     return new_preds
 
+def comb_over_reg(preds):
+    sorted_inds, sorted_reg = sort_sensors()
+    uni_reg = np.unique(sorted_reg).tolist()
+    (s0, s1, s2, s3) = preds.shape
+    new_preds = np.empty((s0, s1, len(uni_reg), s3))
+    for i_reg, reg in enumerate(uni_reg):
+        inds_to_sum = sorted_inds[sorted_reg == reg]
+        new_preds[:, :, i_reg, :] = np.sum(preds[:, :, inds_to_sum, :], axis=2)
+    return new_preds
+
 
 def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
     # print('in agg')
@@ -122,6 +132,8 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
     if 'abs' in accuracy:
         if 'sens' in accuracy:
             tgm = np.zeros((num_win, num_win, pred_shape2/3, pred_shape3))
+        elif 'reg' in accuracy:
+            tgm = np.zeros((num_win, num_win, 9, pred_shape3))
         else:
             tgm = np.zeros((num_win, num_win, pred_shape2, pred_shape3))
         for fold in range(num_folds):
@@ -130,6 +142,8 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
                 for j_win in range(num_win):
                     if 'sens' in accuracy:
                         preds_to_use = comb_over_sens(preds[fold, i_win, j_win])
+                    elif 'reg' in accuracy:
+                        preds_to_use = comb_over_reg(preds[fold, i_win, j_win])
                     else:
                         preds_to_use = preds[fold, i_win, j_win]
                     yhat = np.argmax(preds_to_use, axis=1)

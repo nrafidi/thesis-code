@@ -101,7 +101,12 @@ if __name__ == '__main__':
         accuracy = 'abs-sens'
 
     uni_reg = np.unique(sorted_reg)
-    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    if sens == 'reg':
+        yticks_sens = range(uni_reg.size)
+        accuracy = 'abs-reg'
+    else:
+        yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     for word in ['firstNoun', 'verb', 'secondNoun']:
         for sen_type in ['passive', 'active']:
@@ -128,7 +133,7 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                if sens != 'comb':
+                if sens != 'comb' and sens != 'reg':
                     tgm = tgm[:, :, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
