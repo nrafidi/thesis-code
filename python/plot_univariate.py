@@ -112,7 +112,7 @@ if __name__ == '__main__':
             print(avg_tgm.shape)
             num_time = avg_tgm.shape[-1]
             fig, ax = plt.subplots()
-            h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+            h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
             plt.colorbar(h)
 
             fulltime = sub_time['time'][0]
