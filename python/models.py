@@ -257,14 +257,11 @@ def nb_tgm_uni(data,
                     pred_top = np.squeeze(
                         np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None])
                 else:
-                    print(A_top.shape)
-                    print(B_top.shape)
-                    print(test_data.shape)
+                    # print(A_top.shape)
+                    # print(B_top.shape)
+                    # print(test_data.shape)
                     pred_top = np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, ...] #[None, :, None, None])
-                print(pred_top.shape)
-                meow = np.argmax(pred_top, axis=1)
-                if not np.all(meow == meow[0, 0, 0]):
-                    print('not all the same!')
+                # print(pred_top.shape)
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
     return preds, l_ints, cv_membership
