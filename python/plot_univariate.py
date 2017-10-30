@@ -105,6 +105,7 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
+                print(tgm.shape)
                 fig, ax = plt.subplots()
                 h = ax.imshow(tgm[0, 0, :, :], interpolation='nearest', aspect='auto')
                 plt.colorbar(h)

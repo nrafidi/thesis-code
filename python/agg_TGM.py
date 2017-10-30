@@ -90,8 +90,10 @@ def tgm_from_preds_GNB(preds, l_ints, cv_membership, accuracy='abs'):
 
 
 def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
+    print(preds.shape)
     num_folds = preds.shape[0]
     num_win = preds.shape[1]
+    print(num_win)
     print('meow')
     print(preds[0, 0, 0].shape)
     pred_shape1 = preds[0, 0, 0].shape[1]
@@ -103,6 +105,9 @@ def tgm_from_preds_GNB_uni(preds, l_ints, cv_membership, accuracy='abs'):
             for i_win in range(num_win):
                 for j_win in range(num_win):
                     yhat = np.argmax(preds[fold, i_win, j_win], axis=0)
+                    print(yhat)
+                    print(labels[:, None, None])
+                    print(yhat == labels[:, None, None])
                     tgm[i_win, j_win, :, :] += np.sum(yhat == labels[:, None, None])/num_folds
         return tgm
     else:
