@@ -157,7 +157,7 @@ if __name__ == '__main__':
                 ax.set_yticklabels(uni_reg)
                 ax.set_ylabel('Sensors')
             else:
-                ax.plot(fulltime, avg_tgm)
+                ax.plot(avg_tgm)
 
             ax.set_xticks(range(0, num_time, 250))
             ax.set_xticklabels(fulltime[::250])
