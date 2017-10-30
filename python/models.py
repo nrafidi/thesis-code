@@ -232,15 +232,15 @@ def nb_tgm_uni(data,
 
             A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l, ddof)
 
-            mask = np.ones(A_top.shape[1:], dtype=np.bool)
-            A_top = np.multiply(mask[None, ...], A_top)
-            print(B_top.shape)
-            if doAvg:
-                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
-            else:
-                B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
-            print(B_top.shape)
-            print(B_top)
+            # mask = np.ones(A_top.shape[1:], dtype=np.bool)
+            # A_top = np.multiply(mask[None, ...], A_top)
+            # print(B_top.shape)
+            # if doAvg:
+            #     B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
+            # else:
+            #     B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
+            # print(B_top.shape)
+            # print(B_top)
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -257,7 +257,10 @@ def nb_tgm_uni(data,
                     pred_top = np.squeeze(
                         np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None])
                 else:
-                    pred_top = np.squeeze(np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None, None])
+                    print(A_top.shape)
+                    print(B_top.shape)
+                    print(test_data.shape)
+                    pred_top = np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top #[None, :, None, None])
                 print(pred_top.shape)
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
@@ -465,7 +468,7 @@ if __name__ == '__main__':
     kf = KFold(n_splits=16)
     win_starts = range(0, 3, 3)
     win_len = 97
-    pred_top = nb_tgm_uni(data, labels, kf, win_starts, win_len)
+    pred_top, _, _ = nb_tgm_uni(data, labels, kf, win_starts, win_len)
     for i in range(pred_top.shape[0]):
         fig, ax = plt.subplots()
         ax.imshow(np.squeeze(pred_top[i, ...]), interpolation='nearest', aspect='auto')
