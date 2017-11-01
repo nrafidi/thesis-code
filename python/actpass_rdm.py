@@ -294,9 +294,9 @@ if __name__ == '__main__':
         all_scores_zoom = np.concatenate(
             [syn_scores_zoom[None, ...], glove_scores_zoom[None, ...], rnng_scores_zoom[None, ...], lstm_scores_zoom[None, ...], ])
 
-        good_scores_zoom = all_scores >= 0.15
+        good_scores_zoom = all_scores_zoom>= 0.15
 
-        win_scores_zoom = np.argmax(all_scores, axis=0)
+        win_scores_zoom = np.argmax(all_scores_zoom, axis=0)
 
         h1 = ax_zoom.plot(time_zoom, syn_scores_zoom)
         # h2 = ax.plot(time, sem_scores)
