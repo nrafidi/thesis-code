@@ -210,13 +210,17 @@ if __name__ == '__main__':
 
 
     fig, axs = plt.subplots(num_reg, 1, figsize=(20, 20))
+    fig_zoom, axs_zoom = plt.subplots(num_reg, 1, figsize=(20, 20))
     time = np.arange(args.tmin, args.tmax+0.002, 0.002)
-    print(time.shape)
+    time_zoom = np.arange(0.0, args.tmax + 0.002, 0.002)
     min_reg = np.empty((num_reg,))
     max_reg = np.empty((num_reg,))
+    min_reg_zoom = np.empty((num_reg,))
+    max_reg_zoom = np.empty((num_reg,))
     for i_reg in range(num_reg):
         print(uni_reg[i_reg])
         ax = axs[i_reg]
+        ax_zoom = axs_zoom[i_reg]
         fname = SAVE_SCORES.format(reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
@@ -242,8 +246,10 @@ if __name__ == '__main__':
                 lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
             np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores,
                                 w2v_scores=w2v_scores, rnng_scores=rnng_scores, lstm_scores=lstm_scores)
-        min_reg[i_reg] = np.min([np.min(syn_scores), np.min(sem_scores)])
-        max_reg[i_reg] = np.max([np.max(syn_scores), np.max(sem_scores)])
+
+        min_reg[i_reg] = np.min([np.min(syn_scores), np.min(glove_scores), np.min(rnng_scores), np.min(lstm_scores)])
+        max_reg[i_reg] = np.max([np.max(syn_scores), np.max(glove_scores), np.max(rnng_scores), np.max(lstm_scores)])
+
         h1 = ax.plot(time, syn_scores)
         # h2 = ax.plot(time, sem_scores)
         h3 = ax.plot(time, glove_scores)
@@ -260,12 +266,42 @@ if __name__ == '__main__':
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
+
+        syn_scores_zoom = syn_scores[time >= 0.0]
+        glove_scores_zoom = glove_scores[time >= 0.0]
+        rnng_scores_zoom = rnng_scores[time >= 0.0]
+        lstm_scores_zoom = lstm_scores[time >= 0.0]
+        min_reg_zoom[i_reg] = np.min(
+            [np.min(syn_scores_zoom), np.min(glove_scores_zoom), np.min(rnng_scores_zoom), np.min(lstm_scores_zoom)])
+        max_reg_zoom[i_reg] = np.max(
+            [np.max(syn_scores_zoom), np.max(glove_scores_zoom), np.max(rnng_scores_zoom), np.max(lstm_scores_zoom)])
+
+        h1 = ax_zoom.plot(time_zoom, syn_scores_zoom)
+        # h2 = ax.plot(time, sem_scores)
+        h3 = ax_zoom.plot(time_zoom, glove_scores_zoom)
+        # h4 = ax.plot(time, w2v_scores)
+        h5 = ax_zoom.plot(time_zoom, rnng_scores_zoom)
+        h6 = ax_zoom.plot(time_zoom, lstm_scores_zoom)
+        h1[0].set_label('Syntax')
+        # h2[0].set_label('Simple Semantics')
+        h3[0].set_label('glove Semantics')
+        # h4[0].set_label('w2v Semantics')
+        h5[0].set_label('RNNG')
+        h6[0].set_label('LSTM')
+        ax_zoom.legend()
+        ax_zoom.set_title(uni_reg[i_reg])
+        ax_zoom.set_xlim(0.0, args.tmax + 0.5)
+        ax_zoom.set_xticks(np.arange(0.0, args.tmax, 0.5))
+
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     max_val = np.max(max_reg)
-    min_val = 0.1#np.min(min_reg)
+    min_val = np.min(min_reg)
     for i_reg in range(num_reg):
         axs[i_reg].set_ylim(min_val, max_val)
-    fig.suptitle('{}'.format(args.word))
+    max_val_zoom = np.max(max_reg_zoom)
+    min_val_zoom = np.min(min_reg_zoom)
+    for i_reg in range(num_reg):
+        axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom)
     plt.tight_layout()
     # plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
     plt.show()
