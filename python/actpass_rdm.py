@@ -277,7 +277,7 @@ if __name__ == '__main__':
 
         for i_time in range(all_scores.shape[-1]):
             if good_scores[win_scores[i_time], i_time]:
-                ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]], marker='X')
+                ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]])
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
