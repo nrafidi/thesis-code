@@ -137,15 +137,15 @@ if __name__ == '__main__':
     glove_rdm = glove_rdm_list[1]
     glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
     glove_rdm = glove_rdm[:, EXP_INDS[args.experiment]]
-    fig, ax = plt.subplots()
-    ax.imshow(glove_rdm, interpolation='nearest')
+    # fig, ax = plt.subplots()
+    # ax.imshow(glove_rdm, interpolation='nearest')
 
     w2v_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='w2v')))
     w2v_rdm = w2v_rdm_list[1]
     w2v_rdm = w2v_rdm[EXP_INDS[args.experiment], :]
     w2v_rdm = w2v_rdm[:, EXP_INDS[args.experiment]]
-    fig, ax = plt.subplots()
-    ax.imshow(w2v_rdm, interpolation='nearest')
+    # fig, ax = plt.subplots()
+    # ax.imshow(w2v_rdm, interpolation='nearest')
     # plt.show()
 
     if os.path.isfile(fname):
@@ -249,6 +249,12 @@ if __name__ == '__main__':
 
         min_reg[i_reg] = np.min([np.min(syn_scores), np.min(glove_scores), np.min(rnng_scores), np.min(lstm_scores)])
         max_reg[i_reg] = np.max([np.max(syn_scores), np.max(glove_scores), np.max(rnng_scores), np.max(lstm_scores)])
+
+        all_scores = np.concatenate([syn_scores[None, ...], glove_scores[None, ...], rnng_scores[None, ...], lstm_scores[None, ...], ])
+        print(all_scores.shape)
+
+        meow = all_scores >= 0.1
+        print(meow.shape)
 
         h1 = ax.plot(time, syn_scores)
         # h2 = ax.plot(time, sem_scores)
