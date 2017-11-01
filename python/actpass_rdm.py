@@ -1,7 +1,7 @@
 import argparse
 import load_data
 import matplotlib
-matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.linalg import matrix_rank
