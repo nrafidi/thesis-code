@@ -13,8 +13,8 @@ import os.path
 import pickle
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
-SAVE_RDM = '/share/volume0/nrafidi/RDM_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
+SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
 SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     word = args.word
     sorted_inds, sorted_reg = sort_sensors()
 
-    fname = SAVE_RDM.format(tmin=args.tmin, tmax=args.tmax, word=args.word)
+    fname = SAVE_RDM.format(exp=args.experiment, tmin=args.tmin, tmax=args.tmax, word=args.word)
 
     vectors = np.loadtxt(VECTORS)
     vectors = vectors[EXP_INDS[args.experiment], :]
@@ -222,7 +222,7 @@ if __name__ == '__main__':
         print(uni_reg[i_reg])
         ax = axs[i_reg]
         ax_zoom = axs_zoom[i_reg]
-        fname = SAVE_SCORES.format(reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+        fname = SAVE_SCORES.format(exp=args.experiment, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
             syn_scores = result['syn_scores']
