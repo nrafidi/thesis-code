@@ -314,7 +314,7 @@ if __name__ == '__main__':
 
         for i_time in range(all_scores_zoom.shape[-1]):
             if good_scores_zoom[win_scores_zoom[i_time], i_time]:
-                ax.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
+                ax_zoom.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
 
         ax_zoom.set_title(uni_reg[i_reg])
         ax_zoom.set_xlim(0.0, args.tmax + 0.5)
@@ -328,7 +328,7 @@ if __name__ == '__main__':
     max_val_zoom = np.max(max_reg_zoom)
     min_val_zoom = np.min(min_reg_zoom)
     for i_reg in range(num_reg):
-        axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom)
+        axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom+0.1)
     plt.tight_layout()
     # plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
     plt.show()
