@@ -146,7 +146,7 @@ if __name__ == '__main__':
     w2v_rdm = w2v_rdm[:, EXP_INDS[args.experiment]]
     fig, ax = plt.subplots()
     ax.imshow(w2v_rdm, interpolation='nearest')
-    plt.show()
+    # plt.show()
 
     if os.path.isfile(fname):
         result = np.load(fname)
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     max_val = np.max(max_reg)
-    min_val = 0.2#np.min(min_reg)
+    min_val = 0.1#np.min(min_reg)
     for i_reg in range(num_reg):
         axs[i_reg].set_ylim(min_val, max_val)
     fig.suptitle('{}'.format(args.word))
