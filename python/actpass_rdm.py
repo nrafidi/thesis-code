@@ -217,6 +217,7 @@ if __name__ == '__main__':
     max_reg = np.empty((num_reg,))
     min_reg_zoom = np.empty((num_reg,))
     max_reg_zoom = np.empty((num_reg,))
+    colors = ['b', 'g', 'r', 'c']
     for i_reg in range(num_reg):
         print(uni_reg[i_reg])
         ax = axs[i_reg]
@@ -253,8 +254,12 @@ if __name__ == '__main__':
         all_scores = np.concatenate([syn_scores[None, ...], glove_scores[None, ...], rnng_scores[None, ...], lstm_scores[None, ...], ])
         print(all_scores.shape)
 
-        meow = all_scores >= 0.1
-        print(meow.shape)
+        good_scores = all_scores >= 0.1
+        print(good_scores.shape)
+
+        win_scores = np.argmax(all_scores, axis=0)
+        print(win_scores.shape)
+
 
         h1 = ax.plot(time, syn_scores)
         # h2 = ax.plot(time, sem_scores)
@@ -269,6 +274,10 @@ if __name__ == '__main__':
         h5[0].set_label('RNNG')
         h6[0].set_label('LSTM')
         ax.legend()
+
+        for i_time in range(all_scores.shape[-1]):
+            if good_scores[win_scores[i_time], i_time]:
+                ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]], marker='*')
         ax.set_title(uni_reg[i_reg])
         ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
@@ -303,7 +312,7 @@ if __name__ == '__main__':
     max_val = np.max(max_reg)
     min_val = np.min(min_reg)
     for i_reg in range(num_reg):
-        axs[i_reg].set_ylim(min_val, max_val)
+        axs[i_reg].set_ylim(min_val, max_val+0.1)
     max_val_zoom = np.max(max_reg_zoom)
     min_val_zoom = np.min(min_reg_zoom)
     for i_reg in range(num_reg):
