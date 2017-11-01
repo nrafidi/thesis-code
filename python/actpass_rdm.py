@@ -291,6 +291,13 @@ if __name__ == '__main__':
         max_reg_zoom[i_reg] = np.max(
             [np.max(syn_scores_zoom), np.max(glove_scores_zoom), np.max(rnng_scores_zoom), np.max(lstm_scores_zoom)])
 
+        all_scores_zoom = np.concatenate(
+            [syn_scores_zoom[None, ...], glove_scores_zoom[None, ...], rnng_scores_zoom[None, ...], lstm_scores_zoom[None, ...], ])
+
+        good_scores_zoom = all_scores >= 0.15
+
+        win_scores_zoom = np.argmax(all_scores, axis=0)
+
         h1 = ax_zoom.plot(time_zoom, syn_scores_zoom)
         # h2 = ax.plot(time, sem_scores)
         h3 = ax_zoom.plot(time_zoom, glove_scores_zoom)
@@ -304,6 +311,11 @@ if __name__ == '__main__':
         h5[0].set_label('RNNG')
         h6[0].set_label('LSTM')
         ax_zoom.legend()
+
+        for i_time in range(all_scores_zoom.shape[-1]):
+            if good_scores_zoom[win_scores_zoom[i_time], i_time]:
+                ax.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
+
         ax_zoom.set_title(uni_reg[i_reg])
         ax_zoom.set_xlim(0.0, args.tmax + 0.5)
         ax_zoom.set_xticks(np.arange(0.0, args.tmax, 0.5))
