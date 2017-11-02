@@ -14,7 +14,7 @@ import pickle
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
 SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
@@ -110,6 +110,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--word', default='secondNoun')
+    parser.add_argument('--dist', default='euclidean')
     parser.add_argument('--tmin', type=float, default=-2.0)
     parser.add_argument('--tmax', type=float, default=1.5)
     parser.add_argument('--isPDTW', default='False')
@@ -126,12 +127,12 @@ if __name__ == '__main__':
     vectors = np.loadtxt(VECTORS)
     vectors = vectors[EXP_INDS[args.experiment], :]
 
-    vec_rdm = squareform(pdist(vectors))
+    vec_rdm = squareform(pdist(vectors, metric=args.dist))
 
     lstm = np.loadtxt(LSTM)
     lstm = lstm[EXP_INDS[args.experiment], :]
 
-    lstm_rdm = squareform(pdist(lstm))
+    lstm_rdm = squareform(pdist(lstm, metric=args.dist))
 
     glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
     glove_rdm = glove_rdm_list[1]
@@ -177,7 +178,7 @@ if __name__ == '__main__':
                 for t in range(0, total_data.shape[2]):
                     locs = [i for i, x in enumerate(sorted_reg) if x == reg]
                     reshaped_data = np.squeeze(total_data[:, locs, t])
-                    rdm = squareform(pdist(reshaped_data))
+                    rdm = squareform(pdist(reshaped_data, metric=args.dist))
                     rdm_by_time_list.append(rdm[None, :, :])
                 time_rdm = np.concatenate(rdm_by_time_list)
                 print(time_rdm.shape)
@@ -222,7 +223,7 @@ if __name__ == '__main__':
         print(uni_reg[i_reg])
         ax = axs[i_reg]
         ax_zoom = axs_zoom[i_reg]
-        fname = SAVE_SCORES.format(exp=args.experiment, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
             syn_scores = result['syn_scores']
@@ -329,9 +330,17 @@ if __name__ == '__main__':
     min_val_zoom = np.min(min_reg_zoom)
     for i_reg in range(num_reg):
         axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom+0.1)
-    plt.tight_layout()
-    # plt.savefig('RDM_scores_{tmin}_{tmax}_{word}.pdf'.format(tmin=args.tmin, tmax=args.tmax, word=args.word))
-    plt.show()
+
+    fig.suptitle('{} {}'.format(args.experiment, args.dist))
+    fig.tight_layout()
+    fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
+    fig_zoom.tight_layout()
+    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
+    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist,
+                                                                                 tmax=args.tmax,
+                                                                                 word=args.word))
+    # plt.savefig()
+    # plt.show()
 
 
     #
