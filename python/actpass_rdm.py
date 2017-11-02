@@ -340,7 +340,7 @@ if __name__ == '__main__':
                                                                                  tmax=args.tmax,
                                                                                  word=args.word))
     # plt.savefig()
-    # plt.show()
+    plt.show()
 
 
     #
