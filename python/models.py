@@ -534,7 +534,7 @@ def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg
 if __name__ == '__main__':
     data = rand(16, 306, 100)
     labels = np.array([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4])
-    semantic_vectors = np.rand((16, 300)) + labels[:, None]
+    semantic_vectors = rand(16, 300) + labels[:, None]
 
     kf = KFold(n_splits=16)
     preds, l_ints, cv_membership, scores = lin_reg(data,
