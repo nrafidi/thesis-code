@@ -24,10 +24,10 @@ OUT_FILE = '{dir}{job_name}.o'
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=4GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=8GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},' \
                 'isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},adj={adj},' \
-                'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True ' \
+                'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_sv.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
