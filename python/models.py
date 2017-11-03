@@ -65,7 +65,7 @@ def lin_reg(brain_data,
         if reg == 'ridge':
             model = sklearn.linear_model.RidgeCV(alphas=ALPHAS_RIDGE, fit_intercept=fit_intercept)
         elif reg == 'lasso':
-            model = sklearn.linear_model.MultiTaskLassoCV(fit_intercept=fit_intercept)
+            model = sklearn.linear_model.MultiTaskLassoCV(fit_intercept=fit_intercept, max_iter=500)
         elif reg == 'enet':
             model = sklearn.linear_model.MultiTaskElasticNetCV(l1_ratio=ENET_RATIOS, fit_intercept=fit_intercept)
         else:
