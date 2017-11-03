@@ -1,6 +1,7 @@
 import numpy as np
 import sklearn.linear_model
 from sklearn.model_selection import KFold
+from sklearn.metrics import explained_variance_score
 from numpy.random import rand
 import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
@@ -8,13 +9,81 @@ import matplotlib.pyplot as plt
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
-
+ALPHAS_RIDGE = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0, 100.0, 1000.0, 1e4, 1e5, 1e6]
+ENET_RATIOS = [.1, .5, .7, .9, .95, .99, 1]
 
 def flatten_list(list_of_lists):
     lst = []
     for item in list_of_lists:
         lst.extend(item)
     return lst
+
+
+def lin_reg(brain_data,
+            semantic_vectors,
+            l_ints,
+            kf,
+            reg='ridge',
+            adj='zscore',
+            ddof=1):
+
+    n_tot = brain_data.shape[0]
+    data = np.reshape(brain_data, (n_tot, -1))
+
+    preds = []
+    test_data_all = []
+    cv_membership = []
+    i_split = 0
+    for in_train, in_test in kf.split(data, l_ints):
+        print(i_split)
+        i_split += 1
+        cv_membership.append(in_test)
+
+        train_data = data[in_train, :]
+        train_vectors = semantic_vectors[in_train, :]
+
+        test_data = data[in_test, :]
+        test_data_all.append(test_data)
+        test_vectors = semantic_vectors[in_test, :]
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_vectors, axis=0)
+            train_vectors -= mu_train[None, :]
+            test_vectors -= mu_train[None, :]
+            fit_intercept=False
+        elif adj == 'zscore':
+            mu_train = np.mean(train_vectors, axis=0)
+            std_train = np.std(train_vectors, axis=0, ddof=ddof)
+            train_vectors -= mu_train[None, :]
+            test_vectors -= mu_train[None, :]
+            train_vectors /= std_train[None, :]
+            test_vectors /= std_train[None, :]
+            fit_intercept = False
+        else:
+            fit_intercept = True
+
+        if reg == 'ridge':
+            model = sklearn.linear_model.RidgeCV(alphas=ALPHAS_RIDGE, fit_intercept=fit_intercept)
+        elif reg == 'lasso':
+            model = sklearn.linear_model.LassoCV(fit_intercept=fit_intercept)
+        elif reg == 'enet':
+            model = sklearn.linear_model.ElasticNetCV(l1_ratio=ENET_RATIOS, fit_intercept=fit_intercept)
+        else:
+            raise NameError('Algorithm not implemented')
+
+        model.fit(train_vectors, train_data)
+
+        preds.append(model.predict(test_vectors))
+
+    preds = np.concatenate(preds, axis=0)
+    print(preds.shape)
+    test_data_all = np.concatenate(test_data_all, axis=0)
+    print(test_data_all.shape)
+
+    scores = explained_variance_score(test_data_all, preds)
+
+    return preds, l_ints, cv_membership, scores
+
 
 
 def gnb_model(data, label_membership, ddof):
@@ -465,11 +534,18 @@ def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg
 if __name__ == '__main__':
     data = rand(16, 306, 100)
     labels = np.array([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4])
+    semantic_vectors = np.rand((16, 300)) + labels[:, None]
+
     kf = KFold(n_splits=16)
-    win_starts = range(0, 3, 3)
-    win_len = 97
-    pred_top, _, _ = nb_tgm_uni(data, labels, kf, win_starts, win_len)
-    for i in range(pred_top.shape[0]):
-        fig, ax = plt.subplots()
-        ax.imshow(np.squeeze(pred_top[i, ...]), interpolation='nearest', aspect='auto')
+    preds, l_ints, cv_membership, scores = lin_reg(data,
+                                                   semantic_vectors,
+                                                   labels,
+                                                   kf,
+                                                   reg='ridge',
+                                                   adj='zscore',
+                                                   ddof=1)
+    print(scores.shape)
+    scores = np.reshape(scores, (306, 100))
+    fig, ax = plt.subplots()
+    ax.imshow(scores, interpolation='nearest', aspect='auto')
     plt.show()
