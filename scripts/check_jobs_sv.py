@@ -34,7 +34,8 @@ if __name__ == '__main__':
                 print('Job {} Failed'.format(job_str))
                 with open(err_str, 'r') as fid:
                     print fid.read()
-                print(out_str)
+                print(out_str
+                print(grid)
                 total_jobs += 1
                 # with open(out_str, 'r') as fid:
                 #     print fid.read()
