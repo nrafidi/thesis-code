@@ -33,6 +33,8 @@ if __name__ == '__main__':
                 print('Job {} Failed'.format(job_str))
                 with open(err_str, 'r') as fid:
                     print fid.read()
+                with open(out_str, 'r') as fid:
+                    print fid.read()
             else:
                 with open(out_str, 'r') as fid:
                     meow = fid.read()

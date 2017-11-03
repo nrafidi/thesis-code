@@ -87,12 +87,14 @@ def get_sen_num_from_id(sen_id):
 
 
 def load_glove_vectors(labels):
-    words = [w.replace('.','') for w in labels]
+    words = [str(w.replace('.','')) for w in labels]
+
     vec_dict = {}
     with open(GLOVE) as lines:
         for line in lines:
             split = line.split(" ")
-            word = split[0]
+            word = str(split[0])
+
             vector_strings = split[1:]
             vector = [float(num) for num in vector_strings]
             if word in words:

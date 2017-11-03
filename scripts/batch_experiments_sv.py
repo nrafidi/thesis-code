@@ -76,4 +76,4 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
         if job_id % 100 == 0:
-            time.sleep(300)
+            time.sleep(600)
