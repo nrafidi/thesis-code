@@ -37,7 +37,8 @@ if __name__ == '__main__':
                 with open(out_str, 'r') as fid:
                     meow = fid.read()
                     if 'Experiment parameters not valid.' in meow:
-                        print(meow)
+                        if grid[6] <= grid[9]*16:
+                            print(meow)
                     else:
                         successful_jobs += 1
                         print(job_id)
