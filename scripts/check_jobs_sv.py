@@ -52,4 +52,4 @@ if __name__ == '__main__':
 
         job_id += 1
 
-    print('{}/{} jobs succeeded'.format(successful_jobs, job_id))
+    print('{}/{} jobs succeeded'.format(successful_jobs, total_jobs))
