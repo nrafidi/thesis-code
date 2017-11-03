@@ -152,17 +152,13 @@ if __name__ == '__main__':
     parser.add_argument('--subject')
     parser.add_argument('--sen_type')
     parser.add_argument('--word')
-    parser.add_argument('--win_len', type=int)
-    parser.add_argument('--overlap', type=int)
-    parser.add_argument('--mode', default='pred')
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--isPerm', default='False')
-    parser.add_argument('--num_folds', type=int, default=2)
-    parser.add_argument('--alg', default='LR')
-    parser.add_argument('--doFeatSelect', default='False')
-    parser.add_argument('--doZscore', default='False')
+    parser.add_argument('--num_folds', type=int, default=16)
+    parser.add_argument('--alg', default='ridge')
+    parser.add_argument('--adj', default='mean_centre')
     parser.add_argument('--doAvg', default='False')
-    parser.add_argument('--num_instances', type=int, default=2)
+    parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
@@ -173,12 +169,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Check that parameter setting is valid
-    if args.win_len > 0:
-        is_valid = args.overlap <= args.win_len
-    else:
-        is_valid = True
-    if not is_valid:
-        print('overlap wrong')
+    is_valid = True
     is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
     if not is_valid:
         print('num reps  wrong')
@@ -189,31 +180,22 @@ if __name__ == '__main__':
         is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
     if not is_valid:
         print('instances wrong')
-    if args.mode == 'coef':
-        is_valid = is_valid and args.num_folds == 2
-        if not is_valid:
-            print('folds wrong')
     if is_valid:
-        run_tgm_exp(experiment=args.experiment,
-                    subject=args.subject,
-                    sen_type=args.sen_type,
-                    word=args.word,
-                    win_len=args.win_len,
-                    overlap=args.overlap,
-                    mode=args.mode,
-                    isPDTW=str_to_bool(args.isPDTW),
-                    isPerm=str_to_bool(args.isPerm),
-                    num_folds=args.num_folds,
-                    alg=args.alg,
-                    doFeatSelect=str_to_bool(args.doFeatSelect),
-                    doZscore=str_to_bool(args.doZscore),
-                    doAvg=str_to_bool(args.doAvg),
-                    num_instances=args.num_instances,
-                    reps_to_use=args.reps_to_use,
-                    proc=args.proc,
-                    random_state_perm=args.perm_random_state,
-                    random_state_cv=args.cv_random_state,
-                    random_state_sub=args.sub_random_state,
-                    force=str_to_bool(args.force))
+        run_sv_exp(experiment=args.experiment,
+                   subject=args.subject,
+                   sen_type=args.sen_type,
+                   word=args.word,
+                   isPDTW=str_to_bool(args.isPDTW),
+                   isPerm=str_to_bool(args.isPerm),
+                   num_folds=args.num_folds,
+                   alg=args.alg,
+                   adj=args.adj,
+                   num_instances=args.num_instances,
+                   reps_to_use=args.reps_to_use,
+                   proc=args.proc,
+                   random_state_perm=args.perm_random_state,
+                   random_state_cv=args.cv_random_state,
+                   random_state_sub=args.sub_random_state,
+                   force=str_to_bool(args.force))
     else:
         print('Experiment parameters not valid. Skipping job.')
