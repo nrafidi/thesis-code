@@ -169,6 +169,9 @@ if __name__ == '__main__':
 
     # Check that parameter setting is valid
     is_valid = True
+    is_valid = is_valid and (args.num_folds <= 16*args.num_instances)
+    if not is_valid:
+        print('num folds wrong {} {}'.format(args.num_folds, args.num_instances))
     is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
     if not is_valid:
         print('num reps  wrong')
