@@ -18,6 +18,7 @@ if __name__ == '__main__':
                                    batch_exp.RANDOM_STATES)
     job_id = 0
     successful_jobs = 0
+    total_jobs = 0
     for grid in param_grid:
         job_str = batch_exp.JOB_NAME.format(exp=grid[0],
                                             sub=grid[1],
@@ -34,6 +35,7 @@ if __name__ == '__main__':
                 with open(err_str, 'r') as fid:
                     print fid.read()
                 print(out_str)
+                total_jobs += 1
                 # with open(out_str, 'r') as fid:
                 #     print fid.read()
             else:
@@ -44,6 +46,7 @@ if __name__ == '__main__':
                             print(meow)
                     else:
                         successful_jobs += 1
+                        total_jobs += 1
                         print(job_id)
 
 
