@@ -15,7 +15,6 @@ import pickle
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
 SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
-SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
 
@@ -134,20 +133,6 @@ if __name__ == '__main__':
 
     lstm_rdm = squareform(pdist(lstm, metric=args.dist))
 
-    glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
-    glove_rdm = glove_rdm_list[1]
-    glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
-    glove_rdm = glove_rdm[:, EXP_INDS[args.experiment]]
-    # fig, ax = plt.subplots()
-    # ax.imshow(glove_rdm, interpolation='nearest')
-
-    w2v_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='w2v')))
-    w2v_rdm = w2v_rdm_list[1]
-    w2v_rdm = w2v_rdm[EXP_INDS[args.experiment], :]
-    w2v_rdm = w2v_rdm[:, EXP_INDS[args.experiment]]
-    # fig, ax = plt.subplots()
-    # ax.imshow(w2v_rdm, interpolation='nearest')
-    # plt.show()
 
     if os.path.isfile(fname):
         result = np.load(fname)
@@ -192,23 +177,9 @@ if __name__ == '__main__':
         np.savez_compressed(fname, rdm=rdm)
 
     rdm = np.squeeze(np.mean(rdm, axis=0))
-    ap_list, sen_list = rnng_rdm.get_sen_lists()
-
-    ap_rdm = rnng_rdm.syn_rdm(ap_list)
-    ap_rdm = ap_rdm[EXP_INDS[args.experiment], :]
-    ap_rdm = ap_rdm[:, EXP_INDS[args.experiment]]
-    print(ap_rdm.shape)
-    print(matrix_rank(ap_rdm))
-    semantic_rdm = rnng_rdm.sem_rdm(sen_list, ap_list)
-    semantic_rdm = semantic_rdm[EXP_INDS[args.experiment], :]
-    semantic_rdm = semantic_rdm[:, EXP_INDS[args.experiment]]
-    print(semantic_rdm.shape)
-    print(matrix_rank(semantic_rdm))
 
     uni_reg = np.unique(sorted_reg)
     num_reg = rdm.shape[0]
-
-
 
     fig, axs = plt.subplots(num_reg, 1, figsize=(20, 20))
     fig_zoom, axs_zoom = plt.subplots(num_reg, 1, figsize=(20, 20))
@@ -226,33 +197,15 @@ if __name__ == '__main__':
         fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
-            syn_scores = result['syn_scores']
-            sem_scores = result['sem_scores']
-            glove_scores = result['glove_scores']
-            w2v_scores = result['w2v_scores']
             rnng_scores = result['rnng_scores']
             lstm_scores = result['lstm_scores']
         else:
-            syn_scores = np.empty((rdm.shape[1],))
-            sem_scores = np.empty((rdm.shape[1],))
-            glove_scores = np.empty((rdm.shape[1],))
-            w2v_scores = np.empty((rdm.shape[1],))
-            rnng_scores = np.empty((rdm.shape[1],))
-            lstm_scores = np.empty((rdm.shape[1],))
-            for i_t in range(rdm.shape[1]):
-                syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
-                sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
-                glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), glove_rdm)
-                w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), w2v_rdm)
-                rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
-                lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
-            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores,
-                                w2v_scores=w2v_scores, rnng_scores=rnng_scores, lstm_scores=lstm_scores)
+            raise NameError('need to rerun score calculation')
 
-        min_reg[i_reg] = np.min([np.min(syn_scores), np.min(glove_scores), np.min(rnng_scores), np.min(lstm_scores)])
-        max_reg[i_reg] = np.max([np.max(syn_scores), np.max(glove_scores), np.max(rnng_scores), np.max(lstm_scores)])
+        min_reg[i_reg] = np.min([np.min(rnng_scores), np.min(lstm_scores)])
+        max_reg[i_reg] = np.max([np.max(rnng_scores), np.max(lstm_scores)])
 
-        all_scores = np.concatenate([syn_scores[None, ...], glove_scores[None, ...], rnng_scores[None, ...], lstm_scores[None, ...], ])
+        all_scores = np.concatenate([rnng_scores[None, ...], lstm_scores[None, ...], ])
         print(all_scores.shape)
 
         good_scores = all_scores >= 0.15
@@ -262,16 +215,10 @@ if __name__ == '__main__':
         print(win_scores.shape)
 
 
-        h1 = ax.plot(time, syn_scores)
-        # h2 = ax.plot(time, sem_scores)
-        h3 = ax.plot(time, glove_scores)
-        # h4 = ax.plot(time, w2v_scores)
+
         h5 = ax.plot(time, rnng_scores)
         h6 = ax.plot(time, lstm_scores)
-        h1[0].set_label('Syntax')
-        # h2[0].set_label('Simple Semantics')
-        h3[0].set_label('glove Semantics')
-        # h4[0].set_label('w2v Semantics')
+
         h5[0].set_label('RNNG')
         h6[0].set_label('LSTM')
         ax.legend()
@@ -283,32 +230,23 @@ if __name__ == '__main__':
         ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
 
-        syn_scores_zoom = syn_scores[time >= 0.0]
-        glove_scores_zoom = glove_scores[time >= 0.0]
         rnng_scores_zoom = rnng_scores[time >= 0.0]
         lstm_scores_zoom = lstm_scores[time >= 0.0]
         min_reg_zoom[i_reg] = np.min(
-            [np.min(syn_scores_zoom), np.min(glove_scores_zoom), np.min(rnng_scores_zoom), np.min(lstm_scores_zoom)])
+            [np.min(rnng_scores_zoom), np.min(lstm_scores_zoom)])
         max_reg_zoom[i_reg] = np.max(
-            [np.max(syn_scores_zoom), np.max(glove_scores_zoom), np.max(rnng_scores_zoom), np.max(lstm_scores_zoom)])
+            [np.max(rnng_scores_zoom), np.max(lstm_scores_zoom)])
 
         all_scores_zoom = np.concatenate(
-            [syn_scores_zoom[None, ...], glove_scores_zoom[None, ...], rnng_scores_zoom[None, ...], lstm_scores_zoom[None, ...], ])
+            [rnng_scores_zoom[None, ...], lstm_scores_zoom[None, ...], ])
 
         good_scores_zoom = all_scores_zoom>= 0.15
 
         win_scores_zoom = np.argmax(all_scores_zoom, axis=0)
 
-        h1 = ax_zoom.plot(time_zoom, syn_scores_zoom)
-        # h2 = ax.plot(time, sem_scores)
-        h3 = ax_zoom.plot(time_zoom, glove_scores_zoom)
-        # h4 = ax.plot(time, w2v_scores)
         h5 = ax_zoom.plot(time_zoom, rnng_scores_zoom)
         h6 = ax_zoom.plot(time_zoom, lstm_scores_zoom)
-        h1[0].set_label('Syntax')
-        # h2[0].set_label('Simple Semantics')
-        h3[0].set_label('glove Semantics')
-        # h4[0].set_label('w2v Semantics')
+
         h5[0].set_label('RNNG')
         h6[0].set_label('LSTM')
         ax_zoom.legend()
@@ -335,8 +273,8 @@ if __name__ == '__main__':
     fig.tight_layout()
     fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
     fig_zoom.tight_layout()
-    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
-    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist,
+    fig.savefig('RDM_scores_RvL_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
+    fig_zoom.savefig('RDM_scores_RvL_{exp}_{metric}_0_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist,
                                                                                  tmax=args.tmax,
                                                                                  word=args.word))
     # plt.savefig()
