@@ -45,6 +45,10 @@ if __name__ == '__main__':
                     if 'Experiment parameters not valid.' in meow:
                         if grid[6] <= grid[9]*16:
                             print(meow)
+                    elif 'completed' in meow:
+                        print('{} already completed'.format(job_id))
+                        successful_jobs += 1
+                        total_jobs += 1
                     else:
                         successful_jobs += 1
                         total_jobs += 1
