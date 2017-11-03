@@ -80,9 +80,8 @@ def run_sv_exp(experiment,
                              rsC=random_state_cv,
                              rsS=random_state_sub)
 
-    print(force)
-    print(type(force))
-    if os.path.isfile(fname) and not force:
+
+    if os.path.isfile(fname + '.npz') and not force:
         print('Job already completed. Skipping Job.')
         print(fname)
         return
