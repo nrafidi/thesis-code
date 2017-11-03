@@ -23,5 +23,5 @@ source /home/python27/envs/p27default/bin/activate
 
 cd /home/nrafidi/thesis-code/python
 python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
---isPDTW $isPDTW --isPerm $isPerm --num_folds $num_folds --alg $alg --adj $adj \
---num_instances $num_instances --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force
+--isPDTW $isPDTW --isPerm $isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
+--reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force
