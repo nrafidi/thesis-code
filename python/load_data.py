@@ -76,11 +76,26 @@ TIME_LIMITS = {'active': {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
 # 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_band-5-150_notch-60-120_beatremoval-first_blinkremoval-first'
 DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
 PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pdtwSyn.mat'
+GLOVE = '/share/volume1/sjat/repositories/Nicole-thesis-code/python/sj-experiments/embeddings_files/glove.840B.300d.txt'
 
 
 def get_sen_num_from_id(sen_id):
     m = re.match('.*sentence-(\d+)', sen_id)
     return int(m.group(1))
+
+
+def load_glove_vectors(labels):
+    words = [w.replace('.','') for w in labels]
+    vec = {}
+    with open(GLOVE) as lines:
+        for line in lines:
+            split = line.split(" ")
+            word = split[0]
+            vector_strings = split[1:]
+            vector = [float(num) for num in vector_strings]
+            if word in words:
+                vec[word] = np.array(vector)
+    return vec
 
 
 def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
