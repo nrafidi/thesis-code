@@ -51,7 +51,7 @@ def run_sv_exp(experiment,
                random_state_cv=CV_RAND_STATE,
                random_state_sub=SUB_CV_RAND_STATE,
                force=False):
-    warnings.filterwarnings('error')
+    # warnings.filterwarnings('error')
     # Save Directory
     top_dir = TOP_DIR.format(exp=experiment)
     if not os.path.exists(top_dir):
