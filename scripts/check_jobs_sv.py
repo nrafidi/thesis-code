@@ -48,7 +48,7 @@ if __name__ == '__main__':
                     else:
                         successful_jobs += 1
                         total_jobs += 1
-                        print(job_id)
+                        print('{} succeeded with parameters: {}'.format(job_id, grid))
 
 
         job_id += 1
