@@ -33,7 +33,13 @@ if __name__ == '__main__':
             if os.stat(err_str).st_size != 0:
                 print('Job {} Failed'.format(job_str))
                 with open(err_str, 'r') as fid:
-                    print fid.read()
+                    meow = fid.read()
+                    if 'MemoryError' in meow:
+                        print('MemoryError')
+                    elif 'Killed' in meow:
+                        print('Killed')
+                    else:
+                        print(meow)
                 print(out_str)
                 print(grid)
                 total_jobs += 1
