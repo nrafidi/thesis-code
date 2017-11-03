@@ -157,7 +157,6 @@ if __name__ == '__main__':
     parser.add_argument('--num_folds', type=int, default=16)
     parser.add_argument('--alg', default='ridge')
     parser.add_argument('--adj', default='mean_centre')
-    parser.add_argument('--doAvg', default='False')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
