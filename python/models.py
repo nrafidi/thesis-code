@@ -541,7 +541,7 @@ if __name__ == '__main__':
                                                    semantic_vectors,
                                                    labels,
                                                    kf,
-                                                   reg='lasso',
+                                                   reg='ridge',
                                                    adj='zscore',
                                                    ddof=1)
     print(scores.shape)
