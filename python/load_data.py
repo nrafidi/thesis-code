@@ -100,7 +100,7 @@ def load_glove_vectors(labels):
             if word in words:
                 vec_dict[word] = np.array(vector)
     vec = np.empty((len(labels), 300))
-    for i_w, w in enumerate(labels):
+    for i_w, w in enumerate(words):
         vec[i_w, :] = vec_dict[w]
     return vec
 
