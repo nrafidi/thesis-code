@@ -532,7 +532,7 @@ def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg
 
 
 if __name__ == '__main__':
-    data = rand(16, 306, 100)
+    data = rand(16, 306, 1000)
     labels = np.array([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4])
     semantic_vectors = rand(16, 300) + labels[:, None]
 
@@ -545,7 +545,7 @@ if __name__ == '__main__':
                                                    adj='zscore',
                                                    ddof=1)
     print(scores.shape)
-    scores = np.reshape(scores, (306, 100))
+    scores = np.reshape(scores, (306, 1000))
     fig, ax = plt.subplots()
     ax.imshow(scores, interpolation='nearest', aspect='auto')
     plt.show()
