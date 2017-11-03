@@ -80,7 +80,7 @@ def lin_reg(brain_data,
     test_data_all = np.concatenate(test_data_all, axis=0)
     print(test_data_all.shape)
 
-    scores = explained_variance_score(test_data_all, preds)
+    scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
     return preds, l_ints, cv_membership, scores
 
