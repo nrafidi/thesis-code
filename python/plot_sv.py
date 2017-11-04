@@ -41,7 +41,7 @@ if __name__ == '__main__':
                                    NUM_INSTANCESS)
 
     scores = []
-    for grid in enumerate(param_grid):
+    for grid in param_grid:
         fname = run_SV.SAVE_FILE.format(dir=save_dir,
                                         sub=args.subject,
                                         sen_type=args.sen_type,
