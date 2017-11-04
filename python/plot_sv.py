@@ -69,8 +69,9 @@ if __name__ == '__main__':
     time[time <= 1e-14] = 0.0
     num_time = time.size
 
-    i_max = np.argmax(score_maxes)
-    print('Best score was {} for params {}'.format(score_maxes[i_max], grid_list[i_max]))
+    # i_max = np.argmax(score_maxes)
+    i_max = grid_list.index((160, 'zscore', 10))
+    print('Best score for params {} was {}'.format(grid_list[i_max], score_maxes[i_max]))
 
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
