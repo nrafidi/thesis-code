@@ -40,8 +40,8 @@ if __name__ == '__main__':
                                    ADJS,
                                    NUM_INSTANCESS)
 
-    scores = np.empty((len(param_grid),))
-    for i, grid in enumerate(param_grid):
+    scores = []
+    for grid in enumerate(param_grid):
         fname = run_SV.SAVE_FILE.format(dir=save_dir,
                                         sub=args.subject,
                                         sen_type=args.sen_type,
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         if os.path.isfile(fname + '.npz'):
             result = np.load(fname + '.npz')
             curr_score = result['scores']
-            scores[i] = np.max(curr_score)
+            scores.append(np.max(curr_score))
 
     time = result['time']
     time[time <= 1e-14] = 0.0
