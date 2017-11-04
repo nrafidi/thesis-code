@@ -81,6 +81,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(best_score, interpolation='nearest', aspect='auto')
+    ax.set_ylim(0.0, 0.01)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
