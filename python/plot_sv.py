@@ -68,7 +68,8 @@ if __name__ == '__main__':
     time = result['time']
     time[np.abs(time) <= 1e-14] = 0.0
     num_time = time.size
-
+    fig0, ax0 = plt.subplots()
+    ax0.hist(np.array(score_maxes))
     # i_max = np.argmax(score_maxes)
     i_max = grid_list.index((160, 'zscore', 10))
     print('Best score for params {} was {}'.format(grid_list[i_max], score_maxes[i_max]))
