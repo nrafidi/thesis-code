@@ -41,6 +41,7 @@ if __name__ == '__main__':
                                    NUM_INSTANCESS)
 
     scores = []
+    grid_list = []
     for grid in param_grid:
         fname = run_SV.SAVE_FILE.format(dir=save_dir,
                                         sub=args.subject,
@@ -60,13 +61,14 @@ if __name__ == '__main__':
             result = np.load(fname + '.npz')
             curr_score = result['scores']
             scores.append(np.max(curr_score))
+            grid_list.append(grid)
 
     time = result['time']
     time[time <= 1e-14] = 0.0
     num_time = time.size
 
     i_max = np.argmax(scores)
-    print('Best score was {} for params {}'.format(scores[i_max], param_grid[i_max]))
+    print('Best score was {} for params {}'.format(scores[i_max], grid_list[i_max]))
 
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
