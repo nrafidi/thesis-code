@@ -66,7 +66,7 @@ if __name__ == '__main__':
             grid_list.append(grid)
 
     time = result['time']
-    time[time <= 1e-14] = 0.0
+    time[np.abs(time) <= 1e-14] = 0.0
     num_time = time.size
 
     # i_max = np.argmax(score_maxes)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     best_score = best_score[sorted_inds, :]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(best_score, interpolation='nearest', aspect='auto', vmin=-0.01, vmax=0.01)
+    h = ax.imshow(best_score, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.01)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
