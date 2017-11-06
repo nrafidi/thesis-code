@@ -115,7 +115,7 @@ if __name__ == '__main__':
         tgm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['B']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -196,6 +196,13 @@ if __name__ == '__main__':
 
         fig, ax = plt.subplots()
         ax.imshow(total_best, interpolation='nearest', aspect='auto')
+        num_time = total_best.shape[1]
+        time = np.arange(0.0, 4.5, 0.002)
+        ax.set_xticks(range(0, num_time, 250))
+        ax.set_xticklabels(time[::250])
+        ax.set_yticks(yticks_sens)
+        ax.set_yticklabels(uni_reg)
+        ax.set_ylabel('Sensors')
     plt.show()
 
 
