@@ -153,13 +153,13 @@ if __name__ == '__main__':
             elif word == 'firstNoun' and sen_type == 'passive':
                 word_tgm = concat_tgm[:, :, (num_time-750)]
             elif word == 'verb' and sen_type == 'active':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, (num_time-250)]), axis=1)
+                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, (num_time-250)]), axis=2)
             elif word == 'verb' and sen_type == 'passive':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=1)
+                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=2)
             elif word == 'secondNoun' and sen_type == 'active':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=1)
+                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=2)
             else:
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=1)
+                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=2)
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
