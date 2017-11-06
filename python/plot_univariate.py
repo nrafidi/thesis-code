@@ -93,6 +93,8 @@ if __name__ == '__main__':
         sorted_inds = sorted_inds[1::3]
         sorted_reg = sorted_reg[1::3]
         accuracy = 'abs'
+    elif sens == 'all':
+        accuracy = 'abs'
     elif sens == 'avg' or sens == 'max':
         sorted_reg = sorted_reg[0::3]
         accuracy = 'abs'
@@ -109,7 +111,6 @@ if __name__ == '__main__':
         accuracy = 'abs-wb'
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
-        accuracy='abs'
 
     for sen_type in ['active', 'passive']:
         tgm_by_word = []
@@ -145,6 +146,8 @@ if __name__ == '__main__':
 
             avg_tgm = np.concatenate(tgm_by_sub)
             avg_tgm = np.squeeze(np.mean(avg_tgm, axis=0))
+            if sens == 'wb':
+                avg_tgm = np.reshape(avg_tgm, (1, -1))
             num_time = avg_tgm.shape[-1]
 
             if word == 'firstNoun' and sen_type == 'active':
@@ -198,11 +201,13 @@ if __name__ == '__main__':
         ax.imshow(total_best, interpolation='nearest', aspect='auto')
         num_time = total_best.shape[1]
         time = np.arange(0.0, 4.5, 0.002)
+        print(time.shape)
         ax.set_xticks(range(0, num_time, 250))
         ax.set_xticklabels(time[::250])
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
         ax.set_ylabel('Sensors')
+        ax.set_title(sen_type)
     plt.show()
 
 
