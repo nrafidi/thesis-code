@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     for sen_type in ['active', 'passive']:
         tgm_by_word = []
-        for word in ['secondNoun', 'firstNoun', 'verb']:
+        for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             for sub in ['B', 'C']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
