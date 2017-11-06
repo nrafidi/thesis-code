@@ -151,11 +151,11 @@ if __name__ == '__main__':
             print(num_sens)
 
             if word == 'firstNoun' and sen_type == 'active':
-                word_tgm = concat_tgm[:, :, (num_time-250)]
+                word_tgm = concat_tgm[:, :, :(num_time-250)]
             elif word == 'firstNoun' and sen_type == 'passive':
-                word_tgm = concat_tgm[:, :, (num_time-750)]
+                word_tgm = concat_tgm[:, :, :(num_time-750)]
             elif word == 'verb' and sen_type == 'active':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, (num_time-250)]), axis=2)
+                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, :(num_time-250)]), axis=2)
             elif word == 'verb' and sen_type == 'passive':
                 word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=2)
             elif word == 'secondNoun' and sen_type == 'active':
