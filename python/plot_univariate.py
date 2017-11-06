@@ -152,18 +152,19 @@ if __name__ == '__main__':
             print(num_sub)
             print(num_sens)
 
-            if word == 'firstNoun' and sen_type == 'active':
-                word_tgm = concat_tgm[:, :, :(num_time-250)]
-            elif word == 'firstNoun' and sen_type == 'passive':
-                word_tgm = concat_tgm[:, :, :(num_time-750)]
-            elif word == 'verb' and sen_type == 'active':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, :(num_time-250)]), axis=2)
-            elif word == 'verb' and sen_type == 'passive':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=2)
-            elif word == 'secondNoun' and sen_type == 'active':
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=2)
-            else:
-                word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=2)
+            # if word == 'firstNoun' and sen_type == 'active':
+            #     word_tgm = concat_tgm[:, :, :(num_time-250)]
+            # elif word == 'firstNoun' and sen_type == 'passive':
+            #     word_tgm = concat_tgm[:, :, :(num_time-750)]
+            # elif word == 'verb' and sen_type == 'active':
+            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, :(num_time-250)]), axis=2)
+            # elif word == 'verb' and sen_type == 'passive':
+            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=2)
+            # elif word == 'secondNoun' and sen_type == 'active':
+            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=2)
+            # else:
+            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=2)
+            word_tgm = concat_tgm
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
