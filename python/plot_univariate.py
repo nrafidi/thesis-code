@@ -204,9 +204,10 @@ if __name__ == '__main__':
         print(time.shape)
         ax.set_xticks(range(0, num_time, 250))
         ax.set_xticklabels(time[::250])
-        ax.set_yticks(yticks_sens)
-        ax.set_yticklabels(uni_reg)
-        ax.set_ylabel('Sensors')
+        if sens != 'wb':
+            ax.set_yticks(yticks_sens)
+            ax.set_yticklabels(uni_reg)
+            ax.set_ylabel('Sensors')
         ax.set_title(sen_type)
     plt.show()
 
