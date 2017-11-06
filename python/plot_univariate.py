@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
         for i in range(word_tgm.shape[1]):
             for j in range(word_tgm.shape[2]):
-                if np.any(word_tgm[:, i, j] >= 0.3):
+                if np.any(word_tgm[:, i, j] >= 0.35):
                     if j < 250:
                         print(word_tgm[:, i, j])
                     total_best[i, j, np.argmax(word_tgm[:, i, j])] = 1
