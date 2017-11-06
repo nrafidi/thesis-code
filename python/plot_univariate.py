@@ -170,6 +170,7 @@ if __name__ == '__main__':
 
 
         word_tgm = np.concatenate(tgm_by_word)
+        print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
         print(avg_tgm.shape)
         total_best = np.zeros((word_tgm.shape[2], word_tgm.shape[3], 3))
@@ -218,6 +219,6 @@ if __name__ == '__main__':
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
-    plt.show()
+        plt.show()
 
 
