@@ -112,7 +112,6 @@ if __name__ == '__main__':
 
     for sen_type in ['passive', 'active']:
         tgm_by_word = []
-        time_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
@@ -145,22 +144,26 @@ if __name__ == '__main__':
 
             avg_tgm = np.concatenate(tgm_by_sub)
             avg_tgm = np.squeeze(np.mean(avg_tgm, axis=0))
+            num_time = avg_tgm.shape[-1]
 
-            if word == 'firstNoun':
+            if word == 'firstNoun' and sen_type == 'active':
                 word_tgm = avg_tgm
+            elif word == 'firstNoun' and sen_type == 'passive':
+                word_tgm = avg_tgm[:, :(num_time-500)]
             elif word == 'verb' and sen_type == 'active':
                 word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 250)), avg_tgm), axis=1)
             elif word == 'verb' and sen_type == 'passive':
-                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 500)), avg_tgm[:, :]), axis=1)
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 500)), avg_tgm[:, :(num_time-500)]), axis=1)
             elif word == 'secondNoun' and sen_type == 'active':
                 word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 750)), avg_tgm), axis=1)
+            else:
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 1250)), avg_tgm[:, :(num_time-500)]), axis=1)
 
+            tgm_by_word.append(word_tgm[None, ...])
 
-            num_time = avg_tgm.shape[-1]
             fulltime = sub_time['time'][0]
             fulltime[np.abs(fulltime) < 1e-15] = 0
             fulltime = fulltime[:num_time]
-            time_by_word.append(fulltime)
 
             fig, ax = plt.subplots()
             if sens != 'wb':
@@ -176,6 +179,8 @@ if __name__ == '__main__':
             ax.set_xticklabels(fulltime[::250])
             ax.set_xlabel('Time')
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
-            plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
+            # plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
+        word_tgm = np.concatenate(tgm_by_word)
+        print(word_tgm.shape)
 
 
