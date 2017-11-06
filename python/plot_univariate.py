@@ -178,7 +178,7 @@ if __name__ == '__main__':
         for i in range(word_tgm.shape[2]):
             for j in range(word_tgm.shape[3]):
                 sub_perf = np.sum(word_tgm[:, :, i, j] >= 0.25, axis=1)
-                if np.any(sub_perf == len(load_data.VALID_SUBS[exp])):
+                if np.any(sub_perf > 4):
                     total_best[i, j, np.argmax(avg_tgm[:, i, j])] = 1
                 else:
                     total_best[i, j, :] = [0.8, 0.8, 0.8]
