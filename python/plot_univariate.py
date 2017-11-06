@@ -113,9 +113,9 @@ if __name__ == '__main__':
 
     for sen_type in ['passive', 'active']:
         tgm_by_word = []
-        for word in ['firstNoun', 'verb', 'secondNoun']:
+        for word in ['secondNoun', 'firstNoun', 'verb']:
             tgm_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['B', 'C']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -159,7 +159,8 @@ if __name__ == '__main__':
                 word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 750)), avg_tgm), axis=1)
             else:
                 word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 1250)), avg_tgm[:, :(num_time-500)]), axis=1)
-
+            print(word)
+            print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
 
             fulltime = sub_time['time'][0]
