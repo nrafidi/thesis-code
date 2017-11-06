@@ -200,7 +200,7 @@ if __name__ == '__main__':
                 for j in range(num_time):
                     if total_best[i, j, 0] != 0.8:
                         best_word = np.where(np.squeeze(total_best[i, j, :]))
-                        print(best_word[0])
+                        print(best_word[0][0])
                         ax.scatter(j, avg_tgm[best_word[0], i, j] + 0.1, c=colors[best_word[0]], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
