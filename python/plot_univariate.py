@@ -167,35 +167,35 @@ if __name__ == '__main__':
             fulltime[np.abs(fulltime) < 1e-15] = 0
             fulltime = fulltime[:num_time]
 
-            fig, ax = plt.subplots()
-            if sens != 'wb':
-                h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
-                plt.colorbar(h)
-                ax.set_yticks(yticks_sens)
-                ax.set_yticklabels(uni_reg)
-                ax.set_ylabel('Sensors')
-            else:
-                ax.plot(avg_tgm)
-
-            ax.set_xticks(range(0, num_time, 250))
-            ax.set_xticklabels(fulltime[::250])
-            ax.set_xlabel('Time')
-            ax.set_title('{} {} {}'.format(word, sen_type, sens))
+            # fig, ax = plt.subplots()
+            # if sens != 'wb':
+            #     h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
+            #     plt.colorbar(h)
+            #     ax.set_yticks(yticks_sens)
+            #     ax.set_yticklabels(uni_reg)
+            #     ax.set_ylabel('Sensors')
+            # else:
+            #     ax.plot(avg_tgm)
+            #
+            # ax.set_xticks(range(0, num_time, 250))
+            # ax.set_xticklabels(fulltime[::250])
+            # ax.set_xlabel('Time')
+            # ax.set_title('{} {} {}'.format(word, sen_type, sens))
             # plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
         word_tgm = np.concatenate(tgm_by_word)
         total_best = np.zeros((word_tgm.shape[1], word_tgm.shape[2], 3))
 
         for i in range(word_tgm.shape[1]):
             for j in range(word_tgm.shape[2]):
-                if np.any(word_tgm[:, i, j] >= 0.35):
-                    if j < 250:
-                        print(word_tgm[:, i, j])
+                if np.any(word_tgm[:, i, j] >= 0.3):
+                    # if j < 250:
+                    #     print(word_tgm[:, i, j])
                     total_best[i, j, np.argmax(word_tgm[:, i, j])] = 1
                 else:
                     total_best[i, j, :] = [0.8, 0.8, 0.8]
 
         fig, ax = plt.subplots()
         ax.imshow(total_best, interpolation='nearest', aspect='auto')
-        plt.show()
+    plt.show()
 
 
