@@ -112,6 +112,7 @@ if __name__ == '__main__':
 
     for sen_type in ['passive', 'active']:
         tgm_by_word = []
+        time_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
@@ -143,13 +144,24 @@ if __name__ == '__main__':
                 tgm_by_sub.append(tgm)
 
             avg_tgm = np.concatenate(tgm_by_sub)
-            print(avg_tgm.shape)
             avg_tgm = np.squeeze(np.mean(avg_tgm, axis=0))
-            print(avg_tgm.shape)
+
+            if word == 'firstNoun':
+                word_tgm = avg_tgm
+            elif word == 'verb' and sen_type == 'active':
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 250)), avg_tgm), axis=1)
+            elif word == 'verb' and sen_type == 'passive':
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 500)), avg_tgm[:, :]), axis=1)
+            elif word == 'secondNoun' and sen_type == 'active':
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 750)), avg_tgm), axis=1)
+
+
             num_time = avg_tgm.shape[-1]
             fulltime = sub_time['time'][0]
             fulltime[np.abs(fulltime) < 1e-15] = 0
             fulltime = fulltime[:num_time]
+            time_by_word.append(fulltime)
+
             fig, ax = plt.subplots()
             if sens != 'wb':
                 h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
@@ -166,94 +178,4 @@ if __name__ == '__main__':
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
 
-            plt.show()
-            # mu_diff = np.array(sub_mu_diff)
-            # mu_diff = np.mean(mu_diff, axis=0)
-            # fig, ax = plt.subplots()
-            # h = ax.imshow(mu_diff, interpolation='nearest', aspect='auto', vmin=0, vmax=1.4e-11)
 
-
-            # plt.colorbar(h)
-            # plt.savefig('MuDiffs_subAvg_{}_o{}_w{}_{}_{}_{}.pdf'.format(exp, o, w, word, sen_type, sens), bbox_inches='tight')
-            #
-            # mu_diff_maxes = np.max(mu_diff, axis=0)
-            # mu_diff_max_sensors = np.argmax(mu_diff, axis=0)
-            # above_thresh = np.where(mu_diff_maxes >= 1.25e-11)
-            # above_thresh = above_thresh[0]
-            # fig, ax = plt.subplots()
-            # ax.plot(mu_diff_maxes)
-            # for i in range(above_thresh.shape[0]):
-            #     loc = above_thresh[i]
-            #     sloc = mu_diff_max_sensors[loc]
-            #     plt.text(loc, mu_diff_maxes[loc], sorted_reg[sloc][0:3], axes=ax)
-            # ax.set_ylabel('Mu Diff Max over Sensors')
-            # ax.set_xticks(range(0, num_time, 250))
-            # ax.set_xticklabels(fulltime[::250])
-            # ax.set_xlabel('Time')
-            # ax.set_title('{} {} {}'.format(word, sen_type, sens))
-            # plt.savefig('MuDiffMaxes_subAvg_{}_o{}_w{}_{}_{}_{}.pdf'.format(exp, o, w, word, sen_type, sens), bbox_inches='tight')
-            # # mu_diff_co = np.array(sub_mu_diff_co)
-            # # mu_diff_co = np.mean(mu_diff_co, axis=0)
-            # # fig, ax = plt.subplots()
-            # # h = ax.imshow(mu_diff_co, interpolation='nearest', aspect='auto', vmin=0, vmax=0.45)
-            # # ax.set_yticks(yticks_sens)
-            # # ax.set_yticklabels(uni_reg)
-            # # ax.set_ylabel('Sensors')
-            # # ax.set_xticks(range(0, num_time, 250))
-            # # ax.set_xticklabels(fulltime[::250])
-            # # ax.set_xlabel('Time')
-            # ax.set_title('{} {} {}'.format(word, sen_type, sens))
-            # plt.colorbar(h)
-            # plt.savefig('MuDiffs_subAvg_o{}_w{}_{}_{}_{}.pdf'.format(o, w, word, sen_type, sens), bbox_inches='tight')
-
-
-
-            #plt.show()
-
-
-                # tgm = sub_results[0]
-                # print(tgm.shape)
-                # diag = np.diag(tgm)
-                # print(diag.shape)
-                #
-                # print(time.shape)
-                # num_time = time.shape[0]
-
-                # print(fulltime.shape)
-                # num_fulltime = fulltime.shape[0]
-                # masks = np.sum(sub_masks[0], axis=0)
-                # print(masks.shape)
-                # accum_mask = accum_over_time(masks, o)
-                # print(accum_mask.shape)
-                # accum_mask = accum_mask[:, :num_fulltime]
-                # meow = accum_mask
-                # accum_mask = accum_mask[sorted_inds, :]
-                #
-
-                # ax.set_yticks(range(0, num_time, 25))
-                # ax.set_yticklabels(time[::25])
-                # ax.set_ylabel('Train Window Start')
-                # ax.set_xticks(range(0, num_time, 25))
-                # ax.set_xticklabels(time[::25])
-                # ax.set_xlabel('Test Window Start')
-                # plt.colorbar(h)
-                # plt.savefig('TGM_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
-                #
-                # fig, ax = plt.subplots()
-                # ax.plot(time, diag)
-                # ax.set_ylim([0, 1])
-                # ax.set_ylabel('Accuracy')
-                # ax.set_xlabel('Train Window Start')
-                # plt.savefig('Diag_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type))
-                #
-                # fig, ax = plt.subplots()
-                # h = ax.imshow(accum_mask, interpolation='nearest', aspect='auto', vmin=0, vmax=15)
-                # ax.set_yticks(yticks_sens)
-                # ax.set_yticklabels(uni_reg)
-                # ax.set_ylabel('Sensors')
-                # ax.set_xticks(range(0, num_fulltime, 250))
-                # ax.set_xticklabels(fulltime[::250])
-                # ax.set_xlabel('Time')
-                # plt.colorbar(h)
-                # plt.savefig('Masks_{}_o{}_w{}_{}_{}_GNB-FS.pdf'.format(sub, o, w, word, sen_type), bbox_inches='tight')
-                # # plt.show()

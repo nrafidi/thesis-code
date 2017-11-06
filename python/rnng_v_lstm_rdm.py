@@ -78,10 +78,14 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
     # find largest pvalue that is <= than its critical value
     sorted_pvalues = uncorrected_pvalues[:, sorting_inds]
+    print(sorted_pvalues.shape)
     sorted_critical_values = critical_values[:, sorting_inds]
+    print(sorted_critical_values.shape)
     bh_thresh = np.empty((sorted_pvalues.shape[0],))
     for j in range(sorted_pvalues.shape[0]):
         for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
+            print(sorted_pvalues[j, i].shape)
+            print(sorted_critical_values[j, i].shape)
             if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
                 bh_thresh[j] = sorted_pvalues[j, i]
                 print('threshold for row ', j, ' is:', bh_thresh, 'critical value:', sorted_critical_values[j, i], i)
