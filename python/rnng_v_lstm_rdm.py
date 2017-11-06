@@ -225,7 +225,7 @@ if __name__ == '__main__':
         rnng_good = all_pvals_mantel[0, :] <= bh_threshs[0]
         print(rnng_good.shape)
         lstm_good = all_pvals_mantel[1, :] <= bh_threshs[1]
-        good_pvals_mantel = np.concatenate(rnng_good, lstm_good)
+        good_pvals_mantel = np.concatenate((rnng_good[None, :], lstm_good[None, :]), axis=0)
 
         win_scores_rank = np.argmax(all_scores_rank, axis=0)
         print(win_scores_rank.shape)
