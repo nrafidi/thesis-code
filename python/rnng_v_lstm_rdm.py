@@ -216,6 +216,7 @@ if __name__ == '__main__':
         all_scores_rank = np.concatenate([rnng_scores_rank[None, ...], lstm_scores_rank[None, ...], ])
         print(all_scores_rank.shape)
         all_pvals_mantel = np.concatenate([rnng_pvals_mantel[None, ...], lstm_pvals_mantel[None, ...], ])
+        all_scores_mantel = np.concatenate([rnng_scores_mantel[None, ...], lstm_scores_mantel[None, ...], ])
         print(all_pvals_mantel.shape)
 
         good_scores_rank = all_scores_rank >= 0.15
@@ -240,7 +241,7 @@ if __name__ == '__main__':
 
         for i_time in range(all_pvals_mantel.shape[-1]):
             if good_pvals_mantel[win_scores_mantel[i_time], i_time]:
-                ax_mantel.scatter(time[i_time], all_pvals_mantel[win_scores_mantel[i_time], i_time]+0.05,
+                ax_mantel.scatter(time[i_time], all_scores_mantel[win_scores_mantel[i_time], i_time]+0.05,
                            c=colors[win_scores_mantel[i_time]], linewidths=0.0)
         ax_mantel.set_title(uni_reg[i_reg])
         ax_mantel.set_xlim(args.tmin, args.tmax+0.5)
