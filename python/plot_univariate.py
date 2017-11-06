@@ -188,12 +188,14 @@ if __name__ == '__main__':
         for i in range(word_tgm.shape[1]):
             for j in range(word_tgm.shape[2]):
                 if np.any(word_tgm[:, i, j] >= 0.3):
+                    if i < 250:
+                        print(word_tgm[:, i, j])
                     total_best[i, j, np.argmax(word_tgm[:, i, j])] = 1
                 else:
                     total_best[i, j, :] = [0.8, 0.8, 0.8]
 
         fig, ax = plt.subplots()
-        ax.imshow(total_best)
+        ax.imshow(total_best, interpolation='nearest', aspect='auto')
         plt.show()
 
 
