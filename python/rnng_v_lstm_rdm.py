@@ -65,6 +65,7 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 
 def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
     # originally from Mariya Toneva
+    print(uncorrected_pvalues.shape)
     if len(uncorrected_pvalues.shape) == 1:
         uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
 
