@@ -146,6 +146,8 @@ if __name__ == '__main__':
 
             concat_tgm = np.squeeze(np.concatenate(tgm_by_sub))
             print(concat_tgm.shape)
+            if sens == 'wb':
+                concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
             (num_sub, num_sens, num_time) = concat_tgm.shape
             print(num_sub)
             print(num_sens)
@@ -174,25 +176,48 @@ if __name__ == '__main__':
 
         for i in range(word_tgm.shape[2]):
             for j in range(word_tgm.shape[3]):
-                sub_perf = np.sum(word_tgm[:, :, i, j] >= 3, axis=1)
-                print(sub_perf.shape)
+                sub_perf = np.sum(word_tgm[:, :, i, j] >= 0.25, axis=1)
                 if np.any(sub_perf > 1):
                     total_best[i, j, np.argmax(avg_tgm[:, i, j])] = 1
                 else:
                     total_best[i, j, :] = [0.8, 0.8, 0.8]
 
-        fig, ax = plt.subplots()
-        ax.imshow(total_best, interpolation='nearest', aspect='auto')
-        num_time = total_best.shape[1]
-        time = np.arange(0.0, 4.5, 0.002)
-        print(time.shape)
-        ax.set_xticks(range(0, num_time, 250))
-        ax.set_xticklabels(time[::250])
-        if sens != 'wb':
+
+        if sens == 'reg' or sens == 'wb':
+            fig, axs = plt.subplots(avg_tgm.shape[1], 1, figsize=(20, 20))
+            colors = ['r', 'g', 'b']
+            for i in range(avg_tgm.shape[1]):
+                ax = axs[i]
+                h0 = ax.plot(avg_tgm[0, i, :], c=colors[0])
+                h1 = ax.plot(avg_tgm[1, i, :], c=colors[1])
+                h2 = ax.plot(avg_tgm[2, i, :], c=colors[2])
+                h0[0].set_label('firstNoun')
+                h1[0].set_label('verb')
+                h2[0].set_label('secondNoun')
+                num_time = total_best.shape[1]
+
+                for j in range(num_time):
+                    if total_best[i, j, 0] != 0.8:
+                        best_word = np.where(total_best[i, j, :])
+                        ax.scatter(j, avg_tgm[best_word, i, j] + 0.1, c=colors[best_word], linewidths=0.0)
+
+                time = np.arange(0.0, 4.5, 0.002)
+                ax.set_xticks(range(0, num_time, 250))
+                ax.set_xticklabels(time[::250])
+                ax.legend()
+                if sens == 'reg':
+                    ax.set_title(uni_reg[i])
+        else:
+            fig, ax = plt.subplots()
+            ax.imshow(total_best, interpolation='nearest', aspect='auto')
+            num_time = total_best.shape[1]
+            time = np.arange(0.0, 4.5, 0.002)
+            ax.set_xticks(range(0, num_time, 250))
+            ax.set_xticklabels(time[::250])
             ax.set_yticks(yticks_sens)
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
-        ax.set_title(sen_type)
+            ax.set_title(sen_type)
     plt.show()
 
 
