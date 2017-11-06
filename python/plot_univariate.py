@@ -188,7 +188,10 @@ if __name__ == '__main__':
             fig, axs = plt.subplots(avg_tgm.shape[1], 1, figsize=(20, 20))
             colors = ['r', 'g', 'b']
             for i in range(avg_tgm.shape[1]):
-                ax = axs[i]
+                if sens == 'wb':
+                    ax = axs
+                else:
+                    ax = axs[i]
                 h0 = ax.plot(avg_tgm[0, i, :], c=colors[0])
                 h1 = ax.plot(avg_tgm[1, i, :], c=colors[1])
                 h2 = ax.plot(avg_tgm[2, i, :], c=colors[2])
@@ -204,8 +207,8 @@ if __name__ == '__main__':
                         ax.scatter(j, avg_tgm[best_word[0][0], i, j] + 0.1, c=colors[best_word[0][0]], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
-                ax.set_xlim(0, num_time)
-                ax.set_ylim(0, 1.0)
+                ax.set_xlim(0, num_time + 500)
+                ax.set_ylim(0, 0.8)
                 ax.set_xticks(range(0, num_time, 250))
                 ax.set_xticklabels(time[::250])
                 ax.legend()
@@ -223,6 +226,6 @@ if __name__ == '__main__':
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
-        plt.show()
+    plt.show()
 
 
