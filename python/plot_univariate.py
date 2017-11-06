@@ -204,11 +204,14 @@ if __name__ == '__main__':
                         ax.scatter(j, avg_tgm[best_word[0][0], i, j] + 0.1, c=colors[best_word[0][0]], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
+                ax.set_xlim(0, num_time)
+                ax.set_ylim(0, 1.0)
                 ax.set_xticks(range(0, num_time, 250))
                 ax.set_xticklabels(time[::250])
                 ax.legend()
                 if sens == 'reg':
                     ax.set_title(uni_reg[i])
+            fig.tight_layout()
         else:
             fig, ax = plt.subplots()
             ax.imshow(total_best, interpolation='nearest', aspect='auto')
