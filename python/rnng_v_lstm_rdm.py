@@ -65,7 +65,6 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 
 def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
     # originally from Mariya Toneva
-    print(uncorrected_pvalues.shape)
     if len(uncorrected_pvalues.shape) == 1:
         uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
 
@@ -78,10 +77,11 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
     critical_values = ranks * alpha / (uncorrected_pvalues.shape[1] * dependency_constant)
 
     # find largest pvalue that is <= than its critical value
-    sorted_pvalues = uncorrected_pvalues[:, sorting_inds]
-    print(sorted_pvalues.shape)
-    sorted_critical_values = critical_values[:, sorting_inds]
-    print(sorted_critical_values.shape)
+    sorted_pvalues = np.empty(uncorrected_pvalues.shape)
+    sorted_critical_values = np.empty(critical_values.shape)
+    for i in range(uncorrected_pvalues.shape[0]):
+        sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
+        sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
     bh_thresh = np.empty((sorted_pvalues.shape[0],))
     for j in range(sorted_pvalues.shape[0]):
         for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
