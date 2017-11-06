@@ -147,6 +147,8 @@ if __name__ == '__main__':
             concat_tgm = np.squeeze(np.concatenate(tgm_by_sub))
             print(concat_tgm.shape)
             (num_sub, num_sens, num_time) = concat_tgm.shape
+            print(num_sub)
+            print(num_sens)
 
             if word == 'firstNoun' and sen_type == 'active':
                 word_tgm = concat_tgm[:, :, (num_time-250)]
