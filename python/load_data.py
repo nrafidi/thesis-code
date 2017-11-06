@@ -63,12 +63,12 @@ WORD_PER_SEN = {'krns2':
                           'verb': ['kicked', 'helped', 'approached', 'punched'],
                           'secondNoun': ['man.', 'girl.', 'woman.', 'boy.']}}}
 
-TIME_LIMITS = {'active': {'firstNoun': {'tmin': -0.5, 'tmax': 4.5},
-                          'verb': {'tmin': -0.5, 'tmax': 4},
-                          'secondNoun': {'tmin': -0.5, 'tmax': 3}},
-               'passive': {'firstNoun': {'tmin': -0.5, 'tmax': 5.5},
-                           'verb': {'tmin': -0.5, 'tmax': 4.5},
-                           'secondNoun': {'tmin': -0.5, 'tmax': 4}}}
+TIME_LIMITS = {'active': {'firstNoun': {'tmin': -0.5, 'tmax': 4.0},
+                          'verb': {'tmin': -1.0, 'tmax': 3.5},
+                          'secondNoun': {'tmin': -2.0, 'tmax': 2.5}},
+               'passive': {'firstNoun': {'tmin': -0.5, 'tmax': 4.0},
+                           'verb': {'tmin': -1.5, 'tmax': 3.0},
+                           'secondNoun': {'tmin': -3.0, 'tmax': 1.5}}}
 
 # Old slugs:
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
