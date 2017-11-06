@@ -158,7 +158,7 @@ if __name__ == '__main__':
             elif word == 'secondNoun' and sen_type == 'active':
                 word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 750)), avg_tgm), axis=1)
             else:
-                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 1250)), avg_tgm[:, :(num_time-500)]), axis=1)
+                word_tgm = np.concatenate((np.zeros((avg_tgm.shape[0], 1250)), avg_tgm[:, :(num_time-1000)]), axis=1)
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
@@ -183,6 +183,17 @@ if __name__ == '__main__':
             ax.set_title('{} {} {}'.format(word, sen_type, sens))
             # plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
         word_tgm = np.concatenate(tgm_by_word)
-        print(word_tgm.shape)
+        total_best = np.zeros((word_tgm.shape[1], word_tgm.shape[2], 3))
+
+        for i in range(word_tgm.shape[1]):
+            for j in range(word_tgm.shape[2]):
+                if np.any(word_tgm[:, i, j] >= 0.3):
+                    total_best[i, j, np.argmax(word_tgm[:, i, j])] = 1
+                else:
+                    total_best[i, j, :] = [0.8, 0.8, 0.8]
+
+        fig, ax = plt.subplots()
+        ax.imshow(total_best)
+        plt.show()
 
 
