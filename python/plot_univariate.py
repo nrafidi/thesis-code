@@ -109,6 +109,7 @@ if __name__ == '__main__':
         accuracy = 'abs-wb'
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+        accuracy='abs'
 
     for sen_type in ['passive', 'active']:
         tgm_by_word = []
