@@ -89,5 +89,7 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
+    ax.set_title('{} {} {} {}'.format(args.experiment, args.subject, args.sen_type, args.word))
     plt.colorbar(h)
+    plt.savefig('POVE_{}_{}_{}_{}.pdf'.format(args.experiment, args.subject, args.sen_type, args.word), bbox_inches='tight')
     plt.show()
