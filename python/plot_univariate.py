@@ -116,7 +116,7 @@ if __name__ == '__main__':
         tgm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['B', 'C']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -144,8 +144,9 @@ if __name__ == '__main__':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
 
-            avg_tgm = np.concatenate(tgm_by_sub)
-            avg_tgm = np.squeeze(np.mean(avg_tgm, axis=0))
+            concat_tgm = np.concatenate(tgm_by_sub)
+            print(concat_tgm.shape)
+            avg_tgm = np.squeeze(np.mean(concat_tgm, axis=0))
             if sens == 'wb':
                 avg_tgm = np.reshape(avg_tgm, (1, -1))
             num_time = avg_tgm.shape[-1]
@@ -166,25 +167,7 @@ if __name__ == '__main__':
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
 
-            fulltime = sub_time['time'][0]
-            fulltime[np.abs(fulltime) < 1e-15] = 0
-            fulltime = fulltime[:num_time]
 
-            # fig, ax = plt.subplots()
-            # if sens != 'wb':
-            #     h = ax.imshow(avg_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=0.5)
-            #     plt.colorbar(h)
-            #     ax.set_yticks(yticks_sens)
-            #     ax.set_yticklabels(uni_reg)
-            #     ax.set_ylabel('Sensors')
-            # else:
-            #     ax.plot(avg_tgm)
-            #
-            # ax.set_xticks(range(0, num_time, 250))
-            # ax.set_xticklabels(fulltime[::250])
-            # ax.set_xlabel('Time')
-            # ax.set_title('{} {} {}'.format(word, sen_type, sens))
-            # plt.savefig('uni_{}_{}_{}.pdf'.format(word, sen_type, sens), bbox_inches='tight')
         word_tgm = np.concatenate(tgm_by_word)
         total_best = np.zeros((word_tgm.shape[1], word_tgm.shape[2], 3))
 
