@@ -82,11 +82,11 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
     for i in range(uncorrected_pvalues.shape[0]):
         sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
         sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
-    bh_thresh = np.empty((sorted_pvalues.shape[0],))
+    bh_thresh = -1.0*np.ones((sorted_pvalues.shape[0],))
     for j in range(sorted_pvalues.shape[0]):
         for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
             if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
-                if not bh_thresh[j]:
+                if bh_thresh[j] < 0:
                     bh_thresh[j] = sorted_pvalues[j, i]
                     print('threshold for row ', j, ' is:', bh_thresh[j], 'critical value:', sorted_critical_values[j, i], i)
 
