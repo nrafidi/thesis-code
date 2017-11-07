@@ -246,7 +246,7 @@ if __name__ == '__main__':
     masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
     if sens == 'reg' or sens == 'wb':
         fig, axs = plt.subplots(avg.shape[2], 1, figsize=(20, 20))
-        colors = ['r', 'g', 'b']
+        colors = ['r', 'g', 'b', 'm', 'y', 'c']
         for i in range(avg.shape[2]):
             if sens == 'wb':
                 ax = axs
@@ -255,9 +255,9 @@ if __name__ == '__main__':
             h00 = ax.plot(masked_avg[0, 0, i, :], c=colors[0])
             h01 = ax.plot(masked_avg[0, 1, i, :], c=colors[1])
             h02 = ax.plot(masked_avg[0, 2, i, :], c=colors[2])
-            h10 = ax.plot(masked_avg[1, 0, i, :], c=colors[0], linestyle = 'dashed')
-            h11 = ax.plot(masked_avg[1, 1, i, :], c=colors[1], linestyle = 'dashed')
-            h12 = ax.plot(masked_avg[1, 2, i, :], c=colors[2], linestyle = 'dashed')
+            h10 = ax.plot(masked_avg[1, 0, i, :], c=colors[3])
+            h11 = ax.plot(masked_avg[1, 1, i, :], c=colors[4])
+            h12 = ax.plot(masked_avg[1, 2, i, :], c=colors[5])
 
             h00[0].set_label('firstNoun active')
             h01[0].set_label('verb active')
