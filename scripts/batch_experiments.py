@@ -49,7 +49,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},doZscore={z},' \
-                'doAvg={avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True,doFeatSelect=True ' \
+                'doAvg={avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False,doFeatSelect=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -106,4 +106,4 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
         if job_id % 100 == 0:
-            time.sleep(600)
+            time.sleep(300)
