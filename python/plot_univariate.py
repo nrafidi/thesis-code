@@ -252,12 +252,12 @@ if __name__ == '__main__':
                 ax = axs
             else:
                 ax = axs[i]
-            h00 = ax.plot(masked_avg_tgm[0, 0, i, :], c=colors[0])
-            h01 = ax.plot(masked_avg_tgm[0, 1, i, :], c=colors[1])
-            h02 = ax.plot(masked_avg_tgm[0, 2, i, :], c=colors[2])
-            h10 = ax.plot(masked_avg_tgm[1, 0, i, :], c=colors[0], linestyle = 'dashed')
-            h11 = ax.plot(masked_avg_tgm[1, 1, i, :], c=colors[1], linestyle = 'dashed')
-            h12 = ax.plot(masked_avg_tgm[1, 2, i, :], c=colors[2], linestyle = 'dashed')
+            h00 = ax.plot(masked_avg[0, 0, i, :], c=colors[0])
+            h01 = ax.plot(masked_avg[0, 1, i, :], c=colors[1])
+            h02 = ax.plot(masked_avg[0, 2, i, :], c=colors[2])
+            h10 = ax.plot(masked_avg[1, 0, i, :], c=colors[0], linestyle = 'dashed')
+            h11 = ax.plot(masked_avg[1, 1, i, :], c=colors[1], linestyle = 'dashed')
+            h12 = ax.plot(masked_avg[1, 2, i, :], c=colors[2], linestyle = 'dashed')
 
             h00[0].set_label('firstNoun active')
             h01[0].set_label('verb active')
@@ -265,7 +265,7 @@ if __name__ == '__main__':
             h10[0].set_label('firstNoun passive')
             h11[0].set_label('verb passive')
             h12[0].set_label('secondNoun passive')
-            num_time = total_best.shape[1]
+            num_time = masked_avg.shape[-1]
             #
             # for j in range(num_time):
             #     if total_best[i, j, 0] != 0.8:
