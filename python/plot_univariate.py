@@ -112,7 +112,7 @@ if __name__ == '__main__':
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    for sen_type in ['active', 'passive']:
+    for sen_type in ['passive', 'active']:
         tgm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
