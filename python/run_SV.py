@@ -6,11 +6,12 @@ import os.path
 import random
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import KFold
+from sklearn.decomposition import PCA
 import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_SV/'
 SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}SV_{sub}_{sen_type}_{word}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
+SAVE_FILE = '{dir}SV_{sub}_{sen_type}_{word}_{direction}_pca{pca}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
             'adj{adj}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}_rsSCV{rsS}'
 
 CV_RAND_STATE = 12191989
@@ -39,6 +40,8 @@ def run_sv_exp(experiment,
                subject,
                sen_type,
                word,
+               direction='encoding',
+               doPCA = False,
                isPDTW = False,
                isPerm = False,
                num_folds = 2,
@@ -69,6 +72,8 @@ def run_sv_exp(experiment,
                              sub=subject,
                              sen_type=sen_type,
                              word=word,
+                             direction=direction,
+                             pca=bool_to_str(doPCA),
                              pdtw=bool_to_str(isPDTW),
                              perm=bool_to_str(isPerm),
                              num_folds=num_folds,
@@ -122,6 +127,19 @@ def run_sv_exp(experiment,
 
     semantic_vectors = load_data.load_glove_vectors(labels)
 
+    if doPCA:
+        if direction == 'encoding':
+            pca = PCA()
+            pca.fit(semantic_vectors)
+            semantic_vectors *= np.transpose(pca.components_)
+        else:
+            reshaped_data = np.reshape(data, (data.shape[0], -1))
+            pca = PCA()
+            pca.fit(semantic_vectors)
+            semantic_vectors *= np.transpose(pca.components_)
+
+
+
     if isPerm:
         random.seed(random_state_perm)
         random.shuffle(labels)
@@ -153,6 +171,8 @@ if __name__ == '__main__':
     parser.add_argument('--subject')
     parser.add_argument('--sen_type')
     parser.add_argument('--word')
+    parser.add_argument('--direction', default='encoding')
+    parser.add_argument('--doPCA', default='False')
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--isPerm', default='False')
     parser.add_argument('--num_folds', type=int, default=16)
@@ -188,6 +208,8 @@ if __name__ == '__main__':
                    subject=args.subject,
                    sen_type=args.sen_type,
                    word=args.word,
+                   direction=args.direction,
+                   doPCA=str_to_bool(args.doPCA),
                    isPDTW=str_to_bool(args.isPDTW),
                    isPerm=str_to_bool(args.isPerm),
                    num_folds=args.num_folds,
