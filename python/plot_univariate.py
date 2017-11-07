@@ -112,7 +112,9 @@ if __name__ == '__main__':
     else:
         yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    for sen_type in ['passive', 'active']:
+    avg_by_sen_type = []
+    masked_avg_by_sen_type = []
+    for sen_type in ['active', 'passive']:
         tgm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
@@ -178,9 +180,11 @@ if __name__ == '__main__':
         word_tgm = np.concatenate(tgm_by_word)
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
+        avg_by_sen_type.append(avg_tgm[None, ...])
         best_avg = np.max(avg_tgm, axis=0)
         masked_avg_tgm = np.copy(avg_tgm)
-        masked_avg_tgm[masked_avg_tgm != best_avg] = 0.0
+        masked_avg_tgm[masked_avg_tgm != best_avg] = np.nan
+        masked_avg_by_sen_type.append(masked_avg_tgm[None, ...])
 
         print(avg_tgm.shape)
         total_best = np.zeros((word_tgm.shape[2], word_tgm.shape[3], 3))
@@ -237,6 +241,47 @@ if __name__ == '__main__':
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
         fig.savefig('Univariate_NVN_{}_{}_{}.pdf'.format(sens, sen_type, args.experiment))
+
+    avg = np.concatenate(avg_by_sen_type, axis=0)
+    masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
+    if sens == 'reg' or sens == 'wb':
+        fig, axs = plt.subplots(avg.shape[2], 1, figsize=(20, 20))
+        colors = ['r', 'g', 'b']
+        for i in range(avg.shape[2]):
+            if sens == 'wb':
+                ax = axs
+            else:
+                ax = axs[i]
+            h00 = ax.plot(masked_avg_tgm[0, 0, i, :], c=colors[0])
+            h01 = ax.plot(masked_avg_tgm[0, 1, i, :], c=colors[1])
+            h02 = ax.plot(masked_avg_tgm[0, 2, i, :], c=colors[2])
+            h10 = ax.plot(masked_avg_tgm[1, 0, i, :], c=colors[0], linestyle = 'dashed')
+            h11 = ax.plot(masked_avg_tgm[1, 1, i, :], c=colors[1], linestyle = 'dashed')
+            h12 = ax.plot(masked_avg_tgm[1, 2, i, :], c=colors[2], linestyle = 'dashed')
+
+            h00[0].set_label('firstNoun active')
+            h01[0].set_label('verb active')
+            h02[0].set_label('secondNoun active')
+            h10[0].set_label('firstNoun passive')
+            h11[0].set_label('verb passive')
+            h12[0].set_label('secondNoun passive')
+            num_time = total_best.shape[1]
+            #
+            # for j in range(num_time):
+            #     if total_best[i, j, 0] != 0.8:
+            #         best_word = np.where(np.squeeze(total_best[i, j, :]))
+            #         ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
+
+            time = np.arange(0.0, 4.5, 0.002)
+            ax.set_xlim(0, num_time + 500)
+            ax.set_ylim(0.2, 0.8)
+            ax.set_xticks(range(0, num_time, 250))
+            ax.set_xticklabels(time[::250])
+            ax.legend()
+            if sens == 'reg':
+                ax.set_title(uni_reg[i])
+        fig.tight_layout()
+        fig.savefig('Univariate_NVN_{}_AvP_{}.pdf'.format(sens, args.experiment))
     plt.show()
 
 
