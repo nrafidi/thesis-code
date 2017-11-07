@@ -178,13 +178,17 @@ if __name__ == '__main__':
         word_tgm = np.concatenate(tgm_by_word)
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
+        best_avg = np.max(avg_tgm, axis=0)
+        masked_avg_tgm = np.copy(avg_tgm)
+        masked_avg_tgm[masked_avg_tgm != best_avg] = 0.0
+
         print(avg_tgm.shape)
         total_best = np.zeros((word_tgm.shape[2], word_tgm.shape[3], 3))
 
         for i in range(word_tgm.shape[2]):
             for j in range(word_tgm.shape[3]):
                 sub_perf = np.sum(word_tgm[:, :, i, j] >= 0.25, axis=1)
-                if np.any(sub_perf > 4):
+                if np.any(sub_perf > 5):
                     total_best[i, j, np.argmax(avg_tgm[:, i, j])] = 1
                 else:
                     total_best[i, j, :] = [0.8, 0.8, 0.8]
@@ -198,9 +202,9 @@ if __name__ == '__main__':
                     ax = axs
                 else:
                     ax = axs[i]
-                h0 = ax.plot(avg_tgm[0, i, :], c=colors[0])
-                h1 = ax.plot(avg_tgm[1, i, :], c=colors[1])
-                h2 = ax.plot(avg_tgm[2, i, :], c=colors[2])
+                h0 = ax.plot(masked_avg_tgm[0, i, :], c=colors[0])
+                h1 = ax.plot(masked_avg_tgm[1, i, :], c=colors[1])
+                h2 = ax.plot(masked_avg_tgm[2, i, :], c=colors[2])
                 h0[0].set_label('firstNoun')
                 h1[0].set_label('verb')
                 h2[0].set_label('secondNoun')
