@@ -267,9 +267,9 @@ if __name__ == '__main__':
                 h00 = ax.plot(masked_avg[0, 0, i, active_inds], c=colors[0])
                 h01 = ax.plot(masked_avg[0, 1, i, active_inds], c=colors[1])
                 h02 = ax.plot(masked_avg[0, 2, i, active_inds], c=colors[2])
-                h10 = ax.plot(masked_avg[1, 0, i, passive_inds], c=colors[3])
-                h11 = ax.plot(masked_avg[1, 1, i, passive_inds], c=colors[4])
-                h12 = ax.plot(masked_avg[1, 2, i, passive_inds], c=colors[5])
+                h10 = ax.plot(masked_avg[1, 0, i, passive_inds]+ 0.25, c=colors[3])
+                h11 = ax.plot(masked_avg[1, 1, i, passive_inds]+ 0.25, c=colors[4])
+                h12 = ax.plot(masked_avg[1, 2, i, passive_inds]+ 0.25, c=colors[5])
 
                 h00[0].set_label('firstNoun active')
                 h01[0].set_label('verb active')
