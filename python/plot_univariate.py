@@ -164,7 +164,12 @@ if __name__ == '__main__':
             #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=2)
             # else:
             #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=2)
-            word_tgm = concat_tgm
+            if word == 'secondNoun' and sen_type == 'passive':
+                word_tgm = np.concatenate((concat_tgm,
+                                           np.zeros((num_sub, num_sens, 1))),
+                                          axis=2)
+            else:
+                word_tgm = concat_tgm
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
