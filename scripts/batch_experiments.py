@@ -29,14 +29,14 @@ WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
 OVERLAPS = [3] #12, 25, 50, 100, 150, 200, 250, 300, 350]
 MODES = ['uni']  # pred
 IS_PDTWS = [False]  # True
-IS_PERMS = [False]  # True
+IS_PERMS = [True]  # True
 NUM_FOLDSS = [32]
 ALGS = ['GNB']  # GNB
 DO_ZSCORES = [False]  # True
 DO_AVGS = [False]  # True
 NUM_INSTANCESS = [2]  # 5 10
 REPS_TO_USES = [10]  # 10
-RANDOM_STATES = [1]  # range(1, 10)
+RANDOM_STATES = range(1, 100)
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -106,4 +106,4 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
         if job_id % 100 == 0:
-            time.sleep(300)
+            time.sleep(600)
