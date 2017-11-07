@@ -244,44 +244,57 @@ if __name__ == '__main__':
 
     avg = np.concatenate(avg_by_sen_type, axis=0)
     masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
+    num_time = masked_avg.shape[-1]
     if sens == 'reg' or sens == 'wb':
-        fig, axs = plt.subplots(avg.shape[2], 1, figsize=(20, 20))
-        colors = ['r', 'g', 'b', 'm', 'y', 'c']
-        for i in range(avg.shape[2]):
-            if sens == 'wb':
-                ax = axs
+        for alignment in ['firstNoun', 'verb', 'secondNoun']:
+            if alignment == 'firstNoun':
+                active_inds = range(num_time)
+                passive_inds = range(num_time)
+            elif alignment == 'verb':
+                active_inds = range(0, num_time-250)
+                passive_inds = range(251, num_time)
             else:
-                ax = axs[i]
-            h00 = ax.plot(masked_avg[0, 0, i, :], c=colors[0])
-            h01 = ax.plot(masked_avg[0, 1, i, :], c=colors[1])
-            h02 = ax.plot(masked_avg[0, 2, i, :], c=colors[2])
-            h10 = ax.plot(masked_avg[1, 0, i, :], c=colors[3])
-            h11 = ax.plot(masked_avg[1, 1, i, :], c=colors[4])
-            h12 = ax.plot(masked_avg[1, 2, i, :], c=colors[5])
+                active_inds = range(0, num_time - 500)
+                passive_inds = range(501, num_time)
 
-            h00[0].set_label('firstNoun active')
-            h01[0].set_label('verb active')
-            h02[0].set_label('secondNoun active')
-            h10[0].set_label('firstNoun passive')
-            h11[0].set_label('verb passive')
-            h12[0].set_label('secondNoun passive')
-            num_time = masked_avg.shape[-1]
-            #
-            # for j in range(num_time):
-            #     if total_best[i, j, 0] != 0.8:
-            #         best_word = np.where(np.squeeze(total_best[i, j, :]))
-            #         ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
+            fig, axs = plt.subplots(avg.shape[2], 1, figsize=(20, 20))
+            colors = ['r', 'g', 'b', 'm', 'y', 'c']
+            for i in range(avg.shape[2]):
+                if sens == 'wb':
+                    ax = axs
+                else:
+                    ax = axs[i]
+                h00 = ax.plot(masked_avg[0, 0, i, active_inds], c=colors[0])
+                h01 = ax.plot(masked_avg[0, 1, i, active_inds], c=colors[1])
+                h02 = ax.plot(masked_avg[0, 2, i, active_inds], c=colors[2])
+                h10 = ax.plot(masked_avg[1, 0, i, passive_inds], c=colors[3])
+                h11 = ax.plot(masked_avg[1, 1, i, passive_inds], c=colors[4])
+                h12 = ax.plot(masked_avg[1, 2, i, passive_inds], c=colors[5])
 
-            time = np.arange(0.0, 4.5, 0.002)
-            ax.set_xlim(0, num_time + 500)
-            ax.set_ylim(0.2, 0.8)
-            ax.set_xticks(range(0, num_time, 250))
-            ax.set_xticklabels(time[::250])
-            ax.legend()
-            if sens == 'reg':
-                ax.set_title(uni_reg[i])
-        fig.tight_layout()
-        fig.savefig('Univariate_NVN_{}_AvP_{}.pdf'.format(sens, args.experiment))
+                h00[0].set_label('firstNoun active')
+                h01[0].set_label('verb active')
+                h02[0].set_label('secondNoun active')
+                h10[0].set_label('firstNoun passive')
+                h11[0].set_label('verb passive')
+                h12[0].set_label('secondNoun passive')
+
+                #
+                # for j in range(num_time):
+                #     if total_best[i, j, 0] != 0.8:
+                #         best_word = np.where(np.squeeze(total_best[i, j, :]))
+                #         ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
+
+                time = np.arange(0.0, 4.5, 0.002)
+                ax.set_xlim(0, num_time + 500)
+                ax.set_ylim(0.2, 0.8)
+                ax.set_xticks(range(0, num_time, 250))
+                ax.set_xticklabels(time[::250])
+                ax.legend()
+                if sens == 'reg':
+                    ax.set_title(uni_reg[i])
+            fig.suptitle(alignment)
+            fig.tight_layout()
+            fig.savefig('Univariate_NVN_{}_AvP_{}_{}.pdf'.format(sens, alignment, args.experiment))
     plt.show()
 
 
