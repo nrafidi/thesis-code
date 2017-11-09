@@ -267,7 +267,7 @@ if __name__ == '__main__':
 
 
     max_val = np.max(max_reg)
-    min_val = np.min(min_reg)
+    min_val = 0.0 %np.min(min_reg)
     for i_reg in range(num_reg):
         axs[i_reg].set_ylim(min_val, max_val+0.1)
 
