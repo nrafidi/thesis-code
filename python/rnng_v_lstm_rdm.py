@@ -231,6 +231,9 @@ if __name__ == '__main__':
         win_scores_rank = np.argmax(all_scores_rank, axis=0)
         print(win_scores_rank.shape)
         win_scores_mantel = np.argmin(all_pvals_mantel, axis=0)
+        best_scores_mantel = np.max(all_scores_mantel, axis=0)
+        rnng_scores_mantel[rnng_scores_mantel != best_scores_mantel] = np.nan
+        lstm_scores_mantel[lstm_scores_mantel != best_scores_mantel] = np.nan
 
 
         h0 = ax_mantel.plot(time, rnng_scores_mantel)
