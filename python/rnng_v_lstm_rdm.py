@@ -267,12 +267,12 @@ if __name__ == '__main__':
 
 
     max_val = np.max(max_reg)
-    min_val = 0.0 %np.min(min_reg)
+    min_val = 0.0 #np.min(min_reg)
     for i_reg in range(num_reg):
         axs[i_reg].set_ylim(min_val, max_val+0.1)
 
     max_val_mantel = np.max(max_reg_mantel)
-    min_val_mantel = np.min(min_reg_mantel)
+    min_val_mantel = 0.0 #np.min(min_reg_mantel)
     for i_reg in range(num_reg):
         axs_mantel[i_reg].set_ylim(min_val_mantel, max_val_mantel + 0.1)
 
