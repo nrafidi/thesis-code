@@ -15,7 +15,7 @@ import Mantel
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_rnng_lstm_mantel.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_rnng_lstm_mantel-upper.npz'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
 
@@ -202,8 +202,8 @@ if __name__ == '__main__':
             for i_t in range(rdm.shape[1]):
                 rnng_scores_rank[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
                 lstm_scores_rank[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
-                rnng_scores_mantel[i_t], rnng_pvals_mantel[i_t], _ = Mantel.test(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
-                lstm_scores_mantel[i_t], lstm_pvals_mantel[i_t], _ = Mantel.test(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
+                rnng_scores_mantel[i_t], rnng_pvals_mantel[i_t], _ = Mantel.test(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm, tail='upper')
+                lstm_scores_mantel[i_t], lstm_pvals_mantel[i_t], _ = Mantel.test(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm, tail='upper')
             np.savez_compressed(fname, rnng_scores_rank=rnng_scores_rank, lstm_scores_rank=lstm_scores_rank,
                                 rnng_scores_mantel=rnng_scores_mantel, lstm_scores_mantel=lstm_scores_mantel,
                                 rnng_pvals_mantel=rnng_pvals_mantel, lstm_pvals_mantel=lstm_pvals_mantel)
