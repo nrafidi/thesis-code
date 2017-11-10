@@ -252,7 +252,7 @@ if __name__ == '__main__':
                                            np.zeros((num_sub, num_sens, 1))),
                                           axis=2)
                 corr_pvals = np.concatenate((corr_pvals,
-                                           np.ones((num_sub, num_sens, 1))),
+                                           np.ones((num_sens, 1))),
                                           axis=1)
             else:
                 word_tgm = concat_tgm
