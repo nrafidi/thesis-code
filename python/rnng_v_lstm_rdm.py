@@ -17,6 +17,7 @@ SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
 SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_rnng_lstm_mantel-upper.npz'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
+STIM = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_with_unk_final.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
@@ -99,6 +100,7 @@ if __name__ == '__main__':
     parser.add_argument('--dist', default='euclidean')
     parser.add_argument('--tmin', type=float, default=-2.0)
     parser.add_argument('--tmax', type=float, default=1.5)
+    parser.add_argument('--exc_unk', type=bool, default=False)
     parser.add_argument('--isPDTW', default='False')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
@@ -109,6 +111,11 @@ if __name__ == '__main__':
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
     time = np.arange(args.tmin, args.tmax + 0.002, 0.002)
+
+    if args.exc_unk:
+        stimuli = np.loadtxt(STIM)
+        print(stimuli.shape)
+        print(stimuli[0])
 
     kendall_scores_by_exp = []
     mantel_scores_by_exp = []
