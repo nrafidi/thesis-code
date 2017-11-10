@@ -202,7 +202,7 @@ if __name__ == '__main__':
                                                                 accuracy,
                                                                 sub,
                                                                 param_specs=param_specs,
-                                                                param_limit=5)
+                                                                param_limit=2)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
@@ -306,6 +306,7 @@ if __name__ == '__main__':
                 h2[0].set_label('secondNoun')
                 num_time = total_best.shape[1]
 
+                print(word_scatter.shape)
                 for k in range(3):
                     for j in range(num_time):
                         if not np.isnan(word_scatter[k, i, j]):
