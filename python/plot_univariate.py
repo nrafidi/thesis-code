@@ -253,7 +253,7 @@ if __name__ == '__main__':
                                           axis=2)
                 corr_pvals = np.concatenate((corr_pvals,
                                            np.ones((num_sub, num_sens, 1))),
-                                          axis=2)
+                                          axis=1)
             else:
                 word_tgm = concat_tgm
             tgm_for_scatter = np.copy(word_tgm)
@@ -309,7 +309,7 @@ if __name__ == '__main__':
                 h2[0].set_label('secondNoun')
                 num_time = total_best.shape[1]
 
-                print(word_scatter.shape)
+                # print(word_scatter.shape)
                 for k in range(3):
                     for j in range(num_time):
                         if not np.isnan(word_scatter[k, i, j]):
