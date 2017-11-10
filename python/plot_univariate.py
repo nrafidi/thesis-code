@@ -62,6 +62,7 @@ def comb_by_loc(tgm, sens):
 
 
 def correct_pvals(uncorrected_pvals):
+    print('moo')
     up_shape = uncorrected_pvals.shape
     print(up_shape)
     total_pvals = np.reshape(uncorrected_pvals, (up_shape[0], up_shape[1], -1))
@@ -201,7 +202,9 @@ if __name__ == '__main__':
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
                 perm_tgm = np.stack(np.squeeze(sub_perm_results))
+                print('meow')
                 print(perm_tgm.shape)
+                print(tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
                     perm_tgm = perm_tgm[:, sorted_inds, :]
@@ -209,10 +212,12 @@ if __name__ == '__main__':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
                 pvals = np.mean(perm_tgm >= tgm[None, ...], axis=0)
+                print('woof')
                 print(pvals.shape)
                 pval_by_sub.append(pvals[None, :])
 
             concat_tgm = np.squeeze(np.concatenate(tgm_by_sub))
+            print('oink')
             print(concat_tgm.shape)
             total_pvals = np.concatenate(pval_by_sub)
             print(total_pvals.shape)
@@ -307,7 +312,7 @@ if __name__ == '__main__':
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
-        fig.savefig('Univariate_NVN_{}_{}_{}.pdf'.format(sens, sen_type, args.experiment))
+        fig.savefig('Univariate_NVN_{}_{}_{}_perm.pdf'.format(sens, sen_type, args.experiment))
 
     avg = np.concatenate(avg_by_sen_type, axis=0)
     masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
@@ -361,7 +366,7 @@ if __name__ == '__main__':
                     ax.set_title(uni_reg[i])
             fig.suptitle(alignment)
             fig.tight_layout()
-            fig.savefig('Univariate_NVN_{}_AvP_{}_{}.pdf'.format(sens, alignment, args.experiment))
+            fig.savefig('Univariate_NVN_{}_AvP_{}_{}_perm.pdf'.format(sens, alignment, args.experiment))
     plt.show()
 
 
