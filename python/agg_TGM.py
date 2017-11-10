@@ -206,7 +206,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None):
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        print(f)
+        # print(f)
         print(i_f)
         for param in PARAMS_TO_AGG:
             if param not in sub_params:

@@ -11,7 +11,7 @@ import run_TGM
 import coef_sim
 
 
-SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 
 
 def accum_over_sub(sub_results):
@@ -116,22 +116,32 @@ if __name__ == '__main__':
     masked_avg_by_sen_type = []
     for sen_type in ['active', 'passive']:
         tgm_by_word = []
+        perm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
+            perm_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
-                               'pr': 'F',
+                               'pr': 'T',
                                'alg': 'GNB-FS',
                                'F': 32,
                                'z': 'F',
                                'avg': 'F',
                                'ni': 2,
                                'nr': 10,
-                               'rsPerm': 1,
                                'rsCV': run_TGM.CV_RAND_STATE,
                                'rsSCV': run_TGM.SUB_CV_RAND_STATE}
+                sub_perm_results, _, _, _ = agg_TGM.agg_results(exp,
+                                                                mode,
+                                                                word,
+                                                                sen_type,
+                                                                accuracy,
+                                                                sub,
+                                                                param_specs=param_specs)
+                param_specs['rsPerm'] = 1
+                param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
                                                                           mode,
                                                                           word,
@@ -140,6 +150,8 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
+                perm_tgm = np.stack(sub_perm_results)
+                print(perm_tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
@@ -154,18 +166,6 @@ if __name__ == '__main__':
             print(num_sub)
             print(num_sens)
 
-            # if word == 'firstNoun' and sen_type == 'active':
-            #     word_tgm = concat_tgm[:, :, :(num_time-250)]
-            # elif word == 'firstNoun' and sen_type == 'passive':
-            #     word_tgm = concat_tgm[:, :, :(num_time-750)]
-            # elif word == 'verb' and sen_type == 'active':
-            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 250)), concat_tgm[:, :, :(num_time-250)]), axis=2)
-            # elif word == 'verb' and sen_type == 'passive':
-            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 500)), concat_tgm[:, :, :(num_time-750)]), axis=2)
-            # elif word == 'secondNoun' and sen_type == 'active':
-            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 750)), concat_tgm[:, :, :(num_time-250)]), axis=2)
-            # else:
-            #     word_tgm = np.concatenate((np.zeros((num_sub, num_sens, 1250)), concat_tgm[:, :, :(num_time-1250)]), axis=2)
             if word == 'secondNoun' and sen_type == 'passive':
                 word_tgm = np.concatenate((concat_tgm,
                                            np.zeros((num_sub, num_sens, 1))),

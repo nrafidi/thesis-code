@@ -12,7 +12,7 @@ import rnng_rdm
 import os.path
 import pickle
 
-SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
 SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_semantics_rnng_lstm_corr.npz'
 SEMANTIC_RDM = '/share/volume1/sjat/rdm/krns2-sent-disimilarity-{vsm}.pkl'
