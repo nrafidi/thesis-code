@@ -123,7 +123,7 @@ if __name__ == '__main__':
         fname = SAVE_RDM.format(exp=experiment, tmin=args.tmin, tmax=args.tmax, word=args.word)
 
         if args.exc_unk:
-            lines_to_check = lines[EXP_INDS[experiment]]
+            lines_to_check = [line for i_line, line in enumerate(lines) if i_line in EXP_INDS[experiment]]
             print(len(lines_to_check))
             good_lines = [line for line in lines_to_check if 'UNK' not in line]
             print(good_lines)
