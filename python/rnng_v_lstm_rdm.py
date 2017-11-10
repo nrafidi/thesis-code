@@ -341,7 +341,8 @@ if __name__ == '__main__':
         min_val = 0.0
         for j_reg in range(num_reg):
             axs[j_reg].set_ylim(min_val, max_val + 0.1)
-
+        fig.suptitle('{} {} Mantel'.format(model, args.dist))
+        fig.tight_layout()
         fig.savefig('RDM_mantel_scores_KvP_{model}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(model=model, metric=args.dist,
                                                                                    tmin=args.tmin, tmax=args.tmax,
                                                                                    word=args.word))
