@@ -11,6 +11,7 @@ import run_TGM
 import coef_sim
 from scipy.stats import norm
 from scipy import stats
+import warnings
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
@@ -70,11 +71,13 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
             dist_over_sub = uncorrected_pvals[:, i, j]
-            dist_over_sub[dist_over_sub == 1.0] -= 1e-6
-            dist_over_sub[dist_over_sub == 0.0] += 1e-6
+            dist_over_sub[dist_over_sub == 1.0] -= 1e-3
+            dist_over_sub[dist_over_sub == 0.0] += 1e-3
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
+            assert not np.any(np.isnan(meow))
             _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(dist_over_sub), 0.0)
+            assert not np.isnan(new_pvals[i, j])
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals < bh_thresh[:, None]
@@ -122,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
-
+    warnings.filterwarnings('error')
     exp = args.experiment
     mode = 'uni'
     sens = args.sensors
