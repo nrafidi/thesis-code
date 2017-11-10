@@ -178,6 +178,7 @@ if __name__ == '__main__':
     for sen_type in ['active', 'passive']:
         tgm_by_word = []
         corr_p_by_word = []
+        scatter_tgm_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
@@ -244,30 +245,37 @@ if __name__ == '__main__':
             print(num_sub)
             print(num_sens)
 
-            for i_sub in range(num_sub):
-                meow = concat_tgm[i_sub, :, :]
-                meow[np.logical_not(corr_pvals)] = np.nan
-                concat_tgm[i_sub, :, :] = meow
+
 
             if word == 'secondNoun' and sen_type == 'passive':
                 word_tgm = np.concatenate((concat_tgm,
                                            np.zeros((num_sub, num_sens, 1))),
                                           axis=2)
+                corr_pvals = np.concatenate((corr_pvals,
+                                           np.ones((num_sub, num_sens, 1))),
+                                          axis=2)
             else:
                 word_tgm = concat_tgm
+            tgm_for_scatter = np.copy(word_tgm)
+            for i_sub in range(num_sub):
+                meow = tgm_for_scatter[i_sub, :, :]
+                meow[np.logical_not(corr_pvals)] = np.nan
+                tgm_for_scatter[i_sub, :, :] = meow
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
+            scatter_tgm_by_word.append(tgm_for_scatter[None, :, :])
             corr_p_by_word.append(corr_pvals)
 
 
         word_tgm = np.concatenate(tgm_by_word)
+        word_scatter = np.mean(np.concatenate(scatter_tgm_by_word, axis=1))
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
         avg_by_sen_type.append(avg_tgm[None, ...])
         best_avg = np.max(avg_tgm, axis=0)
         masked_avg_tgm = np.copy(avg_tgm)
-        # masked_avg_tgm[masked_avg_tgm != best_avg] = np.nan
+        masked_avg_tgm[masked_avg_tgm != best_avg] = np.nan
         masked_avg_by_sen_type.append(masked_avg_tgm[None, ...])
 
         print(avg_tgm.shape)
@@ -298,10 +306,10 @@ if __name__ == '__main__':
                 h2[0].set_label('secondNoun')
                 num_time = total_best.shape[1]
 
-                # for j in range(num_time):
-                #     if total_best[i, j, 0] != 0.8:
-                #         best_word = np.where(np.squeeze(total_best[i, j, :]))
-                #         ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
+                for k in range(3):
+                    for j in range(num_time):
+                        if not np.isnan(word_scatter[k, i, j]):
+                            ax.scatter(j, 0.5, c=colors[k], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
                 ax.set_xlim(0, num_time + 500)
