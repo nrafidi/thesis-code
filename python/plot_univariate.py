@@ -71,14 +71,16 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
             dist_over_sub = uncorrected_pvals[:, i, j]
-            dist_over_sub[dist_over_sub == 1.0] -= 1e-5
-            dist_over_sub[dist_over_sub == 0.0] += 1e-5
+            dist_over_sub[dist_over_sub == 1.0] -= 1e-8
+            dist_over_sub[dist_over_sub == 0.0] += 1e-8
             print('ahoy')
             print(dist_over_sub)
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
             print(meow)
+            meow[meow == 1.0] -= 1e-8
+            meow[meow == 0.0] += 1e-8
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
@@ -198,7 +200,7 @@ if __name__ == '__main__':
                                                                 accuracy,
                                                                 sub,
                                                                 param_specs=param_specs,
-                                                                param_limit=3)
+                                                                param_limit=4)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
