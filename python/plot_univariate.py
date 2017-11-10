@@ -202,7 +202,7 @@ if __name__ == '__main__':
                                                                 accuracy,
                                                                 sub,
                                                                 param_specs=param_specs,
-                                                                param_limit=2)
+                                                                param_limit=5)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
@@ -274,14 +274,11 @@ if __name__ == '__main__':
         word_tgm = np.concatenate(tgm_by_word)
         woof = np.concatenate(scatter_tgm_by_word)
         print('ahoy')
-        print(woof.shape)
         word_scatter = np.mean(woof, axis=1)
         print(word_scatter)
         print(np.any(np.isnan(word_scatter)))
 
-        word_scatter = woof[:, 0, :, :]
-        print(word_scatter)
-        print(np.any(np.isnan(word_scatter)))
+
 
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
@@ -320,10 +317,10 @@ if __name__ == '__main__':
                 num_time = total_best.shape[1]
 
                 # print(word_scatter.shape)
-                for k in range(3):
+                for k in range(2, -1, -1):
                     for j in range(num_time):
                         if not np.isnan(word_scatter[k, i, j]):
-                            ax.scatter(j, 0.75, c=colors[k], linewidths=0.0)
+                            ax.scatter(j, 0.7, c=colors[k], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
                 ax.set_xlim(0, num_time + 500)
