@@ -9,6 +9,7 @@ import scipy.io as sio
 import agg_TGM
 import run_TGM
 import coef_sim
+from scipy.stats import norm
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
@@ -116,11 +117,11 @@ if __name__ == '__main__':
     masked_avg_by_sen_type = []
     for sen_type in ['active', 'passive']:
         tgm_by_word = []
-        perm_by_word = []
+        corr_p_by_word = []
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
-            perm_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            pval_by_sub = []
+            for sub in ['B', 'C']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -154,12 +155,21 @@ if __name__ == '__main__':
                 print(perm_tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
+                    perm_tgm = perm_tgm[:, :, :, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
+                pvals = np.mean(perm_tgm >= tgm[None, ...], axis=0)
+                print(pvals.shape)
+                pval_by_sub.append(pvals[None, :])
 
             concat_tgm = np.squeeze(np.concatenate(tgm_by_sub))
             print(concat_tgm.shape)
+            total_pvals = np.concatenate(pval_by_sub)
+            print(total_pvals.shape)
+
+            assert 1 == 0
+
             if sens == 'wb':
                 concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
             (num_sub, num_sens, num_time) = concat_tgm.shape
