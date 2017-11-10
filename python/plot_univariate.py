@@ -75,7 +75,6 @@ def correct_pvals(uncorrected_pvals):
             print(woof)
             _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
             print(new_pvals[i, j])
-            assert 1 == 0
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals < bh_thresh[:, None]
