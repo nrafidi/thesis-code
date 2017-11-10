@@ -69,13 +69,12 @@ def correct_pvals(uncorrected_pvals):
     print(new_pvals.shape)
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
-            meow = norm.ppf(uncorrected_pvals[:, i, j])
-            if np.any(np.isinf(meow)):
-                print(uncorrected_pvals[:, i, j])
-            woof = stats.ttest_1samp(meow, 0.0)
-            # print(woof)
-            _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
-            # print(new_pvals[i, j])
+            dist_over_sub = uncorrected_pvals[:, i, j]
+            dist_over_sub[dist_over_sub == 1.0] -= 1e-10
+            dist_over_sub[dist_over_sub == 0.0] += 1e-10
+            meow = norm.ppf(dist_over_sub)
+            assert not np.any(np.isinf(meow))
+            _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(dist_over_sub), 0.0)
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals < bh_thresh[:, None]
