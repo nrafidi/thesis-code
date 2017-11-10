@@ -204,7 +204,7 @@ if __name__ == '__main__':
                 print(perm_tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
-                    perm_tgm = perm_tgm[:, :, :, sorted_inds, :]
+                    perm_tgm = perm_tgm[:, sorted_inds, :]
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
