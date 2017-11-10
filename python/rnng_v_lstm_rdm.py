@@ -113,9 +113,10 @@ if __name__ == '__main__':
     time = np.arange(args.tmin, args.tmax + 0.002, 0.002)
 
     if args.exc_unk:
-        stimuli = np.loadtxt(STIM)
-        print(stimuli.shape)
-        print(stimuli[0])
+        stim_file = open(STIM, 'r')
+        lines = stim_file.readlines()
+        print(type(lines))
+        print(len(lines))
 
     kendall_scores_by_exp = []
     mantel_scores_by_exp = []
