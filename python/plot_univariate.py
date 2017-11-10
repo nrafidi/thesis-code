@@ -264,12 +264,15 @@ if __name__ == '__main__':
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
-            scatter_tgm_by_word.append(tgm_for_scatter[None, :, :])
+            print('ahoy')
+            print(tgm_for_scatter.shape)
+            scatter_tgm_by_word.append(tgm_for_scatter[None, ...])
             corr_p_by_word.append(corr_pvals)
 
 
         word_tgm = np.concatenate(tgm_by_word)
-        word_scatter = np.mean(np.concatenate(scatter_tgm_by_word, axis=1))
+        word_scatter = np.mean(np.concatenate(scatter_tgm_by_word), axis=1)
+
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
         avg_by_sen_type.append(avg_tgm[None, ...])
