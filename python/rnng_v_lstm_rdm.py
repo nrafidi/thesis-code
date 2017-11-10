@@ -309,7 +309,7 @@ if __name__ == '__main__':
                                                                                     tmin=args.tmin, tmax=args.tmax, word=args.word))
     kendall_scores_by_exp = np.concatenate(kendall_scores_by_exp)
     mantel_scores_by_exp = np.concatenate(mantel_scores_by_exp)
-    mantel_pvals_by_exp = np.concatenate(mantel_scores_by_exp)
+    mantel_pvals_by_exp = np.concatenate(mantel_pvals_by_exp)
     print(kendall_scores_by_exp.shape)
     num_reg = kendall_scores_by_exp.shape[1]
     for i_model, model in enumerate(['RNNG', 'LSTM']):
