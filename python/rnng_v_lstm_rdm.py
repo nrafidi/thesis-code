@@ -115,14 +115,18 @@ if __name__ == '__main__':
     if args.exc_unk:
         stim_file = open(STIM, 'r')
         lines = stim_file.readlines()
-        print(type(lines))
-        print(len(lines))
 
     kendall_scores_by_exp = []
     mantel_scores_by_exp = []
     mantel_pvals_by_exp = []
     for experiment in ['krns2', 'PassAct2']:
         fname = SAVE_RDM.format(exp=experiment, tmin=args.tmin, tmax=args.tmax, word=args.word)
+
+        if args.exc_unk:
+            lines_to_check = lines[EXP_INDS[experiment]]
+            print(len(lines_to_check))
+            good_lines = [line for line in lines_to_check if 'UNK' not in line]
+            print(good_lines)
 
         vectors = np.loadtxt(VECTORS)
         vectors = vectors[EXP_INDS[experiment], :]
