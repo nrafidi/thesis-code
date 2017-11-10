@@ -261,18 +261,22 @@ if __name__ == '__main__':
                 meow = tgm_for_scatter[i_sub, :, :]
                 meow[np.logical_not(corr_pvals)] = np.nan
                 tgm_for_scatter[i_sub, :, :] = meow
-            print(tgm_for_scatter)
+            # print(tgm_for_scatter)
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
-            print('ahoy')
+
             print(tgm_for_scatter.shape)
             scatter_tgm_by_word.append(tgm_for_scatter[None, ...])
             corr_p_by_word.append(corr_pvals)
 
 
         word_tgm = np.concatenate(tgm_by_word)
-        word_scatter = np.mean(np.concatenate(scatter_tgm_by_word), axis=1)
+        woof = np.concatenate(scatter_tgm_by_word)
+        print('ahoy')
+        print(woof.shape)
+        word_scatter = np.mean(woof, axis=1)
+        print(word_scatter)
 
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
