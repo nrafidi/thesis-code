@@ -327,7 +327,7 @@ if __name__ == '__main__':
             colors = ['b', 'g', 'r', 'c']
             for k_exp, exp in enumerate(['krns2', 'PassAct2']):
                 exp_scores = all_reg_scores[k_exp, :]
-                exp_scores[exp_scores != best_scores_mantel] = np.nan
+                # exp_scores[exp_scores != best_scores_mantel] = np.nan
                 exp_good_pvals = all_reg_pvals[k_exp, :] <= bh_threshs[k_exp]
                 all_reg_good.append(exp_good_pvals)
                 h = axs[j_reg].plot(time, exp_scores)
