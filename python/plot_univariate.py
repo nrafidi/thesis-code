@@ -76,6 +76,7 @@ def correct_pvals(uncorrected_pvals):
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
+            print(meow)
             _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(dist_over_sub), 0.0)
             assert not np.isnan(new_pvals[i, j])
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
