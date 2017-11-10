@@ -65,19 +65,22 @@ def correct_pvals(uncorrected_pvals):
     print('moo')
     up_shape = uncorrected_pvals.shape
     print(up_shape)
-    total_pvals = np.reshape(uncorrected_pvals, (up_shape[0], up_shape[1], -1))
-    print(total_pvals.shape)
-    new_pvals = np.empty((total_pvals.shape[1], total_pvals.shape[2]))
+    new_pvals = np.empty((uncorrected_pvals.shape[1], uncorrected_pvals.shape[2]))
     print(new_pvals.shape)
-    for i in range(total_pvals.shape[1]):
-        for j in range(total_pvals.shape[2]):
-            new_pvals[i, j] = ttest_1samp(norm.ppf(total_pvals[:, i, j]), 0.0)
+    for i in range(uncorrected_pvals.shape[1]):
+        for j in range(uncorrected_pvals.shape[2]):
+            meow = norm.ppf(uncorrected_pvals[:, i, j])
+            print(meow)
+            woof = ttest_1samp(meow)
+            print(woof)
+            new_pvals[i, j] = ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
             print(new_pvals[i, j])
             assert 1 == 0
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals < bh_thresh[:, None]
     return corr_pvals
+
 
 def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
     # originally from Mariya Toneva
