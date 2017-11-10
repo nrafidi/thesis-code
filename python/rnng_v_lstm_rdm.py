@@ -118,11 +118,13 @@ if __name__ == '__main__':
 
         vectors = np.loadtxt(VECTORS)
         vectors = vectors[EXP_INDS[experiment], :]
+        print('successfully loaded rnng')
 
         vec_rdm = squareform(pdist(vectors, metric=args.dist))
 
         lstm = np.loadtxt(LSTM)
         lstm = lstm[EXP_INDS[experiment], :]
+        print('successfully loaded lstm')
 
         lstm_rdm = squareform(pdist(lstm, metric=args.dist))
 
@@ -130,6 +132,7 @@ if __name__ == '__main__':
         if os.path.isfile(fname):
             result = np.load(fname)
             rdm = result['rdm']
+            print('successfully loaded data rdm')
         else:
             rdm_by_sub_list = []
             for subject in load_data.VALID_SUBS[experiment]:
