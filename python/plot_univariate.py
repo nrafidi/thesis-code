@@ -71,7 +71,7 @@ def correct_pvals(uncorrected_pvals):
         for j in range(uncorrected_pvals.shape[2]):
             meow = norm.ppf(uncorrected_pvals[:, i, j])
             print(meow)
-            woof = ttest_1samp(meow)
+            woof = ttest_1samp(meow, 0.0)
             print(woof)
             new_pvals[i, j] = ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
             print(new_pvals[i, j])
