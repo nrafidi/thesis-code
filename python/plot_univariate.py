@@ -261,6 +261,7 @@ if __name__ == '__main__':
                 meow = tgm_for_scatter[i_sub, :, :]
                 meow[np.logical_not(corr_pvals)] = np.nan
                 tgm_for_scatter[i_sub, :, :] = meow
+            print(tgm_for_scatter)
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
@@ -313,7 +314,7 @@ if __name__ == '__main__':
                 for k in range(3):
                     for j in range(num_time):
                         if not np.isnan(word_scatter[k, i, j]):
-                            ax.scatter(j, 0.5, c=colors[k], linewidths=0.0)
+                            ax.scatter(j, 0.75, c=colors[k], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
                 ax.set_xlim(0, num_time + 500)
