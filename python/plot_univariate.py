@@ -10,7 +10,7 @@ import agg_TGM
 import run_TGM
 import coef_sim
 from scipy.stats import norm
-from scipy.stats import ttest_1samp
+from scipy import stats
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
@@ -71,9 +71,9 @@ def correct_pvals(uncorrected_pvals):
         for j in range(uncorrected_pvals.shape[2]):
             meow = norm.ppf(uncorrected_pvals[:, i, j])
             print(meow)
-            woof = ttest_1samp(meow, 0.0)
+            woof = stats.ttest_1samp(meow, 0.0)
             print(woof)
-            new_pvals[i, j] = ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
+            _, new_pvals[i, j] = statsttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
             print(new_pvals[i, j])
             assert 1 == 0
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
