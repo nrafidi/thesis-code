@@ -182,7 +182,7 @@ if __name__ == '__main__':
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
-            for sub in ['B', 'C']: #load_data.VALID_SUBS[exp]:
+            for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -201,8 +201,7 @@ if __name__ == '__main__':
                                                                 sen_type,
                                                                 accuracy,
                                                                 sub,
-                                                                param_specs=param_specs,
-                                                                param_limit=5)
+                                                                param_specs=param_specs)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
@@ -343,7 +342,7 @@ if __name__ == '__main__':
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
-        fig.savefig('Univariate_NVN_{}_{}_{}_perm.pdf'.format(sens, sen_type, args.experiment))
+        fig.savefig('Univariate_NVN_{}_{}_{}_fullperm.pdf'.format(sens, sen_type, args.experiment))
 
     avg = np.concatenate(avg_by_sen_type, axis=0)
     masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
