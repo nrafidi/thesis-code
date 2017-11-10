@@ -10,6 +10,7 @@ import agg_TGM
 import run_TGM
 import coef_sim
 from scipy.stats import norm
+from scipy.stats import ttest_1samp
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
@@ -58,6 +59,53 @@ def comb_by_loc(tgm, sens):
             new_tgm[:, :, i_new, :] = np.max(tgm[:, :, i:(i + 3), :], axis=2)
         i_new += 1
     return new_tgm
+
+
+def correct_pvals(uncorrected_pvals):
+    up_shape = uncorrected_pvals.shape
+    print(up_shape)
+    total_pvals = np.reshape(uncorrected_pvals, (up_shape[0], up_shape[1], -1))
+    print(total_pvals.shape)
+    new_pvals = np.empty((total_pvals.shape[1], total_pvals.shape[2]))
+    print(new_pvals.shape)
+    for i in range(total_pvals.shape[1]):
+        for j in range(total_pvals.shape[2]):
+            new_pvals[i, j] = ttest_1samp(norm.ppf(total_pvals[:, i, j]), 0.0)
+            print(new_pvals[i, j])
+            assert 1 == 0
+    bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
+
+    corr_pvals = new_pvals < bh_thresh[:, None]
+    return corr_pvals
+
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
+    # originally from Mariya Toneva
+    if len(uncorrected_pvalues.shape) == 1:
+        uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
+
+    # get ranks of all p-values in ascending order
+    sorting_inds = np.argsort(uncorrected_pvalues, axis=1)
+    ranks = sorting_inds + 1  # add 1 to make the ranks start at 1 instead of 0
+
+    # calculate critical values under arbitrary dependence
+    dependency_constant = np.sum(1 / ranks)
+    critical_values = ranks * alpha / (uncorrected_pvalues.shape[1] * dependency_constant)
+
+    # find largest pvalue that is <= than its critical value
+    sorted_pvalues = np.empty(uncorrected_pvalues.shape)
+    sorted_critical_values = np.empty(critical_values.shape)
+    for i in range(uncorrected_pvalues.shape[0]):
+        sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
+        sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
+    bh_thresh = -1.0*np.ones((sorted_pvalues.shape[0],))
+    for j in range(sorted_pvalues.shape[0]):
+        for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
+            if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
+                if bh_thresh[j] < 0:
+                    bh_thresh[j] = sorted_pvalues[j, i]
+                    print('threshold for row ', j, ' is:', bh_thresh[j], 'critical value:', sorted_critical_values[j, i], i)
+
+    return bh_thresh
 
 
 if __name__ == '__main__':
@@ -140,7 +188,8 @@ if __name__ == '__main__':
                                                                 sen_type,
                                                                 accuracy,
                                                                 sub,
-                                                                param_specs=param_specs)
+                                                                param_specs=param_specs,
+                                                                param_limit=3)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
@@ -151,7 +200,7 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                perm_tgm = np.stack(sub_perm_results)
+                perm_tgm = np.stack(np.squeeze(sub_perm_results))
                 print(perm_tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
@@ -168,13 +217,20 @@ if __name__ == '__main__':
             total_pvals = np.concatenate(pval_by_sub)
             print(total_pvals.shape)
 
-            assert 1 == 0
+            corr_pvals = correct_pvals(total_pvals)
+
 
             if sens == 'wb':
                 concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
+                corr_pvals = np.reshape(corr_pvals, (corr_pvals.shape[0], 1, corr_pvals.shape[1]))
             (num_sub, num_sens, num_time) = concat_tgm.shape
             print(num_sub)
             print(num_sens)
+
+            for i_sub in range(num_sub):
+                meow = concat_tgm[i_sub, :, :]
+                meow[np.logical_not(corr_pvals)] = np.nan
+                concat_tgm[i_sub, :, :] = meow
 
             if word == 'secondNoun' and sen_type == 'passive':
                 word_tgm = np.concatenate((concat_tgm,
@@ -185,6 +241,7 @@ if __name__ == '__main__':
             print(word)
             print(word_tgm.shape)
             tgm_by_word.append(word_tgm[None, ...])
+            corr_p_by_word.append(corr_pvals)
 
 
         word_tgm = np.concatenate(tgm_by_word)
@@ -193,7 +250,7 @@ if __name__ == '__main__':
         avg_by_sen_type.append(avg_tgm[None, ...])
         best_avg = np.max(avg_tgm, axis=0)
         masked_avg_tgm = np.copy(avg_tgm)
-        masked_avg_tgm[masked_avg_tgm != best_avg] = np.nan
+        # masked_avg_tgm[masked_avg_tgm != best_avg] = np.nan
         masked_avg_by_sen_type.append(masked_avg_tgm[None, ...])
 
         print(avg_tgm.shape)
@@ -224,10 +281,10 @@ if __name__ == '__main__':
                 h2[0].set_label('secondNoun')
                 num_time = total_best.shape[1]
 
-                for j in range(num_time):
-                    if total_best[i, j, 0] != 0.8:
-                        best_word = np.where(np.squeeze(total_best[i, j, :]))
-                        ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
+                # for j in range(num_time):
+                #     if total_best[i, j, 0] != 0.8:
+                #         best_word = np.where(np.squeeze(total_best[i, j, :]))
+                #         ax.scatter(j, 0.5, c=colors[best_word[0][0]], linewidths=0.0)
 
                 time = np.arange(0.0, 4.5, 0.002)
                 ax.set_xlim(0, num_time + 500)
