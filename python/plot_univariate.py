@@ -277,6 +277,11 @@ if __name__ == '__main__':
         print(woof.shape)
         word_scatter = np.mean(woof, axis=1)
         print(word_scatter)
+        print(np.any(np.isnan(word_scatter)))
+
+        word_scatter = woof[:, 0, :, :]
+        print(word_scatter)
+        print(np.any(np.isnan(word_scatter)))
 
         print(word_tgm.shape)
         avg_tgm = np.mean(word_tgm, axis=1)
