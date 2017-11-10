@@ -70,8 +70,8 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
             dist_over_sub = uncorrected_pvals[:, i, j]
-            dist_over_sub[dist_over_sub == 1.0] -= 1e-10
-            dist_over_sub[dist_over_sub == 0.0] += 1e-10
+            dist_over_sub[dist_over_sub == 1.0] -= 1e-8
+            dist_over_sub[dist_over_sub == 0.0] += 1e-8
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
             _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(dist_over_sub), 0.0)
