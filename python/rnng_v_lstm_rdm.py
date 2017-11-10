@@ -14,8 +14,8 @@ import pickle
 import Mantel
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
-SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}.npz'
-SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_rnng_lstm_mantel-upper.npz'
+SAVE_RDM = '/share/volume0/nrafidi/RDM_{exp}_{tmin}_{tmax}_{word}{unk_str}.npz'
+SAVE_SCORES = '/share/volume0/nrafidi/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}{unk_str}_rnng_lstm_mantel-upper.npz'
 VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 STIM = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_with_unk_final.txt'
 LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
@@ -115,27 +115,34 @@ if __name__ == '__main__':
     if args.exc_unk:
         stim_file = open(STIM, 'r')
         lines = stim_file.readlines()
+        unk_str = '_noUNK'
+    else:
+        unk_str = ''
 
     kendall_scores_by_exp = []
     mantel_scores_by_exp = []
     mantel_pvals_by_exp = []
     for experiment in ['krns2', 'PassAct2']:
-        fname = SAVE_RDM.format(exp=experiment, tmin=args.tmin, tmax=args.tmax, word=args.word)
+        fname = SAVE_RDM.format(exp=experiment, tmin=args.tmin, tmax=args.tmax, word=args.word, unk_str=unk_str)
 
         if args.exc_unk:
             lines_to_check = [line for i_line, line in enumerate(lines) if i_line in EXP_INDS[experiment]]
             print(len(lines_to_check))
-            good_lines = [line for line in lines_to_check if 'UNK' not in line]
-            print(good_lines)
+            good_lines = [i_line for i_line, line in enumerate(lines_to_check) if 'UNK' not in line]
+            print(len(good_lines))
 
         vectors = np.loadtxt(VECTORS)
         vectors = vectors[EXP_INDS[experiment], :]
+        if args.exc_unk:
+            vectors = vectors[good_lines, :]
         print('successfully loaded rnng')
 
         vec_rdm = squareform(pdist(vectors, metric=args.dist))
 
         lstm = np.loadtxt(LSTM)
         lstm = lstm[EXP_INDS[experiment], :]
+        if args.exc_unk:
+            lstm = lstm[good_lines, :]
         print('successfully loaded lstm')
 
         lstm_rdm = squareform(pdist(lstm, metric=args.dist))
@@ -163,7 +170,9 @@ if __name__ == '__main__':
                 pass_data = pass_data[:, :, :min_time]
 
                 total_data = np.concatenate((act_data, pass_data), axis=0)
-                total_labels = np.concatenate((labels_act, labels_pass), axis=0)
+                if args.exc_unk:
+                    total_data = total_data[good_lines, :]
+                # total_labels = np.concatenate((labels_act, labels_pass), axis=0)
 
                 rdm_by_reg_list = []
                 for reg in set(sorted_reg):
@@ -206,7 +215,7 @@ if __name__ == '__main__':
             print(uni_reg[i_reg])
             ax = axs[i_reg]
             ax_mantel = axs_mantel[i_reg]
-            fname = SAVE_SCORES.format(exp=experiment, metric=args.dist, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+            fname = SAVE_SCORES.format(exp=experiment, metric=args.dist, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word, unk_str=unk_str)
             if os.path.isfile(fname):
                 result = np.load(fname)
                 rnng_scores_rank = result['rnng_scores_rank']
@@ -316,9 +325,9 @@ if __name__ == '__main__':
         fig_mantel.suptitle('{} {} Mantel'.format(experiment, args.dist))
         fig_mantel.tight_layout()
 
-        fig.savefig('RDM_kendall_scores_RvL_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
-        fig_mantel.savefig('RDM_mantel_scores_RvL_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=experiment, metric=args.dist,
-                                                                                    tmin=args.tmin, tmax=args.tmax, word=args.word))
+        fig.savefig('RDM_kendall_scores_RvL_{exp}_{metric}_{tmin}_{tmax}_{word}{unk_str}.pdf'.format(exp=experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word, unk_str=unk_str))
+        fig_mantel.savefig('RDM_mantel_scores_RvL_{exp}_{metric}_{tmin}_{tmax}_{word}{unk_str}.pdf'.format(exp=experiment, metric=args.dist,
+                                                                                    tmin=args.tmin, tmax=args.tmax, word=args.word, unk_str=unk_str))
     kendall_scores_by_exp = np.concatenate(kendall_scores_by_exp)
     mantel_scores_by_exp = np.concatenate(mantel_scores_by_exp)
     mantel_pvals_by_exp = np.concatenate(mantel_pvals_by_exp)
@@ -356,11 +365,11 @@ if __name__ == '__main__':
         min_val = 0.0
         for j_reg in range(num_reg):
             axs[j_reg].set_ylim(min_val, max_val + 0.1)
-        fig.suptitle('{} {} Mantel'.format(model, args.dist))
+        fig.suptitle('{} {} Mantel{unk_str}'.format(model, args.dist, unk_str=unk_str))
         fig.tight_layout()
-        fig.savefig('RDM_mantel_scores_KvP_{model}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(model=model, metric=args.dist,
+        fig.savefig('RDM_mantel_scores_KvP_{model}_{metric}_{tmin}_{tmax}_{word}{unk_str}.pdf'.format(model=model, metric=args.dist,
                                                                                    tmin=args.tmin, tmax=args.tmax,
-                                                                                   word=args.word))
+                                                                                   word=args.word, unk_str=unk_str))
 
 
     plt.show()
