@@ -201,7 +201,7 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                perm_tgm = np.stack(np.squeeze(sub_perm_results))
+                perm_tgm = np.stack(sub_perm_results)
                 print('meow')
                 print(perm_tgm.shape)
                 print(tgm.shape)
@@ -219,7 +219,7 @@ if __name__ == '__main__':
             concat_tgm = np.squeeze(np.concatenate(tgm_by_sub))
             print('oink')
             print(concat_tgm.shape)
-            total_pvals = np.concatenate(pval_by_sub)
+            total_pvals = np.squeeze(np.concatenate(pval_by_sub))
             print(total_pvals.shape)
 
             corr_pvals = correct_pvals(total_pvals)
