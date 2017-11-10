@@ -83,9 +83,10 @@ def correct_pvals(uncorrected_pvals):
             meow[meow == 0.0] += 1e-14
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
+            assert not np.isinf(new_pvals[i, j])
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
-    corr_pvals = new_pvals < bh_thresh[:, None]
+    corr_pvals = new_pvals <= bh_thresh[:, None]
     return corr_pvals
 
 
@@ -200,7 +201,7 @@ if __name__ == '__main__':
                                                                 accuracy,
                                                                 sub,
                                                                 param_specs=param_specs,
-                                                                param_limit=4)
+                                                                param_limit=5)
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
@@ -233,6 +234,7 @@ if __name__ == '__main__':
             print(total_pvals.shape)
 
             corr_pvals = correct_pvals(total_pvals)
+            print(np.sum(corr_pvals))
 
 
             if sens == 'wb':
