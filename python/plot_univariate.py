@@ -73,7 +73,7 @@ def correct_pvals(uncorrected_pvals):
             print(meow)
             woof = stats.ttest_1samp(meow, 0.0)
             print(woof)
-            _, new_pvals[i, j] = statsttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
+            _, new_pvals[i, j] = stats.ttest_1samp(norm.ppf(uncorrected_pvals[:, i, j]), 0.0)
             print(new_pvals[i, j])
             assert 1 == 0
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
