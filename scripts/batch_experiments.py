@@ -22,7 +22,7 @@ import time
 #parser.add_argument('--random_state', type=int, default=1)
 
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H']
+SUBJECTS = ['G', 'H', 'B', 'C', 'D', 'E', 'F']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
