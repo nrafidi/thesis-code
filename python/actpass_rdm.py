@@ -221,7 +221,7 @@ if __name__ == '__main__':
     max_reg_zoom = np.empty((num_reg,))
     colors = ['b', 'g', 'r', 'c']
     for i_reg, reg in enumerate(REGIONS_TO_PLOT):
-        j_reg = uni_reg.index(reg)
+        j_reg = np.where(uni_reg ==reg)
         print(uni_reg[j_reg])
         ax = axs[i_reg]
         ax_zoom = axs_zoom[i_reg]
