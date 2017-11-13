@@ -337,8 +337,8 @@ if __name__ == '__main__':
     fig.tight_layout()
     # fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
     fig_zoom.tight_layout()
-    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}_subset.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
-    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}_subset.pdf'.format(exp=args.experiment, metric=args.dist,
+    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
+    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist,
                                                                                  tmax=args.tmax,
                                                                                  word=args.word))
     # plt.savefig()
