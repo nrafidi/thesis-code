@@ -222,10 +222,10 @@ if __name__ == '__main__':
     colors = ['b', 'g', 'r', 'c']
     for i_reg, reg in enumerate(REGIONS_TO_PLOT):
         j_reg = np.where(uni_reg ==reg)
-        print(uni_reg[j_reg])
+        print(uni_reg[j_reg][0])
         ax = axs[i_reg]
         ax_zoom = axs_zoom[i_reg]
-        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=uni_reg[j_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=uni_reg[j_reg][0], tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
             syn_scores = result['syn_scores']
