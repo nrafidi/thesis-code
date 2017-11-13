@@ -319,7 +319,7 @@ if __name__ == '__main__':
             if good_scores_zoom[win_scores_zoom[i_time], i_time]:
                 ax_zoom.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
 
-        ax_zoom.set_title(uni_reg[i_reg])
+        ax_zoom.set_title(uni_reg[j_reg][0])
         ax_zoom.set_xlim(0.0, args.tmax + 0.5)
         ax_zoom.set_xticks(np.arange(0.0, args.tmax, 0.5))
 
@@ -333,9 +333,9 @@ if __name__ == '__main__':
     for i_reg in range(len(REGIONS_TO_PLOT)):
         axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom+0.1)
 
-    fig.suptitle('{} {}'.format(args.experiment, args.dist))
+    # fig.suptitle('{} {}'.format(args.experiment, args.dist))
     fig.tight_layout()
-    fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
+    # fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
     fig_zoom.tight_layout()
     fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}_subset.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
     fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}_subset.pdf'.format(exp=args.experiment, metric=args.dist,
