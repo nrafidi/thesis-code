@@ -1,7 +1,9 @@
 import numpy as np
 from scipy.stats import norm
 from scipy import stats
-
+import matplotlib
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+import matplotlib.pyplot as plt
 
 def correct_pvals(uncorrected_pvals):
     print('moo')
@@ -11,20 +13,28 @@ def correct_pvals(uncorrected_pvals):
     print(new_pvals.shape)
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
+            fig, axs = plt.subplots(2, 2)
+
             dist_over_sub = uncorrected_pvals[:, i, j]
+            axs[0][0].hist(dist_over_sub)
             dist_over_sub[dist_over_sub == 1.0] -= 1e-14
             dist_over_sub[dist_over_sub == 0.0] += 1e-14
+            axs[0][1].hist(dist_over_sub)
+
             # print('ahoy')
             # print(dist_over_sub)
             meow = norm.ppf(dist_over_sub)
+            axs[1][0].hist(meow)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
             # print(meow)
             meow[meow == 1.0] -= 1e-14
             meow[meow == 0.0] += 1e-14
+            axs[1][1].hist(meow)
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
+            plt.show()
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
@@ -69,5 +79,6 @@ if __name__ == '__main__':
     print(true_accs.shape)
 
     uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
-    print(uncorr_pvals.shape)
-    print(uncorr_pvals[:, 0, 0])
+
+    corr_pvals = correct_pvals(uncorr_pvals)
+    print(np.sum(corr_pvals[0, :]))
