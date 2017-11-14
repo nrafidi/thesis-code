@@ -201,7 +201,7 @@ if __name__ == '__main__':
 
                 perm_agg_file = PERM_FILE.format(exp=exp, sub=sub, sen_type=sen_type, word=word, win_len=w, overlap=o,
                                                  pdtw=param_specs['pd'], perm='T', num_folds=param_specs['F'],
-                                                 alg=param_specs['alg'], zscore=param_specs['z'], avg=param_specs['avg'],
+                                                 alg=param_specs['alg'], zscore=param_specs['z'], doAvg=param_specs['avg'],
                                                  inst=param_specs['ni'], rep=param_specs['nr'], rsPmin=1, rsPmax=99,
                                                  rsCV=param_specs['rsCV'], rsSCV=param_specs['rsSCV'],mode=mode)
 
