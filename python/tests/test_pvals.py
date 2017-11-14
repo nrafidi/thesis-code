@@ -69,4 +69,5 @@ if __name__ == '__main__':
     print(true_accs.shape)
 
     uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
-    print(uncorr_pvals)
+    print(uncorr_pvals.shape)
+    print(uncorr_pvals[:, 0, 0])
