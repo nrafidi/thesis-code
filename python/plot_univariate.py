@@ -17,7 +17,7 @@ import os
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 PERM_FILE = '/share/volume0/nrafidi/{exp}_TGM/{sub}/TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
-            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsPmin}-{rsPmax}_rsCV{rsC}_rsSCV{rsS}_{mode}'
+            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsPmin}-{rsPmax}_agg{accuracy}_rsCV{rsC}_rsSCV{rsS}_{mode}'
 
 
 def accum_over_sub(sub_results):
@@ -203,11 +203,11 @@ if __name__ == '__main__':
                                                  pdtw=param_specs['pd'], perm='T', num_folds=param_specs['F'],
                                                  alg=param_specs['alg'], zscore=param_specs['z'], doAvg=param_specs['avg'],
                                                  inst=param_specs['ni'], rep=param_specs['nr'], rsPmin=1, rsPmax=99,
-                                                 rsC=param_specs['rsCV'], rsS=param_specs['rsSCV'],mode=mode)
+                                                 accuracy=accuracy,rsC=param_specs['rsCV'], rsS=param_specs['rsSCV'],mode=mode)
 
                 if os.path.isfile(perm_agg_file + '.npz'):
                     result = np.load(perm_agg_file + '.npz')
-                    sub_perm_results = result['sub_perm_results']
+                    perm_tgm = result['perm_tgm']
                 else:
                     sub_perm_results, _, _, _ = agg_TGM.agg_results(exp,
                                                                     mode,
@@ -216,8 +216,9 @@ if __name__ == '__main__':
                                                                     accuracy,
                                                                     sub,
                                                                     param_specs=param_specs)
+                    perm_tgm = np.stack(sub_perm_results)
                     np.savez_compressed(perm_agg_file,
-                                        sub_perm_results=sub_perm_results)
+                                        perm_tgm=perm_tgm)
 
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
@@ -229,10 +230,9 @@ if __name__ == '__main__':
                                                                           sub,
                                                                           param_specs=param_specs)
                 tgm = sub_results[0]
-                perm_tgm = np.stack(sub_perm_results)
+
                 print('meow')
                 print(perm_tgm.shape)
-                print(perm_tgm[0, 0, 0, 0, 0].shape)
                 print(tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
