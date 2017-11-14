@@ -1,6 +1,6 @@
 import itertools
 import os.path
-from subprocess import call
+from subprocess import call, check_output
 import time
 
 #parser.add_argument('--experiment')
@@ -21,8 +21,8 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
-EXPERIMENTS = ['PassAct2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['A', 'B', 'C'] #['G', 'H', 'F', 'E', 'D', 'C', 'B']
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+SUBJECTS = ['I, ''A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
@@ -42,6 +42,8 @@ JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
+
+JOB_Q_CHECK = 'expr $(qstat -u nrafidi | wc -l) - 5'
 
 
 if __name__ == '__main__':
@@ -105,5 +107,7 @@ if __name__ == '__main__':
         # print(call_str)
         call(call_str, shell=True)
         job_id += 1
-        if job_id % 100 == 0:
-            time.sleep(300)
+
+        num_jobs_queued = int(check_output(JOB_Q_CHECK))
+        while num_jobs_queued >= 150:
+            time.sleep(30)

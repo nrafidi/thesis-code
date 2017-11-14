@@ -6,7 +6,7 @@ import re
 
 NUM_SENTENCES = 16
 NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
-VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H'],
+VALID_SUBS = {'krns2': ['I, ''A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 
@@ -76,7 +76,8 @@ TIME_LIMITS = {'active': {'firstNoun': {'tmin': -0.5, 'tmax': 4.0},
 # 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_band-5-150_notch-60-120_beatremoval-first_blinkremoval-first'
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_lp-150_notch-60-120_beats-head-meas_blinks-head-meas'
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
-DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
+# DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
+DEFAULT_PROC = 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_lp-150_notch-60-120_beatremoval-first_blinkremoval-first'
 PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pdtwSyn.mat'
 GLOVE = '/share/volume1/sjat/repositories/Nicole-thesis-code/python/sj-experiments/embeddings_files/glove.840B.300d.txt'
 
