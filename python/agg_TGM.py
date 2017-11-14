@@ -206,7 +206,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None, para
     result_files = glob.glob(fname)
     i_f = 0
     for f in result_files:
-        # print(f)
+        print(f)
         print(i_f)
         if i_f > param_limit:
             break
