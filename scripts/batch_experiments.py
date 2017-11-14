@@ -21,22 +21,22 @@ import time
 #parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 #parser.add_argument('--random_state', type=int, default=1)
 
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['G', 'H', 'F', 'E', 'D', 'C', 'B']
+EXPERIMENTS = ['PassAct2']  # ,  'PassAct2', 'PassAct3']
+SUBJECTS = ['A', 'B', 'C'] #['G', 'H', 'F', 'E', 'D', 'C', 'B']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['firstNoun', 'verb', 'secondNoun']
 WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
 OVERLAPS = [3] #12, 25, 50, 100, 150, 200, 250, 300, 350]
 MODES = ['uni']  # pred
 IS_PDTWS = [False]  # True
-IS_PERMS = [True]  # True
+IS_PERMS = [False]  # True
 NUM_FOLDSS = [32]
 ALGS = ['GNB']  # GNB
 DO_ZSCORES = [False]  # True
 DO_AVGS = [False]  # True
 NUM_INSTANCESS = [2]  # 5 10
 REPS_TO_USES = [10]  # 10
-RANDOM_STATES = range(1, 100)
+RANDOM_STATES = [1] #range(1, 100)
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
