@@ -251,13 +251,14 @@ if __name__ == '__main__':
             total_pvals = np.squeeze(np.concatenate(pval_by_sub))
             print(total_pvals.shape)
 
+            if sens == 'wb':
+                concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
+                total_pvals = np.reshape(total_pvals, (total_pvals.shape[0], 1, total_pvals.shape[1]))
             corr_pvals = correct_pvals(total_pvals)
             print(np.sum(corr_pvals))
 
 
-            if sens == 'wb':
-                concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
-                corr_pvals = np.reshape(corr_pvals, (corr_pvals.shape[0], 1, corr_pvals.shape[1]))
+
             (num_sub, num_sens, num_time) = concat_tgm.shape
             print(num_sub)
             print(num_sens)
