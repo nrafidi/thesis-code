@@ -16,11 +16,12 @@ def correct_pvals(uncorrected_pvals):
             fig, axs = plt.subplots(2, 2)
 
             dist_over_sub = uncorrected_pvals[:, i, j]
+            print(np.min(dist_over_sub))
             axs[0][0].hist(dist_over_sub)
             dist_over_sub[dist_over_sub == 1.0] -= 1e-14
             dist_over_sub[dist_over_sub == 0.0] += 1e-14
             axs[0][1].hist(dist_over_sub)
-
+            print(np.min(dist_over_sub))
             # print('ahoy')
             # print(dist_over_sub)
             meow = norm.ppf(dist_over_sub)
