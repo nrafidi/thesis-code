@@ -63,7 +63,8 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 if __name__ == '__main__':
     perm_accs = np.random.rand(100, 10, 5, 2000)
-    true_accs = np.concatenate((0.9999*np.ones((10, 5, 100)), 0.5*np.ones(10, 5, 1900)), axis=2)
+    true_accs = np.concatenate([0.9999*np.ones((10, 5, 100)), 0.5*np.ones(10, 5, 1900)], axis=2)
+    print(true_accs.shape)
 
     uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
     print(uncorr_pvals)
