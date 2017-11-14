@@ -12,9 +12,12 @@ import coef_sim
 from scipy.stats import norm
 from scipy import stats
 import warnings
+import os
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
+PERM_FILE = '/share/volume0/nrafidi/{exp}_TGM/{sub}/TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
+            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsPmin}-{rsPmax}_rsCV{rsC}_rsSCV{rsS}_{mode}'
 
 
 def accum_over_sub(sub_results):
@@ -182,7 +185,7 @@ if __name__ == '__main__':
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
-            for sub in ['B', 'C', 'D', 'E', 'F', 'G', 'H']:
+            for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -195,13 +198,27 @@ if __name__ == '__main__':
                                'nr': 10,
                                'rsCV': run_TGM.CV_RAND_STATE,
                                'rsSCV': run_TGM.SUB_CV_RAND_STATE}
-                sub_perm_results, _, _, _ = agg_TGM.agg_results(exp,
-                                                                mode,
-                                                                word,
-                                                                sen_type,
-                                                                accuracy,
-                                                                sub,
-                                                                param_specs=param_specs)
+
+                perm_agg_file = PERM_FILE.format(exp=exp, sub=sub, sen_type=sen_type, word=word, win_len=w, overlap=o,
+                                                 pdtw=param_specs['pd'], perm='T', num_folds=param_specs['F'],
+                                                 alg=param_specs['alg'], z=param_specs['z'], avg=param_specs['avg'],
+                                                 inst=param_specs['ni'], rep=param_specs['nr'], rsPmin=1, rsPmax=99,
+                                                 rsCV=param_specs['rsCV'], rsSCV=param_specs['rsSCV'],mode=mode)
+
+                if os.path.isfile(perm_agg_file + '.npz'):
+                    result = np.load(perm_agg_file + '.npz')
+                    sub_perm_results = result['sub_perm_results']
+                else:
+                    sub_perm_results, _, _, _ = agg_TGM.agg_results(exp,
+                                                                    mode,
+                                                                    word,
+                                                                    sen_type,
+                                                                    accuracy,
+                                                                    sub,
+                                                                    param_specs=param_specs)
+                    np.savez_compressed(perm_agg_file,
+                                        sub_perm_results=sub_perm_results)
+
                 param_specs['rsPerm'] = 1
                 param_specs['pr'] = 'F'
                 sub_results, _, sub_time, sub_masks = agg_TGM.agg_results(exp,
