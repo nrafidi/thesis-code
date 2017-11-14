@@ -35,7 +35,8 @@ def correct_pvals(uncorrected_pvals):
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
-            plt.show()
+            if j > 100:
+                plt.show()
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
