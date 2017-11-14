@@ -21,6 +21,7 @@ LSTM = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
 
 ANIMATE = ['dog', 'doctor', 'student', 'monkey']
 INANIMATE = ['door', 'hammer', 'peach', 'school']
+REGIONS_TO_PLOT = ['R_Frontal', 'R_Occipital', 'L_Temporal']
 
 EXP_INDS = {'krns2': range(64, 96),
             'PassAct2': range(32, 64),
@@ -210,8 +211,8 @@ if __name__ == '__main__':
 
 
 
-    fig, axs = plt.subplots(num_reg, 1, figsize=(20, 20))
-    fig_zoom, axs_zoom = plt.subplots(num_reg, 1, figsize=(20, 20))
+    fig, axs = plt.subplots(len(REGIONS_TO_PLOT), 1, figsize=(20, 20))
+    fig_zoom, axs_zoom = plt.subplots(len(REGIONS_TO_PLOT), 1, figsize=(20, 20))
     time = np.arange(args.tmin, args.tmax+0.002, 0.002)
     time_zoom = np.arange(0.0, args.tmax + 0.002, 0.002)
     min_reg = np.empty((num_reg,))
@@ -219,11 +220,12 @@ if __name__ == '__main__':
     min_reg_zoom = np.empty((num_reg,))
     max_reg_zoom = np.empty((num_reg,))
     colors = ['b', 'g', 'r', 'c']
-    for i_reg in range(num_reg):
-        print(uni_reg[i_reg])
+    for i_reg, reg in enumerate(REGIONS_TO_PLOT):
+        j_reg = np.where(uni_reg ==reg)
+        print(uni_reg[j_reg][0])
         ax = axs[i_reg]
         ax_zoom = axs_zoom[i_reg]
-        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=uni_reg[i_reg], tmin=args.tmin, tmax=args.tmax, word=args.word)
+        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=reg, tmin=args.tmin, tmax=args.tmax, word=args.word)
         if os.path.isfile(fname):
             result = np.load(fname)
             syn_scores = result['syn_scores']
@@ -240,12 +242,12 @@ if __name__ == '__main__':
             rnng_scores = np.empty((rdm.shape[1],))
             lstm_scores = np.empty((rdm.shape[1],))
             for i_t in range(rdm.shape[1]):
-                syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), ap_rdm)
-                sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), semantic_rdm)
-                glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), glove_rdm)
-                w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), w2v_rdm)
-                rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), vec_rdm)
-                lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[i_reg, i_t, :, :]), lstm_rdm)
+                syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), ap_rdm)
+                sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), semantic_rdm)
+                glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), glove_rdm)
+                w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), w2v_rdm)
+                rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), vec_rdm)
+                lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), lstm_rdm)
             np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores,
                                 w2v_scores=w2v_scores, rnng_scores=rnng_scores, lstm_scores=lstm_scores)
 
@@ -276,10 +278,10 @@ if __name__ == '__main__':
         h6[0].set_label('LSTM')
         ax.legend()
 
-        for i_time in range(all_scores.shape[-1]):
-            if good_scores[win_scores[i_time], i_time]:
-                ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]], linewidths=0.0)
-        ax.set_title(uni_reg[i_reg])
+        # for i_time in range(all_scores.shape[-1]):
+        #     if good_scores[win_scores[i_time], i_time]:
+        #         ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]], linewidths=0.0)
+        ax.set_title(reg)
         ax.set_xlim(args.tmin, args.tmax+0.5)
         ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
 
@@ -317,26 +319,26 @@ if __name__ == '__main__':
             if good_scores_zoom[win_scores_zoom[i_time], i_time]:
                 ax_zoom.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
 
-        ax_zoom.set_title(uni_reg[i_reg])
+        ax_zoom.set_title(reg)
         ax_zoom.set_xlim(0.0, args.tmax + 0.5)
         ax_zoom.set_xticks(np.arange(0.0, args.tmax, 0.5))
 
         # ax.legend([h1, h2], ['Syntax', 'Semantics'])
     max_val = np.max(max_reg)
     min_val = np.min(min_reg)
-    for i_reg in range(num_reg):
+    for i_reg in range(len(REGIONS_TO_PLOT)):
         axs[i_reg].set_ylim(min_val, max_val+0.1)
     max_val_zoom = np.max(max_reg_zoom)
     min_val_zoom = np.min(min_reg_zoom)
-    for i_reg in range(num_reg):
+    for i_reg in range(len(REGIONS_TO_PLOT)):
         axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom+0.1)
 
-    fig.suptitle('{} {}'.format(args.experiment, args.dist))
+    # fig.suptitle('{} {}'.format(args.experiment, args.dist))
     fig.tight_layout()
-    fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
+    # fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
     fig_zoom.tight_layout()
-    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
-    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}.pdf'.format(exp=args.experiment, metric=args.dist,
+    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
+    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist,
                                                                                  tmax=args.tmax,
                                                                                  word=args.word))
     # plt.savefig()
