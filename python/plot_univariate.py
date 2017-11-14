@@ -232,6 +232,7 @@ if __name__ == '__main__':
                 perm_tgm = np.stack(sub_perm_results)
                 print('meow')
                 print(perm_tgm.shape)
+                print(perm_tgm[0, 0, 0, 0, 0].shape)
                 print(tgm.shape)
                 if sens != 'comb' and sens != 'reg' and sens != 'wb':
                     tgm = tgm[:, :, sorted_inds, :]
