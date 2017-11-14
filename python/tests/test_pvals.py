@@ -37,6 +37,9 @@ def correct_pvals(uncorrected_pvals):
             assert not np.isinf(new_pvals[i, j])
             if j > 100:
                 plt.show()
+            else:
+                plt.close()
+
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
