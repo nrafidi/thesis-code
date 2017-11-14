@@ -203,7 +203,7 @@ if __name__ == '__main__':
                                                  pdtw=param_specs['pd'], perm='T', num_folds=param_specs['F'],
                                                  alg=param_specs['alg'], zscore=param_specs['z'], doAvg=param_specs['avg'],
                                                  inst=param_specs['ni'], rep=param_specs['nr'], rsPmin=1, rsPmax=99,
-                                                 rsCV=param_specs['rsCV'], rsSCV=param_specs['rsSCV'],mode=mode)
+                                                 rsC=param_specs['rsCV'], rsS=param_specs['rsSCV'],mode=mode)
 
                 if os.path.isfile(perm_agg_file + '.npz'):
                     result = np.load(perm_agg_file + '.npz')
