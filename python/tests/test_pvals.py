@@ -36,6 +36,7 @@ def correct_pvals(uncorrected_pvals):
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
             if j > 100:
+                fig.suptitle(new_pvals[i, j])
                 plt.show()
             else:
                 plt.close()
