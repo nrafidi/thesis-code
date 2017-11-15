@@ -79,7 +79,7 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 if __name__ == '__main__':
     perm_accs = np.random.rand(100, 10, 5, 2000)
-    good_points = 0.9995*np.ones((10, 5, 100))
+    good_points = 0.999*np.ones((10, 5, 100))
     bad_points = 0.5*np.ones((10, 5, 1900))
     true_accs = np.concatenate([good_points, bad_points], axis=2)
     print(true_accs.shape)
