@@ -210,37 +210,38 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None, para
         print(i_f)
         if i_f > param_limit:
             break
-        for param in PARAMS_TO_AGG:
-            if param not in sub_params:
-                sub_params[param] = []
-        if 'time' not in sub_time:
-            sub_time['time'] = []
-            sub_time['win_starts'] = []
+        if 'agg' not in f:
+            for param in PARAMS_TO_AGG:
+                if param not in sub_params:
+                    sub_params[param] = []
+            if 'time' not in sub_time:
+                sub_time['time'] = []
+                sub_time['win_starts'] = []
 
-        for param in PARAMS_TO_AGG:
-            if param not in param_specs:
-                param_val = extract_param(param, f)
-                sub_params[param].append(param_val)
+            for param in PARAMS_TO_AGG:
+                if param not in param_specs:
+                    param_val = extract_param(param, f)
+                    sub_params[param].append(param_val)
 
-        result = np.load(f)
-        if mode == 'coef':
-            if 'GNB' in f:
-                tgm = [result['mu_win'], result['std_win'], result['mu_diff_win']]
+            result = np.load(f)
+            if mode == 'coef':
+                if 'GNB' in f:
+                    tgm = [result['mu_win'], result['std_win'], result['mu_diff_win']]
+                else:
+                    tgm = result['coef']
+            elif mode == 'uni':
+                tgm = tgm_from_preds_GNB_uni(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
             else:
-                tgm = result['coef']
-        elif mode == 'uni':
-            tgm = tgm_from_preds_GNB_uni(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
-        else:
-            if 'GNB' in f:
-                tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
-            else:
-                tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
-            sub_masks.append(result['masks'])
-            print(tgm.shape)
-        sub_results.append(tgm)
+                if 'GNB' in f:
+                    tgm = tgm_from_preds_GNB(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+                else:
+                    tgm = tgm_from_preds(result['preds'], result['l_ints'], result['cv_membership'], accuracy)
+                sub_masks.append(result['masks'])
+                print(tgm.shape)
+            sub_results.append(tgm)
 
-        sub_time['time'].append(result['time'])
-        sub_time['win_starts'].append(result['win_starts'])
+            sub_time['time'].append(result['time'])
+            sub_time['win_starts'].append(result['win_starts'])
 
         i_f += 1
 
