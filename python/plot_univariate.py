@@ -261,6 +261,11 @@ if __name__ == '__main__':
             corr_pvals, new_pvals = correct_pvals(total_pvals)
 
             fig, ax = plt.subplots()
+            h = ax.imshow(total_pvals[0, ...], interpolation='nearest', aspect='auto')
+            plt.colorbar(h)
+            fig.suptitle(word)
+
+            fig, ax = plt.subplots()
             h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto')
             plt.colorbar(h)
             fig.suptitle(word)
