@@ -76,14 +76,10 @@ def correct_pvals(uncorrected_pvals):
             dist_over_sub = uncorrected_pvals[:, i, j]
             dist_over_sub[dist_over_sub == 1.0] -= 1e-14
             dist_over_sub[dist_over_sub == 0.0] += 1e-14
-            # print('ahoy')
-            # print(dist_over_sub)
+
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
-            # print(meow)
-            meow[meow == 1.0] -= 1e-14
-            meow[meow == 0.0] += 1e-14
             t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             if t_stat < 0.0:
                 new_pvals[i, j] /= 2.0
@@ -94,7 +90,7 @@ def correct_pvals(uncorrected_pvals):
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
-    return corr_pvals
+    return corr_pvals, new_pvals
 
 
 def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
@@ -189,7 +185,7 @@ if __name__ == '__main__':
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['I', 'A', 'B']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
@@ -258,7 +254,14 @@ if __name__ == '__main__':
             if sens == 'wb':
                 concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
                 total_pvals = np.reshape(total_pvals, (total_pvals.shape[0], 1, total_pvals.shape[1]))
-            corr_pvals = correct_pvals(total_pvals)
+            corr_pvals, new_pvals = correct_pvals(total_pvals)
+
+            fig, ax = plt.subplots()
+            h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto')
+            plt.colorbar(h)
+            fig.suptitle(word)
+            plt.show()
+
             print(np.sum(corr_pvals))
 
 
