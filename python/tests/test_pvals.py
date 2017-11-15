@@ -12,6 +12,7 @@ def correct_pvals(uncorrected_pvals):
     new_pvals = np.empty((uncorrected_pvals.shape[1], uncorrected_pvals.shape[2]))
     print(new_pvals.shape)
     for i in range(uncorrected_pvals.shape[1]):
+        print(i)
         for j in range(uncorrected_pvals.shape[2]):
             fig, axs = plt.subplots(2, 2)
 
