@@ -46,6 +46,7 @@ if __name__ == '__main__':
                 with open(out_str, 'r') as fid:
                     meow = fid.read()
                     if 'Experiment parameters not valid.' in meow:
+                        print(meow)
                         is_valid =  grid[5] <= grid[4]
                         if grid[6] == 'coef':
                             is_valid = is_valid and (grid[9] == 2)
@@ -53,7 +54,7 @@ if __name__ == '__main__':
                             print(meow)
                     else:
                         successful_jobs += 1
-                        print(job_id)
+                        # print(job_id)
 
 
         job_id += 1

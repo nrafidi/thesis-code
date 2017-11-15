@@ -35,13 +35,18 @@ def correct_pvals(uncorrected_pvals):
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
-            if j % 100 == 3:
-                fig.suptitle(new_pvals[i, j])
-                plt.show()
-            else:
-                plt.close()
-
+            # if j % 100 == 3:
+            #     fig.suptitle(new_pvals[i, j])
+            #     plt.show()
+            # else:
+            #     plt.close()
+            plt.close()
+    fig, axs = plt.subplots()
+    h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
+    plt.colorbar(h)
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
+    print(bh_thresh)
+    plt.show()
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
     return corr_pvals
@@ -79,7 +84,7 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 if __name__ == '__main__':
     perm_accs = np.random.rand(100, 10, 5, 2000)
-    good_points = 0.99*np.ones((10, 5, 100))
+    good_points = 0.999*np.ones((10, 5, 100))
     bad_points = 0.5*np.ones((10, 5, 1900))
     true_accs = np.concatenate([good_points, bad_points], axis=2)
     print(true_accs.shape)
