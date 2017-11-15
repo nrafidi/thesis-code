@@ -91,7 +91,7 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 if __name__ == '__main__':
     perm_accs = np.random.rand(1000, 10, 2, 200)
-    good_points = 0.999*np.ones((10, 2, 100))
+    good_points = 0.9*np.ones((10, 2, 100))
 
     for badness in [0.7]:
         bad_points = badness*np.ones((10, 2, 100))
