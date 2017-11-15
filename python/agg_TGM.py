@@ -62,7 +62,8 @@ def extract_param(param_name, fname):
     if m:
         return m.group(1)
     else:
-        raise ValueError('Invalid fname for param {}'.format(param_name))
+        raise ValueError('Invalid fname for param {}. fname = {}'.format(param_name, fname))
+
 
 def get_param_str(param_name, param_val):
     if isinstance(PARAM_TYPES[param_name], list):
@@ -210,7 +211,7 @@ def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None, para
         print(i_f)
         if i_f > param_limit:
             break
-        if 'agg' not in f:
+        if 'agg' not in f and '1-99' not in f:
             for param in PARAMS_TO_AGG:
                 if param not in sub_params:
                     sub_params[param] = []
