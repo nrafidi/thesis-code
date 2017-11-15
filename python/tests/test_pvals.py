@@ -4,6 +4,7 @@ from scipy import stats
 import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
+from scipy.stats import kendalltau
 
 def correct_pvals(uncorrected_pvals):
     print('moo')
@@ -109,5 +110,10 @@ if __name__ == '__main__':
         h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
         fig.suptitle(badness)
         plt.colorbar(h)
+
+        for i in range(2):
+            ktau, _ = kendalltau(uncorr_pvals[i, ...], new_pvals)
+            print(ktau)
+
         plt.show()
         print(np.sum(corr_pvals[0, :]))
