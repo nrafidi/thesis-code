@@ -13,6 +13,7 @@ from scipy.stats import norm
 from scipy import stats
 import warnings
 import os
+from scipy.stats import kendalltau
 
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
@@ -264,6 +265,10 @@ if __name__ == '__main__':
             h = ax.imshow(total_pvals[2, ...], interpolation='nearest', aspect='auto')
             plt.colorbar(h)
             fig.suptitle(word)
+
+            for i in range(3):
+                ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
+                print(ktau)
 
             fig, ax = plt.subplots()
             h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto')
