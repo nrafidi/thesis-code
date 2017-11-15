@@ -88,7 +88,7 @@ if __name__ == '__main__':
     perm_accs = np.random.rand(100, 10, 2, 200)
     good_points = 0.999*np.ones((10, 2, 100))
 
-    for badness in [0.5, 0.6, 0.7, 0.8, 0.9]:
+    for badness in [0.7, 0.8, 0.9]:
         bad_points = badness*np.ones((10, 2, 100))
         true_accs = np.concatenate([good_points, bad_points], axis=2)
         print(true_accs.shape)
@@ -98,6 +98,7 @@ if __name__ == '__main__':
         corr_pvals = correct_pvals(uncorr_pvals)
         fig, axs = plt.subplots()
         h = axs.imshow(corr_pvals, interpolation='nearest', aspect='auto')
+        fig.suptitle(badness)
         plt.colorbar(h)
         plt.show()
         print(np.sum(corr_pvals[0, :]))
