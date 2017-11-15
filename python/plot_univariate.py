@@ -88,7 +88,7 @@ def correct_pvals(uncorrected_pvals):
             if t_stat < 0.0:
                 new_pvals[i, j] /= 2.0
             else:
-                new_pvals[i, j] = 1 - new_pvals[i, j]/2.0
+                new_pvals[i, j] = 1.0 - new_pvals[i, j]/2.0
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)

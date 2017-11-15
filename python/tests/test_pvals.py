@@ -14,7 +14,7 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         print(i)
         for j in range(uncorrected_pvals.shape[2]):
-            # fig, axs = plt.subplots(2, 2)
+            fig, axs = plt.subplots()
 
             dist_over_sub = uncorrected_pvals[:, i, j]
             # print(np.min(dist_over_sub))
@@ -30,18 +30,22 @@ def correct_pvals(uncorrected_pvals):
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
             # print(meow)
-            meow[meow == 1.0] -= 1e-14
-            meow[meow == 0.0] += 1e-14
-            # axs[1][1].hist(meow)
+            # meow[meow == 1.0] -= 1e-14
+            # meow[meow == 0.0] += 1e-14
+            axs.hist(meow)
             t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
-            new_pvals[i, j] /= 2
+            my_t_stat = np.mean(meow)/(np.std(meow)/np.sqrt(meow.size))
+            if t_stat < 0.0:
+                new_pvals[i, j] /= 2.0
+            else:
+                new_pvals[i, j] = 1.0 - new_pvals[i, j]/2.0
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
-            # if j % 100 == 0:
-            #     fig.suptitle('{} {}'.format(t_stat, new_pvals[i, j]))
-            #     plt.show()
-            # else:
-            #     plt.close()
+            if j % 100 == 0:
+                fig.suptitle('{}, {}, {}'.format(t_stat, new_pvals[i, j], my_t_stat))
+                plt.show()
+            else:
+                plt.close()
             # plt.close()
     # fig, axs = plt.subplots()
     # h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
