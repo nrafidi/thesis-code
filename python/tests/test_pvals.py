@@ -84,13 +84,17 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 
 if __name__ == '__main__':
-    perm_accs = np.random.rand(100, 10, 5, 200)
-    good_points = 0.999*np.ones((10, 5, 100))
-    bad_points = 0.5*np.ones((10, 5, 100))
+    perm_accs = np.random.rand(100, 10, 3, 200)
+    good_points = 0.999*np.ones((10, 3, 100))
+    bad_points = 0.95*np.ones((10, 3, 100))
     true_accs = np.concatenate([good_points, bad_points], axis=2)
     print(true_accs.shape)
 
     uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
 
     corr_pvals = correct_pvals(uncorr_pvals)
+    fig, axs = plt.subplots()
+    h = axs.imshow(corr_pvals, interpolation='nearest', aspect='auto')
+    plt.colorbar(h)
+    plt.show()
     print(np.sum(corr_pvals[0, :]))
