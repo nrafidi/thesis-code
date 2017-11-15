@@ -14,44 +14,44 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         print(i)
         for j in range(uncorrected_pvals.shape[2]):
-            fig, axs = plt.subplots(2, 2)
+            # fig, axs = plt.subplots(2, 2)
 
             dist_over_sub = uncorrected_pvals[:, i, j]
             # print(np.min(dist_over_sub))
-            axs[0][0].hist(dist_over_sub)
+            # axs[0][0].hist(dist_over_sub)
             dist_over_sub[dist_over_sub == 1.0] -= 1e-14
             dist_over_sub[dist_over_sub == 0.0] += 1e-14
-            axs[0][1].hist(dist_over_sub)
+            # axs[0][1].hist(dist_over_sub)
             # print(np.min(dist_over_sub))
             # print('ahoy')
             # print(dist_over_sub)
             meow = norm.ppf(dist_over_sub)
-            axs[1][0].hist(meow)
+            # axs[1][0].hist(meow)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
             # print(meow)
             meow[meow == 1.0] -= 1e-14
             meow[meow == 0.0] += 1e-14
-            axs[1][1].hist(meow)
+            # axs[1][1].hist(meow)
             t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             new_pvals[i, j] /= 2
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
-            if j % 100 == 0:
-                fig.suptitle('{} {}'.format(t_stat, new_pvals[i, j]))
-                plt.show()
-            else:
-                plt.close()
+            # if j % 100 == 0:
+            #     fig.suptitle('{} {}'.format(t_stat, new_pvals[i, j]))
+            #     plt.show()
+            # else:
+            #     plt.close()
             # plt.close()
-    fig, axs = plt.subplots()
-    h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
-    plt.colorbar(h)
+    # fig, axs = plt.subplots()
+    # h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
+    # plt.colorbar(h)
     bh_thresh = bhy_multiple_comparisons_procedure(new_pvals)
     print(bh_thresh)
-    plt.show()
+    # plt.show()
 
     corr_pvals = new_pvals <= bh_thresh[:, None]
-    return corr_pvals
+    return corr_pvals, new_pvals
 
 
 def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
@@ -92,12 +92,16 @@ if __name__ == '__main__':
         bad_points = badness*np.ones((10, 2, 100))
         true_accs = np.concatenate([good_points, bad_points], axis=2)
         print(true_accs.shape)
-
-        uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
-
-        corr_pvals = correct_pvals(uncorr_pvals)
         fig, axs = plt.subplots()
-        h = axs.imshow(corr_pvals, interpolation='nearest', aspect='auto')
+        h = axs.imshow(true_accs, interpolation='nearest', aspect='auto')
+        plt.colorbar(h)
+        uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
+        fig, axs = plt.subplots()
+        h = axs.imshow(uncorr_pvals, interpolation='nearest', aspect='auto')
+        plt.colorbar(h)
+        corr_pvals, new_pvals = correct_pvals(uncorr_pvals)
+        fig, axs = plt.subplots()
+        h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
         fig.suptitle(badness)
         plt.colorbar(h)
         plt.show()
