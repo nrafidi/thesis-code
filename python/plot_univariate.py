@@ -80,6 +80,10 @@ def correct_pvals(uncorrected_pvals):
             meow = norm.ppf(dist_over_sub)
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
+
+            if np.std(meow) == 0.0:
+                meow[0] += 1e-15
+
             t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             if t_stat < 0.0:
                 new_pvals[i, j] /= 2.0
