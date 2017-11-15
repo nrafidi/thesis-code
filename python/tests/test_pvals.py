@@ -36,12 +36,12 @@ def correct_pvals(uncorrected_pvals):
             _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
-            # if j % 100 == 3:
-            #     fig.suptitle(new_pvals[i, j])
-            #     plt.show()
-            # else:
-            #     plt.close()
-            plt.close()
+            if j % 100 == 0:
+                fig.suptitle(new_pvals[i, j])
+                plt.show()
+            else:
+                plt.close()
+            # plt.close()
     fig, axs = plt.subplots()
     h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
     plt.colorbar(h)
