@@ -33,11 +33,12 @@ def correct_pvals(uncorrected_pvals):
             meow[meow == 1.0] -= 1e-14
             meow[meow == 0.0] += 1e-14
             axs[1][1].hist(meow)
-            _, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
+            t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
+            new_pvals[i, j] /= 2
             assert not np.isnan(new_pvals[i, j])
             assert not np.isinf(new_pvals[i, j])
             if j % 100 == 0:
-                fig.suptitle(new_pvals[i, j])
+                fig.suptitle('{} {}'.format(t_stat, new_pvals[i, j]))
                 plt.show()
             else:
                 plt.close()
@@ -84,9 +85,9 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
 
 
 if __name__ == '__main__':
-    perm_accs = np.random.rand(100, 10, 3, 200)
-    good_points = 0.999*np.ones((10, 3, 100))
-    bad_points = 0.9*np.ones((10, 3, 100))
+    perm_accs = np.random.rand(100, 10, 2, 200)
+    good_points = 0.999*np.ones((10, 2, 100))
+    bad_points = 0.9*np.ones((10, 2, 100))
     true_accs = np.concatenate([good_points, bad_points], axis=2)
     print(true_accs.shape)
 
