@@ -81,8 +81,8 @@ def correct_pvals(uncorrected_pvals):
             assert not np.any(np.isinf(meow))
             assert not np.any(np.isnan(meow))
 
-            if np.std(meow) == 0.0:
-                meow[0] += 1e-15
+            # if np.std(meow) == 0.0:
+            #     meow[0] += 1e-15
 
             t_stat, new_pvals[i, j] = stats.ttest_1samp(meow, 0.0)
             if t_stat < 0.0:
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
-    warnings.filterwarnings('error')
+    # warnings.filterwarnings('error')
     exp = args.experiment
     mode = 'uni'
     sens = args.sensors
