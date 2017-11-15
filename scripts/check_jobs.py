@@ -33,7 +33,7 @@ if __name__ == '__main__':
         err_str = batch_exp.ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
         if not os.path.isfile(err_str) or not os.path.isfile(out_str):
-            #print('Job {} Did Not Run'.format(job_str))
+            print('Job {} Did Not Run'.format(job_str))
             meow = 1
         else:
             if os.stat(err_str).st_size != 0:
