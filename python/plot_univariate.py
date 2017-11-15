@@ -134,7 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     args = parser.parse_args()
-    # warnings.filterwarnings('error')
+    warnings.filterwarnings('error')
     exp = args.experiment
     mode = 'uni'
     sens = args.sensors
@@ -260,6 +260,12 @@ if __name__ == '__main__':
             h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto')
             plt.colorbar(h)
             fig.suptitle(word)
+
+            fig, ax = plt.subplots()
+            h = ax.imshow(corr_pvals, interpolation='nearest', aspect='auto')
+            plt.colorbar(h)
+            fig.suptitle(word)
+
             plt.show()
 
             print(np.sum(corr_pvals))
