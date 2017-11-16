@@ -290,7 +290,7 @@ if __name__ == '__main__':
             plt.colorbar(h)
             fig.suptitle('Surviving p values {} {}'.format(sen_type, word))
 
-            # plt.show()
+            plt.show()
 
             print(np.sum(corr_pvals))
 
