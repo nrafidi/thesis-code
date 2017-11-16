@@ -75,12 +75,14 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
             dist_over_sub = uncorrected_pvals[:, i, j]
-            dist_over_sub[dist_over_sub == 1.0] -= 1e-14
-            dist_over_sub[dist_over_sub == 0.0] += 1e-14
 
             meow = norm.ppf(dist_over_sub)
-            assert not np.any(np.isinf(meow))
-            assert not np.any(np.isnan(meow))
+            if np.any(np.isinf(meow)):
+                print('Inf')
+                print(dist_over_sub)
+            if np.any(np.isnan(meow)):
+                print('NaN')
+                print(dist_over_sub)
 
             # if np.std(meow) == 0.0:
             #     meow[0] += 1e-15
@@ -247,7 +249,9 @@ if __name__ == '__main__':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
                 perms_greater = perm_tgm >= tgm[None, ...]
-                pvals = np.mean(perms_greater + 1, axis=0)
+                sum_perms_greater = np.sum(perms_greater, axis=0)
+                print(sum_perms_greater.shape)
+                pvals = (sum_perms_greater + 1)/perms_greater.shape[0]
                 print('woof')
                 print(pvals.shape)
                 pval_by_sub.append(pvals[None, :])
