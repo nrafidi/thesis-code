@@ -192,7 +192,7 @@ if __name__ == '__main__':
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
-            for sub in ['I', 'D', 'A']: #load_data.VALID_SUBS[exp]:
+            for sub in load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
