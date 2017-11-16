@@ -254,7 +254,7 @@ if __name__ == '__main__':
                 sum_perms_greater = np.sum(perms_greater, axis=0)
                 print(sum_perms_greater.shape)
                 print(np.min(sum_perms_greater))
-                pvals = (sum_perms_greater + 1)/perms_greater.shape[0]
+                pvals = (sum_perms_greater + 1.0)/float(perms_greater.shape[0])
                 print(np.min(pvals))
                 print('woof')
                 print(pvals.shape)
