@@ -248,7 +248,9 @@ if __name__ == '__main__':
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
+                print('perm code')
                 perms_greater = perm_tgm >= tgm[None, ...]
+                print(perms_greater.shape)
                 sum_perms_greater = np.sum(perms_greater, axis=0)
                 print(sum_perms_greater.shape)
                 pvals = (sum_perms_greater + 1)/perms_greater.shape[0]
