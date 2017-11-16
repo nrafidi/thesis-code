@@ -36,7 +36,7 @@ DO_ZSCORES = [False]  # True
 DO_AVGS = [False]  # True
 NUM_INSTANCESS = [2]  # 5 10
 REPS_TO_USES = [10]  # 10
-RANDOM_STATES = range(1, 100)
+RANDOM_STATES = range(100, 501)
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'

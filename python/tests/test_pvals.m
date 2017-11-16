@@ -1,3 +1,29 @@
+function test_pvals()
+    num_perms = 100;
+    perm_accs = randn(num_perms, 10, 2, 200) + 0.5;
+
+    for goodness = [0.9]
+        good_points = goodness*ones(10, 2, 100);
+        for badness = 0.5:0.01:0.6
+            bad_points = badness*ones(10, 2, 100);
+            true_accs = cat(3, good_points, bad_points);
+            disp(size(true_accs))
+            rep_true_accs = repmat(true_accs, [1, 1, 1, num_perms]);
+            disp(size(rep_true_accs))
+            rep_true_accs = permute(rep_true_accs, [4, 1, 2, 3]);
+            meow = squeeze(sum(perm_accs >= rep_true_accs, 1));
+            uncorr_pvals = (meow + 1)/num_perms;
+            disp(size(uncorr_pvals))
+            new_pvals = correct_pvals(uncorr_pvals);
+            figure
+            imagesc(new_pvals)
+            suptitle(sprintf('badness = %0.3f, goodness = %0.3f', badness, goodness))
+            colorbar
+            caxis([0, 0.05])
+        end
+    end
+end
+
 function new_pvals = correct_pvals(uncorrected_pvals)
     
     [~, num_reg, num_t] = size(uncorrected_pvals);
@@ -12,40 +38,13 @@ function new_pvals = correct_pvals(uncorrected_pvals)
             
             [~, new_pvals(i, j)] = ttest(meow);
             
-            if t_stat < 0.0
-                new_pvals(i, j) = new_pvals(i, j)/2.0;
-            else
-                new_pvals(i, j) = 1.0 - new_pvals(i, j)/2.0;
-            end
+%             if t_stat < 0.0
+%                 new_pvals(i, j) = new_pvals(i, j)/2.0;
+%             else
+%                 new_pvals(i, j) = 1.0 - new_pvals(i, j)/2.0;
+%             end
         end
     end
 end
 
 
-function test_pvals
-    perm_accs = np.random.rand(1000, 10, 2, 200)
-
-    for goodness in [0.9, 0.99, 0.999]:
-        good_points = goodness*np.ones((10, 2, 100))
-        for badness in [0.8]:
-            bad_points = badness*np.ones((10, 2, 100))
-            true_accs = np.concatenate([good_points, bad_points], axis=2)
-            print(true_accs.shape)
-            # fig, axs = plt.subplots()
-            # h = axs.imshow(true_accs[0, ...], interpolation='nearest', aspect='auto')
-            # plt.colorbar(h)
-            uncorr_pvals = np.mean(perm_accs >= true_accs[None, ...], axis=0)
-            # fig, axs = plt.subplots()
-            # h = axs.imshow(uncorr_pvals[0, ...], interpolation='nearest', aspect='auto')
-            # plt.colorbar(h)
-            corr_pvals, new_pvals = correct_pvals(uncorr_pvals)
-            fig, axs = plt.subplots()
-            h = axs.imshow(new_pvals, interpolation='nearest', aspect='auto')
-            fig.suptitle('badness = {}, goodness = {}'.format(badness, goodness))
-            plt.colorbar(h)
-            print('badness = {}, goodness = {}'.format(badness, goodness))
-            for i in range(2):
-                ktau, _ = kendalltau(uncorr_pvals[i, ...], new_pvals)
-
-                end
-                end

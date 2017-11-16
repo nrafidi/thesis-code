@@ -245,7 +245,8 @@ if __name__ == '__main__':
                 if sens == 'avg' or sens == 'max':
                     tgm = comb_by_loc(tgm, sens)
                 tgm_by_sub.append(tgm)
-                pvals = np.mean(perm_tgm >= tgm[None, ...], axis=0)
+                perms_greater = perm_tgm >= tgm[None, ...]
+                pvals = np.mean(perms_greater + 1, axis=0)
                 print('woof')
                 print(pvals.shape)
                 pval_by_sub.append(pvals[None, :])
