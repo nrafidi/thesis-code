@@ -75,7 +75,7 @@ def correct_pvals(uncorrected_pvals):
     for i in range(uncorrected_pvals.shape[1]):
         for j in range(uncorrected_pvals.shape[2]):
             dist_over_sub = uncorrected_pvals[:, i, j]
-            dist_over_sub[dist_over_sub == 1.0] -= 1e-15
+            dist_over_sub[dist_over_sub >= 1.0] = 1.0 - 1e-15
             meow = norm.ppf(dist_over_sub)
             if np.any(np.isinf(meow)):
                 print('Inf')
