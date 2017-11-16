@@ -100,7 +100,7 @@ def correct_pvals(uncorrected_pvals):
     return corr_pvals, new_pvals
 
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.01):
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
         uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
