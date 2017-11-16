@@ -18,7 +18,7 @@ from scipy.stats import kendalltau
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 PERM_FILE = '/share/volume0/nrafidi/{exp}_TGM/{sub}/TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
-            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsPmin}-{rsPmax}_agg{accuracy}_rsCV{rsC}_rsSCV{rsS}_{mode}'
+            'z{zscore}_avg{doAvg}_ni{inst}_nr{rep}_rsPerm{rsPmin}-{rsPmax}_agg{accuracy}_rsCV{rsC}_rsSCV{rsS}_{mode}_lp'
 
 
 def accum_over_sub(sub_results):
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
-            for sub in load_data.VALID_SUBS[exp]:
+            for sub in ['I', 'D', 'A']: #load_data.VALID_SUBS[exp]:
                 param_specs = {'o': o,
                                'w': w,
                                'pd': 'F',
