@@ -214,6 +214,7 @@ if __name__ == '__main__':
                     result = np.load(perm_agg_file + '.npz')
                     perm_tgm = result['perm_tgm']
                 else:
+                    print(perm_agg_file)
                     sub_perm_results, _, _, _ = agg_TGM.agg_results(exp,
                                                                     mode,
                                                                     word,
