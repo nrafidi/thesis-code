@@ -274,7 +274,7 @@ if __name__ == '__main__':
             fig, ax = plt.subplots()
             h = ax.imshow(total_pvals[2, ...], interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
             plt.colorbar(h)
-            fig.suptitle('Single Subject p values {}'.format(word))
+            fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
 
             for i in range(3):
                 ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
@@ -283,12 +283,12 @@ if __name__ == '__main__':
             fig, ax = plt.subplots()
             h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
             plt.colorbar(h)
-            fig.suptitle('Combined values {}'.format(word))
+            fig.suptitle('Combined values {} {}'.format(sen_type, word))
 
             fig, ax = plt.subplots()
             h = ax.imshow(corr_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
             plt.colorbar(h)
-            fig.suptitle('Surviving p values {}'.format(word))
+            fig.suptitle('Surviving p values {} {}'.format(sen_type, word))
 
             # plt.show()
 
