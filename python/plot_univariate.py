@@ -272,7 +272,7 @@ if __name__ == '__main__':
             corr_pvals, new_pvals = correct_pvals(total_pvals)
 
             fig, ax = plt.subplots()
-            h = ax.imshow(total_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+            h = ax.imshow(np.squeeze(total_pvals), interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
             plt.colorbar(h)
             fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
             plt.show()
