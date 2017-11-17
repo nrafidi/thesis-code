@@ -270,11 +270,11 @@ if __name__ == '__main__':
                 concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
                 total_pvals = np.reshape(total_pvals, (total_pvals.shape[0], 1, total_pvals.shape[1]))
             corr_pvals, new_pvals = correct_pvals(total_pvals)
-            for i_sub in range(total_pvals.shape[0]):
-                fig, ax = plt.subplots()
-                h = ax.imshow(total_pvals[i_sub, ...], interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
-                plt.colorbar(h)
-                fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
+
+            fig, ax = plt.subplots()
+            h = ax.imshow(total_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+            plt.colorbar(h)
+            fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
             plt.show()
             # for i in range(3):
             #     ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
