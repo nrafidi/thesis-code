@@ -189,7 +189,7 @@ if __name__ == '__main__':
         tgm_by_word = []
         corr_p_by_word = []
         scatter_tgm_by_word = []
-        for word in ['firstNoun', 'verb', 'secondNoun']:
+        for word in ['secondNoun', 'verb', 'firstNoun']:
             tgm_by_sub = []
             pval_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
@@ -270,25 +270,25 @@ if __name__ == '__main__':
                 concat_tgm = np.reshape(concat_tgm, (concat_tgm.shape[0], 1, concat_tgm.shape[1]))
                 total_pvals = np.reshape(total_pvals, (total_pvals.shape[0], 1, total_pvals.shape[1]))
             corr_pvals, new_pvals = correct_pvals(total_pvals)
-
-            fig, ax = plt.subplots()
-            h = ax.imshow(total_pvals[2, ...], interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
-            plt.colorbar(h)
-            fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
-
-            for i in range(3):
-                ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
-                print(ktau)
-
-            fig, ax = plt.subplots()
-            h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
-            plt.colorbar(h)
-            fig.suptitle('Combined values {} {}'.format(sen_type, word))
-
-            fig, ax = plt.subplots()
-            h = ax.imshow(corr_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
-            plt.colorbar(h)
-            fig.suptitle('Surviving p values {} {}'.format(sen_type, word))
+            for i_sub in range(total_pvals.shape[0]):
+                fig, ax = plt.subplots()
+                h = ax.imshow(total_pvals[i_sub, ...], interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+                plt.colorbar(h)
+                fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
+            plt.show()
+            # for i in range(3):
+            #     ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
+            #     print(ktau)
+            #
+            # fig, ax = plt.subplots()
+            # h = ax.imshow(new_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+            # plt.colorbar(h)
+            # fig.suptitle('Combined values {} {}'.format(sen_type, word))
+            #
+            # fig, ax = plt.subplots()
+            # h = ax.imshow(corr_pvals, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+            # plt.colorbar(h)
+            # fig.suptitle('Surviving p values {} {}'.format(sen_type, word))
 
             # plt.show()
 
