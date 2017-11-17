@@ -185,7 +185,7 @@ if __name__ == '__main__':
 
     avg_by_sen_type = []
     masked_avg_by_sen_type = []
-    for sen_type in ['active', 'passive']:
+    for sen_type in ['active']: #, 'passive']:
         tgm_by_word = []
         corr_p_by_word = []
         scatter_tgm_by_word = []
