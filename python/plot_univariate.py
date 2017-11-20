@@ -271,11 +271,11 @@ if __name__ == '__main__':
                 total_pvals = np.reshape(total_pvals, (total_pvals.shape[0], 1, total_pvals.shape[1]))
             corr_pvals, new_pvals = correct_pvals(total_pvals)
 
-            fig, ax = plt.subplots()
-            h = ax.imshow(np.squeeze(total_pvals), interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
-            plt.colorbar(h)
-            fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
-            plt.show()
+            # fig, ax = plt.subplots()
+            # h = ax.imshow(np.squeeze(total_pvals), interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.05)
+            # plt.colorbar(h)
+            # fig.suptitle('Single Subject p values {} {}'.format(sen_type, word))
+            # plt.show()
             # for i in range(3):
             #     ktau, _ = kendalltau(total_pvals[i, ...], new_pvals)
             #     print(ktau)
@@ -398,7 +398,7 @@ if __name__ == '__main__':
             ax.set_yticklabels(uni_reg)
             ax.set_ylabel('Sensors')
             ax.set_title(sen_type)
-        fig.savefig('Univariate_NVN_{}_{}_{}_fullperm.pdf'.format(sens, sen_type, args.experiment))
+        fig.savefig('Univariate_NVN_{}_{}_{}_full500perm.pdf'.format(sens, sen_type, args.experiment))
     #
     # avg = np.concatenate(avg_by_sen_type, axis=0)
     # masked_avg = np.concatenate(masked_avg_by_sen_type, axis=0)
