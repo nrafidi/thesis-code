@@ -120,14 +120,17 @@ def load_model_rdm(experiment, word, mode, model, dist, noUNK):
     if model == 'RNNG':
         vectors = np.loadtxt(RNNG_VECTORS)
         vectors = vectors[EXP_INDS[experiment], :]
-
         model_rdm = squareform(pdist(vectors, metric=dist))
     elif model == 'LSTM':
         lstm = np.loadtxt(LSTM_VECTORS)
         lstm = lstm[EXP_INDS[experiment], :]
         model_rdm = squareform(pdist(lstm, metric=dist))
-    elif model == 'glove':
-        pickle.load(open(SEMANTIC_VECTORS))
+    elif model == 'glove' or model == 'w2v':
+        key_str = '{word}_emb_{model}'.format(word=word, model=model)
+        vector_dict = pickle.load(open(SEMANTIC_VECTORS))
+        vectors = np.stack(vector_dict[key_str])
+        vectors = vectors[EXP_INDS[experiment], :]
+        model_rdm = squareform(pdist(vectors, metric=dist))
 
 
     return model_rdm
