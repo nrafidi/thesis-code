@@ -14,8 +14,8 @@ import pickle
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 
-SAVE_MEG_RDM = '/share/volume0/RNNG/meg_rdm/RDM_{exp}_{word}_win{win_size}_avg{avg_time}_{dist}_num{num_instance}_reps{reps_to_use}_proc{proc}.npz'
-SAVE_RDM_SCORES = '/share/volume0/RNNG/results/Scores_{exp}_{metric}_{reg}_{tmin}_{tmax}_{word}_semantics.npz'
+SAVE_MEG_RDM = '/share/volume0/RNNG/meg_rdm/RDM_{exp}_{word}_{reg}_win{win_size}_avg{avg_time}_{dist}_num{num_instances}_reps{reps_to_use}_proc{proc}.npz'
+SAVE_RDM_SCORES = '/share/volume0/RNNG/results/Scores_{exp}_{metric}_{reg}_{mode}_{model}_{word}_noUNK{noUNK}_win{win_size}_avg{avg_time}_{dist}_num{num_instances}_reps{reps_to_use}_proc{proc}.npz'
 
 HUMAN_WORDNET_SEN_RDM = '/share/volume0/RNNG/semantic_models/wordnet/sentence_similarity/{experiment}_{model}_semantic_dissimilarity.npz'
 WORDNET_WORD_RDM = '/share/volume0/RNNG/semantic_models/{experiment}_{unk}_{mode}_RDM_wordnet.npz'
@@ -116,6 +116,23 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
     return data, labels, time
 
 
+def load_model_rdm(experiment, word, mode, model, dist, noUNK):
+    if model == 'RNNG':
+        vectors = np.loadtxt(RNNG_VECTORS)
+        vectors = vectors[EXP_INDS[experiment], :]
+
+        model_rdm = squareform(pdist(vectors, metric=dist))
+    elif model == 'LSTM':
+        lstm = np.loadtxt(LSTM_VECTORS)
+        lstm = lstm[EXP_INDS[experiment], :]
+        model_rdm = squareform(pdist(lstm, metric=dist))
+    elif model == 'glove':
+        pickle.load(open(SEMANTIC_VECTORS))
+
+
+    return model_rdm
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
@@ -123,6 +140,7 @@ if __name__ == '__main__':
     parser.add_argument('--mode')
     parser.add_argument('--word')
     parser.add_argument('--score')
+    parser.add_argument('--region')
     parser.add_argument('--noUNK', default='False')
     parser.add_argument('--win_size', type=int, default=1)
     parser.add_argument('--avg_time', default='False')
@@ -138,6 +156,7 @@ if __name__ == '__main__':
     mode = args.mode
     word = args.word
     score = args.score
+    region = args.region
     noUNK = str_to_bool(args.noUNK)
     win_size = args.win_size
     avg_time = str_to_bool(args.avg_time)
@@ -152,6 +171,10 @@ if __name__ == '__main__':
     else:
         proc_str = 'default'
 
+    results_fname = SAVE_RDM_SCORES.format(exp=experiment, metric=score, reg=region, mode=mode, model=model, word=word,
+                                           noUnk=bool_to_str(noUNK), win_size=win_size, avg_time=bool_to_str(avg_time),
+                                           dist=dist, num_instances=num_instances, reps_to_use=reps_to_use, proc=proc_str)
+
     if model not in VALID_MODELS[mode]:
         print('Model {} not available for mode {}.'.format(model, mode))
     elif avg_time and win_size == 1:
@@ -163,12 +186,13 @@ if __name__ == '__main__':
         sorted_inds, sorted_reg = sort_sensors()
 
         #MEG Data RDM
-        meg_fname = SAVE_MEG_RDM.format(exp=experiment, word=word, win_size=win_size, avg_time=bool_to_str(avg_time),
-                                        dist=dist, num_instances=num_instances, reps=reps_to_use, proc=proc_str)
+        meg_fname = SAVE_MEG_RDM.format(exp=experiment, word=word, reg=region, win_size=win_size,
+                                        avg_time=bool_to_str(avg_time), dist=dist, num_instances=num_instances,
+                                        reps=reps_to_use, proc=proc_str)
 
         if os.path.isfile(meg_fname):
             result = np.load(meg_fname)
-            rdm = result['rdm']
+            brain_rdm = result['rdm']
         else:
             rdm_by_sub_list = []
             for subject in load_data.VALID_SUBS[experiment]:
@@ -188,34 +212,23 @@ if __name__ == '__main__':
                 total_data = np.concatenate((act_data, pass_data), axis=0)
                 total_labels = np.concatenate((labels_act, labels_pass), axis=0)
 
-                rdm_by_reg_list = []
-                for reg in set(sorted_reg):
-                    rdm_by_time_list = []
-                    for t in range(0, total_data.shape[2]):
-                        locs = [i for i, x in enumerate(sorted_reg) if x == reg]
-                        reshaped_data = np.squeeze(total_data[:, locs, t])
-                        rdm = squareform(pdist(reshaped_data, metric=args.dist))
-                        rdm_by_time_list.append(rdm[None, :, :])
-                    time_rdm = np.concatenate(rdm_by_time_list)
-                    print(time_rdm.shape)
-                    rdm_by_reg_list.append(time_rdm[None, ...])
-                reg_rdm = np.concatenate(rdm_by_reg_list)
-                print(reg_rdm.shape)
-                rdm_by_sub_list.append(reg_rdm[None, ...])
-            rdm = np.concatenate(rdm_by_sub_list)
-            print(rdm.shape)
+                rdm_by_time_list = []
+                for t in range(0, total_data.shape[2]):
+                    locs = [i for i, x in enumerate(sorted_reg) if x == region]
+                    reshaped_data = np.squeeze(total_data[:, locs, t])
+                    rdm = squareform(pdist(reshaped_data, metric=dist))
+                    rdm_by_time_list.append(rdm[None, :, :])
+                time_rdm = np.concatenate(rdm_by_time_list)
+                print(time_rdm.shape)
+                rdm_by_sub_list.append(time_rdm[None, ...])
+            brain_rdm = np.concatenate(rdm_by_sub_list)
+            print(brain_rdm.shape)
 
-            np.savez_compressed(meg_fname, rdm=rdm, labels=total_labels)
+            np.savez_compressed(meg_fname, rdm=brain_rdm, labels=total_labels)
 
-    vectors = np.loadtxt(VECTORS)
-    vectors = vectors[EXP_INDS[args.experiment], :]
+        model_rdm = load_model_rdm(experiment, word, mode, model, dist, noUNK)
 
-    vec_rdm = squareform(pdist(vectors, metric=args.dist))
 
-    lstm = np.loadtxt(LSTM)
-    lstm = lstm[EXP_INDS[args.experiment], :]
-
-    lstm_rdm = squareform(pdist(lstm, metric=args.dist))
 
     glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
     glove_rdm = glove_rdm_list[1]

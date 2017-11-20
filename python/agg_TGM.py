@@ -183,7 +183,7 @@ def tgm_from_preds(preds, l_ints, cv_membership, accuracy='abs'):
         raise ValueError('Not implemented yet')
 
 
-def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None, param_limit=100):
+def agg_results(exp, mode, word, sen_type, accuracy, sub, param_specs=None, param_limit=1000):
     sub_results = []
     sub_masks = []
     sub_params = {}
