@@ -189,7 +189,7 @@ if __name__ == '__main__':
         tgm_by_word = []
         corr_p_by_word = []
         scatter_tgm_by_word = []
-        for word in ['secondNoun', 'verb', 'firstNoun']:
+        for word in ['firstNoun', 'verb', 'secondNoun']:
             tgm_by_sub = []
             pval_by_sub = []
             for sub in load_data.VALID_SUBS[exp]:
