@@ -11,14 +11,17 @@ from scipy.stats import kendalltau
 import rnng_rdm
 import os.path
 import pickle
+import string
+import Mantel
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
+SENTENCES = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_with_unk_final.txt'
 
 SAVE_MEG_RDM = '/share/volume0/RNNG/meg_rdm/RDM_{exp}_{word}_{reg}_win{win_size}_avg{avg_time}_{dist}_num{num_instances}_reps{reps_to_use}_proc{proc}.npz'
 SAVE_RDM_SCORES = '/share/volume0/RNNG/results/Scores_{exp}_{metric}_{reg}_{mode}_{model}_{word}_noUNK{noUNK}_win{win_size}_avg{avg_time}_{dist}_num{num_instances}_reps{reps_to_use}_proc{proc}.npz'
 
 HUMAN_WORDNET_SEN_RDM = '/share/volume0/RNNG/semantic_models/wordnet/sentence_similarity/{experiment}_{model}_semantic_dissimilarity.npz'
-WORDNET_WORD_RDM = '/share/volume0/RNNG/semantic_models/{experiment}_{unk}_{mode}_RDM_wordnet.npz'
+WORDNET_WORD_RDM = '/share/volume0/RNNG/semantic_models/{experiment}_all_{word}_RDM_wordnet.npz'
 SEMANTIC_VECTORS = '/share/volume0/RNNG/semantic_models/nouns_verb.pkl'
 RNNG_VECTORS = '/share/volume0/RNNG/sentence_stimuli_tokenized_tagged_pred_trees_no_preterms_vectors.txt'
 LSTM_VECTORS = '/share/volume0/RNNG/test_sents_vectors_lstm.txt'
@@ -35,6 +38,10 @@ VALID_MODELS = {'noun1': ['glove', 'w2v', 'wordnet'],
                 'noun2': ['glove', 'w2v', 'wordnet'],
                 'sentence': ['glove-avg', 'glove-cat', 'w2v-avg', 'w2v-cat',
                              'wordnet', 'human-sem', 'human-syn', 'RNNG', 'LSTM']}
+
+NUMAP = 96
+WAS = 'was'
+BY = 'by'
 
 
 def bool_to_str(bool_var):
@@ -58,6 +65,47 @@ def sort_sensors():
     sorted_inds = np.argsort(sensor_reg)
     sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
     return sorted_inds, sorted_reg
+
+
+def get_sen_lists():
+    ap_list = []
+    sen_list = []
+    with open(SENTENCES) as f:
+        i_line = 0
+        for line in f:
+            if i_line >= NUMAP:
+                break
+            i_line += 1
+            sen_list.append(string.split(line))
+            if WAS in line:
+                if BY in line:
+                    ap_list.append('P')
+                else:
+                    ap_list.append('PS')
+            else:
+                if len(string.split(line)) == 4:
+                    ap_list.append('AS')
+                else:
+                    ap_list.append('A')
+    return ap_list, sen_list
+
+
+def syn_rdm(experiment):
+    ap_list, _ = get_sen_lists()
+    ap_rdm = np.empty((NUMAP, NUMAP))
+    for i, i_sen in enumerate(ap_list):
+        for j, j_sen in enumerate(ap_list):
+            if j >= NUMAP:
+                break
+            if i_sen == j_sen:
+                ap_rdm[i, j] = 0.0
+            elif i_sen in j_sen or j_sen in i_sen:
+                ap_rdm[i, j] = 0.5
+            else:
+                ap_rdm[i, j] = 1.0
+    ap_rdm = ap_rdm[EXP_INDS[experiment], :]
+    ap_rdm = ap_rdm[:, EXP_INDS[experiment]]
+    return ap_rdm
 
 
 def ktau_rdms(rdm1, rdm2):
@@ -125,14 +173,51 @@ def load_model_rdm(experiment, word, mode, model, dist, noUNK):
         lstm = np.loadtxt(LSTM_VECTORS)
         lstm = lstm[EXP_INDS[experiment], :]
         model_rdm = squareform(pdist(lstm, metric=dist))
+    elif model == 'human-syn':
+        model_rdm = syn_rdm(experiment)
+    elif model == 'human-sem':
+        result = np.load(HUMAN_WORDNET_SEN_RDM.format(experiment=experiment.lower(), model='human'))
+        result_dict = result.item()
+        model_rdm = result_dict[u'dissimilarity']
+    elif model == 'glove-cat' or model == 'w2v-cat':
+        str_len = len(model)
+        vector_dict = pickle.load(open(SEMANTIC_VECTORS))
+        vectors_by_word = []
+        for w in ['noun1', 'verb', 'noun2']:
+            key_str = '{word}_emb_{model}'.format(word=w, model=model[:(str_len-4)])
+            vectors = np.stack(vector_dict[key_str])
+            vectors_by_word.append(vectors[EXP_INDS[experiment], :])
+        vectors = np.concatenate(vectors_by_word, axis=1)
+        model_rdm = squareform(pdist(vectors, metric=dist))
+    elif model == 'glove-avg' or model == 'w2v-avg':
+        str_len = len(model)
+        vector_dict = pickle.load(open(SEMANTIC_VECTORS))
+        vectors_by_word = []
+        for w in ['noun1', 'verb', 'noun2']:
+            key_str = '{word}_emb_{model}'.format(word=w, model=model[:(str_len-4)])
+            vectors = np.stack(vector_dict[key_str])
+            vectors_by_word.append(vectors[EXP_INDS[experiment], :])
+        vectors = np.mean(np.stack(vectors_by_word), axis=0)
+        model_rdm = squareform(pdist(vectors, metric=dist))
     elif model == 'glove' or model == 'w2v':
         key_str = '{word}_emb_{model}'.format(word=word, model=model)
         vector_dict = pickle.load(open(SEMANTIC_VECTORS))
         vectors = np.stack(vector_dict[key_str])
         vectors = vectors[EXP_INDS[experiment], :]
         model_rdm = squareform(pdist(vectors, metric=dist))
-
-
+    else:
+        assert model == 'wordnet'
+        if mode == 'sentence':
+            result = np.load(HUMAN_WORDNET_SEN_RDM.format(experiment=experiment.lower(), model='wordnet'))
+            result_dict = result.item()
+            model_rdm = result_dict[u'dissimilarity']
+        else:
+            model_rdm = np.empty(len(EXP_INDS[experiment]), len(EXP_INDS[experiment]))
+    if noUNK:
+        _, sen_list = get_sen_lists()
+        good_inds = [i for i, sen in enumerate(sen_list) if 'UNK' not in sen and i in EXP_INDS['experiment']]
+        model_rdm = model_rdm[good_inds, :]
+        model_rdm = model_rdm[:, good_inds]
     return model_rdm
 
 
@@ -231,244 +316,14 @@ if __name__ == '__main__':
 
         model_rdm = load_model_rdm(experiment, word, mode, model, dist, noUNK)
 
+        num_time = brain_rdm.shape[0]
+        rdm_scores = np.empty(num_time)
+        rdm_pvals = np.empty(num_time)
+        for i_t in range(num_time):
+            if score == 'kendalltau':
+                rdm_scores[i_t], rdm_pvals[i_t] = ktau_rdms(np.squeeze(brain_rdm[i_t, :, :]), model_rdm)
+            else:
+                rdm_scores[i_t], rdm_pvals[i_t] = Mantel.test(np.squeeze(brain_rdm[i_t, :, :]), model_rdm, tail='upper')
+        bh_thresh = bhy_multiple_comparisons_procedure(rdm_pvals)
+        np.savez_compressed(results_fname, rdm_scores=rdm_scores, rdm_pvals=rdm_pvals, bh_thresh=bh_thresh)
 
-
-    glove_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='glove')))
-    glove_rdm = glove_rdm_list[1]
-    glove_rdm = glove_rdm[EXP_INDS[args.experiment], :]
-    glove_rdm = glove_rdm[:, EXP_INDS[args.experiment]]
-    # fig, ax = plt.subplots()
-    # ax.imshow(glove_rdm, interpolation='nearest')
-
-    w2v_rdm_list = pickle.load(open(SEMANTIC_RDM.format(vsm='w2v')))
-    w2v_rdm = w2v_rdm_list[1]
-    w2v_rdm = w2v_rdm[EXP_INDS[args.experiment], :]
-    w2v_rdm = w2v_rdm[:, EXP_INDS[args.experiment]]
-    # fig, ax = plt.subplots()
-    # ax.imshow(w2v_rdm, interpolation='nearest')
-    # plt.show()
-
-
-
-    rdm = np.squeeze(np.mean(rdm, axis=0))
-    ap_list, sen_list = rnng_rdm.get_sen_lists()
-
-    ap_rdm = rnng_rdm.syn_rdm(ap_list)
-    ap_rdm = ap_rdm[EXP_INDS[args.experiment], :]
-    ap_rdm = ap_rdm[:, EXP_INDS[args.experiment]]
-    print(ap_rdm.shape)
-    print(matrix_rank(ap_rdm))
-    semantic_rdm = rnng_rdm.sem_rdm(sen_list, ap_list)
-    semantic_rdm = semantic_rdm[EXP_INDS[args.experiment], :]
-    semantic_rdm = semantic_rdm[:, EXP_INDS[args.experiment]]
-    print(semantic_rdm.shape)
-    print(matrix_rank(semantic_rdm))
-
-    uni_reg = np.unique(sorted_reg)
-    num_reg = rdm.shape[0]
-
-
-
-    fig, axs = plt.subplots(len(REGIONS_TO_PLOT), 1, figsize=(20, 20))
-    fig_zoom, axs_zoom = plt.subplots(len(REGIONS_TO_PLOT), 1, figsize=(20, 20))
-    time = np.arange(args.tmin, args.tmax+0.002, 0.002)
-    time_zoom = np.arange(0.0, args.tmax + 0.002, 0.002)
-    min_reg = np.empty((num_reg,))
-    max_reg = np.empty((num_reg,))
-    min_reg_zoom = np.empty((num_reg,))
-    max_reg_zoom = np.empty((num_reg,))
-    colors = ['b', 'g', 'r', 'c']
-    for i_reg, reg in enumerate(REGIONS_TO_PLOT):
-        j_reg = np.where(uni_reg ==reg)
-        print(uni_reg[j_reg][0])
-        ax = axs[i_reg]
-        ax_zoom = axs_zoom[i_reg]
-        fname = SAVE_SCORES.format(exp=args.experiment, metric=args.dist, reg=reg, tmin=args.tmin, tmax=args.tmax, word=args.word)
-        if os.path.isfile(fname):
-            result = np.load(fname)
-            syn_scores = result['syn_scores']
-            sem_scores = result['sem_scores']
-            glove_scores = result['glove_scores']
-            w2v_scores = result['w2v_scores']
-            rnng_scores = result['rnng_scores']
-            lstm_scores = result['lstm_scores']
-        else:
-            syn_scores = np.empty((rdm.shape[1],))
-            sem_scores = np.empty((rdm.shape[1],))
-            glove_scores = np.empty((rdm.shape[1],))
-            w2v_scores = np.empty((rdm.shape[1],))
-            rnng_scores = np.empty((rdm.shape[1],))
-            lstm_scores = np.empty((rdm.shape[1],))
-            for i_t in range(rdm.shape[1]):
-                syn_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), ap_rdm)
-                sem_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), semantic_rdm)
-                glove_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), glove_rdm)
-                w2v_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), w2v_rdm)
-                rnng_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), vec_rdm)
-                lstm_scores[i_t], _ = rank_correlate_rdms(np.squeeze(rdm[j_reg, i_t, :, :]), lstm_rdm)
-            np.savez_compressed(fname, syn_scores=syn_scores, sem_scores=sem_scores, glove_scores=glove_scores,
-                                w2v_scores=w2v_scores, rnng_scores=rnng_scores, lstm_scores=lstm_scores)
-
-        min_reg[i_reg] = np.min([np.min(syn_scores), np.min(glove_scores), np.min(rnng_scores), np.min(lstm_scores)])
-        max_reg[i_reg] = np.max([np.max(syn_scores), np.max(glove_scores), np.max(rnng_scores), np.max(lstm_scores)])
-
-        all_scores = np.concatenate([syn_scores[None, ...], glove_scores[None, ...], rnng_scores[None, ...], lstm_scores[None, ...], ])
-        print(all_scores.shape)
-
-        good_scores = all_scores >= 0.15
-        print(good_scores.shape)
-
-        win_scores = np.argmax(all_scores, axis=0)
-        print(win_scores.shape)
-
-
-        h1 = ax.plot(time, syn_scores)
-        # h2 = ax.plot(time, sem_scores)
-        h3 = ax.plot(time, glove_scores)
-        # h4 = ax.plot(time, w2v_scores)
-        h5 = ax.plot(time, rnng_scores)
-        h6 = ax.plot(time, lstm_scores)
-        h1[0].set_label('Syntax')
-        # h2[0].set_label('Simple Semantics')
-        h3[0].set_label('glove Semantics')
-        # h4[0].set_label('w2v Semantics')
-        h5[0].set_label('RNNG')
-        h6[0].set_label('LSTM')
-        ax.legend()
-
-        # for i_time in range(all_scores.shape[-1]):
-        #     if good_scores[win_scores[i_time], i_time]:
-        #         ax.scatter(time[i_time], all_scores[win_scores[i_time], i_time]+0.05, c=colors[win_scores[i_time]], linewidths=0.0)
-        ax.set_title(reg)
-        ax.set_xlim(args.tmin, args.tmax+0.5)
-        ax.set_xticks(np.arange(args.tmin, args.tmax, 0.5))
-
-        syn_scores_zoom = syn_scores[time >= 0.0]
-        glove_scores_zoom = glove_scores[time >= 0.0]
-        rnng_scores_zoom = rnng_scores[time >= 0.0]
-        lstm_scores_zoom = lstm_scores[time >= 0.0]
-        min_reg_zoom[i_reg] = np.min(
-            [np.min(syn_scores_zoom), np.min(glove_scores_zoom), np.min(rnng_scores_zoom), np.min(lstm_scores_zoom)])
-        max_reg_zoom[i_reg] = np.max(
-            [np.max(syn_scores_zoom), np.max(glove_scores_zoom), np.max(rnng_scores_zoom), np.max(lstm_scores_zoom)])
-
-        all_scores_zoom = np.concatenate(
-            [syn_scores_zoom[None, ...], glove_scores_zoom[None, ...], rnng_scores_zoom[None, ...], lstm_scores_zoom[None, ...], ])
-
-        good_scores_zoom = all_scores_zoom>= 0.15
-
-        win_scores_zoom = np.argmax(all_scores_zoom, axis=0)
-
-        h1 = ax_zoom.plot(time_zoom, syn_scores_zoom)
-        # h2 = ax.plot(time, sem_scores)
-        h3 = ax_zoom.plot(time_zoom, glove_scores_zoom)
-        # h4 = ax.plot(time, w2v_scores)
-        h5 = ax_zoom.plot(time_zoom, rnng_scores_zoom)
-        h6 = ax_zoom.plot(time_zoom, lstm_scores_zoom)
-        h1[0].set_label('Syntax')
-        # h2[0].set_label('Simple Semantics')
-        h3[0].set_label('glove Semantics')
-        # h4[0].set_label('w2v Semantics')
-        h5[0].set_label('RNNG')
-        h6[0].set_label('LSTM')
-        ax_zoom.legend()
-
-        for i_time in range(all_scores_zoom.shape[-1]):
-            if good_scores_zoom[win_scores_zoom[i_time], i_time]:
-                ax_zoom.scatter(time_zoom[i_time], all_scores_zoom[win_scores_zoom[i_time], i_time]+0.05, c=colors[win_scores_zoom[i_time]], linewidths=0.0)
-
-        ax_zoom.set_title(reg)
-        ax_zoom.set_xlim(0.0, args.tmax + 0.5)
-        ax_zoom.set_xticks(np.arange(0.0, args.tmax, 0.5))
-
-        # ax.legend([h1, h2], ['Syntax', 'Semantics'])
-    max_val = np.max(max_reg)
-    min_val = np.min(min_reg)
-    for i_reg in range(len(REGIONS_TO_PLOT)):
-        axs[i_reg].set_ylim(min_val, max_val+0.1)
-    max_val_zoom = np.max(max_reg_zoom)
-    min_val_zoom = np.min(min_reg_zoom)
-    for i_reg in range(len(REGIONS_TO_PLOT)):
-        axs_zoom[i_reg].set_ylim(min_val_zoom, max_val_zoom+0.1)
-
-    # fig.suptitle('{} {}'.format(args.experiment, args.dist))
-    fig.tight_layout()
-    # fig_zoom.suptitle('{} {}'.format(args.experiment, args.dist))
-    fig_zoom.tight_layout()
-    fig.savefig('RDM_scores_{exp}_{metric}_{tmin}_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist, tmin=args.tmin, tmax=args.tmax, word=args.word))
-    fig_zoom.savefig('RDM_scores_{exp}_{metric}_0_{tmax}_{word}_subset.png'.format(exp=args.experiment, metric=args.dist,
-                                                                                 tmax=args.tmax,
-                                                                                 word=args.word))
-    # plt.savefig()
-    plt.show()
-
-
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #     best_rdm_len = np.argmax(score_rdm_len)
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(rdm_list[best_rdm_len], interpolation='nearest', aspect='auto')
-    #     plt.colorbar(h)
-    #     ax.set_title('{} {} {} {} len'.format(reg, time_act[best_rdm_len],
-    #                                    score_rdm_len[best_rdm_len], word))
-    #     plt.savefig('RDM_len_{}_{}_{}.pdf'.format(reg, best_rdm_len, word))
-    #
-    #     fig, ax = plt.subplots()
-    #     ax.plot(time_act, score_rdm_len)
-    #     ax.set_title('{} {} len'.format(reg, word))
-    #     ax.set_ylim(0, 0.5)
-    #     plt.savefig('Score_len_{}_{}.pdf'.format(reg, word))
-    #
-    #     best_rdm_id = np.argmax(score_rdm_id)
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(rdm_list[best_rdm_id], interpolation='nearest', aspect='auto')
-    #     plt.colorbar(h)
-    #     ax.set_title('{} {} {} {} id'.format(reg, time_act[best_rdm_id],
-    #                                    score_rdm_id[best_rdm_id], word))
-    #     plt.savefig('RDM_id_{}_{}_{}.pdf'.format(reg, best_rdm_id, word))
-    #
-    #     fig, ax = plt.subplots()
-    #     ax.plot(time_act, score_rdm_id)
-    #     ax.set_ylim(0, 0.5)
-    #     ax.set_title('{} {} id'.format(reg, word))
-    #     plt.savefig('Score_id_{}_{}.pdf'.format(reg, word))
-    #
-    #     best_rdm_ani = np.argmax(score_rdm_ani)
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(rdm_list[best_rdm_ani], interpolation='nearest', aspect='auto')
-    #     plt.colorbar(h)
-    #     ax.set_title('{} {} {} {} ani'.format(reg, time_act[best_rdm_ani],
-    #                                          score_rdm_id[best_rdm_ani], word))
-    #     plt.savefig('RDM_ani_{}_{}_{}.pdf'.format(reg, best_rdm_ani, word))
-    #
-    # fig, ax = plt.subplots()
-    # ax.plot(time_act, score_rdm_ani)
-    # ax.set_ylim(0, 0.5)
-    # ax.set_title('{} {} ani'.format(reg, word))
-    # plt.savefig('Score_ani_{}_{}.pdf'.format(reg, word))
-    # word_rdm_len = word_len_rdm(total_labels)
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(word_rdm_len, interpolation='nearest')
-    # ax.set_title('Word len RDM')
-    # plt.colorbar(h)
-    # plt.savefig('RDM_word_len_{}.pdf'.format(word))
-    #
-    # word_rdm_id = word_id_rdm(total_labels)
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(word_rdm_id, interpolation='nearest')
-    # ax.set_title('Word id RDM')
-    # plt.colorbar(h)
-    # plt.savefig('RDM_word_id_{}.pdf'.format(word))
-    #
-    # word_rdm_ani = ani_rdm(total_labels)
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(word_rdm_ani, interpolation='nearest')
-    # ax.set_title('Word ani RDM')
-    # plt.colorbar(h)
-    # plt.savefig('RDM_word_ani_{}.pdf'.format(word))
-    # # plt.show()
