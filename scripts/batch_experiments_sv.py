@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=32GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},model={model},' \
-                'inc_art1={art1},inc_art2={art2},only_art1={oart1},only_art2={oart2}' \
+                'inc_art1={art1},inc_art2={art2},only_art1={oart1},only_art2={oart2},' \
                 'isPDTW={pdtw},doPCA=False,isPerm={perm},num_folds={nf},alg={alg},adj={adj},' \
                 'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_sv.sh'
@@ -108,9 +108,9 @@ if __name__ == '__main__':
                                     job_name=job_str,
                                     errfile=err_str,
                                     outfile=out_str)
-        print(call_str)
+        # print(call_str)
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 10:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
             time.sleep(30)
