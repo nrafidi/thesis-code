@@ -35,6 +35,13 @@ SEN_ID_RANGE = {'krns2':
                     {'active': range(16),
                     'passive': range(16, 32)}}
 
+ARTICLE1 = {'a': [4, 6, 9, 10, 13, 15, 16, 19, 21, 22, 24, 26, 28, 31, 33, 35],
+            'the': [5, 7, 8, 11, 12, 14, 17, 18, 20, 23, 25, 27, 29, 30, 32, 34]}
+
+ARTICLE2 = {'a': [5, 6, 8, 10, 12, 15, 17, 19, 20, 22, 25, 26, 29, 31, 32, 35],
+            'the': [4, 7, 9, 11, 13, 14, 16, 18, 21, 23, 24, 27, 28, 30, 33, 34]}
+
+
 WORD_PER_SEN = {'krns2':
                     {'active':
                          {'firstNoun': ['dog','doctor','student','monkey'],
@@ -104,6 +111,36 @@ def load_glove_vectors(labels):
     for i_w, w in enumerate(words):
         vec[i_w, :] = vec_dict[w]
     return vec
+
+
+def get_arts_from_senid(sentence_ids, art_num):
+    arts = []
+    for sen in sentence_ids:
+        if art_num == 1:
+            for key in ARTICLE1:
+                if sen in ARTICLE1[key]:
+                    arts.append(key)
+        elif art_num ==2:
+            for key in ARTICLE2:
+                if sen in ARTICLE2[key]:
+                    arts.append(key)
+        else:
+            raise NameError('There are only two articles, dingus')
+    assert len(arts) == len(sentence_ids)
+    return arts
+
+
+def load_one_hot(labels):
+    unique_labels = np.unique(labels)
+    num_labels = unique_labels.size
+    one_hot_dict = {}
+    for i_l, uni_l in enumerate(unique_labels):
+        one_hot_dict[uni_l] = np.zeros((num_labels,))
+        one_hot_dict[uni_l][i_l] = 1
+    one_hot = []
+    for l in labels:
+        one_hot.append(one_hot_dict[l])
+    return np.stack(one_hot)
 
 
 def load_pdtw(subject, word, experiment='krns2', proc=DEFAULT_PROC):
