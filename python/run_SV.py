@@ -11,8 +11,8 @@ import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_SV/'
 SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}SV_{sub}_{sen_type}_{word}_{direction}_pca{pca}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \
-            'adj{adj}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}_rsSCV{rsS}'
+SAVE_FILE = '{dir}SV_{sub}_{sen_type}_{word}_{model}_art1{art1}_art2{art2}_{direction}_pca{pca}_pd{pdtw}_pr{perm}_' \
+            'F{num_folds}_alg{alg}_adj{adj}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}_rsSCV{rsS}'
 
 CV_RAND_STATE = 12191989
 SUB_CV_RAND_STATE = 2282015
@@ -40,6 +40,11 @@ def run_sv_exp(experiment,
                subject,
                sen_type,
                word,
+               model='one_hot',
+               inc_art1=False,
+               inc_art2=False,
+               only_art1=False,
+               only_art2=False,
                direction='encoding',
                doPCA = False,
                isPDTW = False,
@@ -68,10 +73,23 @@ def run_sv_exp(experiment,
     if sen_type not in VALID_SEN_TYPE:
         raise ValueError('invalid sen_type {}: must be {}'.format(sen_type, VALID_SEN_TYPE))
 
+    if only_art1:
+        art1_str = 'O'
+        art2_str = 'F'
+    elif only_art2:
+        art2_str = 'O'
+        art1_str = 'F'
+    else:
+        art1_str = bool_to_str(inc_art1)
+        art2_str = bool_to_str(inc_art2)
+
     fname = SAVE_FILE.format(dir=save_dir,
                              sub=subject,
                              sen_type=sen_type,
                              word=word,
+                             model=model,
+                             art1=art1_str,
+                             art2=art2_str,
                              direction=direction,
                              pca=bool_to_str(doPCA),
                              pdtw=bool_to_str(isPDTW),
@@ -104,8 +122,9 @@ def run_sv_exp(experiment,
         else:
             data_raw = passive_data_raw
             time = time_p
+        sentence_ids = range(data_raw.shape[0])
     else:
-        data_raw, labels, time, _ = load_data.load_raw(subject=subject,
+        data_raw, labels, time, sentence_ids = load_data.load_raw(subject=subject,
                                                        word=word,
                                                        sen_type=sen_type,
                                                        experiment=experiment,
@@ -113,8 +132,9 @@ def run_sv_exp(experiment,
 
     print(data_raw.shape)
 
-    data, labels, _ = load_data.avg_data(data_raw=data_raw,
+    data, labels, sentence_ids = load_data.avg_data(data_raw=data_raw,
                                          labels_raw=labels,
+                                         sentence_ids_raw=sentence_ids,
                                          experiment=experiment,
                                          num_instances=num_instances,
                                          reps_to_use=reps_to_use)
@@ -125,7 +145,24 @@ def run_sv_exp(experiment,
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
 
-    semantic_vectors = load_data.load_glove_vectors(labels)
+    if model == 'glove':
+        semantic_vectors = load_data.load_glove_vectors(labels)
+    else:
+        if only_art1:
+            semantic_vectors = load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1))
+        elif only_art2:
+            semantic_vectors = load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 2))
+        else:
+            semantic_vectors = load_data.load_one_hot(labels)
+            if inc_art1:
+                semantic_vectors = np.concatenate([semantic_vectors,
+                                                   load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1))],
+                                                  axis=1)
+            if inc_art2:
+                semantic_vectors = np.concatenate([semantic_vectors,
+                                                   load_data.load_one_hot(
+                                                       load_data.get_arts_from_senid(sentence_ids, 2))],
+                                                  axis=1)
 
     if doPCA:
         if direction == 'encoding':
@@ -171,6 +208,11 @@ if __name__ == '__main__':
     parser.add_argument('--subject')
     parser.add_argument('--sen_type')
     parser.add_argument('--word')
+    parser.add_argument('--model', default='one_hot')
+    parser.add_argument('--inc_art1', default='False')
+    parser.add_argument('--inc_art2', default='False')
+    parser.add_argument('--only_art1', default='False')
+    parser.add_argument('--only_art2', default='False')
     parser.add_argument('--direction', default='encoding')
     parser.add_argument('--doPCA', default='False')
     parser.add_argument('--isPDTW', default='False')
@@ -189,25 +231,49 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Check that parameter setting is valid
-    is_valid = True
-    is_valid = is_valid and (args.num_folds <= 16*args.num_instances)
+    total_valid = True
+
+    inc_art1 = str_to_bool(args.inc_art1)
+    inc_art2 = str_to_bool(args.inc_art2)
+    only_art1 = str_to_bool(args.only_art1)
+    only_art2 = str_to_bool(args.only_art2)
+
+    if inc_art1 or inc_art2 or only_art2 or only_art1:
+        is_valid = args.model == 'one_hot'
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('wrong model for articles')
+    is_valid = not ((only_art1 and only_art2) or (only_art1 and inc_art2) or (only_art2 and inc_art1))
+    total_valid = total_valid and is_valid
+    if not is_valid:
+        print('articles wrong')
+    is_valid = args.num_folds <= 16*args.num_instances
+    total_valid = total_valid and is_valid
     if not is_valid:
         print('num folds wrong {} {}'.format(args.num_folds, args.num_instances))
-    is_valid = is_valid and (args.reps_to_use <= load_data.NUM_REPS[args.experiment])
+    is_valid = args.reps_to_use <= load_data.NUM_REPS[args.experiment]
+    total_valid = total_valid and is_valid
     if not is_valid:
         print('num reps  wrong')
-    is_valid = is_valid and (args.subject in load_data.VALID_SUBS[args.experiment])
+    is_valid = args.subject in load_data.VALID_SUBS[args.experiment]
+    total_valid = total_valid and is_valid
     if not is_valid:
         print('subject wrong')
     if args.num_instances != 2:
-        is_valid = is_valid and ((args.reps_to_use % args.num_instances) == 0)
-    if not is_valid:
-        print('instances wrong')
-    if is_valid:
+        is_valid = (args.reps_to_use % args.num_instances) == 0
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('instances wrong')
+    if total_valid:
         run_sv_exp(experiment=args.experiment,
                    subject=args.subject,
                    sen_type=args.sen_type,
                    word=args.word,
+                   model=args.model,
+                   inc_art1=inc_art1,
+                   inc_art2=inc_art2,
+                   only_art1=only_art1,
+                   only_art2=only_art2,
                    direction=args.direction,
                    doPCA=str_to_bool(args.doPCA),
                    isPDTW=str_to_bool(args.isPDTW),

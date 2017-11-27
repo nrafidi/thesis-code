@@ -62,7 +62,9 @@ def lin_reg(brain_data,
         else:
             fit_intercept = True
 
-        if reg == 'ridge':
+        if reg == 'ols':
+            model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
+        elif reg == 'ridge':
             model = sklearn.linear_model.RidgeCV(alphas=ALPHAS_RIDGE, fit_intercept=fit_intercept)
         elif reg == 'lasso':
             model = sklearn.linear_model.MultiTaskLassoCV(fit_intercept=fit_intercept, max_iter=100)
