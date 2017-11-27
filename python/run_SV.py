@@ -17,7 +17,7 @@ SAVE_FILE = '{dir}SV_{sub}_{sen_type}_{word}_{model}_art1{art1}_art2{art2}_{dire
 CV_RAND_STATE = 12191989
 SUB_CV_RAND_STATE = 2282015
 
-VALID_ALGS = ['ridge', 'lasso', 'enet']
+VALID_ALGS = ['ols', 'ridge', 'lasso', 'enet']
 VALID_SEN_TYPE = ['active', 'passive']
 
 
