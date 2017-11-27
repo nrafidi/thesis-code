@@ -126,7 +126,8 @@ def get_arts_from_senid(sentence_ids, art_num):
                     arts.append(key)
         else:
             raise NameError('There are only two articles, dingus')
-    assert len(arts) == len(sentence_ids)
+    if len(arts) != len(sentence_ids):
+        raise AssertionError('Should be same length:\narts={}\nsentence_ids={}'.format(arts, sentence_ids))
     return arts
 
 
