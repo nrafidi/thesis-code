@@ -5,6 +5,11 @@ source /home/python27/envs/p27default/bin/activate
 #parser.add_argument('--subject')
 #parser.add_argument('--sen_type')
 #parser.add_argument('--word')
+#parser.add_argument('--model', default='one_hot')
+#    parser.add_argument('--inc_art1', default='False')
+#    parser.add_argument('--inc_art2', default='False')
+#    parser.add_argument('--only_art1', default='False')
+#    parser.add_argument('--only_art2', default='False')
 #parser.add_argument('--win_len', type=int)
 #parser.add_argument('--overlap', type=int)
 #parser.add_argument('--mode')
@@ -24,4 +29,5 @@ source /home/python27/envs/p27default/bin/activate
 cd /home/nrafidi/thesis-code/python
 python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
 --isPDTW $isPDTW --isPerm $isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
---reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force
+--reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force --model $model --inc_art1 $inc_art1 \
+--inc_art2 $inc_art2 --only_art1 $only_art1 --only_art2 $only_art2
