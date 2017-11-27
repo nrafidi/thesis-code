@@ -115,7 +115,8 @@ def load_glove_vectors(labels):
 
 def get_arts_from_senid(sentence_ids, art_num):
     arts = []
-    for sen in sentence_ids:
+    for sen_id in sentence_ids:
+        sen = get_sen_num_from_id(sen_id)
         if art_num == 1:
             for key in ARTICLE1:
                 if sen in ARTICLE1[key]:
