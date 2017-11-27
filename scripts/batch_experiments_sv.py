@@ -105,6 +105,7 @@ if __name__ == '__main__':
                                     inst=inst,
                                     rep=rep,
                                     rs=rs,
+                                    job_name=job_str,
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)

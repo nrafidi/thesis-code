@@ -243,6 +243,10 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('wrong model for articles')
+        is_valid = args.experiment == 'krns2'
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('wrong experiment for articles')
     is_valid = not ((only_art1 and only_art2) or (only_art1 and inc_art2) or (only_art2 and inc_art1))
     total_valid = total_valid and is_valid
     if not is_valid:
