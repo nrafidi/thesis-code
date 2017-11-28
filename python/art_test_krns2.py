@@ -40,7 +40,7 @@ if __name__ == '__main__':
     sen_type = 'active'
     word = 'secondNoun'
     art1_str = 'T'
-    art2_str = 'F'
+    art2_str = 'T'
 
     fname = run_SV.SAVE_FILE.format(dir=save_dir,
                              sub='B',
@@ -65,6 +65,7 @@ if __name__ == '__main__':
     all_feat_res = result['scores']
 
     art1_str = 'O'
+    art2_str = 'O'
 
     fname = run_SV.SAVE_FILE.format(dir=save_dir,
                                     sub='B',
@@ -109,13 +110,13 @@ if __name__ == '__main__':
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
     plt.colorbar(h)
-    ax.set_title('Active\nSecondNoun + Art1 - Art1')
+    ax.set_title('Active\nSecondNoun + Art - Art')
     plt.savefig('POVE_diff_active_secondNoun.pdf', bbox_inches='tight')
 
     # Passive First Noun Second Article
     sen_type = 'passive'
     word = 'firstNoun'
-    art1_str = 'F'
+    art1_str = 'T'
     art2_str = 'T'
 
     fname = run_SV.SAVE_FILE.format(dir=save_dir,
@@ -140,6 +141,7 @@ if __name__ == '__main__':
     result = np.load(fname + '.npz')
     all_feat_res = result['scores']
 
+    art1_str = 'O'
     art2_str = 'O'
 
     fname = run_SV.SAVE_FILE.format(dir=save_dir,
@@ -184,7 +186,7 @@ if __name__ == '__main__':
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
     plt.colorbar(h)
-    ax.set_title('Passive\nFirstNoun + Art2 - Art2')
+    ax.set_title('Passive\nFirstNoun + Art - Art')
     plt.savefig('POVE_diff_passive_firstNoun.pdf', bbox_inches='tight')
 
 
