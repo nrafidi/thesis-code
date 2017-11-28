@@ -99,9 +99,9 @@ if __name__ == '__main__':
 
     score_diff = np.reshape(all_feat_res - only_art_res, (306, -1))
     score_diff = score_diff[sorted_inds, :]
-
+    print(np.max(score_diff))
     fig, ax = plt.subplots()
-    h = ax.imshow(score_diff, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.01)
+    h = ax.imshow(score_diff, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.4)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
@@ -174,9 +174,9 @@ if __name__ == '__main__':
 
     score_diff = np.reshape(all_feat_res - only_art_res, (306, -1))
     score_diff = score_diff[sorted_inds, :]
-
+    print(np.max(score_diff))
     fig, ax = plt.subplots()
-    h = ax.imshow(score_diff, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.01)
+    h = ax.imshow(score_diff, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.4)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
