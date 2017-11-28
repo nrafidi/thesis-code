@@ -31,7 +31,16 @@ if __name__ == '__main__':
     parser.add_argument('--subject', default='B')
     parser.add_argument('--sen_type', default='active')
     parser.add_argument('--word', default='firstNoun')
+    parser.add_argument('--art1_str', default='T')
+    parser.add_argument('--art2_str', default='T')
     args = parser.parse_args()
+
+    exp = args.experiment
+    sub = args.subject
+    sen_type = args.sen_type
+    word = args.word
+    art1_str = args.art1_str
+    art2_str = args.art2_str
 
     top_dir = run_SV.TOP_DIR.format(exp=args.experiment)
     save_dir = run_SV.SAVE_DIR.format(top_dir=top_dir, sub=args.subject)
@@ -45,19 +54,24 @@ if __name__ == '__main__':
     grid_list = []
     for grid in param_grid:
         fname = run_SV.SAVE_FILE.format(dir=save_dir,
-                                        sub=args.subject,
-                                        sen_type=args.sen_type,
-                                        word=args.word,
-                                        pdtw='F',
-                                        perm='F',
-                                        num_folds=grid[0],
-                                        alg='ridge',
-                                        adj=grid[1],
-                                        inst=grid[2],
-                                        rep=10,
-                                        rsP=1,
-                                        rsC=run_SV.CV_RAND_STATE,
-                                        rsS=run_SV.SUB_CV_RAND_STATE)
+                                 sub='B',
+                                 sen_type=sen_type,
+                                 word=word,
+                                 model='one_hot',
+                                 art1=art1_str,
+                                 art2=art2_str,
+                                 direction='encoding',
+                                 pca='F',
+                                 pdtw='F',
+                                 perm='F',
+                                 num_folds=grid[0],
+                                 alg='ols',
+                                 adj=grid[1],
+                                 inst=grid[2],
+                                 rep=10,
+                                 rsP=1,
+                                 rsC=run_SV.CV_RAND_STATE,
+                                 rsS=run_SV.SUB_CV_RAND_STATE)
         if os.path.isfile(fname + '.npz'):
             result = np.load(fname + '.npz')
             curr_score = result['scores']
@@ -70,8 +84,8 @@ if __name__ == '__main__':
     num_time = time.size
     fig0, ax0 = plt.subplots()
     ax0.hist(np.array(score_maxes))
-    # i_max = np.argmax(score_maxes)
-    i_max = grid_list.index((160, 'zscore', 10))
+    i_max = np.argmax(score_maxes)
+    # i_max = grid_list.index((160, 'zscore', 10))
     print('Best score for params {} was {}'.format(grid_list[i_max], score_maxes[i_max]))
 
     sorted_inds, sorted_reg = sort_sensors()
@@ -89,7 +103,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} {} {}'.format(args.experiment, args.subject, args.sen_type, args.word))
+    ax.set_title('{} {} {} {}\nArt1: {} Art2: {}'.format(args.experiment, args.subject, args.sen_type, args.word,
+                                                         art1_str, art2_str))
     plt.colorbar(h)
-    plt.savefig('POVE_{}_{}_{}_{}.pdf'.format(args.experiment, args.subject, args.sen_type, args.word), bbox_inches='tight')
+    plt.savefig('POVE_{}_{}_{}_{}_art1{}_art2{}.pdf'.format(args.experiment, args.subject, args.sen_type, args.word,
+                                                            art1_str, art2_str), bbox_inches='tight')
     plt.show()
