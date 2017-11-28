@@ -73,12 +73,15 @@ def run_sv_exp(experiment,
     if sen_type not in VALID_SEN_TYPE:
         raise ValueError('invalid sen_type {}: must be {}'.format(sen_type, VALID_SEN_TYPE))
 
-    if only_art1:
+    if only_art1 and not only_art2:
         art1_str = 'O'
         art2_str = 'F'
-    elif only_art2:
+    elif only_art2 and not only_art1:
         art2_str = 'O'
         art1_str = 'F'
+    elif only_art1 and only_art2:
+        art2_str = 'O'
+        art1_str = 'O'
     else:
         art1_str = bool_to_str(inc_art1)
         art2_str = bool_to_str(inc_art2)
@@ -148,10 +151,14 @@ def run_sv_exp(experiment,
     if model == 'glove':
         semantic_vectors = load_data.load_glove_vectors(labels)
     else:
-        if only_art1:
+        if only_art1 and not only_art2:
             semantic_vectors = load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1))
-        elif only_art2:
+        elif only_art2 and not only_art1:
             semantic_vectors = load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 2))
+        elif only_art1 and only_art2:
+            semantic_vectors = np.concatenate([load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1)),
+                                               load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 2))],
+                                               axis=1)
         else:
             semantic_vectors = load_data.load_one_hot(labels)
             if inc_art1:
@@ -247,10 +254,10 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('wrong experiment for articles')
-    is_valid = not ((only_art1 and only_art2) or (only_art1 and inc_art2) or (only_art2 and inc_art1))
-    total_valid = total_valid and is_valid
-    if not is_valid:
-        print('articles wrong')
+    # is_valid = not ((only_art1 and only_art2) or (only_art1 and inc_art2) or (only_art2 and inc_art1))
+    # total_valid = total_valid and is_valid
+    # if not is_valid:
+    #     print('articles wrong')
     is_valid = args.num_folds <= 16*args.num_instances
     total_valid = total_valid and is_valid
     if not is_valid:

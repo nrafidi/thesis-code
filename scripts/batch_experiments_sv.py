@@ -6,18 +6,18 @@ import time
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B'] #, 'C', 'D', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['active', 'passive'] #, 'active']
-WORDS = ['firstNoun', 'verb', 'secondNoun']
+WORDS = ['firstNoun', 'secondNoun']
 MODELS = ['one_hot']
-ONLY_ART1 = [True, False]
-ONLY_ART2 = [True, False]
-INC_ART1 = [True, False]
-INC_ART2 = [True, False]
+ONLY_ART1 = [True]
+ONLY_ART2 = [True]
+INC_ART1 = [False]
+INC_ART2 = [False]
 IS_PDTWS = [False]  # True
 IS_PERMS = [False]  # True
-NUM_FOLDSS = [16, 32, 160]
+NUM_FOLDSS = [16] #, 32, 160]
 ALGS = ['ols']  # GNB
-ADJS = [None, 'mean_center', 'zscore']
-NUM_INSTANCESS = [1, 2, 10]  # 5 10
+ADJS = [None] #, 'mean_center', 'zscore']
+NUM_INSTANCESS = [1] #, 2, 10]  # 5 10
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]  # range(1, 10)
 
