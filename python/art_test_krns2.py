@@ -27,27 +27,25 @@ def sort_sensors():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--subject', default='B')
-    parser.add_argument('--sen_type', default='active')
-    parser.add_argument('--word', default='firstNoun')
-    parser.add_argument('--art1_str', default='T')
-    parser.add_argument('--art2_str', default='T')
     args = parser.parse_args()
 
-    exp = args.experiment
+    exp = 'krns2'
     sub = args.subject
+
+    top_dir = run_SV.TOP_DIR.format(exp=exp)
+    save_dir = run_SV.SAVE_DIR.format(top_dir=top_dir, sub=sub)
+
+    param_grid = itertools.product(NUM_FOLDSS,
+                                   ADJS,
+                                   NUM_INSTANCESS)
+
     sen_type = args.sen_type
     word = args.word
     art1_str = args.art1_str
     art2_str = args.art2_str
 
-    top_dir = run_SV.TOP_DIR.format(exp=args.experiment)
-    save_dir = run_SV.SAVE_DIR.format(top_dir=top_dir, sub=args.subject)
 
-    param_grid = itertools.product(NUM_FOLDSS,
-                                   ADJS,
-                                   NUM_INSTANCESS)
 
     scores = []
     score_maxes = []
@@ -84,8 +82,8 @@ if __name__ == '__main__':
     num_time = time.size
     fig0, ax0 = plt.subplots()
     ax0.hist(np.array(score_maxes))
-    # i_max = np.argmax(score_maxes)
-    i_max = grid_list.index((16, None, 1))
+    i_max = np.argmax(score_maxes)
+    # i_max = grid_list.index((160, 'zscore', 10))
     print('Best score for params {} was {}'.format(grid_list[i_max], score_maxes[i_max]))
 
     sorted_inds, sorted_reg = sort_sensors()
