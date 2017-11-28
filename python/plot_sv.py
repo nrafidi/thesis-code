@@ -96,7 +96,7 @@ if __name__ == '__main__':
     best_score = best_score[sorted_inds, :]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(best_score, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.01)
+    h = ax.imshow(best_score, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
