@@ -84,7 +84,7 @@ def lin_reg(brain_data,
 
     scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
-    return preds, l_ints, cv_membership, scores
+    return preds, l_ints, cv_membership, scores, test_data_all
 
 
 
