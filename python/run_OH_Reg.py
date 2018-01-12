@@ -170,20 +170,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
-    parser.add_argument('--sen_type')
+    parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
     parser.add_argument('--word', default='all')
     parser.add_argument('--model', default='one_hot')
-    parser.add_argument('--isPDTW', default='False')
-    parser.add_argument('--isPerm', default='False')
+    parser.add_argument('--isPDTW', action='store_true')
+    parser.add_argument('--isPerm', action='store_true')
     parser.add_argument('--num_folds', type=int, default=16)
-    parser.add_argument('--alg', default='ols')
-    parser.add_argument('--adj', default='mean_centre')
+    parser.add_argument('--alg', default='ols', choices=VALID_ALGS)
+    parser.add_argument('--adj', default='mean_center')
+    parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
     parser.add_argument('--cv_random_state', type=int, default=CV_RAND_STATE)
-    parser.add_argument('--force', default='False')
+    parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
 
@@ -206,22 +207,14 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('instances wrong')
-    is_valid = args.alg in VALID_ALGS
-    total_valid = total_valid and is_valid
-    if not is_valid:
-        print('algorithm wrong')
-    is_valid = args.sen_type in VALID_SEN_TYPE
-    total_valid = total_valid and is_valid
-    if not is_valid:
-        print('sentence type wrong')
     if total_valid:
         run_sv_exp(experiment=args.experiment,
                    subject=args.subject,
                    sen_type=args.sen_type,
                    word=args.word,
                    model=args.model,
-                   isPDTW=str_to_bool(args.isPDTW),
-                   isPerm=str_to_bool(args.isPerm),
+                   isPDTW=args.isPDTW,
+                   isPerm=args.isPerm,
                    num_folds=args.num_folds,
                    alg=args.alg,
                    adj=args.adj,
@@ -230,6 +223,6 @@ if __name__ == '__main__':
                    proc=args.proc,
                    random_state_perm=args.perm_random_state,
                    random_state_cv=args.cv_random_state,
-                   force=str_to_bool(args.force))
+                   force=args.force)
     else:
         print('Experiment parameters not valid. Skipping job.')
