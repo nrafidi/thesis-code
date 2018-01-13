@@ -402,7 +402,7 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 if __name__ == '__main__':
     subject = 'B'
     filters = [is_in_long_sentence, is_in_passive, is_first_noun]
-    experiment = 'krns2'
+    experiment = 'PassAct2'
     tmin= -0.5
     tmax = 0.5
     evokeds, labels, sentence_ids, time = load_raw(subject,
