@@ -169,16 +169,12 @@ def is_non_to_be_verb_at_count(ordered_sentence_usis, index_non_to_be_verb, is_r
 def is_noun_at_noun_count(ordered_sentence_usis, index_noun, is_raise=True):
     index = 0
     for (usi, annotation), is_match in has_part_of_speech(ordered_sentence_usis, noun_tags):
-        print(usi)
-        print(annotation)
         if 'krns2' in usi and 'sentence' in usi:
-            print(usi)
             if (annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun1'] or
                         annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun2'] or
                         annotation['stimulus'] in WORD_PER_SEN['krns2']['passive']['noun1'] or
                         annotation['stimulus'] in WORD_PER_SEN['krns2']['passive']['noun2']):
                 if index == index_noun:
-                    print('yielding True')
                     yield True
                 else:
                     yield False
@@ -302,6 +298,8 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         # filter out question words on this side, since None is not handled correctly by hippo
         if annotations['question_id'] is not None:
             continue
+        if annotations['stanford_2017_06_09_pos'] is None:
+            continue
         sentence_id = annotations['sentence_id']
         if sentence_id in sentence_id_to_usis:
             sentence_id_to_usis[sentence_id].append((usi, annotations))
@@ -315,7 +313,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
-            # print(usi_words)
+            print(usi_words)
             for idx, result in enumerate(f(usi_words)):
                 anded_filter[idx] = anded_filter[idx] and result
             assert (idx == len(anded_filter) - 1)  # if this is violated the filter is messed up
