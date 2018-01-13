@@ -340,7 +340,8 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
         ordered_inds = range(data.shape[2])
     else:
         ordered_inds = sorted_inds
-
+    print(data.shape)
+    print(len(ordered_inds))
     final_inds = [i for i in ordered_inds if i not in inds_to_remove]
     data = data[:, final_inds, :]
 
