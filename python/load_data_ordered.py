@@ -263,7 +263,7 @@ def order_sentences(usis, experiment):
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
     assert test_sort == exp_sentences
-    return sorted_sentence_ids, recon_sentences
+    return sorted_sentence_ids, exp_sentences
 
 
 def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
@@ -279,7 +279,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                                       'question_id'])
 
     # sort in text file sentence order
-    sorted_sentence_ids, recon_sentences = order_sentences(usis, experiment)
+    sorted_sentence_ids, sorted_sentences = order_sentences(usis, experiment)
     print sorted_sentence_ids
     # group by sentence ids
     sentence_id_to_usis = dict()
@@ -314,10 +314,13 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                 filtered_usis[usi_word[0]] = usi_word[1]
 
     usis = filtered_usis
+    labels = []
+    for usi in usis:
+        usi_idx = sorted_sentence_ids.index(usi['sentence_id'])
+        labels.append(sorted_sentences[usi_idx].split())
 
 
-    print(usis)
-    raise ValueError
+    # print(usis)
     # print(len(usis))
 
     exp_sub = [(experiment, subject)]
