@@ -13,7 +13,8 @@ if __name__ == '__main__':
                                    batch_exp.ALGS,
                                    batch_exp.ADJS,
                                    batch_exp.NUM_INSTANCESS,
-                                   batch_exp.REPS_TO_USES)
+                                   batch_exp.REPS_TO_USES,
+                                   batch_exp.RANDOM_STATES)
     job_id = 0
     successful_jobs = 0
     total_jobs = 0
@@ -28,6 +29,7 @@ if __name__ == '__main__':
         adj = grid[7]
         inst = grid[8]
         rep = grid[9]
+        rs = grid[10]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                               sub=sub,

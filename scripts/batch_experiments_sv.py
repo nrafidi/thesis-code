@@ -13,6 +13,7 @@ ALGS = ['ols']  # GNB
 ADJS = [None, 'mean_center', 'zscore']
 NUM_INSTANCESS = [1] #, 2, 10]  # 5 10
 REPS_TO_USES = [10]  # 10
+RANDOM_STATES = [1]
 
 JOB_NAME = 'oh-{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_oh_jobFiles/'
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=32GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},' \
                 'isPerm={perm},num_folds={nf},alg={alg},adj={adj},' \
-                'num_instances={inst},reps_to_use={rep},force=False ' \
+                'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_sv.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -38,7 +39,8 @@ if __name__ == '__main__':
                                    ALGS,
                                    ADJS,
                                    NUM_INSTANCESS,
-                                   REPS_TO_USES)
+                                   REPS_TO_USES,
+                                   RANDOM_STATES)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
@@ -51,6 +53,7 @@ if __name__ == '__main__':
         adj = grid[7]
         inst = grid[8]
         rep = grid[9]
+        rs = grid[10]
 
 
         job_str = JOB_NAME.format(exp=exp,
@@ -76,6 +79,7 @@ if __name__ == '__main__':
                                     adj=adj,
                                     inst=inst,
                                     rep=rep,
+                                    rs=rs,
                                     job_name=job_str,
                                     errfile=err_str,
                                     outfile=out_str)
