@@ -6,7 +6,6 @@ import os.path
 import random
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import KFold
-from sklearn.decomposition import PCA
 import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_OH/'
@@ -25,13 +24,6 @@ def bool_to_str(bool_var):
         return 'T'
     else:
         return 'F'
-
-
-def str_to_bool(str_bool):
-    if str_bool == 'False':
-        return False
-    else:
-        return True
 
 
 # Runs the TGM experiment
