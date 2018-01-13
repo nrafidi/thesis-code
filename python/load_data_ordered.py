@@ -169,7 +169,13 @@ def is_non_to_be_verb_at_count(ordered_sentence_usis, index_non_to_be_verb, is_r
 def is_noun_at_noun_count(ordered_sentence_usis, index_noun, is_raise=True):
     index = 0
     for (usi, annotation), is_match in has_part_of_speech(ordered_sentence_usis, noun_tags):
-        if is_match:
+        if 'krns2' in usi:
+            if index == index_noun:
+                yield True
+            else:
+                yield False
+            index += 1
+        elif is_match:
             if index == index_noun:
                 yield True
             else:
@@ -259,20 +265,6 @@ def order_sentences(usis, experiment):
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
     exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace(' ', '').replace('\t', ' ') for ind in EXP_INDS[experiment]]
     print(exp_sentences)
-    for sen in exp_sentences:
-        if sen not in recon_sentences:
-            if ('man' in sen) and ('liked' in sen) and ('boy' in sen):
-                print(sen)
-                for j_sen in recon_sentences:
-                    if ('man' in j_sen) and ('liked' in j_sen) and ('boy' in j_sen):
-                        print(j_sen)
-                        for i, s in enumerate(difflib.ndiff(sen, j_sen)):
-                            if s[0] == ' ':
-                                continue
-                            elif s[0] == '-':
-                                print(u'Delete "{}" from position {}'.format(s[-1], i))
-                            elif s[0] == '+':
-                                print(u'Add "{}" to position {}'.format(s[-1], i))
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
@@ -417,7 +409,7 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 if __name__ == '__main__':
     subject = 'B'
     filters = [is_in_long_sentence, is_in_passive, is_first_noun]
-    experiment = 'PassAct2'
+    experiment = 'krns2'
     tmin= -0.5
     tmax = 0.5
     evokeds, labels, sentence_ids, time = load_raw(subject,
