@@ -261,8 +261,8 @@ def order_sentences(usis, experiment):
     # print(exp_sentences)
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences if sen in recon_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
-    test_sort = [recon_sentences[ind] for ind in sorted_inds]
-    assert test_sort == exp_sentences
+    # test_sort = [recon_sentences[ind] for ind in sorted_inds]
+    # assert test_sort == exp_sentences
     return sorted_sentence_ids, recon_sentences
 
 
