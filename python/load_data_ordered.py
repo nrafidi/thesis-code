@@ -169,17 +169,7 @@ def is_non_to_be_verb_at_count(ordered_sentence_usis, index_non_to_be_verb, is_r
 def is_noun_at_noun_count(ordered_sentence_usis, index_noun, is_raise=True):
     index = 0
     for (usi, annotation), is_match in has_part_of_speech(ordered_sentence_usis, noun_tags):
-        if 'krns2' in usi and 'sentence' in usi:
-            if (annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun1'] or
-                        annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun2'] or
-                        annotation['stimulus'] in WORD_PER_SEN['krns2']['passive']['noun1'] or
-                        annotation['stimulus'] in WORD_PER_SEN['krns2']['passive']['noun2']):
-                if index == index_noun:
-                    yield True
-                else:
-                    yield False
-                index += 1
-        elif is_match:
+        if is_match:
             if index == index_noun:
                 yield True
             else:
