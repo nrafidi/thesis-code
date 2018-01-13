@@ -119,9 +119,10 @@ def run_sv_exp(experiment,
             if col == WORD_COLS[experiment][word]:
                 continue
         oh = load_one_hot(labels[:, col])
+        print(oh.shape)
         semantic_vectors.append(oh)
 
-    semantic_vectors = np.stack(semantic_vectors, axis=1)
+    semantic_vectors = np.concatenate(semantic_vectors, axis=1)
     print(semantic_vectors)
 
     if isPerm:
