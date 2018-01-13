@@ -1,4 +1,3 @@
-import difflib
 import numpy as np
 import hippo.io
 import hippo.query
@@ -12,90 +11,33 @@ VALID_SUBS = {'krns2': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 
-WORD_INDS = {'noun1': 0, 'verb': 1, 'noun2': 2}
-
 EXP_INDS = {'krns2': range(64, 96),
             'PassAct2': range(32, 64),
             'PassAct3': range(32)}
-
-WORD_POS = {'active':
-                {'noun1': 1,
-                 'verb': 2,
-                 'noun2': 4,
-                 'agent': 1,
-                 'patient': 4},
-            'passive':
-                {'noun1': 1,
-                 'verb': 3,
-                 'noun2': 6,
-                 'agent': 6,
-                 'patient': 1}}
 
 USI_NAME = {'krns2': 'krns2',
             'PassAct2': 'pass-act-2',
             'PassAct3': 'pass-act-3'}
 
-SEN_ID_RANGE = {'krns2':
-                    {'active': range(4, 20),
-                     'passive': range(20, 36)},
-                'PassAct2':
-                    {'active': range(16),
-                     'passive': range(16, 32)},
-                'PassAct3':
-                    {'active': [0, 1, 2, 3, 8, 9, 10, 11],
-                     'passive': [16, 17, 18, 19, 24, 25, 26, 27]}}
-
-WORD_PER_SEN = {'krns2':
-                    {'active':
-                         {'noun1': ['dog', 'doctor', 'student', 'monkey'],
-                          'verb': ['found', 'kicked', 'inspected', 'touched'],
-                          'noun2': ['peach.', 'school.', 'hammer.', 'door.']},
-                     'passive':
-                         {'noun1': ['peach', 'hammer', 'school', 'door'],
-                          'verb': ['found', 'kicked', 'inspected', 'touched'],
-                          'noun2': ['dog.', 'doctor.', 'student.', 'monkey.']}},
-                'PassAct2':
-                    {'active':
-                         {'noun1': ['man', 'girl', 'woman', 'boy'],
-                          'verb': ['watched', 'liked', 'despised', 'encouraged'],
-                          'noun2': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'agent': ['man', 'girl', 'woman', 'boy'],
-                          'patient': ['man.', 'girl.', 'woman.', 'boy.']},
-                     'passive':
-                         {'noun1': ['man', 'girl', 'woman', 'boy'],
-                          'verb': ['watched', 'liked', 'despised', 'encouraged'],
-                          'noun2': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'agent': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'patient': ['man', 'girl', 'woman', 'boy']}},
-                'PassAct3':
-                    {'active':
-                         {'noun1': ['man', 'girl', 'woman', 'boy'],
-                          'verb': ['kicked', 'helped', 'approached', 'punched'],
-                          'noun2': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'agent': ['man', 'girl', 'woman', 'boy'],
-                          'patient': ['man.', 'girl.', 'woman.', 'boy.']},
-                     'passive':
-                         {'noun1': ['man', 'girl', 'woman', 'boy'],
-                          'verb': ['kicked', 'helped', 'approached', 'punched'],
-                          'noun2': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'agent': ['man.', 'girl.', 'woman.', 'boy.'],
-                          'patient': ['man', 'girl', 'woman', 'boy']}}}
-
 TIME_LIMITS = {'active': {'noun1': {'tmin': -1.0, 'tmax': 4.0},
-                          'verb': {'tmin': -1.0, 'tmax': 3.0},
-                          'noun2': {'tmin': -2.0, 'tmax': 1.5},
-                          'agent': {'tmin': -0.5, 'tmax': 1.5},
-                          'patient': {'tmin': -0.5, 'tmax': 1.5}},
+                          'verb': {'tmin': -1.5, 'tmax': 3.0},
+                          'noun2': {'tmin': -2.5, 'tmax': 1.5},
+                          'agent': {'tmin': -1.0, 'tmax': 1.5},
+                          'patient': {'tmin': -1.0, 'tmax': 1.5}},
                'passive': {'noun1': {'tmin': -1.0, 'tmax': 4.0},
-                           'verb': {'tmin': -1.0, 'tmax': 3.0},
-                           'noun2': {'tmin': -2.0, 'tmax': 1.5},
-                           'agent': {'tmin': -0.5, 'tmax': 1.5},
-                           'patient': {'tmin': -0.5, 'tmax': 1.5}}}
+                           'verb': {'tmin': -1.5, 'tmax': 3.0},
+                           'noun2': {'tmin': -2.5, 'tmax': 1.5},
+                           'agent': {'tmin': -1.0, 'tmax': 1.5},
+                           'patient': {'tmin': -1.0, 'tmax': 1.5}}}
 
 noun_tags = {'NN', 'NNS', 'NNP', 'NNPS'}
 verb_tags = {'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ'}
 to_be_verbs = {'be', 'am', 'is', 'are', 'being', 'was', 'were', 'been'}
 punctuation_regex = re.compile('[{}]'.format(re.escape(string.punctuation)))
+
+IRR_WORDS = {'krns2': ['was', 'by'],
+             'PassAct2': ['was', 'by', 'the'],
+             'PassAct3': ['was', 'by', 'the']}
 
 # Old slugs:
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
@@ -253,12 +195,10 @@ def recon_sen_from_usis(usis):
 
 def order_sentences(usis, experiment):
     recon_sentences, sentence_id_by_recon = recon_sen_from_usis(usis)
-    # print(recon_sentences)
     with open(path_constants.SENTENCES) as f:
         loaded_sentences = f.readlines()
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
     exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace(' ', '').replace('\t', ' ') for ind in EXP_INDS[experiment]]
-    # print(exp_sentences)
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences if sen in recon_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
@@ -317,32 +257,24 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     labels = []
     for usi in usis:
         usi_idx = sorted_sentence_ids.index(usis[usi]['sentence_id'])
-        labels.append(sorted_sentences[usi_idx].split())
-
-
-    # print(usis)
-    # print(len(usis))
+        words_to_add = sorted_sentences[usi_idx].split()
+        label_to_add = [w for w in words_to_add if w not in IRR_WORDS[experiment]]
+        labels.append(label_to_add)
 
     exp_sub = [(experiment, subject)]
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
 
-    # labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
-    # labels = [sen.split() for sen in recon_sentences]
-    # print(labels)
     sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
     print(sentence_ids)
 
     sorted_inds_sentence = [sentence_ids.index(sen_id) for sen_id in sorted_sentence_ids if sen_id in sentence_ids]
     print(sorted_inds_sentence)
-    # print(sorted_inds_sentence)
     labels = [labels[ind] for ind in sorted_inds_sentence]
-    # print(labels)
     sentence_ids = [sentence_ids[ind] for ind in sorted_inds_sentence]
 
     print(labels)
     print(sentence_ids)
-    raise ValueError
     assert len(labels) == len(sentence_ids)
 
     _, uels = zip(*id_uels)
@@ -427,6 +359,6 @@ if __name__ == '__main__':
                                                    tmin,
                                                    tmax)
     print(evokeds.shape)
-    print(labels)
+    print(np.array(labels))
     print(sentence_ids)
     print(time.shape)
