@@ -323,18 +323,20 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
 
     # labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
     labels = [sen.split() for sen in recon_sentences]
+    print(labels)
     sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
+    print(sentence_ids)
 
     sorted_inds_sentence = [sentence_ids.index(sen_id) for sen_id in sorted_sentence_ids if sen_id in sentence_ids]
+    print(sorted_inds_sentence)
     # print(sorted_inds_sentence)
     labels = [labels[ind] for ind in sorted_inds_sentence]
     # print(labels)
     sentence_ids = [sentence_ids[ind] for ind in sorted_inds_sentence]
 
-    print(sentence_ids)
-    print(len(sentence_ids))
     print(labels)
-    print(len(labels))
+    print(sentence_ids)
+    raise ValueError
     assert len(labels) == len(sentence_ids)
 
     _, uels = zip(*id_uels)
