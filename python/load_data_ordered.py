@@ -300,6 +300,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
+            print(usi_words)
             for idx, result in enumerate(f(usi_words)):
                 anded_filter[idx] = anded_filter[idx] and result
             assert (idx == len(anded_filter) - 1)  # if this is violated the filter is messed up
