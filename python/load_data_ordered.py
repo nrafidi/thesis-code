@@ -333,15 +333,14 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
     labels = np.array(labels)
 
     if noMag:
-        inds_to_remove = range(2, data.shape[2], 3)
+        inds_to_remove = range(2, data.shape[1], 3)
     else:
         inds_to_remove = []
     if sorted_inds is None:
-        ordered_inds = range(data.shape[2])
+        ordered_inds = range(data.shape[1])
     else:
         ordered_inds = sorted_inds
-    print(data.shape)
-    print(len(ordered_inds))
+
     final_inds = [i for i in ordered_inds if i not in inds_to_remove]
     data = data[:, final_inds, :]
 
