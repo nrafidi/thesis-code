@@ -3,7 +3,7 @@ import os.path
 base_path = '/share/volume0/RNNG'
 # base_path = r'C:\Users\danrs\Documents\BrainGroupData\RNNG'
 
-SENTENCES = os.path.join(base_path, 'sentence_stimuli_tokenized_tagged_with_unk_final.txt')
+SENTENCES = os.path.join(base_path, 'sentence_stimuli_tokenized.tsv')
 
 SAVE_MEG_RDM = os.path.join(
     base_path, 'meg_rdm',
