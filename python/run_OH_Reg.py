@@ -105,7 +105,6 @@ def run_sv_exp(experiment,
                                                                   sorted_inds=None)
 
     l_set = np.unique(labels, axis=0).tolist()
-    n_l = l_set.shape[0]
     num_labels = labels.shape[0]
     l_ints = np.empty((num_labels,))
     for i_l in range(num_labels):
