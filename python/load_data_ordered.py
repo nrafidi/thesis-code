@@ -239,9 +239,9 @@ def recon_sen_from_usis(usis):
     for sentence_id in sentence_id_to_stimulus.keys():
         word_indices = np.array(sentence_id_to_word_index[sentence_id])
         words = np.array(sentence_id_to_stimulus[sentence_id])
-        for i_word, word in enumerate(words):
-            if 'punched' in word:
-                words[i_word] = 'unklced'
+        # for i_word, word in enumerate(words):
+        #     if 'punched' in word:
+        #         words[i_word] = 'unklced'
         corr_words = np.array([punctuation_regex.sub('', word).lower() for word in words])
         sorted_inds = np.argsort(word_indices)
         recon = ' '.join(corr_words[sorted_inds])
@@ -256,7 +256,7 @@ def order_sentences(usis, experiment):
     with open(path_constants.SENTENCES) as f:
         loaded_sentences = f.readlines()
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
-    exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip() for ind in EXP_INDS[experiment]]
+    exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace('\t', ' ') for ind in EXP_INDS[experiment]]
     print(exp_sentences)
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
