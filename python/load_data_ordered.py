@@ -170,6 +170,7 @@ def is_noun_at_noun_count(ordered_sentence_usis, index_noun, is_raise=True):
     index = 0
     for (usi, annotation), is_match in has_part_of_speech(ordered_sentence_usis, noun_tags):
         if 'krns2' in usi and 'sentence' in usi:
+            print('meow')
             print(usi)
             if (annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun1'] or
                         annotation['stimulus'] in WORD_PER_SEN['krns2']['active']['noun2'] or
