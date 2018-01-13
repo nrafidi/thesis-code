@@ -263,7 +263,7 @@ def order_sentences(usis, experiment):
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
     assert test_sort == exp_sentences
-    return sorted_sentence_ids
+    return sorted_sentence_ids, exp_sentences
 
 
 def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
@@ -279,7 +279,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                                       'question_id'])
 
     # sort in text file sentence order
-    sorted_sentence_ids = order_sentences(usis, experiment)
+    sorted_sentence_ids, sorted_sentences = order_sentences(usis, experiment)
     print sorted_sentence_ids
     # group by sentence ids
     sentence_id_to_usis = dict()
@@ -321,17 +321,19 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
 
-    print(id_uels)
-    print(usis)
-    raise ValueError
-    labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
+    # labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
+
     sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
-    assert len(labels) == len(sentence_ids)
+
     sorted_inds_sentence = [sentence_ids.index(sen_id) for sen_id in sorted_sentence_ids if sen_id in sentence_ids]
     # print(sorted_inds_sentence)
-    labels = [labels[ind] for ind in sorted_inds_sentence]
+    # labels = [labels[ind] for ind in sorted_inds_sentence]
     # print(labels)
     sentence_ids = [sentence_ids[ind] for ind in sorted_inds_sentence]
+    labels = [sen.split() for sen in sorted_sentences]
+    print(sentence_ids)
+    print(labels)
+    assert len(labels) == len(sentence_ids)
 
     _, uels = zip(*id_uels)
 
@@ -342,8 +344,6 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     # Downsample
     evokeds = evokeds[:, :, :, ::2]
     time = np.arange(tmin, tmax + 2e-3, 2e-3)
-    print(evokeds.shape[3])
-    print(time.size)
     if evokeds.shape[3] != time.size:
         min_size = np.min([evokeds.shape[3], time.size])
         evokeds = evokeds[:, :, :, :min_size]
