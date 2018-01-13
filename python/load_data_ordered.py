@@ -303,7 +303,6 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
-            print(usi_words)
             for idx, result in enumerate(f(usi_words)):
                 anded_filter[idx] = anded_filter[idx] and result
             assert (idx == len(anded_filter) - 1)  # if this is violated the filter is messed up
@@ -315,19 +314,23 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
 
     usis = filtered_usis
 
-    print(usis)
-    print(len(usis))
+    # print(usis)
+    # print(len(usis))
 
     exp_sub = [(experiment, subject)]
     uels = hippo.query.get_uels_from_usis(usis.keys(), experiment_subjects=exp_sub)
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
+
+    print(id_uels)
+    print(usis)
+    raise ValueError
     labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
     sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
     assert len(labels) == len(sentence_ids)
     sorted_inds_sentence = [sentence_ids.index(sen_id) for sen_id in sorted_sentence_ids if sen_id in sentence_ids]
-    print(sorted_inds_sentence)
+    # print(sorted_inds_sentence)
     labels = [labels[ind] for ind in sorted_inds_sentence]
-    print(labels)
+    # print(labels)
     sentence_ids = [sentence_ids[ind] for ind in sorted_inds_sentence]
 
     _, uels = zip(*id_uels)
