@@ -279,8 +279,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                                       'question_id'])
 
     # sort in text file sentence order
-    sorted_sentence_ids, recon_sentences = order_sentences(usis, experiment)
-    print sorted_sentence_ids
+
     # group by sentence ids
     sentence_id_to_usis = dict()
     for usi in usis:
@@ -313,6 +312,8 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                 filtered_usis[usi_word[0]] = usi_word[1]
 
     usis = filtered_usis
+    sorted_sentence_ids, recon_sentences = order_sentences(usis, experiment)
+    print sorted_sentence_ids
 
     # print(usis)
     # print(len(usis))
