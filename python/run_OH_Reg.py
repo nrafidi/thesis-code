@@ -104,12 +104,12 @@ def run_sv_exp(experiment,
                                                                   noMag=False,
                                                                   sorted_inds=None)
 
-    l_set = np.unique(labels, axis=0)
+    l_set = np.unique(labels, axis=0).tolist()
     n_l = l_set.shape[0]
     num_labels = labels.shape[0]
     l_ints = np.empty((num_labels,))
     for i_l in range(num_labels):
-        l_ints[i_l] = np.where(l_set == labels[i_l, :])
+        l_ints[i_l] = l_set.index(labels[i_l, :])
 
     semantic_vectors = []
     for col in range(labels.shape[-1]):
