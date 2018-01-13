@@ -261,15 +261,16 @@ def order_sentences(usis, experiment):
     print(exp_sentences)
     for sen in exp_sentences:
         if sen not in recon_sentences:
-            for j_sen in recon_sentences:
-                if 'man' in j_sen and 'liked' in j_sen and 'boy' in j_sen:
-                    for i, s in enumerate(difflib.ndiff(sen, j_sen)):
-                        if s[0] == ' ':
-                            continue
-                        elif s[0] == '-':
-                            print(u'Delete "{}" from position {}'.format(s[-1], i))
-                        elif s[0] == '+':
-                            print(u'Add "{}" to position {}'.format(s[-1], i))
+            if ('man' in sen) and ('liked' in sen) and ('boy' in sen):
+                for j_sen in recon_sentences:
+                    if ('man' in j_sen) and ('liked' in j_sen) and ('boy' in j_sen):
+                        for i, s in enumerate(difflib.ndiff(sen, j_sen)):
+                            if s[0] == ' ':
+                                continue
+                            elif s[0] == '-':
+                                print(u'Delete "{}" from position {}'.format(s[-1], i))
+                            elif s[0] == '+':
+                                print(u'Add "{}" to position {}'.format(s[-1], i))
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
