@@ -30,21 +30,21 @@ cd /home/nrafidi/thesis-code/python
 
 if $isPerm =='True' and $force == 'True'
 then
-    python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
     --isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force
 elif $isPerm == 'True'
 then
-    python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
     --isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state
 elif $force == 'True'
 then
-    python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
     --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force
 else
-    python run_SV.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
     --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state
 fi
