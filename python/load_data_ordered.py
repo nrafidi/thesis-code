@@ -297,14 +297,11 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
             sentence_id_to_usis[sentence_id] = [(usi, annotations)]
 
     filtered_usis = dict()
-    labels = []
     for sentence_id in sentence_id_to_usis:
         sentence_usis = sentence_id_to_usis[sentence_id]
         # sorted order
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
-        sen_words = [uw['stimulus'] for uw in usi_words]
-        print(sen_words)
-        labels.append(sen_words)
+
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
             for idx, result in enumerate(f(usi_words)):
@@ -315,11 +312,12 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
             # print(usi_word[1]['stimulus'], usi_word[1]['stanford_2017_06_09_pos'], is_allowed)
             if is_allowed:
                 filtered_usis[usi_word[0]] = usi_word[1]
-    print(labels)
+
     usis = filtered_usis
 
 
-    # print(usis)
+    print(usis)
+    raise ValueError
     # print(len(usis))
 
     exp_sub = [(experiment, subject)]
