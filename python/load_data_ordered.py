@@ -1,3 +1,4 @@
+import difflib
 import numpy as np
 import hippo.io
 import hippo.query
@@ -258,6 +259,16 @@ def order_sentences(usis, experiment):
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
     exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace('\t', ' ') for ind in EXP_INDS[experiment]]
     print(exp_sentences)
+    for sen in exp_sentences:
+        if sen not in recon_sentences:
+            for j_sen in recon_sentences:
+                for i, s in enumerate(difflib.ndiff(sen, j_sen)):
+                    if s[0] == ' ':
+                        continue
+                    elif s[0] == '-':
+                        print(u'Delete "{}" from position {}'.format(s[-1], i))
+                    elif s[0] == '+':
+                        print(u'Add "{}" to position {}'.format(s[-1], i))
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
