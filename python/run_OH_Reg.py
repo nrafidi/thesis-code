@@ -108,7 +108,10 @@ def run_sv_exp(experiment,
     num_labels = labels.shape[0]
     l_ints = np.empty((num_labels,))
     for i_l in range(num_labels):
-        l_ints[i_l] = l_set.index(labels[i_l, :])
+        for j_l, l in enumerate(l_set):
+            if np.all(l == labels[i_l, :]):
+                l_ints[i_l] = j_l
+                break
 
     semantic_vectors = []
     for col in range(labels.shape[-1]):
