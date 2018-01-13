@@ -8,19 +8,12 @@ if __name__ == '__main__':
                                    batch_exp.SUBJECTS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
-                                   batch_exp.MODELS,
-                                   batch_exp.INC_ART1,
-                                   batch_exp.INC_ART2,
-                                   batch_exp.ONLY_ART1,
-                                   batch_exp.ONLY_ART2,
-                                   batch_exp.IS_PDTWS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.NUM_FOLDSS,
                                    batch_exp.ALGS,
                                    batch_exp.ADJS,
                                    batch_exp.NUM_INSTANCESS,
-                                   batch_exp.REPS_TO_USES,
-                                   batch_exp.RANDOM_STATES)
+                                   batch_exp.REPS_TO_USES)
     job_id = 0
     successful_jobs = 0
     total_jobs = 0
@@ -29,19 +22,12 @@ if __name__ == '__main__':
         sub = grid[1]
         sen = grid[2]
         word = grid[3]
-        model = grid[4]
-        art1 = grid[5]
-        art2 = grid[6]
-        oart1 = grid[7]
-        oart2 = grid[8]
-        pdtw = grid[9]
-        perm = grid[10]
-        nf = grid[11]
-        alg = grid[12]
-        adj = grid[13]
-        inst = grid[14]
-        rep = grid[15]
-        rs = grid[16]
+        perm = grid[4]
+        nf = grid[5]
+        alg = grid[6]
+        adj = grid[7]
+        inst = grid[8]
+        rep = grid[9]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                               sub=sub,
