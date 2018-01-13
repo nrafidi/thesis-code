@@ -265,12 +265,12 @@ def recon_sen_from_usis(usis):
 
 def order_sentences(usis, experiment):
     recon_sentences, sentence_id_by_recon = recon_sen_from_usis(usis)
-    print(recon_sentences)
+    # print(recon_sentences)
     with open(path_constants.SENTENCES) as f:
         loaded_sentences = f.readlines()
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
     exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace(' ', '').replace('\t', ' ') for ind in EXP_INDS[experiment]]
-    print(exp_sentences)
+    # print(exp_sentences)
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
@@ -313,7 +313,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
-            print(usi_words)
+            # print(usi_words)
             for idx, result in enumerate(f(usi_words)):
                 anded_filter[idx] = anded_filter[idx] and result
             assert (idx == len(anded_filter) - 1)  # if this is violated the filter is messed up
