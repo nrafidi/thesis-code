@@ -302,8 +302,9 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         sentence_usis = sentence_id_to_usis[sentence_id]
         # sorted order
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
-        print(usi_words)
-        labels.append(usi_words)
+        sen_words = [uw['stimulus'] for uw in usi_words]
+        print(sen_words)
+        labels.append(sen_words)
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
             for idx, result in enumerate(f(usi_words)):
