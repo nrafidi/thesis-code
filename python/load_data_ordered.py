@@ -316,7 +316,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     usis = filtered_usis
     labels = []
     for usi in usis:
-        usi_idx = sorted_sentence_ids.index(usi['sentence_id'])
+        usi_idx = sorted_sentence_ids.index(usis[usi]['sentence_id'])
         labels.append(sorted_sentences[usi_idx].split())
 
 
