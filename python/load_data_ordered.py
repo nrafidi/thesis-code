@@ -257,7 +257,7 @@ def order_sentences(usis, experiment):
     with open(path_constants.SENTENCES) as f:
         loaded_sentences = f.readlines()
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
-    exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace('\t', ' ') for ind in EXP_INDS[experiment]]
+    exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace(' ', '').replace('\t', ' ') for ind in EXP_INDS[experiment]]
     print(exp_sentences)
     for sen in exp_sentences:
         if sen not in recon_sentences:
