@@ -331,8 +331,10 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     # print(labels)
     sentence_ids = [sentence_ids[ind] for ind in sorted_inds_sentence]
     labels = [sen.split() for sen in sorted_sentences]
-    print(sentence_ids)
-    print(labels)
+    # print(sentence_ids)
+    print(len(sentence_ids))
+    # print(labels)
+    print(len(labels))
     assert len(labels) == len(sentence_ids)
 
     _, uels = zip(*id_uels)
