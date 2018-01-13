@@ -259,7 +259,7 @@ def order_sentences(usis, experiment):
     loaded_sentences = [sen.strip() for sen in loaded_sentences]
     exp_sentences = [punctuation_regex.sub('', loaded_sentences[ind]).lower().strip().replace(' ', '').replace('\t', ' ') for ind in EXP_INDS[experiment]]
     # print(exp_sentences)
-    sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences]
+    sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences if sen in recon_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
     test_sort = [recon_sentences[ind] for ind in sorted_inds]
     assert test_sort == exp_sentences
