@@ -261,8 +261,8 @@ def order_sentences(usis, experiment):
     # print(exp_sentences)
     sorted_inds = [recon_sentences.index(sen) for sen in exp_sentences if sen in recon_sentences]
     sorted_sentence_ids = [sentence_id_by_recon[ind] for ind in sorted_inds]
-    # test_sort = [recon_sentences[ind] for ind in sorted_inds]
-    # assert test_sort == exp_sentences
+    test_sort = [recon_sentences[ind] for ind in sorted_inds]
+    assert test_sort == exp_sentences
     return sorted_sentence_ids, recon_sentences
 
 
@@ -279,7 +279,8 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
                                       'question_id'])
 
     # sort in text file sentence order
-
+    sorted_sentence_ids, recon_sentences = order_sentences(usis, experiment)
+    print sorted_sentence_ids
     # group by sentence ids
     sentence_id_to_usis = dict()
     for usi in usis:
@@ -296,10 +297,12 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
             sentence_id_to_usis[sentence_id] = [(usi, annotations)]
 
     filtered_usis = dict()
+    labels = []
     for sentence_id in sentence_id_to_usis:
         sentence_usis = sentence_id_to_usis[sentence_id]
         # sorted order
         usi_words = sorted(sentence_usis, key=lambda usi_annotation: usi_annotation[1]['word_index_in_sentence'])
+        labels.append(usi_words.join())
         anded_filter = [True for _ in range(len(usi_words))]
         for f in filters:
             for idx, result in enumerate(f(usi_words)):
@@ -310,10 +313,9 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
             # print(usi_word[1]['stimulus'], usi_word[1]['stanford_2017_06_09_pos'], is_allowed)
             if is_allowed:
                 filtered_usis[usi_word[0]] = usi_word[1]
-
+    print(labels)
     usis = filtered_usis
-    sorted_sentence_ids, recon_sentences = order_sentences(usis, experiment)
-    print sorted_sentence_ids
+
 
     # print(usis)
     # print(len(usis))
@@ -323,8 +325,8 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
     id_uels = [(k, uels[k]) for k in uels.keys()]  # putting uels in a list instead of a map (explicit ordering)
 
     # labels = [punctuation_regex.sub('', usis[k]['stimulus']).lower() for k, _ in id_uels]
-    labels = [sen.split() for sen in recon_sentences]
-    print(labels)
+    # labels = [sen.split() for sen in recon_sentences]
+    # print(labels)
     sentence_ids = [usis[k]['sentence_id'] for k, _ in id_uels]
     print(sentence_ids)
 
