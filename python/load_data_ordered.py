@@ -291,7 +291,7 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         evokeds = evokeds[:, :, :, :min_size]
         time = time[:min_size]
 
-    return evokeds, labels, sentence_ids, time
+    return evokeds, labels, time, sentence_ids
 
 
 def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use, noMag=False,
