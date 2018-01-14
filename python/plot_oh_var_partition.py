@@ -157,7 +157,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Time')
     ax.set_title('{} {} {}\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adj, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg, num_folds, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
