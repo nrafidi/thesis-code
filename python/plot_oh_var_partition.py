@@ -113,8 +113,10 @@ if __name__ == '__main__':
     num_time = time.size
 
     sorted_inds, sorted_reg = sort_sensors()
+    r2_all_adj[r2_all_adj < 0.0] = 0.0
     r2_all_adj = np.reshape(r2_all_adj, (306, -1))
     r2_all_adj = r2_all_adj[sorted_inds, :]
+    r2_word_adj[r2_word_adj < 0.0] = 0.0
     r2_word_adj = np.reshape(r2_word_adj, (306, -1))
     r2_word_adj = r2_word_adj[sorted_inds, :]
 
