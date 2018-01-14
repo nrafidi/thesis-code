@@ -90,36 +90,27 @@ if __name__ == '__main__':
     total_est_word = np.concatenate(total_est_word, axis=0)
     total_true_word = np.concatenate(total_true_word, axis=0)
 
-    print(total_est_all.shape)
     num_samples = total_est_all.shape[0]
     num_outputs = total_est_all.shape[-1]
 
     r2_all = explained_variance_score(total_true_all, total_est_all, multioutput='raw_values')
-
-    print(np.max(r2_all))
-    print(np.min(r2_all))
-    print(np.divide(float(num_samples - 1), float(num_samples-num_feats_all-1)))
-
     r2_all_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all)*np.divide(float(num_samples - 1),
                                                                                         float(num_samples-num_feats_all-1))
-    print(np.max(r2_all_adj))
-    print(np.min(r2_all_adj))
+
+    print('Pre adj r2all = {}'.format(r2_all[0]))
+    print('Divisor = {}'.format(np.divide(float(num_samples - 1), float(num_samples - num_feats_all - 1))))
+    print('Post adj r2all = {}'.format(r2_all_adj[0]))
 
     r2_word = explained_variance_score(total_true_word, total_est_word, multioutput='raw_values')
-    print(r2_word[0])
     r2_word_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all) * np.divide(float(num_samples - 1),
-                                                                                           float(num_samples - num_feats_all - 5))
-    print(r2_word_adj[0])
-    print(np.max(r2_word))
-    print(np.min(r2_word))
-    print(np.divide(float(num_samples - 1), float(num_samples - num_feats_all - 5)))
-    print(np.max(r2_word_adj))
-    print(np.min(r2_word_adj))
+                                                                                           float(num_samples - num_feats_all + 3))
+    print('Pre adj r2word = {}'.format(r2_word[0]))
+    print('Divisor = {}'.format(np.divide(float(num_samples - 1), float(num_samples - num_feats_all + 3))))
+    print('Post adj r2word = {}'.format(r2_word_adj[0]))
 
     time = np.array(np.arange(-1.0, 4.0, 0.002))
     time[np.abs(time) <= 1e-14] = 0.0
     num_time = time.size
-    print(num_time)
 
     sorted_inds, sorted_reg = sort_sensors()
     r2_all_adj = np.reshape(r2_all_adj, (306, -1))
@@ -128,8 +119,7 @@ if __name__ == '__main__':
     r2_word_adj = r2_word_adj[sorted_inds, :]
 
     r2_plot = r2_all_adj - r2_word_adj
-    print(np.max(r2_plot))
-    print(np.min(r2_plot))
+
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
