@@ -89,7 +89,10 @@ if __name__ == '__main__':
     total_est_word = np.concatenate(total_est_word, axis=0)
     total_true_word = np.concatenate(total_true_word, axis=0)
 
-    print(total_est_all.shape)
+    num_outputs = total_est_all.shape[-1]
+    r2_all = np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
+                                                 np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
+    print(r2_all.shape)
 
     # time = result['time']
     # time[np.abs(time) <= 1e-14] = 0.0
