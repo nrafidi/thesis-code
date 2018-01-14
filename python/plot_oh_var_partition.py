@@ -49,7 +49,7 @@ if __name__ == '__main__':
     total_true_all = []
     total_est_word = []
     total_true_word = []
-    for subject in subjects:
+    for subject in ['I']: #subjects:
         save_dir = run_OH_Reg.SAVE_DIR.format(top_dir=top_dir, sub=subject)
         fname = run_OH_Reg.SAVE_FILE.format(dir=save_dir,
                                  sub=subject,
@@ -90,14 +90,17 @@ if __name__ == '__main__':
     total_est_word = np.concatenate(total_est_word, axis=0)
     total_true_word = np.concatenate(total_true_word, axis=0)
 
+    print(total_est_all.shape)
     num_samples = total_est_all.shape[0]
     num_outputs = total_est_all.shape[-1]
 
     r2_all = explained_variance_score(total_true_all, total_est_all, multioutput='raw_values')
     #     np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
     #                                              np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
+
     print(np.max(r2_all))
     print(np.min(r2_all))
+    print(np.divide(float(num_samples - 1), float(num_samples-num_feats_all-1)))
     r2_all_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all)*np.divide(float(num_samples - 1),
                                                                                         float(num_samples-num_feats_all-1))
     print(np.max(r2_all_adj))
@@ -127,6 +130,20 @@ if __name__ == '__main__':
     print(np.min(r2_plot))
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    r2_all = np.reshape(r2_all, (306, -1))
+    r2_all = r2_all[sorted_inds, :]
+    fig, ax = plt.subplots()
+    h = ax.imshow(r2_all, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
+    ax.set_yticks(yticks_sens)
+    ax.set_yticklabels(uni_reg)
+    ax.set_ylabel('Sensors')
+    ax.set_xticks(range(0, num_time, 250))
+    ax.set_xticklabels(time[::250])
+    ax.set_xlabel('Time')
+    ax.set_title('{} {} All\nAdj: {}'.format(exp, sen_type, adj))
+    plt.colorbar(h)
+
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
