@@ -89,38 +89,48 @@ if __name__ == '__main__':
     total_est_word = np.concatenate(total_est_word, axis=0)
     total_true_word = np.concatenate(total_true_word, axis=0)
 
+    num_samples = total_est_all.shape[0]
     num_outputs = total_est_all.shape[-1]
+
     r2_all = np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
                                                  np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
-    print(r2_all.shape)
+    r2_all_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all)*np.divide(float(num_samples - 1),
+                                                                                        float(num_samples-num_feats_all-1))
+    print(np.max(r2_all_adj))
+    print(np.min(r2_all_adj))
 
-    # time = result['time']
-    # time[np.abs(time) <= 1e-14] = 0.0
-    # num_time = time.size
-    # fig0, ax0 = plt.subplots()
-    # ax0.hist(np.array(score_maxes))
-    # # i_max = np.argmax(score_maxes)
-    # i_max = grid_list.index((16, None, 1))
-    # print('Best score for params {} was {}'.format(grid_list[i_max], score_maxes[i_max]))
-    #
-    # sorted_inds, sorted_reg = sort_sensors()
-    # uni_reg = np.unique(sorted_reg)
-    # yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
-    #
-    # best_score = np.reshape(scores[i_max], (306, -1))
-    # best_score = best_score[sorted_inds, :]
-    #
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(best_score, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
-    # ax.set_yticks(yticks_sens)
-    # ax.set_yticklabels(uni_reg)
-    # ax.set_ylabel('Sensors')
-    # ax.set_xticks(range(0, num_time, 250))
-    # ax.set_xticklabels(time[::250])
-    # ax.set_xlabel('Time')
-    # ax.set_title('{} {} {} {}\nArt1: {} Art2: {}'.format(args.experiment, args.subject, args.sen_type, args.word,
-    #                                                      art1_str, art2_str))
-    # plt.colorbar(h)
-    # plt.savefig('POVE_{}_{}_{}_{}_art1{}_art2{}.pdf'.format(args.experiment, args.subject, args.sen_type, args.word,
-    #                                                         art1_str, art2_str), bbox_inches='tight')
-    # plt.show()
+    r2_word = np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_word - total_true_word), axis=0),
+                                                 np.sum(np.square(total_true_word - np.mean(total_true_word, axis=0)),
+                                                        axis=0))
+    r2_word_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all) * np.divide(float(num_samples - 1),
+                                                                                          float(num_samples - num_feats_all - 5))
+    print(np.max(r2_word_adj))
+    print(np.min(r2_word_adj))
+
+    time = result['time']
+    time[np.abs(time) <= 1e-14] = 0.0
+    num_time = time.size
+
+    sorted_inds, sorted_reg = sort_sensors()
+    r2_all_adj = np.reshape(r2_all_adj, (306, -1))
+    r2_all_adj = r2_all_adj[sorted_inds, :]
+    r2_word_adj = np.reshape(r2_word_adj, (306, -1))
+    r2_word_adj = r2_word_adj[sorted_inds, :]
+
+    r2_plot = r2_all_adj - r2_word_adj
+
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
+    ax.set_yticks(yticks_sens)
+    ax.set_yticklabels(uni_reg)
+    ax.set_ylabel('Sensors')
+    ax.set_xticks(range(0, num_time, 250))
+    ax.set_xticklabels(time[::250])
+    ax.set_xlabel('Time')
+    ax.set_title('{} {} {}\nAdj: {}'.format(exp, sen_type, word, adj))
+    plt.colorbar(h)
+    plt.savefig('POVE_OH_{}_{}_{}_adj{}.pdf'.format(exp, sen_type, word, adj), bbox_inches='tight')
+    plt.show()
