@@ -33,6 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('--sen_type', choices=['active', 'passive'], default='active')
     parser.add_argument('--word', choices=['noun1', 'verb', 'noun2'], default='noun1')
     parser.add_argument('--adj', choices=[None, 'mean_center', 'zscore'], default=None)
+    parser.add_argument('--alg', choices=['ols', 'ridge'], default='ols')
     args = parser.parse_args()
 
     exp = args.experiment
@@ -41,6 +42,7 @@ if __name__ == '__main__':
     sen_type = args.sen_type
     word = args.word
     adj = args.adj
+    alg = args.alg
 
     top_dir = run_OH_Reg.TOP_DIR.format(exp=exp)
 
@@ -57,7 +59,7 @@ if __name__ == '__main__':
                                  word='all',
                                  perm='F',
                                  num_folds=16,
-                                 alg='ols',
+                                 alg=alg,
                                  adj=adj,
                                  inst=1,
                                  rep=10,
@@ -74,7 +76,7 @@ if __name__ == '__main__':
                                             word=word,
                                             perm='F',
                                             num_folds=16,
-                                            alg='ols',
+                                            alg=alg,
                                             adj=adj,
                                             inst=1,
                                             rep=10,
@@ -149,9 +151,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} {}\nAdj: {}'.format(exp, sen_type, word, adj))
+    ax.set_title('{} {} {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_{}_adj{}.pdf'.format(exp, sen_type, word, adj), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -161,9 +163,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} All\nAdj: {}'.format(exp, sen_type, adj))
+    ax.set_title('{} {} All\nAdj: {} Alg: {}'.format(exp, sen_type, adj, alg))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_all_adj{}.pdf'.format(exp, sen_type, adj), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_all_adj{}_alg{}.pdf'.format(exp, sen_type, adj, alg), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -173,8 +175,8 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} less {}\nAdj: {}'.format(exp, sen_type, word, adj))
+    ax.set_title('{} {} less {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_less-{}_adj{}.pdf'.format(exp, sen_type, word, adj), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_less-{}_adj{}_alg{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
 
     plt.show()
