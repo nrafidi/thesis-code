@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import run_OH_Reg
 import scipy.io as sio
+from sklearn.metrics import explained_variance_score
 import os.path
 
 
@@ -92,8 +93,11 @@ if __name__ == '__main__':
     num_samples = total_est_all.shape[0]
     num_outputs = total_est_all.shape[-1]
 
-    r2_all = np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
-                                                 np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
+    r2_all = explained_variance_score(total_true_all, total_est_all, multioutput='raw_values')
+    #     np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
+    #                                              np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
+    print(np.max(r2_all))
+    print(np.min(r2_all))
     r2_all_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all)*np.divide(float(num_samples - 1),
                                                                                         float(num_samples-num_feats_all-1))
     print(np.max(r2_all_adj))
