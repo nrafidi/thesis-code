@@ -49,7 +49,7 @@ if __name__ == '__main__':
     total_true_all = []
     total_est_word = []
     total_true_word = []
-    for subject in ['I', 'B', 'C']: #subjects:
+    for subject in subjects:
         save_dir = run_OH_Reg.SAVE_DIR.format(top_dir=top_dir, sub=subject)
         fname = run_OH_Reg.SAVE_FILE.format(dir=save_dir,
                                  sub=subject,
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
+    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     plt.savefig('POVE_OH_{}_{}_{}_adj{}.pdf'.format(exp, sen_type, word, adj), bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
+    h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     plt.savefig('POVE_OH_{}_{}_all_adj{}.pdf'.format(exp, sen_type, adj), bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
+    h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
