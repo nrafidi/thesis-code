@@ -38,6 +38,7 @@ def bool_to_str(bool_var):
     else:
         return 'F'
 
+
 def load_one_hot(labels):
     unique_labels = np.unique(labels)
     num_labels = unique_labels.size
