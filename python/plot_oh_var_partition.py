@@ -34,6 +34,8 @@ if __name__ == '__main__':
     parser.add_argument('--word', choices=['noun1', 'verb', 'noun2'], default='noun1')
     parser.add_argument('--adj', choices=[None, 'mean_center', 'zscore'], default=None)
     parser.add_argument('--alg', choices=['ols', 'ridge'], default='ols')
+    parser.add_argument('--num_instances', type=int, default=1)
+    parser.add_argument('--num_folds', type=int, default=16)
     args = parser.parse_args()
 
     exp = args.experiment
@@ -43,6 +45,8 @@ if __name__ == '__main__':
     word = args.word
     adj = args.adj
     alg = args.alg
+    num_instances = args.num_instances
+    num_folds = args.num_folds
 
     top_dir = run_OH_Reg.TOP_DIR.format(exp=exp)
 
@@ -58,10 +62,10 @@ if __name__ == '__main__':
                                  sen_type=sen_type,
                                  word='all',
                                  perm='F',
-                                 num_folds=16,
+                                 num_folds=num_folds,
                                  alg=alg,
                                  adj=adj,
-                                 inst=1,
+                                 inst=num_instances,
                                  rep=10,
                                  rsP=1,
                                  rsC=run_OH_Reg.CV_RAND_STATE)
@@ -75,10 +79,10 @@ if __name__ == '__main__':
                                             sen_type=sen_type,
                                             word=word,
                                             perm='F',
-                                            num_folds=16,
+                                            num_folds=num_folds,
                                             alg=alg,
                                             adj=adj,
-                                            inst=1,
+                                            inst=num_instances,
                                             rep=10,
                                             rsP=1,
                                             rsC=run_OH_Reg.CV_RAND_STATE)
@@ -151,9 +155,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
+    ax.set_title('{} {} {}\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adj, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -163,9 +167,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} All\nAdj: {} Alg: {}'.format(exp, sen_type, adj, alg))
+    ax.set_title('{} {} All\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, adj, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_all_adj{}_alg{}.pdf'.format(exp, sen_type, adj, alg), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_all_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, adj, alg, num_folds, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -175,8 +179,8 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} less {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
+    ax.set_title('{} {} less {}\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adj, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_less-{}_adj{}_alg{}.pdf'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_less-{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg, num_folds, num_instances), bbox_inches='tight')
 
     plt.show()
