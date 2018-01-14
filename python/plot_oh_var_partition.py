@@ -107,9 +107,10 @@ if __name__ == '__main__':
     print(np.max(r2_word_adj))
     print(np.min(r2_word_adj))
 
-    time = result['time']
+    time = np.array(np.arange(-1.0, 4.0, 0.002))
     time[np.abs(time) <= 1e-14] = 0.0
     num_time = time.size
+    print(num_time)
 
     sorted_inds, sorted_reg = sort_sensors()
     r2_all_adj = np.reshape(r2_all_adj, (306, -1))
@@ -118,12 +119,13 @@ if __name__ == '__main__':
     r2_word_adj = r2_word_adj[sorted_inds, :]
 
     r2_plot = r2_all_adj - r2_word_adj
-
+    print(np.max(r2_plot))
+    print(np.min(r2_plot))
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
+    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.6)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
