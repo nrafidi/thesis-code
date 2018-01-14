@@ -3,13 +3,13 @@ import os.path
 from subprocess import call, check_output
 import time
 
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+EXPERIMENTS = ['krns2', 'PassAct2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['all', 'noun1', 'verb', 'noun2']
 IS_PERMS = [False]  # True
 NUM_FOLDSS = [16] #, 32, 160]
-ALGS = ['ols']  # GNB
+ALGS = ['ols', 'ridge']  # GNB
 ADJS = [None, 'mean_center', 'zscore']
 NUM_INSTANCESS = [1] #, 2, 10]  # 5 10
 REPS_TO_USES = [10]  # 10

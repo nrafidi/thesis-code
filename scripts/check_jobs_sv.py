@@ -42,20 +42,25 @@ if __name__ == '__main__':
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
         if os.path.isfile(err_str) and os.path.isfile(out_str):
             if os.stat(err_str).st_size != 0:
-                print('Job {} Failed'.format(job_str))
+
                 with open(err_str, 'r') as fid:
                     meow = fid.read()
                     if 'MemoryError' in meow:
+                        print('Job {} Failed'.format(job_str))
                         print('MemoryError')
+                        print(out_str)
+                        print(grid)
                     elif 'Killed' in meow:
+                        print('Job {} Failed'.format(job_str))
                         print('Killed')
+                        print(out_str)
+                        print(grid)
+                    elif 'False' in meow:
+                        print('Weird error')
+                        successful_jobs += 1
                     else:
                         print(meow)
-                print(out_str)
-                print(grid)
                 total_jobs += 1
-                # with open(out_str, 'r') as fid:
-                #     print fid.read()
             else:
                 with open(out_str, 'r') as fid:
                     meow = fid.read()
