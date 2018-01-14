@@ -49,7 +49,7 @@ if __name__ == '__main__':
     total_true_all = []
     total_est_word = []
     total_true_word = []
-    for subject in ['I']: #subjects:
+    for subject in ['I', 'B', 'C']: #subjects:
         save_dir = run_OH_Reg.SAVE_DIR.format(top_dir=top_dir, sub=subject)
         fname = run_OH_Reg.SAVE_FILE.format(dir=save_dir,
                                  sub=subject,
@@ -95,22 +95,24 @@ if __name__ == '__main__':
     num_outputs = total_est_all.shape[-1]
 
     r2_all = explained_variance_score(total_true_all, total_est_all, multioutput='raw_values')
-    #     np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_all - total_true_all), axis=0),
-    #                                              np.sum(np.square(total_true_all - np.mean(total_true_all, axis=0)), axis=0))
 
     print(np.max(r2_all))
     print(np.min(r2_all))
     print(np.divide(float(num_samples - 1), float(num_samples-num_feats_all-1)))
+
     r2_all_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all)*np.divide(float(num_samples - 1),
                                                                                         float(num_samples-num_feats_all-1))
     print(np.max(r2_all_adj))
     print(np.min(r2_all_adj))
 
-    r2_word = np.ones((num_outputs,)) - np.divide(np.sum(np.square(total_est_word - total_true_word), axis=0),
-                                                 np.sum(np.square(total_true_word - np.mean(total_true_word, axis=0)),
-                                                        axis=0))
+    r2_word = explained_variance_score(total_true_word, total_est_word, multioutput='raw_values')
+    print(r2_word[0])
     r2_word_adj = np.ones((num_outputs,)) - (np.ones((num_outputs,)) - r2_all) * np.divide(float(num_samples - 1),
-                                                                                          float(num_samples - num_feats_all - 5))
+                                                                                           float(num_samples - num_feats_all - 5))
+    print(r2_word_adj[0])
+    print(np.max(r2_word))
+    print(np.min(r2_word))
+    print(np.divide(float(num_samples - 1), float(num_samples - num_feats_all - 5)))
     print(np.max(r2_word_adj))
     print(np.min(r2_word_adj))
 
