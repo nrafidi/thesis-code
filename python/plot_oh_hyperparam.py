@@ -41,6 +41,7 @@ if __name__ == '__main__':
 
     num_instances_to_try = [1, 2, 10]
     max_uni_var = []
+    mean_nonzero_uni_var = []
     num_uni_var = []
 
     for num_instances in num_instances_to_try:
@@ -107,6 +108,7 @@ if __name__ == '__main__':
 
         r2_plot = r2_all_adj - r2_word_adj
         max_uni_var.append(np.max(r2_plot))
+        mean_nonzero_uni_var.append(np.mean(r2_plot[r2_plot > 0.0]))
         num_uni_var.append(np.sum(r2_plot > 0.0))
 
     fig, ax = plt.subplots()
@@ -117,6 +119,15 @@ if __name__ == '__main__':
     ax.set_title(
         '{} {} {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
     plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_max.png'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
+
+    fig, ax = plt.subplots()
+    ax.plot(num_instances_to_try, mean_nonzero_uni_var)
+    ax.set_ylabel('Mean Nonzero Unique Variance')
+    ax.set_xticks(num_instances_to_try)
+    ax.set_xlabel('Number of instances per sentence')
+    ax.set_title(
+        '{} {} {}\nAdj: {} Alg: {}'.format(exp, sen_type, word, adj, alg))
+    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_meannz.png'.format(exp, sen_type, word, adj, alg), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     ax.plot(num_instances_to_try, num_uni_var)
