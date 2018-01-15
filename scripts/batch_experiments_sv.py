@@ -8,10 +8,10 @@ SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['all', 'noun1', 'verb', 'noun2']
 IS_PERMS = [False]  # True
-NUM_FOLDSS = [16, 32, 160] #, 32, 160]
+NUM_FOLDSS = [16, 32, 80] #, 32, 160]
 ALGS = ['ols', 'ridge']  # GNB
 ADJS = [None, 'mean_center', 'zscore']
-NUM_INSTANCESS = [2, 10] #, 2, 10]  # 5 10
+NUM_INSTANCESS = [5, 10] #, 2, 10]  # 5 10
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]
 

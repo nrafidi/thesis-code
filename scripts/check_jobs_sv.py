@@ -2,6 +2,19 @@ import itertools
 import os.path
 import batch_experiments_sv as batch_exp
 
+TOP_DIR = '/share/volume0/nrafidi/{exp}_OH/'
+SAVE_DIR = '{top_dir}/{sub}/'
+SAVE_FILE = '{dir}OH_{sub}_{sen_type}_{word}_pr{perm}_' \
+            'F{num_folds}_alg{alg}_adj{adj}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}'
+
+CV_RAND_STATE = 12191989
+
+def bool_to_str(bool_var):
+    if bool_var:
+        return 'T'
+    else:
+        return 'F'
+
 
 if __name__ == '__main__':
     param_grid = itertools.product(batch_exp.EXPERIMENTS,
@@ -31,6 +44,27 @@ if __name__ == '__main__':
         rep = grid[9]
         rs = grid[10]
 
+        total_jobs += 1
+
+        top_dir = TOP_DIR.format(exp=exp)
+        save_dir = SAVE_DIR.format(top_dir=top_dir, sub=sub)
+
+        fname = SAVE_FILE.format(dir=save_dir,
+                                 sub=sub,
+                                 sen_type=sen,
+                                 word=word,
+                                 perm=bool_to_str(perm),
+                                 num_folds=nf,
+                                 alg=alg,
+                                 adj=adj,
+                                 inst=inst,
+                                 rep=rep,
+                                 rsP=rs,
+                                 rsC=CV_RAND_STATE)
+
+        if os.path.isfile(fname + '.npz'):
+            successful_jobs += 1
+
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                               sub=sub,
                                               sen=sen,
@@ -57,18 +91,15 @@ if __name__ == '__main__':
                         print(grid)
                     elif 'False' in meow:
                         print('Weird error')
-                        successful_jobs += 1
                     else:
                         print(meow)
-                total_jobs += 1
-            else:
-                with open(out_str, 'r') as fid:
-                    meow = fid.read()
-                    if 'Experiment parameters not valid.' not in meow:
-                        successful_jobs += 1
-                        total_jobs += 1
-                        print('{} succeeded with parameters: {}'.format(job_id, grid))
-
+            # else:
+            #     with open(out_str, 'r') as fid:
+            #         meow = fid.read()
+            #         if 'Experiment parameters not valid.' not in meow:
+            #             successful_jobs += 1
+            #             total_jobs += 1
+            #             print('{} succeeded with parameters: {}'.format(job_id, grid))
 
         job_id += 1
 
