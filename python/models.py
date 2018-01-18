@@ -24,7 +24,9 @@ def lin_reg(brain_data,
             l_ints,
             kf,
             reg='ridge',
-            adj='zscore',
+            adjX='zscore',
+            adjY='zscore',
+            doTestAvg=False, #TODO: implement this!
             ddof=1):
 
     n_tot = brain_data.shape[0]
@@ -43,24 +45,37 @@ def lin_reg(brain_data,
         train_vectors = semantic_vectors[in_train, :]
 
         test_data = data[in_test, :]
-        test_data_all.append(test_data)
         test_vectors = semantic_vectors[in_test, :]
 
-        if adj == 'mean_center':
+        if adjX == 'mean_center':
             mu_train = np.mean(train_vectors, axis=0)
             train_vectors -= mu_train[None, :]
             test_vectors -= mu_train[None, :]
-            fit_intercept=False
-        elif adj == 'zscore':
+        elif adjX == 'zscore':
             mu_train = np.mean(train_vectors, axis=0)
             std_train = np.std(train_vectors, axis=0, ddof=ddof)
             train_vectors -= mu_train[None, :]
             test_vectors -= mu_train[None, :]
             train_vectors /= std_train[None, :]
             test_vectors /= std_train[None, :]
-            fit_intercept = False
+
+        if adjY == 'mean_center':
+            mu_train_Y = np.mean(train_data, axis=0)
+            train_data -= mu_train_Y[None, :]
+            test_data -= mu_train_Y[None, :]
+        elif adjY == 'zscore':
+            mu_train_Y = np.mean(train_data, axis=0)
+            std_train_Y = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train_Y[None, :]
+            test_data -= mu_train_Y[None, :]
+            train_data /= std_train_Y[None, :]
+            test_data /= std_train_Y[None, :]
+        test_data_all.append(test_data)
+
+        if (adjX == 'mean_center' or adjX == 'zscore') and (adjY == 'mean_center' or adjY == 'zscore'):
+            fit_intercept=False
         else:
-            fit_intercept = True
+            fit_intercept=True
 
         if reg == 'ols':
             model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
@@ -84,7 +99,10 @@ def lin_reg(brain_data,
 
     scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
-    return preds, l_ints, cv_membership, scores, test_data_all
+    weights = model.coef_
+    bias = model.intercept_
+
+    return preds, l_ints, cv_membership, scores, test_data_all, weights, bias
 
 
 

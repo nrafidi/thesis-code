@@ -4,14 +4,15 @@ from subprocess import call, check_output
 import time
 
 EXPERIMENTS = ['krns2', 'PassAct2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['all', 'noun1', 'verb', 'noun2']
 IS_PERMS = [False]  # True
-NUM_FOLDSS = [16, 32, 80] #, 32, 160]
+NUM_FOLDSS = [16, 32, 80, 160]
 ALGS = ['ols', 'ridge']  # GNB
 ADJS = [None, 'mean_center', 'zscore']
-NUM_INSTANCESS = [5, 10] #, 2, 10]  # 5 10
+TST_AVGS = [True, False]
+NUM_INSTANCESS = [1, 2, 5, 10]
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]
 
@@ -26,7 +27,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=32GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},' \
-                'isPerm={perm},num_folds={nf},alg={alg},adj={adj},' \
+                'isPerm={perm},num_folds={nf},alg={alg},adjX={adjX},adjY={adjY},doTestAvg={tst_avg},' \
                 'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_sv.sh'
 
@@ -38,6 +39,8 @@ if __name__ == '__main__':
                                    NUM_FOLDSS,
                                    ALGS,
                                    ADJS,
+                                   ADJS,
+                                   TST_AVGS,
                                    NUM_INSTANCESS,
                                    REPS_TO_USES,
                                    RANDOM_STATES)
@@ -50,10 +53,12 @@ if __name__ == '__main__':
         perm = grid[4]
         nf = grid[5]
         alg = grid[6]
-        adj = grid[7]
-        inst = grid[8]
-        rep = grid[9]
-        rs = grid[10]
+        adjX = grid[7]
+        adjY = grid[8]
+        tst_avg = grid[9]
+        inst = grid[10]
+        rep = grid[11]
+        rs = grid[12]
 
 
         job_str = JOB_NAME.format(exp=exp,
@@ -76,7 +81,9 @@ if __name__ == '__main__':
                                     perm=perm,
                                     nf=nf,
                                     alg=alg,
-                                    adj=adj,
+                                    adjX=adjX,
+                                    adjY=adjY,
+                                    tst_avg=tst_avg,
                                     inst=inst,
                                     rep=rep,
                                     rs=rs,

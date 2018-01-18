@@ -5,7 +5,8 @@ import batch_experiments_sv as batch_exp
 TOP_DIR = '/share/volume0/nrafidi/{exp}_OH/'
 SAVE_DIR = '{top_dir}/{sub}/'
 SAVE_FILE = '{dir}OH_{sub}_{sen_type}_{word}_pr{perm}_' \
-            'F{num_folds}_alg{alg}_adj{adj}_ni{inst}_nr{rep}_rsPerm{rsP}_rsCV{rsC}'
+            'F{num_folds}_alg{alg}_adjX-{adjX}_adjY-{adjY}_avgTest{avgT}_ni{inst}_' \
+            'nr{rep}_rsPerm{rsP}_rsCV{rsC}'
 
 CV_RAND_STATE = 12191989
 
@@ -25,6 +26,8 @@ if __name__ == '__main__':
                                    batch_exp.NUM_FOLDSS,
                                    batch_exp.ALGS,
                                    batch_exp.ADJS,
+                                   batch_exp.ADJS,
+                                   batch_exp.TST_AVGS,
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.REPS_TO_USES,
                                    batch_exp.RANDOM_STATES)
@@ -39,10 +42,12 @@ if __name__ == '__main__':
         perm = grid[4]
         nf = grid[5]
         alg = grid[6]
-        adj = grid[7]
-        inst = grid[8]
-        rep = grid[9]
-        rs = grid[10]
+        adjX = grid[7]
+        adjY = grid[8]
+        tst_avg = grid[9]
+        inst = grid[10]
+        rep = grid[11]
+        rs = grid[12]
 
         total_jobs += 1
 
@@ -56,7 +61,9 @@ if __name__ == '__main__':
                                  perm=bool_to_str(perm),
                                  num_folds=nf,
                                  alg=alg,
-                                 adj=adj,
+                                 adjX=adjX,
+                                 adjY=adjY,
+                                 avgT=bool_to_str(tst_avg),
                                  inst=inst,
                                  rep=rep,
                                  rsP=rs,

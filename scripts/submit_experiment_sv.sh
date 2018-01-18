@@ -28,23 +28,43 @@ source /home/python27/envs/p27default/bin/activate
 
 cd /home/nrafidi/thesis-code/python
 
-if $isPerm =='True' and $force == 'True'
+if $isPerm =='True' and $force == 'True' and $doTestAvg == 'True'
 then
     python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
-    --isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
+    --isPerm --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
+    --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force --doTestAvg
+elif $isPerm == 'True' and $force == 'True'
+then
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    --isPerm --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force
+elif $isPerm == 'True' and $doTestAvg == 'True'
+then
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    --isPerm --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
+    --reps_to_use $reps_to_use --perm_random_state $perm_random_state --doTestAvg
 elif $isPerm == 'True'
 then
     python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
-    --isPerm --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
+    --isPerm --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state
+elif $force == 'True' and $doTestAvg == 'True'
+then
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
+    --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force --doTestAvg
 elif $force == 'True'
 then
     python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
-    --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
+    --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force
+elif $doTestAvg == 'True'
+then
+    python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
+    --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
+    --reps_to_use $reps_to_use --perm_random_state $perm_random_state --doTestAvg
 else
     python run_OH_Reg.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
-    --num_folds $num_folds --alg $alg --adj $adj --num_instances $num_instances \
+    --num_folds $num_folds --alg $alg --adjX $adjX --adjY $adjY --num_instances $num_instances \
     --reps_to_use $reps_to_use --perm_random_state $perm_random_state
 fi
