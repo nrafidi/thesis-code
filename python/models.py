@@ -26,7 +26,7 @@ def lin_reg(brain_data,
             reg='ridge',
             adjX='zscore',
             adjY='zscore',
-            doTestAvg=False, #TODO: implement this!
+            doTestAvg=False,
             ddof=1):
 
     n_tot = brain_data.shape[0]
@@ -46,6 +46,19 @@ def lin_reg(brain_data,
 
         test_data = data[in_test, :]
         test_vectors = semantic_vectors[in_test, :]
+
+        if doTestAvg:
+            test_labels = l_ints[in_test]
+            uni_test_labels = np.unique(test_labels)
+            new_test_data = []
+            new_test_vectors = []
+            for label in uni_test_labels:
+                is_label = test_labels == label
+                new_test_data.append(np.mean(test_data[is_label, :], axis=0))
+                vec = test_vectors[is_label, :]
+                new_test_vectors.append(vec[0, :])
+            test_data = np.concatenate(new_test_data, axis=0)
+            test_vectors = np.concatenate(new_test_vectors, axis=0)
 
         if adjX == 'mean_center':
             mu_train = np.mean(train_vectors, axis=0)
