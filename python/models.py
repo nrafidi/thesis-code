@@ -54,9 +54,10 @@ def lin_reg(brain_data,
             new_test_vectors = []
             for label in uni_test_labels:
                 is_label = test_labels == label
-                new_test_data.append(np.mean(test_data[is_label, :], axis=0))
+                dat = np.mean(test_data[is_label, :], axis=0)
+                new_test_data.append(np.reshape(dat, (1, -1)))
                 vec = test_vectors[is_label, :]
-                new_test_vectors.append(vec[0, :])
+                new_test_vectors.append(np.reshape(vec[0, :], (1, -1)))
             test_data = np.concatenate(new_test_data, axis=0)
             if len(test_data.shape) == 1:
                 test_data = np.reshape(test_data, (1, -1))
