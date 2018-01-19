@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 source /home/python27/envs/p27default/bin/activate
 
 #parser.add_argument('--experiment')
