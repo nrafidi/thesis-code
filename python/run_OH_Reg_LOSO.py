@@ -166,7 +166,7 @@ if __name__ == '__main__':
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
-
+    print(args)
     # Check that parameter setting is valid
     total_valid = True
     is_valid = args.reps_to_use <= load_data.NUM_REPS[args.experiment]
