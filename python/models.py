@@ -142,6 +142,11 @@ def lin_reg_loso(brain_data,
 
     uni_l_ints = np.unique(l_ints)
 
+    if (adjX == 'mean_center' or adjX == 'zscore') and (adjY == 'mean_center' or adjY == 'zscore'):
+        fit_intercept = False
+    else:
+        fit_intercept = True
+
     i_split = 0
     for lint in uni_l_ints:
         in_test = l_ints == lint
@@ -200,11 +205,6 @@ def lin_reg_loso(brain_data,
             test_data /= std_train_Y[None, :]
         test_data_all.append(test_data)
 
-        if (adjX == 'mean_center' or adjX == 'zscore') and (adjY == 'mean_center' or adjY == 'zscore'):
-            fit_intercept=False
-        else:
-            fit_intercept=True
-
         if reg == 'ols':
             model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
         elif reg == 'ridge':
@@ -227,6 +227,25 @@ def lin_reg_loso(brain_data,
 
     scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
+    # Get weights and bias on full data
+    if adjX == 'mean_center':
+        mu = np.mean(semantic_vectors, axis=0)
+        semantic_vectors -= mu[None, :]
+    elif adjX == 'zscore':
+        mu = np.mean(semantic_vectors, axis=0)
+        std = np.std(semantic_vectors, axis=0, ddof=ddof)
+        semantic_vectors -= mu[None, :]
+        semantic_vectors /= std[None, :]
+
+    if adjY == 'mean_center':
+        mu_Y = np.mean(data, axis=0)
+        data -= mu_Y[None, :]
+    elif adjY == 'zscore':
+        mu_Y = np.mean(data, axis=0)
+        std_Y = np.std(data, axis=0, ddof=ddof)
+        data -= mu_Y[None, :]
+        data /= std_Y[None, :]
+
     if reg == 'ols':
         model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
     elif reg == 'ridge':
@@ -238,7 +257,7 @@ def lin_reg_loso(brain_data,
                                                            max_iter=100)
     else:
         raise NameError('Algorithm not implemented')
-    model.fit(semantic_vectors, brain_data)
+    model.fit(semantic_vectors, data)
     weights = model.coef_
     bias = model.intercept_
 
