@@ -159,16 +159,16 @@ if __name__ == '__main__':
     parser.add_argument('--subject')
     parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
     parser.add_argument('--word', default='all')
-    parser.add_argument('--isPerm', action='store_true')
+    parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
     parser.add_argument('--alg', default='ols', choices=VALID_ALGS)
     parser.add_argument('--adjX', default='mean_center')
     parser.add_argument('--adjY', default='mean_center')
-    parser.add_argument('--doTestAvg', action='store_true')
+    parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
-    parser.add_argument('--force', action='store_true')
+    parser.add_argument('--force', default='False', choices=['True', 'False'])
 
     args = parser.parse_args()
     print(args)
@@ -192,15 +192,15 @@ if __name__ == '__main__':
                    subject=args.subject,
                    sen_type=args.sen_type,
                    word=args.word,
-                   isPerm=args.isPerm,
+                   isPerm=str_to_bool(args.isPerm),
                    alg=args.alg,
                    adjX=args.adjX,
                    adjY=args.adjY,
-                   doTestAvg=args.doTestAvg,
+                   doTestAvg=str_to_bool(args.doTestAvg),
                    num_instances=args.num_instances,
                    reps_to_use=args.reps_to_use,
                    proc=args.proc,
                    random_state_perm=args.perm_random_state,
-                   force=args.force)
+                   force=str_to_bool(args.force))
     else:
         print('Experiment parameters not valid. Skipping job.')
