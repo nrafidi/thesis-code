@@ -28,6 +28,11 @@ source /home/python27/envs/p27default/bin/activate
 
 cd /home/nrafidi/thesis-code/python
 
+echo $doTestAvg
+echo $doTestAvg == True
+echo $doTestAvg == 'True'
+
+
 if $isPerm =='True' and $force == 'True' and $doTestAvg == 'True'
 then
     python run_OH_Reg_LOSO.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word \
