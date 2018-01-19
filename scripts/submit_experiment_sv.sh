@@ -31,7 +31,9 @@ cd /home/nrafidi/thesis-code/python
 echo $doTestAvg
 echo $doTestAvg == True
 echo $doTestAvg == 'True'
-
+echo $force
+echo $force == True
+echo $force == 'True'
 
 if $isPerm =='True' and $force == 'True' and $doTestAvg == 'True'
 then
