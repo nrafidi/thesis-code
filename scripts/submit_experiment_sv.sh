@@ -29,11 +29,21 @@ source /home/python27/envs/p27default/bin/activate
 cd /home/nrafidi/thesis-code/python
 
 echo $doTestAvg
-echo $doTestAvg == True
-echo $doTestAvg == 'True'
+if $doTestAvg==True
+then
+    echo 'meow'
+elif $doTestAvg=='True'
+then
+    echo 'woof'
+fi
 echo $force
-echo $force == True
-echo $force == 'True'
+if $force==True
+then
+    echo 'meow'
+elif $force=='True'
+then
+    echo 'woof'
+fi
 
 if $isPerm =='True' and $force == 'True' and $doTestAvg == 'True'
 then
