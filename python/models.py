@@ -58,7 +58,12 @@ def lin_reg(brain_data,
                 vec = test_vectors[is_label, :]
                 new_test_vectors.append(vec[0, :])
             test_data = np.concatenate(new_test_data, axis=0)
+            if len(test_data.shape) == 1:
+                np.reshape(test_data, (1, -1))
             test_vectors = np.concatenate(new_test_vectors, axis=0)
+            if len(test_vectors.shape) == 1:
+                np.reshape(test_vectors, (1, -1))
+
 
         if adjX == 'mean_center':
             mu_train = np.mean(train_vectors, axis=0)
