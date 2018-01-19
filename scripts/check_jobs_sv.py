@@ -100,13 +100,10 @@ if __name__ == '__main__':
                         print('Weird error')
                     else:
                         print(meow)
-            # else:
-            #     with open(out_str, 'r') as fid:
-            #         meow = fid.read()
-            #         if 'Experiment parameters not valid.' not in meow:
-            #             successful_jobs += 1
-            #             total_jobs += 1
-            #             print('{} succeeded with parameters: {}'.format(job_id, grid))
+            with open(out_str, 'r') as fid:
+                meow = fid.read()
+                if 'Skipping' in meow:
+                    total_jobs -= 1
 
         job_id += 1
 
