@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 source /home/python27/envs/p27default/bin/activate
 
 #parser.add_argument('--experiment')
@@ -31,6 +31,7 @@ cd /home/nrafidi/thesis-code/python
 echo $doTestAvg
 echo 'Dan is a poop head'
 echo 'Dan is a major poop head'
+echo 'It might have been defaulting'
 if $doTestAvg==True; then
     echo 'meow'
 elif $doTestAvg=='True'; then

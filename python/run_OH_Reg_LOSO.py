@@ -35,6 +35,11 @@ def bool_to_str(bool_var):
     else:
         return 'F'
 
+def str_to_bool(str_bool):
+    if str_bool == 'False':
+        return False
+    else:
+        return True
 
 def load_one_hot(labels):
     unique_labels = np.unique(labels)
