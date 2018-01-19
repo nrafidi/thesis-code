@@ -47,6 +47,9 @@ then
 elif "$doTestAvg"==True
 then
     echo 'ruff'
+elif "$doTestAvg"==true
+then
+    echo 'Calvin is a poop head'
 fi
 echo $force
 if $force==True
