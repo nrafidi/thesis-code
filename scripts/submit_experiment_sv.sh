@@ -29,6 +29,7 @@ source /home/python27/envs/p27default/bin/activate
 cd /home/nrafidi/thesis-code/python
 
 echo $doTestAvg
+echo 'Dan is a poop head'
 if $doTestAvg==True
 then
     echo 'meow'
