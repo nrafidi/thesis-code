@@ -124,6 +124,127 @@ def lin_reg(brain_data,
     return preds, l_ints, cv_membership, scores, test_data_all, weights, bias
 
 
+def lin_reg_loso(brain_data,
+                 semantic_vectors,
+                 l_ints,
+                 reg='ridge',
+                 adjX='zscore',
+                 adjY='zscore',
+                 doTestAvg=False,
+                 ddof=1):
+
+    n_tot = brain_data.shape[0]
+    data = np.reshape(brain_data, (n_tot, -1))
+
+    preds = []
+    test_data_all = []
+    cv_membership = []
+
+    uni_l_ints = np.unique(l_ints)
+
+    i_split = 0
+    for lint in uni_l_ints:
+        in_test = l_ints == lint
+        in_train = np.logical_not(in_test)
+        print(i_split)
+        i_split += 1
+        cv_membership.append(in_test)
+
+        train_data = data[in_train, :]
+        train_vectors = semantic_vectors[in_train, :]
+
+        test_data = data[in_test, :]
+        test_vectors = semantic_vectors[in_test, :]
+
+        if doTestAvg:
+            test_labels = l_ints[in_test]
+            uni_test_labels = np.unique(test_labels)
+            new_test_data = []
+            new_test_vectors = []
+            for label in uni_test_labels:
+                is_label = test_labels == label
+                dat = np.mean(test_data[is_label, :], axis=0)
+                new_test_data.append(np.reshape(dat, (1, -1)))
+                vec = test_vectors[is_label, :]
+                new_test_vectors.append(np.reshape(vec[0, :], (1, -1)))
+            test_data = np.concatenate(new_test_data, axis=0)
+            if len(test_data.shape) == 1:
+                test_data = np.reshape(test_data, (1, -1))
+            test_vectors = np.concatenate(new_test_vectors, axis=0)
+            if len(test_vectors.shape) == 1:
+                test_vectors = np.reshape(test_vectors, (1, -1))
+
+
+        if adjX == 'mean_center':
+            mu_train = np.mean(train_vectors, axis=0)
+            train_vectors -= mu_train[None, :]
+            test_vectors -= mu_train[None, :]
+        elif adjX == 'zscore':
+            mu_train = np.mean(train_vectors, axis=0)
+            std_train = np.std(train_vectors, axis=0, ddof=ddof)
+            train_vectors -= mu_train[None, :]
+            test_vectors -= mu_train[None, :]
+            train_vectors /= std_train[None, :]
+            test_vectors /= std_train[None, :]
+
+        if adjY == 'mean_center':
+            mu_train_Y = np.mean(train_data, axis=0)
+            train_data -= mu_train_Y[None, :]
+            test_data -= mu_train_Y[None, :]
+        elif adjY == 'zscore':
+            mu_train_Y = np.mean(train_data, axis=0)
+            std_train_Y = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train_Y[None, :]
+            test_data -= mu_train_Y[None, :]
+            train_data /= std_train_Y[None, :]
+            test_data /= std_train_Y[None, :]
+        test_data_all.append(test_data)
+
+        if (adjX == 'mean_center' or adjX == 'zscore') and (adjY == 'mean_center' or adjY == 'zscore'):
+            fit_intercept=False
+        else:
+            fit_intercept=True
+
+        if reg == 'ols':
+            model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
+        elif reg == 'ridge':
+            model = sklearn.linear_model.RidgeCV(alphas=ALPHAS_RIDGE, fit_intercept=fit_intercept)
+        elif reg == 'lasso':
+            model = sklearn.linear_model.MultiTaskLassoCV(fit_intercept=fit_intercept, max_iter=100)
+        elif reg == 'enet':
+            model = sklearn.linear_model.MultiTaskElasticNetCV(l1_ratio=ENET_RATIOS, fit_intercept=fit_intercept, max_iter=100)
+        else:
+            raise NameError('Algorithm not implemented')
+
+        model.fit(train_vectors, train_data)
+
+        preds.append(model.predict(test_vectors))
+
+    preds = np.concatenate(preds, axis=0)
+    print(preds.shape)
+    test_data_all = np.concatenate(test_data_all, axis=0)
+    print(test_data_all.shape)
+
+    scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
+
+    if reg == 'ols':
+        model = sklearn.linear_model.LinearRegression(fit_intercept=fit_intercept)
+    elif reg == 'ridge':
+        model = sklearn.linear_model.RidgeCV(alphas=ALPHAS_RIDGE, fit_intercept=fit_intercept)
+    elif reg == 'lasso':
+        model = sklearn.linear_model.MultiTaskLassoCV(fit_intercept=fit_intercept, max_iter=100)
+    elif reg == 'enet':
+        model = sklearn.linear_model.MultiTaskElasticNetCV(l1_ratio=ENET_RATIOS, fit_intercept=fit_intercept,
+                                                           max_iter=100)
+    else:
+        raise NameError('Algorithm not implemented')
+    model.fit(semantic_vectors, brain_data)
+    weights = model.coef_
+    bias = model.intercept_
+
+    return preds, l_ints, cv_membership, scores, test_data_all, weights, bias
+
+
 
 def gnb_model(data, label_membership, ddof):
     mu_full = np.array([np.mean(data[label_in, ...], axis=0) for label_in in label_membership])

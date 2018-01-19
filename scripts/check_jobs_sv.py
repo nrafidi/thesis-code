@@ -4,11 +4,9 @@ import batch_experiments_sv as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_OH/'
 SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}OH_{sub}_{sen_type}_{word}_pr{perm}_' \
-            'F{num_folds}_alg{alg}_adjX-{adjX}_adjY-{adjY}_avgTest{avgT}_ni{inst}_' \
-            'nr{rep}_rsPerm{rsP}_rsCV{rsC}'
-
-CV_RAND_STATE = 12191989
+SAVE_FILE = '{dir}OH-LOSO_{sub}_{sen_type}_{word}_pr{perm}_' \
+            'alg{alg}_adjX-{adjX}_adjY-{adjY}_avgTest{avgT}_ni{inst}_' \
+            'nr{rep}_rsPerm{rsP}'
 
 def bool_to_str(bool_var):
     if bool_var:
@@ -23,7 +21,6 @@ if __name__ == '__main__':
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
                                    batch_exp.IS_PERMS,
-                                   batch_exp.NUM_FOLDSS,
                                    batch_exp.ALGS,
                                    batch_exp.ADJS,
                                    batch_exp.ADJS,
@@ -40,14 +37,13 @@ if __name__ == '__main__':
         sen = grid[2]
         word = grid[3]
         perm = grid[4]
-        nf = grid[5]
-        alg = grid[6]
-        adjX = grid[7]
-        adjY = grid[8]
-        tst_avg = grid[9]
-        inst = grid[10]
-        rep = grid[11]
-        rs = grid[12]
+        alg = grid[5]
+        adjX = grid[6]
+        adjY = grid[7]
+        tst_avg = grid[8]
+        inst = grid[9]
+        rep = grid[10]
+        rs = grid[11]
 
         total_jobs += 1
 
@@ -59,15 +55,13 @@ if __name__ == '__main__':
                                  sen_type=sen,
                                  word=word,
                                  perm=bool_to_str(perm),
-                                 num_folds=nf,
                                  alg=alg,
                                  adjX=adjX,
                                  adjY=adjY,
                                  avgT=bool_to_str(tst_avg),
                                  inst=inst,
                                  rep=rep,
-                                 rsP=rs,
-                                 rsC=CV_RAND_STATE)
+                                 rsP=rs)
 
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1

@@ -8,7 +8,7 @@ SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['all', 'noun1', 'verb', 'noun2']
 IS_PERMS = [False]  # True
-NUM_FOLDSS = [16, 32, 80, 160]
+# NUM_FOLDSS = [16, 32, 80, 160]
 ALGS = ['ols', 'ridge']  # GNB
 ADJS = [None, 'mean_center', 'zscore']
 TST_AVGS = [True, False]
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=32GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},' \
-                'isPerm={perm},num_folds={nf},alg={alg},adjX={adjX},adjY={adjY},doTestAvg={tst_avg},' \
+                'isPerm={perm},alg={alg},adjX={adjX},adjY={adjY},doTestAvg={tst_avg},' \
                 'num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_sv.sh'
 
@@ -36,7 +36,6 @@ if __name__ == '__main__':
                                    SEN_TYPES,
                                    WORDS,
                                    IS_PERMS,
-                                   NUM_FOLDSS,
                                    ALGS,
                                    ADJS,
                                    ADJS,
@@ -51,14 +50,13 @@ if __name__ == '__main__':
         sen = grid[2]
         word = grid[3]
         perm = grid[4]
-        nf = grid[5]
-        alg = grid[6]
-        adjX = grid[7]
-        adjY = grid[8]
-        tst_avg = grid[9]
-        inst = grid[10]
-        rep = grid[11]
-        rs = grid[12]
+        alg = grid[5]
+        adjX = grid[6]
+        adjY = grid[7]
+        tst_avg = grid[8]
+        inst = grid[9]
+        rep = grid[10]
+        rs = grid[11]
 
 
         job_str = JOB_NAME.format(exp=exp,
@@ -79,7 +77,6 @@ if __name__ == '__main__':
                                     sen=sen,
                                     word=word,
                                     perm=perm,
-                                    nf=nf,
                                     alg=alg,
                                     adjX=adjX,
                                     adjY=adjY,
