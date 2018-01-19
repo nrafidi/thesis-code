@@ -41,6 +41,12 @@ then
 elif $doTestAvg
 then
     echo 'moo'
+elif "$doTestAvg"=="True"
+then
+    echo 'bark'
+elif "$doTestAvg"==True
+then
+    echo 'ruff'
 fi
 echo $force
 if $force==True
