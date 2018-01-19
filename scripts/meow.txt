@@ -1,0 +1,2 @@
+34765603.cortex.ml.cmu.edu
+qsub  -q default -N oh-krns2-A-active-all-0 -l walltime=72:00:00,mem=32GB -v experiment=krns2,subject=A,sen_type=active,word=all,isPerm=False,num_folds=16,alg=ols,adjX=None,adjY=None,doTestAvg=True,num_instances=1,reps_to_use=10,perm_random_state=1,force=False -e /share/volume0/nrafidi/krns2_oh_jobFiles/oh-krns2-A-active-all-0.e -o /share/volume0/nrafidi/krns2_oh_jobFiles/oh-krns2-A-active-all-0.o submit_experiment_sv.sh

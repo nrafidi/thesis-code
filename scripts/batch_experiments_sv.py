@@ -90,9 +90,9 @@ if __name__ == '__main__':
                                     job_name=job_str,
                                     errfile=err_str,
                                     outfile=out_str)
-        # print(call_str)
+        #print(call_str)
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 40:
             time.sleep(30)

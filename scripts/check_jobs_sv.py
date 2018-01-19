@@ -97,12 +97,13 @@ if __name__ == '__main__':
                         print(out_str)
                         print(grid)
                     elif 'False' in meow:
+                        #print(meow)
                         print('Weird error')
                     else:
                         print(meow)
             with open(out_str, 'r') as fid:
                 meow = fid.read()
-                if 'Skipping' in meow:
+                if 'Skipping' in meow and 'already' not in meow:
                     total_jobs -= 1
 
         job_id += 1
