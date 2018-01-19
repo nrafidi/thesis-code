@@ -30,26 +30,20 @@ cd /home/nrafidi/thesis-code/python
 
 echo $doTestAvg
 echo 'Dan is a poop head'
-if $doTestAvg==True;
-then
+echo 'Dan is a major poop head'
+if $doTestAvg==True; then
     echo 'meow'
-elif $doTestAvg=='True';
-then
+elif $doTestAvg=='True'; then
     echo 'woof'
-elif $doTestAvg=="True";
-then
+elif $doTestAvg=="True"; then
     echo 'oink'
-elif $doTestAvg;
-then
+elif $doTestAvg; then
     echo 'moo'
-elif "$doTestAvg"=="True";
-then
+elif "$doTestAvg"=="True"; then
     echo 'bark'
-elif "$doTestAvg"==True;
-then
+elif "$doTestAvg"==True; then
     echo 'ruff'
-elif "$doTestAvg"==true;
-then
+elif "$doTestAvg"==true; then
     echo 'Calvin is a poop head'
 fi
 echo $force
