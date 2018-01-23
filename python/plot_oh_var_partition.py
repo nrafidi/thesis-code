@@ -49,7 +49,6 @@ if __name__ == '__main__':
     avgT = run_OH_Reg_LOSO.bool_to_str(args.avgT)
     alg = args.alg
     num_instances = args.num_instances
-    num_folds = args.num_folds
 
     top_dir = run_OH_Reg_LOSO.TOP_DIR.format(exp=exp)
 
