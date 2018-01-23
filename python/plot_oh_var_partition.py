@@ -5,7 +5,7 @@ matplotlib.use('TkAgg')
 import load_data_ordered as load_data
 import matplotlib.pyplot as plt
 import numpy as np
-import run_OH_Reg
+import run_OH_Reg_LOSO
 import scipy.io as sio
 from sklearn.metrics import explained_variance_score
 import os.path
@@ -32,7 +32,9 @@ if __name__ == '__main__':
     parser.add_argument('--experiment', choices=['krns2', 'PassAct2', 'PassAct3'], default='krns2')
     parser.add_argument('--sen_type', choices=['active', 'passive'], default='active')
     parser.add_argument('--word', choices=['noun1', 'verb', 'noun2'], default='noun1')
-    parser.add_argument('--adj', choices=[None, 'mean_center', 'zscore'], default=None)
+    parser.add_argument('--adjX', choices=[None, 'mean_center', 'zscore'], default=None)
+    parser.add_argument('--adjY', choices=[None, 'mean_center', 'zscore'], default=None)
+    parser.add_argument('--avgT', action='store_true')
     parser.add_argument('--alg', choices=['ols', 'ridge'], default='ols')
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--num_folds', type=int, default=16)
@@ -43,49 +45,51 @@ if __name__ == '__main__':
     num_feats_all = NUM_FEATS[exp]
     sen_type = args.sen_type
     word = args.word
-    adj = args.adj
+    adjX = args.adjX
+    adjY = args.adjY
+    avgT = run_OH_Reg_LOSO.bool_to_str(args.avgT)
     alg = args.alg
     num_instances = args.num_instances
     num_folds = args.num_folds
 
-    top_dir = run_OH_Reg.TOP_DIR.format(exp=exp)
-
+    top_dir = run_OH_Reg_LOSO.TOP_DIR.format(exp=exp)
 
     total_est_all = []
     total_true_all = []
     total_est_word = []
     total_true_word = []
     for subject in subjects:
-        save_dir = run_OH_Reg.SAVE_DIR.format(top_dir=top_dir, sub=subject)
-        fname = run_OH_Reg.SAVE_FILE.format(dir=save_dir,
-                                 sub=subject,
-                                 sen_type=sen_type,
-                                 word='all',
-                                 perm='F',
-                                 num_folds=num_folds,
-                                 alg=alg,
-                                 adj=adj,
-                                 inst=num_instances,
-                                 rep=10,
-                                 rsP=1,
-                                 rsC=run_OH_Reg.CV_RAND_STATE)
+        save_dir = run_OH_Reg_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=subject)
+        fname = run_OH_Reg_LOSO.SAVE_FILE.format(dir=save_dir,
+                                                 sub=subject,
+                                                 sen_type=sen_type,
+                                                 word='all',
+                                                 perm='F',
+                                                 alg=alg,
+                                                 adjX=adjX,
+                                                 adjY=adjY,
+                                                 avgT=avgT,
+                                                 ni=num_instances,
+                                                 rep=10,
+                                                 rsP=1)
         if os.path.isfile(fname + '.npz'):
             result = np.load(fname + '.npz')
             total_est_all.append(result['preds'])
             total_true_all.append(result['test_data_all'])
 
-        fname = run_OH_Reg.SAVE_FILE.format(dir=save_dir,
-                                            sub=subject,
-                                            sen_type=sen_type,
-                                            word=word,
-                                            perm='F',
-                                            num_folds=num_folds,
-                                            alg=alg,
-                                            adj=adj,
-                                            inst=num_instances,
-                                            rep=10,
-                                            rsP=1,
-                                            rsC=run_OH_Reg.CV_RAND_STATE)
+        fname = run_OH_Reg_LOSO.SAVE_FILE.format(dir=save_dir,
+                                                 sub=subject,
+                                                 sen_type=sen_type,
+                                                 word=word,
+                                                 perm='F',
+                                                 num_folds=num_folds,
+                                                 alg=alg,
+                                                 adjX=adjX,
+                                                 adjY=adjY,
+                                                 avgT=avgT,
+                                                 ni=num_instances,
+                                                 rep=10,
+                                                 rsP=1)
         if os.path.isfile(fname + '.npz'):
             result = np.load(fname + '.npz')
             total_est_word.append(result['preds'])
@@ -155,9 +159,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} {}\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adj, alg, num_folds, num_instances))
+    ax.set_title('{} {} {}\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_{}_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -167,9 +171,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} All\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, adj, alg, num_folds, num_instances))
+    ax.set_title('{} {} All\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, adjX, adjY, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_all_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, adj, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_all_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -179,8 +183,8 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} less {}\nAdj: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adj, alg, num_folds, num_instances))
+    ax.set_title('{} {} less {}\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_less-{}_adj{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adj, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_less-{}_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
 
     plt.show()
