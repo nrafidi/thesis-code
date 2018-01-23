@@ -56,6 +56,7 @@ if __name__ == '__main__':
     total_true_all = []
     total_est_word = []
     total_true_word = []
+    loaded_subs = 0.0
     for subject in subjects:
         save_dir = run_OH_Reg_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=subject)
         fname = run_OH_Reg_LOSO.SAVE_FILE.format(dir=save_dir,
@@ -74,6 +75,7 @@ if __name__ == '__main__':
             result = np.load(fname + '.npz')
             total_est_all.append(result['preds'])
             total_true_all.append(result['test_data_all'])
+            loaded_subs += 0.5
 
         fname = run_OH_Reg_LOSO.SAVE_FILE.format(dir=save_dir,
                                                  sub=subject,
@@ -91,7 +93,9 @@ if __name__ == '__main__':
             result = np.load(fname + '.npz')
             total_est_word.append(result['preds'])
             total_true_word.append(result['test_data_all'])
+            loaded_subs += 0.5
 
+    print('{} out of {} subjects loaded'.format(loaded_subs, len(subjects)))
     total_est_all = np.concatenate(total_est_all, axis=0)
     total_true_all = np.concatenate(total_true_all, axis=0)
     total_est_word = np.concatenate(total_est_word, axis=0)
