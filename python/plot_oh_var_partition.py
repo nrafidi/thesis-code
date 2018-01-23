@@ -67,7 +67,7 @@ if __name__ == '__main__':
                                                  adjX=adjX,
                                                  adjY=adjY,
                                                  avgT=avgT,
-                                                 ni=num_instances,
+                                                 inst=num_instances,
                                                  rep=10,
                                                  rsP=1)
         if os.path.isfile(fname + '.npz'):
@@ -80,12 +80,11 @@ if __name__ == '__main__':
                                                  sen_type=sen_type,
                                                  word=word,
                                                  perm='F',
-                                                 num_folds=num_folds,
                                                  alg=alg,
                                                  adjX=adjX,
                                                  adjY=adjY,
                                                  avgT=avgT,
-                                                 ni=num_instances,
+                                                 inst=num_instances,
                                                  rep=10,
                                                  rsP=1)
         if os.path.isfile(fname + '.npz'):
