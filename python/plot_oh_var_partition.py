@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
+    h = ax.imshow(r2_plot, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.5)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
@@ -165,7 +165,7 @@ if __name__ == '__main__':
     plt.savefig('POVE_OH_{}_{}_{}_adjX{}_adjY{}_alg{}_ni{}_avgT{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_instances, avgT), bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
+    h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.5)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     plt.savefig('POVE_OH_{}_{}_all_adjX{}_adjY{}_alg{}_ni{}_avgT{}.pdf'.format(exp, sen_type, adjX, adjY, alg, num_instances, avgT), bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
+    h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=0.5)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
