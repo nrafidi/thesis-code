@@ -37,7 +37,6 @@ if __name__ == '__main__':
     parser.add_argument('--avgT', action='store_true')
     parser.add_argument('--alg', choices=['ols', 'ridge'], default='ols')
     parser.add_argument('--num_instances', type=int, default=1)
-    parser.add_argument('--num_folds', type=int, default=16)
     args = parser.parse_args()
 
     exp = args.experiment
@@ -159,9 +158,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} {}\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances))
+    ax.set_title('{} {} {}\nAdjX: {} AdjY: {} Alg: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_{}_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_{}_adjX{}_adjY{}_alg{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_all_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -171,9 +170,9 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} All\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, adjX, adjY, alg, num_folds, num_instances))
+    ax.set_title('{} {} All\nAdjX: {} AdjY: {} Alg: {} NI: {}'.format(exp, sen_type, adjX, adjY, alg, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_all_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_all_adjX{}_adjY{}_alg{}_ni{}.pdf'.format(exp, sen_type, adjX, adjY, alg, num_instances), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(r2_word_adj, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
@@ -183,8 +182,8 @@ if __name__ == '__main__':
     ax.set_xticks(range(0, num_time, 250))
     ax.set_xticklabels(time[::250])
     ax.set_xlabel('Time')
-    ax.set_title('{} {} less {}\nAdjX: {} AdjY: {} Alg: {} NF: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances))
+    ax.set_title('{} {} less {}\nAdjX: {} AdjY: {} Alg: {} NI: {}'.format(exp, sen_type, word, adjX, adjY, alg, num_instances))
     plt.colorbar(h)
-    plt.savefig('POVE_OH_{}_{}_less-{}_adjX{}_adjY{}_alg{}_nf{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_folds, num_instances), bbox_inches='tight')
+    plt.savefig('POVE_OH_{}_{}_less-{}_adjX{}_adjY{}_alg{}_ni{}.pdf'.format(exp, sen_type, word, adjX, adjY, alg, num_instances), bbox_inches='tight')
 
     plt.show()
