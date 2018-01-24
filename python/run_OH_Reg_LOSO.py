@@ -128,7 +128,9 @@ def run_sv_exp(experiment,
         semantic_vectors.append(oh)
 
     semantic_vectors = np.concatenate(semantic_vectors, axis=1)
-    print(semantic_vectors)
+    print(np.sum(semantic_vectors, axis=1))
+    print(semantic_vectors.shape)
+    print(np.any(np.isnan(semantic_vectors)))
 
     if isPerm:
         random.seed(random_state_perm)
