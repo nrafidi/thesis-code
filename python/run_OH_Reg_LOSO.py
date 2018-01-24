@@ -41,8 +41,8 @@ def str_to_bool(str_bool):
     else:
         return True
 
-def load_one_hot(labels):
-    unique_labels = np.unique(labels)
+def load_one_hot(labels, unique_labels):
+    # unique_labels = np.unique(labels)
     num_labels = unique_labels.size
     one_hot_dict = {}
     for i_l, uni_l in enumerate(unique_labels):
@@ -118,11 +118,12 @@ def run_sv_exp(experiment,
     print(l_ints)
 
     semantic_vectors = []
+    uni_labels = np.unique(labels)
     for col in range(labels.shape[-1]):
         if word != 'all':
             if col == WORD_COLS[experiment][word]:
                 continue
-        oh = load_one_hot(labels[:, col])
+        oh = load_one_hot(labels[:, col], uni_labels)
         print(oh.shape)
         semantic_vectors.append(oh)
 
