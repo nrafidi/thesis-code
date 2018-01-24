@@ -188,6 +188,11 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('instances wrong')
+    is_valid = not (args.num_instances < 5 and args.alg == 'ols')
+    total_valid = total_valid and is_valid
+    if not is_valid:
+        print('Not enough instances for ols to work.')
+
     if total_valid:
         run_sv_exp(experiment=args.experiment,
                    subject=args.subject,
