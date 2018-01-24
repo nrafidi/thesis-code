@@ -96,7 +96,7 @@ if __name__ == '__main__':
                         #print(meow)
                         print('Weird error')
                     else:
-                        print(meow)
+                        print('Job {} Failed'.format(job_str))
             with open(out_str, 'r') as fid:
                 meow = fid.read()
                 if 'Skipping' in meow and 'already' not in meow:
