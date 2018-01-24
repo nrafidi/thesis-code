@@ -31,6 +31,7 @@ if __name__ == '__main__':
     job_id = 0
     successful_jobs = 0
     total_jobs = 0
+    successful = False
     for grid in param_grid:
         exp = grid[0]
         sub = grid[1]
@@ -64,6 +65,7 @@ if __name__ == '__main__':
                                  rsP=rs)
 
         if os.path.isfile(fname + '.npz'):
+            successful = True
             successful_jobs += 1
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
@@ -98,8 +100,10 @@ if __name__ == '__main__':
             with open(out_str, 'r') as fid:
                 meow = fid.read()
                 if 'Skipping' in meow and 'already' not in meow:
+                    if successful:
+                        successful_jobs -= 1
                     total_jobs -= 1
-
+        successful = False
         job_id += 1
 
     print('{}/{} jobs succeeded'.format(successful_jobs, total_jobs))
