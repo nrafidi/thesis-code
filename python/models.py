@@ -572,6 +572,104 @@ def nb_tgm_coef(data,
     return mu_win, std_win, mu_diff_win
 
 
+def lr_tgm_loso(data,
+                labels,
+                win_starts,
+                win_len,
+                penalty='l2',
+                adj='mean_center',
+                doTimeAvg=False,
+                doTestAvg=False,
+                ddof=1):
+    labels = np.array(labels)
+    n_tot = data.shape[0]
+    n_time = data.shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    uni_l_ints = np.unique(l_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    cv_membership = []
+    i_split = 0
+    for lint in uni_l_ints:
+        in_test = l_ints == lint
+        in_train = np.logical_not(in_test)
+        print(i_split)
+        i_split += 1
+        cv_membership.append(in_test)
+
+        train_data = data[in_train, :]
+        train_labels = l_ints[in_train]
+
+        test_data = data[in_test, :]
+        test_labels = l_ints[in_test]
+
+        if doTestAvg:
+            uni_test_labels = np.unique(test_labels)
+            new_test_data = []
+            new_test_vectors = []
+            for label in uni_test_labels:
+                is_label = test_labels == label
+                dat = np.mean(test_data[is_label, :], axis=0)
+                new_test_data.append(np.reshape(dat, (1, -1)))
+                vec = test_vectors[is_label, :]
+                new_test_vectors.append(np.reshape(vec[0, :], (1, -1)))
+            test_data = np.concatenate(new_test_data, axis=0)
+            if len(test_data.shape) == 1:
+                test_data = np.reshape(test_data, (1, -1))
+            test_vectors = np.concatenate(new_test_vectors, axis=0)
+            if len(test_vectors.shape) == 1:
+                test_vectors = np.reshape(test_vectors, (1, -1))
+
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_data, axis=0)
+            train_data -= mu_train[None, :]
+            test_data -= mu_train[None, :]
+        elif adj == 'zscore':
+            mu_train = np.mean(train_data, axis=0)
+            std_train = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train[None, :]
+            test_data -= mu_train[None, :]
+            train_data /= std_train[None, :]
+            test_data /= std_train[None, :]
+
+        model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
+                                                          penalty=penalty,
+                                                          solver='saga',
+                                                          max_iter=500,
+                                                          multi_class='multinomial')
+
+        model.fit(train_data, train_labels)
+
+        acc = model.score(test_data)
+
+    # Get weights and bias on full data
+    if adj == 'mean_center':
+        mu = np.mean(data, axis=0)
+        data -= mu[None, :]
+    elif adj == 'zscore':
+        mu = np.mean(data, axis=0)
+        std = np.std(data, axis=0, ddof=ddof)
+        data -= mu[None, :]
+        data /= std[None, :]
+
+    model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
+                                                      penalty=penalty,
+                                                      solver='saga',
+                                                      max_iter=500,
+                                                      multi_class='multinomial')
+    weights = model.coef_
+    bias = model.intercept_
+
+    return preds, l_ints, cv_membership, scores, test_data_all, weights, bias
+
+
 def lr_tgm(data,
            labels,
            kf,
