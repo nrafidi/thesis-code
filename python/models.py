@@ -654,6 +654,8 @@ def lr_tgm_loso(data,
                     test_data = np.concatenate(new_test_data, axis=0)
                     if len(test_data.shape) == 1:
                         test_data = np.reshape(test_data, (1, -1))
+                else:
+                    uni_test_labels = test_labels
 
 
                 if adj == 'mean_center':
@@ -665,7 +667,7 @@ def lr_tgm_loso(data,
 
                 print(test_data.shape)
                 print(test_labels.shape)
-                tgm_acc[i_split, wi, wj] = model.score(test_data, test_labels)
+                tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
 
     return l_ints, cv_membership, tgm_acc
 
