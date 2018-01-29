@@ -77,10 +77,10 @@ if __name__ == '__main__':
                                                                                                rep=10,
                                                                                                rsP=1) + '.npz')
                                                 print(result.keys())
-                                                tgm = np.mean(result['tgm'], axis=0)
-                                                np.savez(agg, tgm=tgm)
+                                                tgm = np.mean(result['tgm_acc'], axis=0)
                                                 tgm_by_sub.append(tgm[None, ...])
                                             tgm_by_sub = np.mean(np.concatenate(tgm_by_sub, axis=0), axis=0)
+                                            np.savez(agg, tgm=tgm_by_sub)
                                             tgm_by_word.append(tgm_by_sub[None, ...])
                                     tgm_by_word = np.concatenate(tgm_by_word)
                                     tgm_by_avgTst.append(tgm_by_word[None, ...])
