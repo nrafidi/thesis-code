@@ -101,7 +101,7 @@ if __name__ == '__main__':
                                     word=word,
                                     win_len=win_len,
                                     overlap=overlap,
-                                    isPerm=isPerm,
+                                    perm=isPerm,
                                     adj=adj,
                                     alg=alg,
                                     tm_avg=tm_avg,
