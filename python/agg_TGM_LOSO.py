@@ -1,5 +1,8 @@
 import argparse
 import load_data_ordered as load_data
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 import numpy as np
 import os.path
 import run_TGM_LOSO
@@ -99,3 +102,14 @@ if __name__ == '__main__':
         tgm_by_win = np.concatenate(tgm_by_win)
         print(tgm_by_win.shape)
         np.savez(total_agg, tgm=tgm_by_win)
+    else:
+        result = np.load(total_agg)
+        tgm_by_win = result['tgm']
+
+    tgm = np.squeeze(tgm_by_win)
+    fig, ax = plt.subplots()
+    ax.plot(np.diag(tgm[0, :]), color='r')
+    ax.plot(np.diag(tgm[1, :]), color='b')
+    ax.plot(np.diag(tgm[2, :]), color='g')
+
+    plt.show()
