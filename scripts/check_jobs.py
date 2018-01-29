@@ -89,7 +89,7 @@ if __name__ == '__main__':
             # print('Job {} Did Not Run'.format(job_str))
             meow = 1
         else:
-            if os.stat(err_str).st_size != 0 and not was_success:
+            if os.stat(err_str).st_size != 0 and (not was_success):
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
