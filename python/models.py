@@ -604,15 +604,15 @@ def lr_tgm_loso(data,
         i_split += 1
         cv_membership.append(in_test)
 
-        train_data = data[in_train, ...]
+        train_data_full = data[in_train, ...]
         train_labels = l_ints[in_train]
 
-        test_data = data[in_test, ...]
+        test_data_full = data[in_test, ...]
         test_labels = l_ints[in_test]
 
         for wi in xrange(n_w):
             train_time = test_windows[wi]
-            train_data = train_data[:, :, train_time]
+            train_data = train_data_full[:, :, train_time]
             if doTimeAvg:
                 train_data = np.mean(train_data, axis=2)
             else:
@@ -628,6 +628,7 @@ def lr_tgm_loso(data,
                 train_data /= std_train[None, :]
 
             model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
+                                                              cv=2,
                                                               penalty=penalty,
                                                               solver='saga',
                                                               max_iter=500,
@@ -637,9 +638,7 @@ def lr_tgm_loso(data,
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
-                print(test_time)
-                print(test_data.shape)
-                test_data = test_data[:, :, test_time]
+                test_data = test_data_full[:, :, test_time]
                 if doTimeAvg:
                     test_data = np.mean(test_data, axis=2)
                 else:
