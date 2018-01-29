@@ -76,6 +76,7 @@ if __name__ == '__main__':
                                                                                                inst=inst,
                                                                                                rep=10,
                                                                                                rsP=1) + '.npz')
+                                                print(result)
                                                 tgm = np.mean(result['tgm'], axis=0)
                                                 np.savez(agg, tgm=tgm)
                                                 tgm_by_sub.append(tgm[None, ...])
