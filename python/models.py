@@ -576,6 +576,7 @@ def lr_tgm_loso(data,
                 labels,
                 win_starts,
                 win_len,
+                sen_ints,
                 penalty='l2',
                 adj='mean_center',
                 doTimeAvg=False,
@@ -589,16 +590,16 @@ def lr_tgm_loso(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
-    uni_l_ints = np.unique(l_ints)
+    uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
 
     cv_membership = []
-    tgm_acc = np.empty((len(uni_l_ints), n_w, n_w))
+    tgm_acc = np.empty((len(uni_sen_ints), n_w, n_w))
     i_split = 0
-    for lint in uni_l_ints:
-        in_test = l_ints == lint
+    for lint in uni_sen_ints:
+        in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
         print(i_split)
         i_split += 1

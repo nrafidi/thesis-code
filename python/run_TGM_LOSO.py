@@ -109,6 +109,15 @@ def run_tgm_exp(experiment,
 
     win_starts = range(0, total_win - win_len, overlap)
 
+    sen_set = np.unique(labels, axis=0).tolist()
+    num_labels = labels.shape[0]
+    sen_ints = np.empty((num_labels,))
+    for i_l in range(num_labels):
+        for j_l, l in enumerate(sen_set):
+            if np.all(l == labels[i_l, :]):
+                sen_ints[i_l] = j_l
+                break
+
     labels = labels[:, WORD_COLS[experiment][word]]
 
     if isPerm:
@@ -119,6 +128,7 @@ def run_tgm_exp(experiment,
                                                         labels,
                                                         win_starts,
                                                         win_len,
+                                                        sen_ints,
                                                         penalty=alg[3:],
                                                         adj=adj,
                                                         doTimeAvg=doTimeAvg,
