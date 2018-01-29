@@ -68,14 +68,14 @@ if __name__ == '__main__':
                                                                                                word=word,
                                                                                                win_len=win_len,
                                                                                                ov=overlap,
-                                                                                               parm='F',
+                                                                                               perm='F',
                                                                                                alg=alg,
                                                                                                adj=adj,
                                                                                                avgTm=avgTm,
                                                                                                avgTst=avgTst,
                                                                                                inst=inst,
                                                                                                rep=10,
-                                                                                               perm=1))
+                                                                                               rsP=1))
                                                 tgm = np.mean(result['tgm'], axis=0)
                                                 np.savez(agg, tgm=tgm)
                                                 tgm_by_sub.append(tgm[None, ...])
