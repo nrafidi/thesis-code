@@ -59,7 +59,7 @@ def run_tgm_exp(experiment,
                 proc=load_data.DEFAULT_PROC,
                 random_state_perm=1,
                 force=False):
-    # warnings.filterwarnings('error')
+    warnings.filterwarnings(action='ignore')
     # Save Directory
     top_dir = TOP_DIR.format(exp=experiment)
     if not os.path.exists(top_dir):
