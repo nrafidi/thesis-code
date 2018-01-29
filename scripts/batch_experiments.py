@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
-                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg}' \
+                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},' \
                 'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
