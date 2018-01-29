@@ -81,16 +81,20 @@ if __name__ == '__main__':
 
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
+            was_success = True
+        else:
+            was_success = False
 
         if not os.path.isfile(err_str) or not os.path.isfile(out_str):
             # print('Job {} Did Not Run'.format(job_str))
             meow = 1
         else:
-            if os.stat(err_str).st_size != 0:
-                print('Job {} Failed'.format(job_str))
+            if os.stat(err_str).st_size != 0 and not was_success:
                 with open(err_str, 'r') as fid:
-                    print fid.read()
-                print(grid)
+                    err_file = fid.read()
+                    print('Job {} Failed'.format(job_str))
+                    print(err_file)
+                    print(grid)
             # else:
             #     with open(out_str, 'r') as fid:
             #         meow = fid.read()
