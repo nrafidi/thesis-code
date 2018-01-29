@@ -637,6 +637,8 @@ def lr_tgm_loso(data,
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
+                print(test_time)
+                print(test_data.shape)
                 test_data = test_data[:, :, test_time]
                 if doTimeAvg:
                     test_data = np.mean(test_data, axis=2)
