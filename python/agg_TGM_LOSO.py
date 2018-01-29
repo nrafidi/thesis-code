@@ -28,9 +28,7 @@ if __name__ == '__main__':
     insts = [1]#, 2, 5, 10]
     bools = ['T']#, 'F']
 
-    if os.path.isfile(total_agg):
-        tgm_by_word = np.load(total_agg)
-    else:
+    if not os.path.isfile(total_agg):
         tgm_by_win = []
         for win_len in time_lens:
             tgm_by_ov = []
@@ -63,7 +61,7 @@ if __name__ == '__main__':
                                         else:
                                             tgm_by_sub = []
                                             for sub in load_data.VALID_SUBS[exp]:
-                                                save_dir = run_TGM_LOSO.SAVE_DIR.format(sub=sub)
+                                                save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
                                                 result = np.load(run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
                                                                                                sub=sub,
                                                                                                sen_type=sen_type,
@@ -98,5 +96,5 @@ if __name__ == '__main__':
             tgm_by_ov = np.concatenate(tgm_by_ov)
             tgm_by_win.append(tgm_by_win[None, ...])
         tgm_by_win = np.concatenate(tgm_by_win)
-
+        print(tgm_by_win.shape)
         np.savez(total_agg, tgm=tgm_by_win)
