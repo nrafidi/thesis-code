@@ -49,8 +49,9 @@ if __name__ == '__main__':
                                     for word in words:
                                         agg = AGG_FILE.format(dir=top_dir,
                                                               sen_type=sen_type,
-                                                              word=word,win_len=win_len,
-                                                              overlap=overlap,
+                                                              word=word,
+                                                              win_len=win_len,
+                                                              ov=overlap,
                                                               alg=alg,
                                                               adj=adj,
                                                               inst=inst,
