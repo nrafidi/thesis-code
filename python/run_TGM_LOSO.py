@@ -140,7 +140,7 @@ if __name__ == '__main__':
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
-    parser.add_argument('--alg', default='ols', choices=VALID_ALGS)
+    parser.add_argument('--alg', default='lr-l2', choices=VALID_ALGS)
     parser.add_argument('--adj', default='mean_center')
     parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
