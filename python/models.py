@@ -595,6 +595,7 @@ def lr_tgm_loso(data,
     n_w = len(test_windows)
 
     cv_membership = []
+    tgm_acc = np.empty((len(uni_l_ints), n_w, n_w))
     i_split = 0
     for lint in uni_l_ints:
         in_test = l_ints == lint
@@ -603,71 +604,68 @@ def lr_tgm_loso(data,
         i_split += 1
         cv_membership.append(in_test)
 
-        train_data = data[in_train, :]
+        train_data = data[in_train, ...]
         train_labels = l_ints[in_train]
 
-        test_data = data[in_test, :]
+        test_data = data[in_test, ...]
         test_labels = l_ints[in_test]
 
-        if doTestAvg:
-            uni_test_labels = np.unique(test_labels)
-            new_test_data = []
-            new_test_vectors = []
-            for label in uni_test_labels:
-                is_label = test_labels == label
-                dat = np.mean(test_data[is_label, :], axis=0)
-                new_test_data.append(np.reshape(dat, (1, -1)))
-                vec = test_vectors[is_label, :]
-                new_test_vectors.append(np.reshape(vec[0, :], (1, -1)))
-            test_data = np.concatenate(new_test_data, axis=0)
-            if len(test_data.shape) == 1:
-                test_data = np.reshape(test_data, (1, -1))
-            test_vectors = np.concatenate(new_test_vectors, axis=0)
-            if len(test_vectors.shape) == 1:
-                test_vectors = np.reshape(test_vectors, (1, -1))
+        for wi in xrange(n_w):
+            train_time = test_windows[wi]
+            train_data = train_data[:, :, train_time]
+            if doTimeAvg:
+                train_data = np.mean(train_data, axis=2)
+            else:
+                train_data = np.reshape(train_data, (np.sum(in_train), -1))
+
+            if adj == 'mean_center':
+                mu_train = np.mean(train_data, axis=0)
+                train_data -= mu_train[None, :]
+            elif adj == 'zscore':
+                mu_train = np.mean(train_data, axis=0)
+                std_train = np.std(train_data, axis=0, ddof=ddof)
+                train_data -= mu_train[None, :]
+                train_data /= std_train[None, :]
+
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
+                                                              penalty=penalty,
+                                                              solver='saga',
+                                                              max_iter=500,
+                                                              multi_class='multinomial')
+
+            model.fit(train_data, train_labels)
+
+            for wj in xrange(n_w):
+                test_time = test_windows[wj]
+                test_data = test_data[:, :, test_time]
+                if doTimeAvg:
+                    test_data = np.mean(test_data, axis=2)
+                else:
+                    test_data = np.reshape(test_data, (np.sum(in_test), -1))
+
+                if doTestAvg:
+                    uni_test_labels = np.unique(test_labels)
+                    new_test_data = []
+                    for label in uni_test_labels:
+                        is_label = test_labels == label
+                        dat = np.mean(test_data[is_label, :], axis=0)
+                        new_test_data.append(np.reshape(dat, (1, -1)))
+                    test_data = np.concatenate(new_test_data, axis=0)
+                    if len(test_data.shape) == 1:
+                        test_data = np.reshape(test_data, (1, -1))
 
 
-        if adj == 'mean_center':
-            mu_train = np.mean(train_data, axis=0)
-            train_data -= mu_train[None, :]
-            test_data -= mu_train[None, :]
-        elif adj == 'zscore':
-            mu_train = np.mean(train_data, axis=0)
-            std_train = np.std(train_data, axis=0, ddof=ddof)
-            train_data -= mu_train[None, :]
-            test_data -= mu_train[None, :]
-            train_data /= std_train[None, :]
-            test_data /= std_train[None, :]
+                if adj == 'mean_center':
+                    test_data -= mu_train[None, :]
+                elif adj == 'zscore':
+                    test_data -= mu_train[None, :]
+                    test_data /= std_train[None, :]
 
-        model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
-                                                          penalty=penalty,
-                                                          solver='saga',
-                                                          max_iter=500,
-                                                          multi_class='multinomial')
 
-        model.fit(train_data, train_labels)
 
-        acc = model.score(test_data)
+                tgm_acc[i_split, wi, wj] = model.score(test_data, test_labels)
 
-    # Get weights and bias on full data
-    if adj == 'mean_center':
-        mu = np.mean(data, axis=0)
-        data -= mu[None, :]
-    elif adj == 'zscore':
-        mu = np.mean(data, axis=0)
-        std = np.std(data, axis=0, ddof=ddof)
-        data -= mu[None, :]
-        data /= std[None, :]
-
-    model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
-                                                      penalty=penalty,
-                                                      solver='saga',
-                                                      max_iter=500,
-                                                      multi_class='multinomial')
-    weights = model.coef_
-    bias = model.intercept_
-
-    return preds, l_ints, cv_membership, scores, test_data_all, weights, bias
+    return l_ints, cv_membership, tgm_acc
 
 
 def lr_tgm(data,

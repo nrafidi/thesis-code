@@ -3,40 +3,36 @@ import os.path
 from subprocess import call, check_output
 import time
 
-#parser.add_argument('--experiment')
-#parser.add_argument('--subject')
-#parser.add_argument('--SEN_TYPE')
-#parser.add_argument('--word')
-#parser.add_argument('--win_len', type=int)
-#parser.add_argument('--overlap', type=int)
-#parser.add_argument('--mode')
-#parser.add_argument('--isPDTW', type=bool, default=False)
-#parser.add_argument('--isPerm', type=bool, default=False)
-#parser.add_argument('--num_folds', type=int, default=2)
-#parser.add_argument('--alg', default='LR')
-#parser.add_argument('--doZscore', type=bool, default=False)
-#parser.add_argument('--doAvg', type=bool, default=False)
-#parser.add_argument('--num_instances', type=int, default=2)
-#parser.add_argument('--reps_to_use', type=int, default=10)
-#parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
-#parser.add_argument('--random_state', type=int, default=1)
+# parser.add_argument('--experiment')
+# parser.add_argument('--subject')
+# parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
+# parser.add_argument('--word', choices=['noun1', 'noun2', 'verb'])
+# parser.add_argument('--win_len', type=int)
+# parser.add_argument('--overlap', type=int)
+# parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
+# parser.add_argument('--alg', default='ols', choices=VALID_ALGS)
+# parser.add_argument('--adj', default='mean_center')
+# parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
+# parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
+# parser.add_argument('--num_instances', type=int, default=1)
+# parser.add_argument('--reps_to_use', type=int, default=10)
+# parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
+# parser.add_argument('--perm_random_state', type=int, default=1)
+# parser.add_argument('--force', default='False', choices=['True', 'False'])
 
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['I', 'D', 'A', 'B', 'C', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['passive', 'active'] #, 'active']
-WORDS = ['firstNoun', 'secondNoun', 'verb']
-WIN_LENS = [-1] #-1, 3, 6, 12, 25] #, 2000]
-OVERLAPS = [3] #12, 25, 50, 100, 150, 200, 250, 300, 350]
-MODES = ['uni']  # pred
-IS_PDTWS = [False]  # True
-IS_PERMS = [True]  # True
-NUM_FOLDSS = [32]
-ALGS = ['GNB']  # GNB
-DO_ZSCORES = [False]  # True
-DO_AVGS = [False]  # True
-NUM_INSTANCESS = [2]  # 5 10
+WORDS = ['noun1', 'noun2', 'verb']
+WIN_LENS = [-1, 12, 25, 50, 100]
+OVERLAPS = [12, 25, 50, 100]
+IS_PERMS = [False]  # True
+ALGS = ['lr-l2', 'lr-l1']  # GNB
+ADJS = [None, 'mean_center', 'zscore']
+DO_AVGS = [True, False]  # True
+NUM_INSTANCESS = [1, 2, 5, 10]
 REPS_TO_USES = [10]  # 10
-RANDOM_STATES = range(100, 501)
+RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -50,8 +46,8 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
-                'mode={mode},isPDTW={pdtw},isPerm={perm},num_folds={nf},alg={alg},doZscore={z},' \
-                'doAvg={avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False,doFeatSelect=True ' \
+                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg}' \
+                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -60,22 +56,35 @@ if __name__ == '__main__':
                                    WORDS,
                                    WIN_LENS,
                                    OVERLAPS,
-                                   MODES,
-                                   IS_PDTWS,
                                    IS_PERMS,
-                                   NUM_FOLDSS,
                                    ALGS,
-                                   DO_ZSCORES,
+                                   ADJS,
+                                   DO_AVGS,
                                    DO_AVGS,
                                    NUM_INSTANCESS,
                                    REPS_TO_USES,
                                    RANDOM_STATES)
     job_id = 0
     for grid in param_grid:
-        job_str = JOB_NAME.format(exp=grid[0],
-                                  sub=grid[1],
-                                  sen=grid[2],
-                                  word=grid[3],
+        exp = grid[0]
+        sub = grid[1]
+        sen = grid[2]
+        word = grid[3]
+        win_len = grid[4]
+        overlap = grid[5]
+        isPerm = grid[6]
+        alg = grid[7]
+        adj = grid[8]
+        tm_avg = grid[9]
+        tst_avg = grid[10]
+        ni = grid[11]
+        reps = grid[12]
+        rs = grid[13]
+
+        job_str = JOB_NAME.format(exp=exp,
+                                  sub=sub,
+                                  sen=sen,
+                                  word=word,
                                   id=job_id)
 
         dir_str = JOB_DIR.format(exp=grid[0])
@@ -85,23 +94,21 @@ if __name__ == '__main__':
         err_str = ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = OUT_FILE.format(dir=dir_str, job_name=job_str)
 
-        call_str = qsub_call.format(exp=grid[0],
-                                    sub=grid[1],
-                                    sen=grid[2],
-                                    word=grid[3],
-                                    job_name=job_str,
-                                    win_len=grid[4],
-                                    overlap=grid[5],
-                                    mode=grid[6],
-                                    pdtw=grid[7],
-                                    perm=grid[8],
-                                    nf=grid[9],
-                                    alg=grid[10],
-                                    z=grid[11],
-                                    avg=grid[12],
-                                    inst=grid[13],
-                                    rep=grid[14],
-                                    rs=grid[15],
+        call_str = qsub_call.format(job_name=job_str,
+                                    exp=exp,
+                                    sub=sub,
+                                    sen=sen,
+                                    word=word,
+                                    win_len=win_len,
+                                    overlap=overlap,
+                                    isPerm=isPerm,
+                                    adj=adj,
+                                    alg=alg,
+                                    tm_avg=tm_avg,
+                                    tst_avg=tst_avg,
+                                    inst=ni,
+                                    rep=reps,
+                                    rs=rs,
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)
