@@ -89,7 +89,7 @@ if __name__ == '__main__':
                             tgm_by_avgTm = np.concatenate(tgm_by_avgTm)
                             tgm_by_inst.append(tgm_by_avgTm[None, ...])
                         tgm_by_inst = np.concatenate(tgm_by_inst)
-                        tgm_by_adj.append(tgm_by_adj[None, ...])
+                        tgm_by_adj.append(tgm_by_inst[None, ...])
                     tgm_by_adj = np.concatenate(tgm_by_adj)
                     tgm_by_alg.append(tgm_by_alg[None, ...])
                 tgm_by_alg = np.concatenate(tgm_by_alg)
