@@ -18,9 +18,6 @@ def bool_to_str(bool_var):
 
 if __name__ == '__main__':
     param_grid = itertools.product(batch_exp.EXPERIMENTS,
-                                   batch_exp.SUBJECTS,
-                                   batch_exp.SEN_TYPES,
-                                   batch_exp.WORDS,
                                    batch_exp.WIN_LENS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
@@ -30,24 +27,27 @@ if __name__ == '__main__':
                                    batch_exp.DO_AVGS,
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.REPS_TO_USES,
-                                   batch_exp.RANDOM_STATES)
+                                   batch_exp.RANDOM_STATES,
+                                   batch_exp.SEN_TYPES,
+                                   batch_exp.WORDS,
+                                   batch_exp.SUBJECTS,)
     job_id = 0
     successful_jobs = 0
     for grid in param_grid:
         exp = grid[0]
-        sub = grid[1]
-        sen = grid[2]
-        word = grid[3]
-        win_len = grid[4]
-        overlap = grid[5]
-        isPerm = grid[6]
-        alg = grid[7]
-        adj = grid[8]
-        tm_avg = grid[9]
-        tst_avg = grid[10]
-        ni = grid[11]
-        reps = grid[12]
-        rs = grid[13]
+        win_len = grid[1]
+        overlap = grid[2]
+        isPerm = grid[3]
+        alg = grid[4]
+        adj = grid[5]
+        tm_avg = grid[6]
+        tst_avg = grid[7]
+        ni = grid[8]
+        reps = grid[9]
+        rs = grid[10]
+        sen = grid[11]
+        word = grid[12]
+        sub = grid[13]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,

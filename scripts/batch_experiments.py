@@ -51,9 +51,6 @@ if __name__ == '__main__':
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
-                                   SUBJECTS,
-                                   SEN_TYPES,
-                                   WORDS,
                                    WIN_LENS,
                                    OVERLAPS,
                                    IS_PERMS,
@@ -63,23 +60,26 @@ if __name__ == '__main__':
                                    DO_AVGS,
                                    NUM_INSTANCESS,
                                    REPS_TO_USES,
-                                   RANDOM_STATES)
+                                   RANDOM_STATES,
+                                   SEN_TYPES,
+                                   WORDS,
+                                   SUBJECTS)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
-        sub = grid[1]
-        sen = grid[2]
-        word = grid[3]
-        win_len = grid[4]
-        overlap = grid[5]
-        isPerm = grid[6]
-        alg = grid[7]
-        adj = grid[8]
-        tm_avg = grid[9]
-        tst_avg = grid[10]
-        ni = grid[11]
-        reps = grid[12]
-        rs = grid[13]
+        win_len = grid[1]
+        overlap = grid[2]
+        isPerm = grid[3]
+        alg = grid[4]
+        adj = grid[5]
+        tm_avg = grid[6]
+        tst_avg = grid[7]
+        ni = grid[8]
+        reps = grid[9]
+        rs = grid[10]
+        sen = grid[11]
+        word = grid[12]
+        sub = grid[13]
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
