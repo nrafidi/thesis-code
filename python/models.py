@@ -605,10 +605,10 @@ def lr_tgm_loso(data,
         cv_membership.append(in_test)
 
         train_data_full = data[in_train, ...]
-        train_labels = l_ints[in_train]
+        train_labels = np.ravel(l_ints[in_train])
 
         test_data_full = data[in_test, ...]
-        test_labels = l_ints[in_test]
+        test_labels = np.ravel(l_ints[in_test])
 
         for wi in xrange(n_w):
             train_time = test_windows[wi]
@@ -663,7 +663,8 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-
+                print(test_data.shape)
+                print(test_labels.shape)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, test_labels)
 
     return l_ints, cv_membership, tgm_acc
