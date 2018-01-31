@@ -696,7 +696,7 @@ def lr_tgm_coef(data,
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
 
-    coef = np.empty((n_w,))
+    coef = np.empty((n_w,), dtype=object)
     i_split = 0
     train_data_full = data
     train_labels = np.ravel(l_ints)
