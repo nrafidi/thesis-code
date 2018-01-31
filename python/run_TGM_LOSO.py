@@ -10,7 +10,7 @@ TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 SAVE_DIR = '{top_dir}/{sub}/'
 SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'nr{rep}_rsPerm{rsP}'
+            'nr{rep}_rsPerm{rsP}_{mode}'
 
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive']
@@ -58,7 +58,8 @@ def run_tgm_exp(experiment,
                 reps_to_use=10,
                 proc=load_data.DEFAULT_PROC,
                 random_state_perm=1,
-                force=False):
+                force=False,
+                mode='acc'):
     warnings.filterwarnings(action='ignore')
     # Save Directory
     top_dir = TOP_DIR.format(exp=experiment)
@@ -81,7 +82,8 @@ def run_tgm_exp(experiment,
                              avgTst=bool_to_str(doTestAvg),
                              inst=num_instances,
                              rep=reps_to_use,
-                             rsP=random_state_perm)
+                             rsP=random_state_perm,
+                             mode=mode)
 
 
     if os.path.isfile(fname + '.npz') and not force:
@@ -107,7 +109,7 @@ def run_tgm_exp(experiment,
     if win_len < 0:
         win_len = total_win - overlap
 
-    win_starts = range(total_win - 500, total_win - win_len, overlap)
+    win_starts = range(0, total_win - win_len, overlap)
 
     sen_set = np.unique(labels, axis=0).tolist()
     num_labels = labels.shape[0]
@@ -124,21 +126,39 @@ def run_tgm_exp(experiment,
         random.seed(random_state_perm)
         random.shuffle(labels)
 
-    l_ints, cv_membership, tgm_acc = models.lr_tgm_loso(data,
-                                                        labels,
-                                                        win_starts,
-                                                        win_len,
-                                                        sen_ints,
-                                                        penalty=alg[3:],
-                                                        adj=adj,
-                                                        doTimeAvg=doTimeAvg,
-                                                        doTestAvg=doTestAvg)
-    np.savez_compressed(fname,
-                        l_ints=l_ints,
-                        cv_membership=cv_membership,
-                        tgm_acc=tgm_acc,
-                        time=time,
-                        proc=proc)
+    if mode == 'acc':
+        l_ints, cv_membership, tgm_acc = models.lr_tgm_loso(data,
+                                                            labels,
+                                                            win_starts,
+                                                            win_len,
+                                                            sen_ints,
+                                                            penalty=alg[3:],
+                                                            adj=adj,
+                                                            doTimeAvg=doTimeAvg,
+                                                            doTestAvg=doTestAvg)
+        np.savez_compressed(fname,
+                            l_ints=l_ints,
+                            cv_membership=cv_membership,
+                            tgm_acc=tgm_acc,
+                            win_starts=win_starts,
+                            time=time,
+                            proc=proc)
+    else:
+        l_ints, coef = models.lr_tgm_coef(data,
+                                          labels,
+                                          win_starts,
+                                          win_len,
+                                          sen_ints,
+                                          penalty=alg[3:],
+                                          adj=adj,
+                                          doTimeAvg=doTimeAvg,
+                                          doTestAvg=doTestAvg)
+        np.savez_compressed(fname,
+                            l_ints=l_ints,
+                            coef=coef,
+                            win_starts=win_starts,
+                            time=time,
+                            proc=proc)
 
 
 if __name__ == '__main__':
@@ -159,6 +179,7 @@ if __name__ == '__main__':
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
     parser.add_argument('--force', default='False', choices=['True', 'False'])
+    parser.add_argument('--mode', choices=['acc', 'coef'])
 
     args = parser.parse_args()
     print(args)
@@ -194,6 +215,7 @@ if __name__ == '__main__':
                     reps_to_use=10,
                     proc=load_data.DEFAULT_PROC,
                     random_state_perm=1,
-                    force=False)
+                    force=False,
+                    mode=args.modes)
     else:
         print('Experiment parameters not valid. Skipping job.')

@@ -30,7 +30,8 @@ if __name__ == '__main__':
                                    batch_exp.RANDOM_STATES,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
-                                   batch_exp.SUBJECTS,)
+                                   batch_exp.SUBJECTS,
+                                   batch_exp.MODES)
     job_id = 0
     successful_jobs = 0
     for grid in param_grid:
@@ -48,6 +49,7 @@ if __name__ == '__main__':
         sen = grid[11]
         word = grid[12]
         sub = grid[13]
+        mode = grid[14]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
@@ -77,7 +79,8 @@ if __name__ == '__main__':
                                  avgTst=bool_to_str(tst_avg),
                                  inst=ni,
                                  rep=reps,
-                                 rsP=rs)
+                                 rsP=rs,
+                                 mode=mode)
 
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1

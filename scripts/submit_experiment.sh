@@ -27,5 +27,5 @@ source /home/python27/envs/p27default/bin/activate
 
 cd /home/nrafidi/thesis-code/python
 python run_TGM_LOSO.py --experiment $experiment  --subject $subject --sen_type $sen_type --word $word --win_len $win_len --overlap $overlap \
---isPerm $isPerm --adj $adj --alg $alg --doTimeAvg $doTimeAvg --doTestAvg $doTestAvg \
+--isPerm $isPerm --adj $adj --alg $alg --doTimeAvg $doTimeAvg --doTestAvg $doTestAvg --mode $mode \
 --num_instances $num_instances --reps_to_use $reps_to_use --perm_random_state $perm_random_state --force $force

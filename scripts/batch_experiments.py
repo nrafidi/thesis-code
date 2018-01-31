@@ -20,12 +20,13 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
+MODES = ['acc', 'coef']
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['I', 'D', 'A', 'B', 'C', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['passive', 'active'] #, 'active']
 WORDS = ['noun1', 'noun2', 'verb']
 WIN_LENS = [100, 50, 25, 12]
-OVERLAPS = [100, 50, 25, 12]
+OVERLAPS = [12]
 IS_PERMS = [False]  # True
 ALGS = ['lr-l1']  # GNB
 ADJS = [None]
@@ -46,7 +47,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
-                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},' \
+                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
                 'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
@@ -63,7 +64,8 @@ if __name__ == '__main__':
                                    RANDOM_STATES,
                                    SEN_TYPES,
                                    WORDS,
-                                   SUBJECTS)
+                                   SUBJECTS,
+                                   MODES)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
@@ -80,6 +82,7 @@ if __name__ == '__main__':
         sen = grid[11]
         word = grid[12]
         sub = grid[13]
+        mode= grid[14]
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
@@ -106,6 +109,7 @@ if __name__ == '__main__':
                                     alg=alg,
                                     tm_avg=tm_avg,
                                     tst_avg=tst_avg,
+                                    mode=mode,
                                     inst=ni,
                                     rep=reps,
                                     rs=rs,

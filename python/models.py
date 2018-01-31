@@ -632,7 +632,6 @@ def lr_tgm_loso(data,
                                                               cv=2,
                                                               penalty=penalty,
                                                               solver='liblinear',
-                                                              max_iter=500,
                                                               multi_class='ovr')
 
             model.fit(train_data, train_labels)
@@ -672,6 +671,63 @@ def lr_tgm_loso(data,
         i_split += 1
 
     return l_ints, cv_membership, tgm_acc
+
+
+def lr_tgm_coef(data,
+                labels,
+                win_starts,
+                win_len,
+                sen_ints,
+                penalty='l1',
+                adj='mean_center',
+                doTimeAvg=False,
+                doTestAvg=False,
+                ddof=1):
+    labels = np.array(labels)
+    n_tot = data.shape[0]
+    n_time = data.shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    uni_sen_ints = np.unique(sen_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    coef = np.empty((n_w,))
+    i_split = 0
+    train_data_full = data
+    train_labels = np.ravel(l_ints)
+    for wi in xrange(n_w):
+        train_time = test_windows[wi]
+        train_data = train_data_full[:, :, train_time]
+        if doTimeAvg:
+            train_data = np.mean(train_data, axis=2)
+        else:
+            train_data = np.reshape(train_data, (train_data.shape[0], -1))
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_data, axis=0)
+            train_data -= mu_train[None, :]
+        elif adj == 'zscore':
+            mu_train = np.mean(train_data, axis=0)
+            std_train = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train[None, :]
+            train_data /= std_train[None, :]
+
+        model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(5, 25, 20),
+                                                          cv=2,
+                                                          penalty=penalty,
+                                                          solver='liblinear',
+                                                          multi_class='ovr')
+
+        model.fit(train_data, train_labels)
+
+        coef[wi] = model.coef_
+
+    return l_ints, coef
 
 
 def lr_tgm(data,
@@ -757,59 +813,59 @@ def lr_tgm(data,
     return preds, l_ints, cv_membership, coef
 
 
-def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg=False):
-    labels = np.array(labels)
-    n_time = data.shape[2]
-
-    l_set = np.unique(labels)
-    n_l = len(l_set)
-    l_index = {l_set[i]: i for i in xrange(n_l)}
-    l_ints = np.array([l_index[l] for l in labels])
-
-    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
-    n_w = len(test_windows)
-
-    coef = np.empty((n_w,), dtype=object)
-
-    mu_full_all = np.mean(data, axis=0)
-    std_full_all = np.std(data, axis=0, ddof=ddof)
-
-    cv_sub = np.ones((len(labels),), dtype=np.int)
-    for l in list(set(labels)):
-        indLabel = [i for i, x in enumerate(labels) if x == l]
-        cv_sub[indLabel[0::2]] = 0
-    in_train_sub = cv_sub == 1
-    in_test_sub = np.logical_not(in_train_sub)
-
-    for wi in xrange(n_w):
-        train_time = test_windows[wi]
-        if doZscore:
-            new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
-            new_data = new_data / std_full_all[None, :, train_time]
-        else:
-            new_data = data[:, :, train_time]
-            if doAvg:
-                new_data = np.mean(new_data, axis=2)
-                c_range = [2e11, 5e11, 8e11, 1e12, 2e12, 5e12, 8e12, 1e13]
-            else:
-                new_data = np.reshape(new_data, [new_data.shape[0], -1], 'F')
-                c_range = [1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20]
-
-        LR_model = sklearn.linear_model.LogisticRegression(C=1e11, penalty='l1', warm_start=True)
-
-        sub_acc = np.zeros((len(c_range),))
-        for c in c_range:
-            LR_model.fit(new_data[in_train_sub, :], l_ints[in_train_sub])
-            sub_acc = LR_model.score(new_data[in_test_sub, :], l_ints[in_test_sub])
-            LR_model.set_params(C=c)
-
-        LR_model.set_params(C=c_range[np.argmax(sub_acc)])
-
-        LR_model.fit(new_data, l_ints)
-
-        coef[wi] = LR_model.coef_
-
-    return coef
+# def lr_tgm_coef(data, labels, win_starts, win_len, doZscore=False, ddof=1, doAvg=False):
+#     labels = np.array(labels)
+#     n_time = data.shape[2]
+#
+#     l_set = np.unique(labels)
+#     n_l = len(l_set)
+#     l_index = {l_set[i]: i for i in xrange(n_l)}
+#     l_ints = np.array([l_index[l] for l in labels])
+#
+#     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+#     n_w = len(test_windows)
+#
+#     coef = np.empty((n_w,), dtype=object)
+#
+#     mu_full_all = np.mean(data, axis=0)
+#     std_full_all = np.std(data, axis=0, ddof=ddof)
+#
+#     cv_sub = np.ones((len(labels),), dtype=np.int)
+#     for l in list(set(labels)):
+#         indLabel = [i for i, x in enumerate(labels) if x == l]
+#         cv_sub[indLabel[0::2]] = 0
+#     in_train_sub = cv_sub == 1
+#     in_test_sub = np.logical_not(in_train_sub)
+#
+#     for wi in xrange(n_w):
+#         train_time = test_windows[wi]
+#         if doZscore:
+#             new_data = data[:, :, train_time] - mu_full_all[None, :, train_time]
+#             new_data = new_data / std_full_all[None, :, train_time]
+#         else:
+#             new_data = data[:, :, train_time]
+#             if doAvg:
+#                 new_data = np.mean(new_data, axis=2)
+#                 c_range = [2e11, 5e11, 8e11, 1e12, 2e12, 5e12, 8e12, 1e13]
+#             else:
+#                 new_data = np.reshape(new_data, [new_data.shape[0], -1], 'F')
+#                 c_range = [1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20]
+#
+#         LR_model = sklearn.linear_model.LogisticRegression(C=1e11, penalty='l1', warm_start=True)
+#
+#         sub_acc = np.zeros((len(c_range),))
+#         for c in c_range:
+#             LR_model.fit(new_data[in_train_sub, :], l_ints[in_train_sub])
+#             sub_acc = LR_model.score(new_data[in_test_sub, :], l_ints[in_test_sub])
+#             LR_model.set_params(C=c)
+#
+#         LR_model.set_params(C=c_range[np.argmax(sub_acc)])
+#
+#         LR_model.fit(new_data, l_ints)
+#
+#         coef[wi] = LR_model.coef_
+#
+#     return coef
 
 
 if __name__ == '__main__':
