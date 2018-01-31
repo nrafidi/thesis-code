@@ -632,7 +632,8 @@ def lr_tgm_loso(data,
                                                               cv=2,
                                                               penalty=penalty,
                                                               solver='liblinear',
-                                                              multi_class='ovr')
+                                                              multi_class='ovr',
+                                                              refit=True)
 
             model.fit(train_data, train_labels)
 
@@ -721,7 +722,8 @@ def lr_tgm_coef(data,
                                                           cv=2,
                                                           penalty=penalty,
                                                           solver='liblinear',
-                                                          multi_class='ovr')
+                                                          multi_class='ovr',
+                                                          refit=True)
 
         model.fit(train_data, train_labels)
 
