@@ -8,6 +8,9 @@ import scipy.io as sio
 import run_TGM_LOSO
 
 
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+
+
 def sort_sensors():
     load_var = sio.loadmat(SENSOR_MAP)
     sensor_reg = load_var['sensor_reg']
