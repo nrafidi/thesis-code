@@ -49,6 +49,7 @@ def intersect_coef(exp,
                                                        mode='coef') + '.npz')
         coef = result['coef']
         coef_time = np.array(coef[win_time] != 0)
+        coef_time = np.all(coef_time, axis=0)
         coef_by_sub.append(coef_time[None, ...])
     intersection = np.all(np.concatenate(coef_by_sub, axis=0), axis=0)
     return intersection
