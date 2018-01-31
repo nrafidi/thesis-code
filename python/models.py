@@ -577,7 +577,7 @@ def lr_tgm_loso(data,
                 win_starts,
                 win_len,
                 sen_ints,
-                penalty='l2',
+                penalty='l1',
                 adj='mean_center',
                 doTimeAvg=False,
                 doTestAvg=False,
@@ -628,12 +628,12 @@ def lr_tgm_loso(data,
                 train_data -= mu_train[None, :]
                 train_data /= std_train[None, :]
 
-            model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(10, 20, 10),
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=np.logspace(5, 25, 20),
                                                               cv=2,
                                                               penalty=penalty,
-                                                              solver='saga',
+                                                              solver='liblinear',
                                                               max_iter=500,
-                                                              multi_class='multinomial')
+                                                              multi_class='ovr')
 
             model.fit(train_data, train_labels)
 

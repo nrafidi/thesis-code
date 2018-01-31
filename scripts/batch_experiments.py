@@ -24,10 +24,10 @@ EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['I', 'D', 'A', 'B', 'C', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['passive', 'active'] #, 'active']
 WORDS = ['noun1', 'noun2', 'verb']
-WIN_LENS = [50, 25, 12]
-OVERLAPS = [50, 25, 12]
+WIN_LENS = [100, 50, 25, 12]
+OVERLAPS = [100, 50, 25, 12]
 IS_PERMS = [False]  # True
-ALGS = ['lr-l1', 'lr-l2']  # GNB
+ALGS = ['lr-l1']  # GNB
 ADJS = [None]
 DO_AVGS = [False, True]  # True
 NUM_INSTANCESS = [1, 2, 5, 10]
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},' \
-                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
+                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,

@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     words = ['noun1', 'verb', 'noun2']
     time_lens = [12]#, 25, 50]
-    algs = ['lr-l2']#, 'lr-l1']
+    algs = ['lr-l1']#, 'lr-l1']
     adjs=[None]#, 'zscore']
     insts = [1]#, 2, 5, 10]
     bools = ['T']#, 'F']

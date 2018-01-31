@@ -107,7 +107,7 @@ def run_tgm_exp(experiment,
     if win_len < 0:
         win_len = total_win - overlap
 
-    win_starts = range(0, total_win - win_len, overlap)
+    win_starts = range(total_win - 500, total_win - win_len, overlap)
 
     sen_set = np.unique(labels, axis=0).tolist()
     num_labels = labels.shape[0]
