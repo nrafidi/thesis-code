@@ -97,5 +97,6 @@ if __name__ == '__main__':
                                                                                                                sen_type=args.sen_type,
                                                                                                                word=args.word,
                                                                                                                experiment=args.experiment))
+    plt.show()
 
 
