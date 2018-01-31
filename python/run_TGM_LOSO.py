@@ -216,6 +216,6 @@ if __name__ == '__main__':
                     proc=load_data.DEFAULT_PROC,
                     random_state_perm=1,
                     force=False,
-                    mode=args.modes)
+                    mode=args.mode)
     else:
         print('Experiment parameters not valid. Skipping job.')
