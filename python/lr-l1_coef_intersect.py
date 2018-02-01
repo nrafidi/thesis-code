@@ -56,9 +56,9 @@ def intersect_coef(exp,
         C_time = np.array(Cs[win_time])
         print(C_time)
         print(np.sum(coef_time))
-        coef_time = np.sum(coef_time, axis=0)
+        coef_time = np.all(coef_time, axis=0)
         coef_by_sub.append(coef_time[None, ...])
-    intersection = np.sum(np.concatenate(coef_by_sub, axis=0), axis=0)
+    intersection = np.all(np.concatenate(coef_by_sub, axis=0), axis=0)
     return intersection
 
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     intersection = intersection[sorted_inds, :]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[args.experiment]))
+    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
