@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=1)
+    parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
@@ -105,6 +105,7 @@ if __name__ == '__main__':
                                                                                                                sen_type=args.sen_type,
                                                                                                                word=args.word,
                                                                                                                experiment=args.experiment))
+    plt.colorbar(h)
     plt.show()
 
 
