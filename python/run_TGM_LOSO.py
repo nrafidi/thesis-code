@@ -212,11 +212,11 @@ if __name__ == '__main__':
                     adj=args.adj,
                     doTimeAvg=str_to_bool(args.doTimeAvg),
                     doTestAvg=str_to_bool(args.doTestAvg),
-                    num_instances=1,
-                    reps_to_use=10,
-                    proc=load_data.DEFAULT_PROC,
-                    random_state_perm=1,
-                    force=False,
+                    num_instances=args.num_instances,
+                    reps_to_use=args.reps_to_use,
+                    proc=args.proc,
+                    random_state_perm=args.perm_random_state,
+                    force=str_to_bool(args.force),
                     mode=args.mode)
     else:
         print('Experiment parameters not valid. Skipping job.')
