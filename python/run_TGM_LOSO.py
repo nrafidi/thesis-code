@@ -144,18 +144,19 @@ def run_tgm_exp(experiment,
                             time=time,
                             proc=proc)
     else:
-        l_ints, coef = models.lr_tgm_coef(data,
-                                          labels,
-                                          win_starts,
-                                          win_len,
-                                          sen_ints,
-                                          penalty=alg[3:],
-                                          adj=adj,
-                                          doTimeAvg=doTimeAvg,
-                                          doTestAvg=doTestAvg)
+        l_ints, coef, Cs = models.lr_tgm_coef(data,
+                                              labels,
+                                              win_starts,
+                                              win_len,
+                                              sen_ints,
+                                              penalty=alg[3:],
+                                              adj=adj,
+                                              doTimeAvg=doTimeAvg,
+                                              doTestAvg=doTestAvg)
         np.savez_compressed(fname,
                             l_ints=l_ints,
                             coef=coef,
+                            Cs=Cs,
                             win_starts=win_starts,
                             time=time,
                             proc=proc)

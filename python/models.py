@@ -698,6 +698,7 @@ def lr_tgm_coef(data,
     n_w = len(test_windows)
 
     coef = np.empty((n_w,), dtype=object)
+    Cs = np.empty((n_w,), dtype=object)
     i_split = 0
     train_data_full = data
     train_labels = np.ravel(l_ints)
@@ -726,10 +727,10 @@ def lr_tgm_coef(data,
                                                           refit=True)
 
         model.fit(train_data, train_labels)
-
+        Cs[wi] = model.C_
         coef[wi] = model.coef_
 
-    return l_ints, coef
+    return l_ints, coef, Cs
 
 
 def lr_tgm(data,
