@@ -44,9 +44,11 @@ def intersect_accs(exp,
                                                        rsP=1,
                                                        mode='acc') + '.npz')
         acc = np.mean(result['tgm_acc'], axis=0)
+        print(np.sum(acc))
         time_by_sub.append(result['time'][None, ...])
         win_starts_by_sub.append(result['win_starts'][None, ...])
         acc_thresh = acc > 0.25
+        print(np.sum(acc_thresh))
         acc_by_sub.append(acc[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
