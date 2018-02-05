@@ -25,13 +25,13 @@ EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['I', 'D', 'A', 'B', 'C', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['passive', 'active'] #, 'active']
 WORDS = ['noun1', 'noun2', 'verb']
-WIN_LENS = [100]#, 50, 25, 12]
+WIN_LENS = [100, 50, 25, 12]#, 50, 25, 12]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
 ALGS = ['lr-l1']  # GNB
 ADJS = [None]
 DO_AVGS = [False]#, True]  # True
-NUM_INSTANCESS = [2]#, 5, 10, 1]
+NUM_INSTANCESS = [2, 1, 5, 10]#, 5, 10, 1]
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]
 
