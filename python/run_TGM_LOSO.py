@@ -50,8 +50,8 @@ def run_tgm_exp(experiment,
                 win_len,
                 overlap,
                 isPerm = False,
-                alg='lr-l2',
-                adj='mean_center',
+                alg='lr-l1',
+                adj=None,
                 doTimeAvg=False,
                 doTestAvg=True,
                 num_instances=1,
@@ -122,6 +122,10 @@ def run_tgm_exp(experiment,
 
     labels = labels[:, WORD_COLS[experiment][word]]
 
+    print(data.shape)
+    print(labels)
+    print(sen_ints)
+
     if isPerm:
         random.seed(random_state_perm)
         random.shuffle(labels)
@@ -148,11 +152,9 @@ def run_tgm_exp(experiment,
                                               labels,
                                               win_starts,
                                               win_len,
-                                              sen_ints,
                                               penalty=alg[3:],
                                               adj=adj,
-                                              doTimeAvg=doTimeAvg,
-                                              doTestAvg=doTestAvg)
+                                              doTimeAvg=doTimeAvg)
         np.savez_compressed(fname,
                             l_ints=l_ints,
                             coef=coef,

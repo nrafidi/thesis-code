@@ -678,11 +678,9 @@ def lr_tgm_coef(data,
                 labels,
                 win_starts,
                 win_len,
-                sen_ints,
                 penalty='l1',
                 adj='mean_center',
                 doTimeAvg=False,
-                doTestAvg=False,
                 ddof=1):
     labels = np.array(labels)
     n_tot = data.shape[0]
@@ -692,7 +690,6 @@ def lr_tgm_coef(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
-    uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
