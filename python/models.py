@@ -683,7 +683,6 @@ def lr_tgm_coef(data,
                 doTimeAvg=False,
                 ddof=1):
     labels = np.array(labels)
-    n_tot = data.shape[0]
     n_time = data.shape[2]
 
     l_set = np.unique(labels)
@@ -696,7 +695,6 @@ def lr_tgm_coef(data,
 
     coef = np.empty((n_w,), dtype=object)
     Cs = np.empty((n_w,), dtype=object)
-    i_split = 0
     train_data_full = data
     train_labels = np.ravel(l_ints)
     for wi in xrange(n_w):

@@ -101,6 +101,8 @@ def run_tgm_exp(experiment,
                                                                   noMag=False,
                                                                   sorted_inds=None)
 
+    print(labels)
+
     tmin = time.min()
     tmax = time.max()
 
@@ -112,19 +114,19 @@ def run_tgm_exp(experiment,
     win_starts = range(0, total_win - win_len, overlap)
 
     sen_set = np.unique(labels, axis=0).tolist()
+    print(sen_set)
     num_labels = labels.shape[0]
     sen_ints = np.empty((num_labels,))
     for i_l in range(num_labels):
         for j_l, l in enumerate(sen_set):
+            print(l)
+            print(labels[i_l, :])
             if np.all(l == labels[i_l, :]):
                 sen_ints[i_l] = j_l
                 break
 
-    labels = labels[:, WORD_COLS[experiment][word]]
-
-    print(data.shape)
-    print(labels)
     print(sen_ints)
+    labels = labels[:, WORD_COLS[experiment][word]]
 
     if isPerm:
         random.seed(random_state_perm)
@@ -173,8 +175,8 @@ if __name__ == '__main__':
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
-    parser.add_argument('--alg', default='lr-l2', choices=VALID_ALGS)
-    parser.add_argument('--adj', default='mean_center')
+    parser.add_argument('--alg', default='lr-l1', choices=VALID_ALGS)
+    parser.add_argument('--adj', default=None)
     parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--num_instances', type=int, default=1)
