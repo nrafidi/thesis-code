@@ -628,7 +628,7 @@ def lr_tgm_loso(data,
                 train_data -= mu_train[None, :]
                 train_data /= std_train[None, :]
 
-            model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
                                                               cv=2,
                                                               penalty=penalty,
                                                               solver='liblinear',
@@ -668,10 +668,6 @@ def lr_tgm_loso(data,
 
 
                 print(model.C_)
-                print(model.n_iter_)
-                print(uni_test_labels)
-                preds = model.predict_log_proba(test_data)
-                print(preds)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 print(tgm_acc[i_split, wi, wj])
         i_split += 1
