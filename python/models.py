@@ -670,6 +670,8 @@ def lr_tgm_loso(data,
                 print(model.coef_)
                 print(model.scores_)
                 print(uni_test_labels)
+                preds = model.predict_log_proba(test_data)
+                print(preds)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 print(tgm_acc[i_split, wi, wj])
         i_split += 1
