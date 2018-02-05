@@ -666,8 +666,9 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                print(test_data.shape)
-                print(uni_test_labels.shape)
+                print(model.C_)
+                print(model.coef_)
+                print(model.scores_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 print(tgm_acc[i_split, wi, wj])
         i_split += 1
