@@ -668,8 +668,7 @@ def lr_tgm_loso(data,
 
 
                 print(model.C_)
-                print(model.coef_)
-                print(model.scores_)
+                print(model.n_iter_)
                 print(uni_test_labels)
                 preds = model.predict_log_proba(test_data)
                 print(preds)
