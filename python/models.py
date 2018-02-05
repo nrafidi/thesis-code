@@ -669,6 +669,7 @@ def lr_tgm_loso(data,
                 print(model.C_)
                 print(model.coef_)
                 print(model.scores_)
+                print(uni_test_labels)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 print(tgm_acc[i_split, wi, wj])
         i_split += 1
@@ -724,6 +725,9 @@ def lr_tgm_coef(data,
                                                           refit=True)
 
         model.fit(train_data, train_labels)
+        print(model.C_)
+        print(model.coef_)
+        print(model.scores_)
         Cs[wi] = model.C_
         coef[wi] = model.coef_
 
