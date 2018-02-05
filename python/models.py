@@ -633,6 +633,7 @@ def lr_tgm_loso(data,
                                                               penalty=penalty,
                                                               solver='liblinear',
                                                               multi_class='ovr',
+                                                              class_weight='balanced',
                                                               refit=True)
 
             model.fit(train_data, train_labels)
