@@ -23,6 +23,7 @@ def intersect_accs(exp,
     top_dir = run_TGM_LOSO.TOP_DIR.format(exp=exp)
 
     acc_by_sub = []
+    acc_intersect = []
     time_by_sub = []
     win_starts_by_sub = []
     for sub in load_data.VALID_SUBS[exp]:
@@ -46,10 +47,11 @@ def intersect_accs(exp,
         time_by_sub.append(result['time'][None, ...])
         win_starts_by_sub.append(result['win_starts'][None, ...])
         acc_thresh = acc > 0.25
-        coef_time = np.all(coef_time, axis=0)
-        coef_by_sub.append(coef_time[None, ...])
-    intersection = np.all(np.concatenate(coef_by_sub, axis=0), axis=0)
-    return intersection
+        acc_by_sub.append(acc[None, ...])
+        acc_intersect.append(acc_thresh[None, ...])
+    acc_all = np.concatenate(acc_by_sub, axis=0)
+    intersection = np.all(np.concatenate(acc_intersect, axis=0), axis=0)
+    return intersection, acc_all
 
 
 if __name__ == '__main__':
@@ -57,7 +59,6 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--sen_type', choices=run_TGM_LOSO.VALID_SEN_TYPE)
     parser.add_argument('--word', choices = ['noun1', 'verb', 'noun2'])
-    parser.add_argument('--win_time', type=int)
     parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
@@ -66,36 +67,45 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    intersection = intersect_coef(args.experiment,
-                                  args.sen_type,
-                                  args.word,
-                                  args.win_time,
-                                  win_len=args.win_len,
-                                  overlap=args.overlap,
-                                  adj=args.adj,
-                                  num_instances=args.num_instances,
-                                  avgTime=args.avgTime,
-                                  avgTest=args.avgTest)
+    intersection, acc_all = intersect_accs(args.experiment,
+                                           args.sen_type,
+                                           args.word,
+                                           win_len=args.win_len,
+                                           overlap=args.overlap,
+                                           adj=args.adj,
+                                           num_instances=args.num_instances,
+                                           avgTime=args.avgTime,
+                                           avgTest=args.avgTest)
 
-    intersection = np.reshape(intersection, (306, args.win_len))
-
-    sorted_inds, sorted_reg = sort_sensors()
-    uni_reg = np.unique(sorted_reg)
-    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
-
-    intersection = intersection[sorted_inds, :]
+    mean_acc = np.mean(acc_all, axis=0)
 
     fig, ax = plt.subplots()
     h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    ax.set_yticks(yticks_sens)
-    ax.set_yticklabels(uni_reg)
-    ax.set_ylabel('Sensors')
-    ax.set_xlabel('Time')
-    ax.set_title('Intersection over subjects at time window {win_time}\n{sen_type} {word} {experiment}'.format(win_time=args.win_time,
-                                                                                                               sen_type=args.sen_type,
-                                                                                                               word=args.word,
-                                                                                                               experiment=args.experiment))
+    ax.set_ylabel('Test Time')
+    ax.set_xlabel('Train Time')
+    ax.set_title('Intersection off acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                                                      word=args.word,
+                                                                                                      experiment=args.experiment))
     plt.colorbar(h)
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    ax.set_ylabel('Test Time')
+    ax.set_xlabel('Train Time')
+    ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                                     word=args.word,
+                                                                                     experiment=args.experiment))
+    plt.colorbar(h)
+
+    fig, ax = plt.subplots()
+    ax.plot(mean_acc)
+    ax.set_ylabel('Accuracy')
+    ax.set_xlabel('Time')
+    ax.set_title('Mean Acc over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                                 word=args.word,
+                                                                                 experiment=args.experiment))
+
+
     plt.show()
 
 
