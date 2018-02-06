@@ -52,7 +52,7 @@ def intersect_accs(exp,
         acc_by_sub.append(acc[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
-    intersection = np.all(np.concatenate(acc_intersect, axis=0), axis=0)
+    intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
     return intersection, acc_all
 
 
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     mean_acc = np.mean(acc_all, axis=0)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[exp]))
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
     ax.set_title('Intersection off acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     plt.colorbar(h)
 
     fig, ax = plt.subplots()
-    ax.plot(mean_acc)
+    ax.plot(np.diag(mean_acc))
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time')
     ax.set_title('Mean Acc over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
