@@ -82,7 +82,7 @@ if __name__ == '__main__':
     mean_acc = np.mean(acc_all, axis=0)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[exp]))
+    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[args.experiment]))
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
     ax.set_title('Intersection off acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
