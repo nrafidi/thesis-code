@@ -85,10 +85,18 @@ if __name__ == '__main__':
     h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[args.experiment]))
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
-    ax.set_title('Intersection off acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+    ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                                       word=args.word,
                                                                                                       experiment=args.experiment))
     plt.colorbar(h)
+
+    fig, ax = plt.subplots()
+    ax.plot(np.diag(intersection))
+    ax.set_ylabel('Number of Subjects with > chance acc')
+    ax.set_xlabel('Time')
+    ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                                 word=args.word,
+                                                                                 experiment=args.experiment))
 
     fig, ax = plt.subplots()
     h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
