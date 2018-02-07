@@ -43,7 +43,7 @@ def intersect_accs(exp,
                                                        rep=10,
                                                        rsP=1,
                                                        mode='acc') + '.npz')
-        print(result.keys())
+
         acc = np.mean(result['tgm_acc'], axis=0)
         time_by_sub.append(result['time'][None, ...])
         win_starts_by_sub.append(result['win_starts'][None, ...])
@@ -52,7 +52,9 @@ def intersect_accs(exp,
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
     intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
-    return intersection, acc_all
+    time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
+    win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0)
+    return intersection, acc_all, time, win_starts
 
 
 if __name__ == '__main__':
@@ -68,50 +70,51 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    intersection, acc_all = intersect_accs(args.experiment,
-                                           args.sen_type,
-                                           args.word,
-                                           win_len=args.win_len,
-                                           overlap=args.overlap,
-                                           adj=args.adj,
-                                           num_instances=args.num_instances,
-                                           avgTime=args.avgTime,
-                                           avgTest=args.avgTest)
+    intersection, acc_all, time, win_starts = intersect_accs(args.experiment,
+                                                             args.sen_type,
+                                                             args.word,
+                                                             win_len=args.win_len,
+                                                             overlap=args.overlap,
+                                                             adj=args.adj,
+                                                             num_instances=args.num_instances,
+                                                             avgTime=args.avgTime,
+                                                             avgTest=args.avgTest)
 
     frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
     mean_acc = np.mean(acc_all, axis=0)
 
-    fig, ax = plt.subplots()
-    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[args.experiment]))
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
-    ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                                      word=args.word,
-                                                                                                      experiment=args.experiment))
-    plt.colorbar(h)
+    # fig, ax = plt.subplots()
+    # h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=len(load_data.VALID_SUBS[args.experiment]))
+    # ax.set_ylabel('Test Time')
+    # ax.set_xlabel('Train Time')
+    # ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+    #                                                                                                   word=args.word,
+    #                                                                                                   experiment=args.experiment))
+    # plt.colorbar(h)
+
+    # fig, ax = plt.subplots()
+    # ax.plot(np.diag(intersection))
+    # ax.set_ylabel('Number of Subjects with > chance acc')
+    # ax.set_xlabel('Time')
+    # ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+    #                                                                              word=args.word,
+    #                                                                              experiment=args.experiment))
+
+    # fig, ax = plt.subplots()
+    # h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    # ax.set_ylabel('Test Time')
+    # ax.set_xlabel('Train Time')
+    # ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+    #                                                                                  word=args.word,
+    #                                                                                  experiment=args.experiment))
+    # plt.colorbar(h)
 
     fig, ax = plt.subplots()
-    ax.plot(np.diag(intersection))
-    ax.set_ylabel('Number of Subjects with > chance acc')
-    ax.set_xlabel('Time')
-    ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                 word=args.word,
-                                                                                 experiment=args.experiment))
-
-    fig, ax = plt.subplots()
-    h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
-    ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                     word=args.word,
-                                                                                     experiment=args.experiment))
-    plt.colorbar(h)
-
-    fig, ax = plt.subplots()
-    ax.plot(np.diag(mean_acc), label='Accuracy')
-    ax.plot(frac_sub, label='Fraction of Subjects > Chance')
+    ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
+    ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time')
+    ax.set_ylim([0.0, 1.0])
     ax.legend()
     ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                  word=args.word,
