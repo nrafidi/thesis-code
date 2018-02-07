@@ -53,7 +53,7 @@ def intersect_accs(exp,
     acc_all = np.concatenate(acc_by_sub, axis=0)
     intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
     time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
-    win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0)
+    win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0).astype('int')
     return intersection, acc_all, time, win_starts
 
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
     ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
-    ax.set_ylabel('Accuracy')
+    ax.set_ylabel('Accuracy/Fraction > Chance')
     ax.set_xlabel('Time')
     ax.set_ylim([0.0, 1.0])
     ax.legend()
