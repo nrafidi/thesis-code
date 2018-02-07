@@ -115,10 +115,10 @@ if __name__ == '__main__':
     ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.0 - time_adjust
+        max_line = 2.0 - time_adjust + 0.01
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.0 - time_adjust
+        max_line = 3.0 - time_adjust + 0.01
 
     for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
         ax.axvline(x=v, color='k')
