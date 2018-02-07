@@ -121,7 +121,7 @@ if __name__ == '__main__':
         max_line = 3.0 - time_adjust
 
     for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
-        ax.vline(x=v, color='k')
+        ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
             plt.text(v + 0.05, 0.8, text_to_write[i_v])
     ax.set_ylabel('Accuracy/Fraction > Chance')
