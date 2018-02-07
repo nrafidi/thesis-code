@@ -43,12 +43,11 @@ def intersect_accs(exp,
                                                        rep=10,
                                                        rsP=1,
                                                        mode='acc') + '.npz')
+        print(result.keys())
         acc = np.mean(result['tgm_acc'], axis=0)
-        print(np.sum(acc))
         time_by_sub.append(result['time'][None, ...])
         win_starts_by_sub.append(result['win_starts'][None, ...])
         acc_thresh = acc > 0.25
-        print(np.sum(acc_thresh))
         acc_by_sub.append(acc[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
@@ -79,6 +78,7 @@ if __name__ == '__main__':
                                            avgTime=args.avgTime,
                                            avgTest=args.avgTest)
 
+    frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
     mean_acc = np.mean(acc_all, axis=0)
 
     fig, ax = plt.subplots()
@@ -108,10 +108,12 @@ if __name__ == '__main__':
     plt.colorbar(h)
 
     fig, ax = plt.subplots()
-    ax.plot(np.diag(mean_acc))
+    ax.plot(np.diag(mean_acc), label='Accuracy')
+    ax.plot(frac_sub, label='Fraction of Subjects > Chance')
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time')
-    ax.set_title('Mean Acc over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+    ax.legend()
+    ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                  word=args.word,
                                                                                  experiment=args.experiment))
 
