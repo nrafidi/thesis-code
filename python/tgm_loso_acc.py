@@ -109,18 +109,19 @@ if __name__ == '__main__':
     #                                                                                  experiment=args.experiment))
     # plt.colorbar(h)
 
+    time_adjust = args.win_len*0.002
     fig, ax = plt.subplots()
     ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
     ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.0
+        max_line = 2.0 - time_adjust
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.0
+        max_line = 3.0 - time_adjust
 
-    for i_v, v in enumerate(np.arange(-0.5, max_line, 0.5)):
-        ax.vline(x=v)
+    for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
+        ax.vline(x=v, color='k')
         if i_v < len(text_to_write):
             plt.text(v + 0.05, 0.8, text_to_write[i_v])
     ax.set_ylabel('Accuracy/Fraction > Chance')
