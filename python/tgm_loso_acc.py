@@ -112,10 +112,21 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
     ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
+    if args.sen_type == 'active':
+        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        max_line = 2.0
+    else:
+        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        max_line = 3.0
+
+    for i_v, v in enumerate(np.arange(-0.5, max_line, 0.5)):
+        ax.vline(x=v)
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05, 0.8, text_to_write[i_v])
     ax.set_ylabel('Accuracy/Fraction > Chance')
     ax.set_xlabel('Time')
     ax.set_ylim([0.0, 1.0])
-    ax.legend()
+    ax.legend(loc=4)
     ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                  word=args.word,
                                                                                  experiment=args.experiment))
