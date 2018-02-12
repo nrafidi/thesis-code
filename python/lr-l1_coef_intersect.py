@@ -101,11 +101,20 @@ if __name__ == '__main__':
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
     ax.set_xlabel('Time')
-    ax.set_title('Intersection over subjects at time window {win_time}\n{sen_type} {word} {experiment}'.format(win_time=args.win_time,
-                                                                                                               sen_type=args.sen_type,
-                                                                                                               word=args.word,
-                                                                                                               experiment=args.experiment))
-    plt.colorbar(h)
+    ax.set_title('Intersection over subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len} {overlap} {num_instances}'.format(win_time=args.win_time,
+                                                                                                                                                    sen_type=args.sen_type,
+                                                                                                                                                    word=args.word,
+                                                                                                                                                    experiment=args.experiment,
+                                                                                                                                                    win_len=args.win_len,
+                                                                                                                                                    overlap=args.overlap,
+                                                                                                                                                    num_instances=args.num_instances))
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_coef_intersect_{sen_type}_{word}_{win_time}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, win_time=args.win_time, win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
     plt.show()
 
 
