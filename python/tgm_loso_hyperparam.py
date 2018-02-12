@@ -31,10 +31,14 @@ if __name__ == '__main__':
 
     frac_sub_tot = []
     mean_acc_tot = []
+    arg_max_tot = []
+    arg_max_eos = []
     for win_len in win_lens:
         time_adjust = win_len * 0.002
         frac_sub_win = []
         mean_acc_win = []
+        arg_max_tot_win = []
+        arg_max_eos_win = []
         for num_instances in num_insts:
             intersection, acc_all, time, win_starts = tgm_loso_acc.intersect_accs(args.experiment,
                                                                      args.sen_type,
@@ -46,12 +50,16 @@ if __name__ == '__main__':
                                                                      avgTime=args.avgTime,
                                                                      avgTest=args.avgTest)
 
-            time_ind = time[win_starts] >= (max_time - time_adjust)
+            time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
             max_mean_acc = np.max(mean_acc[time_ind])
             argmax_mean_acc = np.argmax(mean_acc[time_ind])
+            arg_max_eos_win.append(time_ind[argmax_mean_acc])
+
+            arg_max_tot_win.append(np.argmax(mean_acc))
+
             max_frac_sub = frac_sub[time_ind]
             max_frac_sub = max_frac_sub[argmax_mean_acc]
 
@@ -59,13 +67,21 @@ if __name__ == '__main__':
             mean_acc_win.append(max_mean_acc)
         frac_sub_win = np.array(frac_sub_win)
         mean_acc_win = np.array(mean_acc_win)
+        arg_max_eos_win = np.array(arg_max_eos_win)
+        arg_max_tot_win = np.array(arg_max_tot_win)
 
         frac_sub_tot.append(frac_sub_win[None, ...])
         mean_acc_tot.append(mean_acc_win[None, ...])
+        arg_max_tot.append(arg_max_tot_win[None, ...])
+        arg_max_eos.append(arg_max_eos_win[None, ...])
 
     frac_sub_tot = np.concatenate(frac_sub_tot, axis=0)
 
     mean_acc_tot = np.concatenate(mean_acc_tot, axis=0)
+
+    arg_max_tot = np.concatenate(arg_max_tot, axis=0)
+
+    arg_max_eos = np.concatenate(arg_max_eos, axis=0)
 
 
     print(mean_acc_tot[1, 2])
@@ -99,7 +115,8 @@ if __name__ == '__main__':
         '/home/nrafidi/thesis_figs/{exp}_win_inst_comp_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
         ), bbox_inches='tight')
-
+    print(arg_max_eos)
+    print(arg_max_tot)
     plt.show()
 
 
