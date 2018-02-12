@@ -133,7 +133,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
     print(arg_max_eos)
     print(arg_max_tot)
-    print(per_sub_max_eos)
+    print(np.squeeze(per_sub_max_eos[:, 0, :]))
     plt.show()
 
 
