@@ -100,7 +100,11 @@ if __name__ == '__main__':
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
-    ax.set_xlabel('Time')
+    time_win = range(args.win_len)
+    time = time_win*2
+    ax.set_xticks(time_win[::25])
+    ax.set_xticklabels(time[::25])
+    ax.set_xlabel('Time (ms)')
     ax.set_title('Fraction of subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len}ms {overlap}ms {num_instances} inst'.format(win_time=args.win_time,
                                                                                                                                                     sen_type=args.sen_type,
                                                                                                                                                     word=args.word,
