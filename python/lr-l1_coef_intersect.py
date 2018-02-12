@@ -96,7 +96,7 @@ if __name__ == '__main__':
     intersection = intersection[sorted_inds, :]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+    h = ax.imshow(intersection, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
