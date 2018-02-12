@@ -80,7 +80,7 @@ if __name__ == '__main__':
             per_sub_max_eos_win.append(sub_eos_max[None, ...])
 
         per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
-        per_sub_max_eos.append(per_sub_max_eos[None, ...])
+        per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
         frac_sub_win = np.array(frac_sub_win)
         mean_acc_win = np.array(mean_acc_win)
         arg_max_eos_win = np.array(arg_max_eos_win)
