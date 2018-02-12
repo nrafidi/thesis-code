@@ -68,7 +68,7 @@ if __name__ == '__main__':
     print(mean_acc_tot[0, 0])
 
     fig, axs = plt.subplots(1, 2)
-    h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest')
+    h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
     axs[0].set_xticks(range(len(num_insts)))
     axs[0].set_xticklabels(num_insts)
     axs[0].set_yticks(range(len(win_lens)))
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     axs[0].set_xlabel('Number of Instances')
     axs[0].set_ylabel('Window Length (ms)')
     fig.colorbar(h0, ax=axs[0], shrink=0.5)
-    h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest')
+    h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[1].set_xticks(range(len(num_insts)))
     axs[1].set_xticklabels(num_insts)
     axs[1].set_yticks(range(len(win_lens)))
