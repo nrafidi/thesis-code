@@ -65,9 +65,7 @@ if __name__ == '__main__':
     mean_acc_tot = np.concatenate(mean_acc_tot, axis=0)
 
 
-    print(mean_acc_tot[1, 2])
-    print(num_insts[2])
-    print(win_lens[1])
+    print(mean_acc_tot[0, 0])
 
     fig, axs = plt.subplots(1, 2)
     h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest')
@@ -76,18 +74,19 @@ if __name__ == '__main__':
     axs[0].set_yticks(range(len(win_lens)))
     axs[0].set_yticklabels(win_lens)
     axs[0].set_title('Fraction of Subjects > Chance')
-    plt.colorbar(h0)
+    fig.colorbar(h0, ax=axs[0])
     h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest')
     axs[1].set_xticks(range(len(num_insts)))
     axs[1].set_xticklabels(num_insts)
     axs[1].set_yticks(range(len(win_lens)))
     axs[1].set_yticklabels(win_lens)
     axs[1].set_title('Mean Accuracy')
-    plt.colorbar(h1)
+    fig.colorbar(h1, ax=axs[1])
     fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                              args.word,
                                                                              args.avgTime,
                                                                              args.avgTest))
+    fig.tight_layout()
     plt.show()
 
 
