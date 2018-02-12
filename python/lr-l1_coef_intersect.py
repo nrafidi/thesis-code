@@ -58,7 +58,7 @@ def intersect_coef(exp,
         print(np.sum(coef_time))
         coef_time = np.all(coef_time, axis=0)
         coef_by_sub.append(coef_time[None, ...])
-    intersection = np.all(np.concatenate(coef_by_sub, axis=0), axis=0)
+    intersection = np.mean(np.concatenate(coef_by_sub, axis=0), axis=0)
     return intersection
 
 
@@ -101,13 +101,14 @@ if __name__ == '__main__':
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
     ax.set_xlabel('Time')
-    ax.set_title('Intersection over subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len} {overlap} {num_instances}'.format(win_time=args.win_time,
+    ax.set_title('Fraction of subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len} {overlap} {num_instances}'.format(win_time=args.win_time,
                                                                                                                                                     sen_type=args.sen_type,
                                                                                                                                                     word=args.word,
                                                                                                                                                     experiment=args.experiment,
                                                                                                                                                     win_len=args.win_len,
                                                                                                                                                     overlap=args.overlap,
                                                                                                                                                     num_instances=args.num_instances))
+    plt.colorbar(h)
     fig.tight_layout()
     plt.savefig(
         '/home/nrafidi/thesis_figs/{exp}_coef_intersect_{sen_type}_{word}_{win_time}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}.png'.format(
