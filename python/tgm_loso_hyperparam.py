@@ -54,8 +54,8 @@ if __name__ == '__main__':
             max_mean_acc = np.max(mean_acc[time_ind])
             frac_sub_win.append(max_frac_sub)
             mean_acc_win.append(max_mean_acc)
-        frac_sub_win = np.concatenate(frac_sub_win, axis=0)
-        mean_acc_win = np.concatenate(mean_acc_win, axis=0)
+        frac_sub_win = np.array(frac_sub_win)
+        mean_acc_win = np.array(mean_acc_win)
 
         frac_sub_tot.append(frac_sub_win[None, ...])
         mean_acc_tot.append(mean_acc_win[None, ...])
