@@ -33,12 +33,14 @@ if __name__ == '__main__':
     mean_acc_tot = []
     arg_max_tot = []
     arg_max_eos = []
+    per_sub_max_eos = []
     for win_len in win_lens:
         time_adjust = win_len * 0.002
         frac_sub_win = []
         mean_acc_win = []
         arg_max_tot_win = []
         arg_max_eos_win = []
+        per_sub_max_eos_win = []
         for num_instances in num_insts:
             intersection, acc_all, time, win_starts = tgm_loso_acc.intersect_accs(args.experiment,
                                                                      args.sen_type,
@@ -68,6 +70,17 @@ if __name__ == '__main__':
 
             frac_sub_win.append(max_frac_sub)
             mean_acc_win.append(max_mean_acc)
+
+            sub_eos_max = []
+            for i_sub in range(acc_all.shape[0]):
+                diag_acc = np.diag(np.squeeze(acc_all[i_sub, :, :]))
+                argo = np.argmax(diag_acc[time_ind])
+                sub_eos_max.append(time_ind[argo])
+            sub_eos_max = np.array(sub_eos_max)
+            per_sub_max_eos_win.append(sub_eos_max[None, ...])
+
+        per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
+        per_sub_max_eos.append(per_sub_max_eos[None, ...])
         frac_sub_win = np.array(frac_sub_win)
         mean_acc_win = np.array(mean_acc_win)
         arg_max_eos_win = np.array(arg_max_eos_win)
@@ -86,7 +99,7 @@ if __name__ == '__main__':
 
     arg_max_eos = np.concatenate(arg_max_eos, axis=0)
 
-
+    per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
     print(mean_acc_tot[1, 2])
 
     fig, axs = plt.subplots(1, 2)
@@ -120,6 +133,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
     print(arg_max_eos)
     print(arg_max_tot)
+    print(per_sub_max_eos)
     plt.show()
 
 
