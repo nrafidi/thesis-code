@@ -50,8 +50,11 @@ if __name__ == '__main__':
             frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
-            max_frac_sub = np.max(frac_sub[time_ind])
             max_mean_acc = np.max(mean_acc[time_ind])
+            argmax_mean_acc = np.argmax(mean_acc[time_ind])
+            max_frac_sub = frac_sub[time_ind]
+            max_frac_sub = max_frac_sub[argmax_mean_acc]
+
             frac_sub_win.append(max_frac_sub)
             mean_acc_win.append(max_mean_acc)
         frac_sub_win = np.array(frac_sub_win)
@@ -65,7 +68,7 @@ if __name__ == '__main__':
     mean_acc_tot = np.concatenate(mean_acc_tot, axis=0)
 
 
-    print(mean_acc_tot[0, 0])
+    print(mean_acc_tot[1, 2])
 
     fig, axs = plt.subplots(1, 2)
     h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
