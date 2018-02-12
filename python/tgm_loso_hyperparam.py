@@ -50,7 +50,8 @@ if __name__ == '__main__':
                                                                      avgTime=args.avgTime,
                                                                      avgTest=args.avgTest)
 
-            time_ind, _ = np.where(time[win_starts] >= (max_time - time_adjust))
+            time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
+            time_ind = time_ind[0]
             print(time_ind)
             frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
             mean_acc = np.diag(np.mean(acc_all, axis=0))
