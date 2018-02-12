@@ -52,13 +52,13 @@ if __name__ == '__main__':
 
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
-            print(time_ind)
+            # print(time_ind)
             frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
             max_mean_acc = np.max(mean_acc[time_ind])
             argmax_mean_acc = np.argmax(mean_acc[time_ind])
-            print(argmax_mean_acc)
+            # print(argmax_mean_acc)
             arg_max_eos_win.append(time_ind[argmax_mean_acc])
 
             arg_max_tot_win.append(np.argmax(mean_acc))
