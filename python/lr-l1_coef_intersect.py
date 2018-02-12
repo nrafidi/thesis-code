@@ -100,7 +100,7 @@ if __name__ == '__main__':
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
-    time_win = range(args.win_len)
+    time_win = np.array(range(args.win_len))
     time = time_win*2
     ax.set_xticks(time_win[::25])
     ax.set_xticklabels(time[::25])
