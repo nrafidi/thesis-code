@@ -26,7 +26,7 @@ def intersect_accs(exp,
     acc_intersect = []
     time_by_sub = []
     win_starts_by_sub = []
-    for sub in load_data.VALID_SUBS[exp]:
+    for sub in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
         save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
         result = np.load(run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
                                                        sub=sub,
