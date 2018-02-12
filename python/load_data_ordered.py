@@ -7,7 +7,7 @@ import path_constants
 
 NUM_SENTENCES = 16
 NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
-VALID_SUBS = {'krns2': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 

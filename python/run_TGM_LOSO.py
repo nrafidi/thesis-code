@@ -197,6 +197,11 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('instances wrong')
+    if args.mode == 'coef':
+        is_valid = not str_to_bool(args.doTestAvg)
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('Test avg makes no difference for coef mode')
 
     if total_valid:
         run_tgm_exp(experiment=args.experiment,

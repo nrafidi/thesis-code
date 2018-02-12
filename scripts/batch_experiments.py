@@ -22,15 +22,15 @@ import time
 
 MODES = ['acc', 'coef']
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['I', 'D', 'A', 'B', 'C', 'E', 'F', 'G', 'H']
+SUBJECTS = ['I', 'D', 'B', 'C', 'E', 'F', 'G', 'H']
 SEN_TYPES = ['passive', 'active'] #, 'active']
 WORDS = ['noun1', 'noun2', 'verb']
-WIN_LENS = [100, 50, 25, 12]#, 50, 25, 12]
+WIN_LENS = [150, 100, 50, 25]#, 50, 25, 12]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
 ALGS = ['lr-l1']  # GNB
 ADJS = [None]
-DO_AVGS = [False]#, True]  # True
+DO_AVGS = [True, False]#, True]  # True
 NUM_INSTANCESS = [2, 1, 5, 10]#, 5, 10, 1]
 REPS_TO_USES = [10]  # 10
 RANDOM_STATES = [1]
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
-                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True ' \
+                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
