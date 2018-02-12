@@ -101,11 +101,11 @@ if __name__ == '__main__':
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
     ax.set_xlabel('Time')
-    ax.set_title('Fraction of subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len} {overlap} {num_instances}'.format(win_time=args.win_time,
+    ax.set_title('Fraction of subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len}ms {overlap}ms {num_instances} inst'.format(win_time=args.win_time,
                                                                                                                                                     sen_type=args.sen_type,
                                                                                                                                                     word=args.word,
                                                                                                                                                     experiment=args.experiment,
-                                                                                                                                                    win_len=args.win_len,
+                                                                                                                                                    win_len=args.win_len*2,
                                                                                                                                                     overlap=args.overlap,
                                                                                                                                                     num_instances=args.num_instances))
     plt.colorbar(h)
