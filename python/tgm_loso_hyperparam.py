@@ -72,8 +72,8 @@ if __name__ == '__main__':
     axs[0].set_xticks(range(len(num_insts)))
     axs[0].set_xticklabels(num_insts)
     axs[0].set_yticks(range(len(win_lens)))
-    axs[0].set_yticklabels(np.array(win_lens).astype('float')*0.002)
-    axs[0].set_title('Fraction of Subjects > Chance')
+    axs[0].set_yticklabels(np.array(win_lens).astype('float')*2)
+    axs[0].set_title('Frac Subjects > Chance')
     axs[0].set_xlabel('Number of Instances')
     axs[0].set_ylabel('Window Length (ms)')
     fig.colorbar(h0, ax=axs[0], shrink=0.5)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     axs[1].set_xticks(range(len(num_insts)))
     axs[1].set_xticklabels(num_insts)
     axs[1].set_yticks(range(len(win_lens)))
-    axs[1].set_yticklabels(np.array(win_lens).astype('float')*0.002)
+    axs[1].set_yticklabels(np.array(win_lens).astype('float')*2)
     axs[1].set_title('Mean Accuracy')
     axs[1].set_xlabel('Number of Instances')
     axs[1].set_ylabel('Window Length (ms)')
@@ -91,6 +91,12 @@ if __name__ == '__main__':
                                                                              args.avgTime,
                                                                              args.avgTest))
     fig.tight_layout()
+
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_win_inst_comp_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
+        ), bbox_inches='tight')
+
     plt.show()
 
 
