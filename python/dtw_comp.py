@@ -18,6 +18,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--subject', default='B')
+    parser.add_argument('--sen_type', choices=['active', 'passive'])
+    parser.add_argument('--dist', choices=['euclidean', 'cosine'])
+    parser.add_argument('--radius', type=int)
+    parser.add_argument('--sen0', type=int, default=0)
+    parser.add_argument('--sen1', type=int, default=6)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
     args = parser.parse_args()
@@ -25,10 +30,19 @@ if __name__ == '__main__':
     exp = args.experiment
     sub = args.subject
     proc = args.proc
+    radius = args.radius
+    sen0 = args.sen0
+    sen1 = args.sen1
+    sen_type = args.sen_type
+
+    if args.dist == 'euclidean':
+        dist=euclidean
+    else:
+        dist=cosine
 
     data, labels, time, final_inds = load_data.load_sentence_data(subject=sub,
                                                                   word='noun1',
-                                                                  sen_type='active',
+                                                                  sen_type=sen_type,
                                                                   experiment=exp,
                                                                   proc=proc,
                                                                   num_instances=10,
@@ -45,8 +59,8 @@ if __name__ == '__main__':
                 sen_ints[i_l] = j_l
                 break
 
-    sen0_data = data[sen_ints == 0, ...]
-    sen1_data = data[sen_ints == 4, ...]
+    sen0_data = data[sen_ints == sen0, ...]
+    sen1_data = data[sen_ints == sen1, ...]
     sen_data = np.concatenate([sen0_data, sen1_data], axis=0)
     num_sen = 20
 
@@ -56,22 +70,24 @@ if __name__ == '__main__':
     comp_mat[10:, 10:] = 0.0
     comp_mat[:10, 10:] = 1.0
     comp_mat[10:, :10] = 1.0
-    print(comp_mat)
+    # print(comp_mat)
 
     radius_range = range(1, data.shape[-1], 12)
 
-    scores = np.empty((len(radius_range), 2))
-    for i_rad, radius in enumerate(radius_range):
-        for i_dist, dist in enumerate([euclidean, cosine]):
-            dtw_mat = np.empty((num_sen, num_sen))
-            for i in range(num_sen):
-                for j in range(i, num_sen):
-                    dtw_mat[i, j], _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, :, :])),
-                                                       np.transpose(np.squeeze(sen_data[j, :, :])),
-                                                       radius=radius,
-                                                       dist=dist)
-                    dtw_mat[j, i] = dtw_mat[i, j]
-            scores[i_rad, i_dist], _ = ktau_rdms(comp_mat, dtw_mat)
-            print('Score {} at radius {} distance {}'.format(scores[i_rad, i_dist], radius, dist))
+    dtw_mat = np.empty((num_sen, num_sen))
+    for i in range(num_sen):
+        for j in range(i, num_sen):
+            dtw_mat[i, j], _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, :, :])),
+                                               np.transpose(np.squeeze(sen_data[j, :, :])),
+                                               radius=radius,
+                                               dist=dist)
+            dtw_mat[j, i] = dtw_mat[i, j]
+    score, _ = ktau_rdms(comp_mat, dtw_mat)
+    print('Score {} at radius {} distance {}'.format(score, radius, args.dist))
 
-    np.savez('/share/volume0/nrafidi/DTW/dtw_scores.npz', scores=scores)
+    np.savez('/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}.npz'.format(sen_type=sen_type,
+                                                                                                             sen0=sen0,
+                                                                                                             sen1=sen1,
+                                                                                                             radius=radius,
+                                                                                                             dist=dist),
+             scores=score, dtw_mat = dtw_mat)
