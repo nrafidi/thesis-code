@@ -89,5 +89,5 @@ if __name__ == '__main__':
                                                                                                              sen0=sen0,
                                                                                                              sen1=sen1,
                                                                                                              radius=radius,
-                                                                                                             dist=dist),
+                                                                                                             dist=args.dist),
              scores=score, dtw_mat = dtw_mat)
