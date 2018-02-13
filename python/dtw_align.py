@@ -24,6 +24,7 @@ if __name__ == '__main__':
     parser.add_argument('--sen_type', choices=['active', 'passive'])
     parser.add_argument('--dist', choices=['euclidean', 'cosine'])
     parser.add_argument('--radius', type=int)
+    parser.add_argument('--num_instances', type=int)
     parser.add_argument('--sen0', type=int, default=0)
     parser.add_argument('--sen1', type=int, default=6)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     sen0 = args.sen0
     sen1 = args.sen1
     sen_type = args.sen_type
+    num_instances=args.num_instances
 
     if args.dist == 'euclidean':
         dist=euclidean
@@ -48,7 +50,7 @@ if __name__ == '__main__':
                                                                   sen_type=sen_type,
                                                                   experiment=exp,
                                                                   proc=proc,
-                                                                  num_instances=10,
+                                                                  num_instances=num_instances,
                                                                   reps_to_use=10,
                                                                   noMag=False,
                                                                   sorted_inds=None)
@@ -76,7 +78,7 @@ if __name__ == '__main__':
     print(path_within.shape)
 
     dtw_without, path_without = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[0, :, :])),
-                                                np.transpose(np.squeeze(sen_data[10, :, :])),
+                                                np.transpose(np.squeeze(sen_data[num_instances, :, :])),
                                                 radius=radius,
                                                 dist=dist)
     print('Across sentence dtw distance: {}'.format(dtw_without))
@@ -87,7 +89,7 @@ if __name__ == '__main__':
     print('Within sentence no align distance: {}'.format(dist_noalign_within))
 
     dist_noalign_without = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
-                                         np.squeeze(sen_data[10, :, i])) for i in range(sen_data.shape[-1])])
+                                         np.squeeze(sen_data[num_instances, :, i])) for i in range(sen_data.shape[-1])])
 
     print('Across sentence no align distance: {}'.format(dist_noalign_without))
 
