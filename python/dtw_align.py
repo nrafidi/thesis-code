@@ -68,12 +68,22 @@ if __name__ == '__main__':
                                               radius=radius,
                                               dist=dist)
 
+    print(dtw_within)
+    path_within = np.array(path_within)
+    print(path_within.shape)
+
     dtw_without, path_without = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[0, :, :])),
                                                 np.transpose(np.squeeze(sen_data[10, :, :])),
                                                 radius=radius,
                                                 dist=dist)
-
-    print(dtw_within)
-    print(path_within)
     print(dtw_without)
-    print(path_without)
+
+    dist_noalign_within = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
+                                  np.squeeze(sen_data[1, :, i])) for i in range(sen_data.shape[-1])])
+
+    print(dist_noalign_within)
+
+    dist_noalign_without = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
+                                         np.squeeze(sen_data[10, :, i])) for i in range(sen_data.shape[-1])])
+
+    print(dist_noalign_without)
