@@ -146,10 +146,11 @@ if __name__ == '__main__':
     h11 = axs[1][1].imshow(warp_sen1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen 1 Rep 0')
     fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without))
-    plt.show()
+
     fig.tight_layout()
     plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_without_ni{}_{}_r{}_{}.png'.format(num_instances,
                                                                                       sen_type,
                                                                                       radius,
                                                                                       args.dist),
                 bbox_inches='tight')
+    plt.show()
