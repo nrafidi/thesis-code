@@ -103,7 +103,7 @@ if __name__ == '__main__':
     warp_rep1_data = np.transpose(np.squeeze(sen_data[1, :, path_within[:, 1]]))
     warp_rep1_data /= np.max(warp_rep1_data)
 
-    print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
+    # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
     fig, axs = plt.subplots(2, 2)
     h00 = axs[0][0].imshow(orig_rep0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen 0 Rep 0')
