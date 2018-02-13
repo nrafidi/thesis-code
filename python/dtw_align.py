@@ -94,16 +94,16 @@ if __name__ == '__main__':
     print('Across sentence no align distance: {}'.format(dist_noalign_without))
 
     orig_rep0_data = np.squeeze(sen_data[0, :, :])
-    orig_rep0_data /= np.max(orig_rep0_data)
+    orig_rep0_data /= np.max(np.abs(orig_rep0_data))
 
     warp_rep0_data = np.transpose(np.squeeze(sen_data[0, :, path_within[:,0]]))
-    warp_rep0_data /= np.max(warp_rep0_data)
+    warp_rep0_data /= np.max(np.abs(warp_rep0_data))
 
     orig_rep1_data = np.squeeze(sen_data[1, :, :])
-    orig_rep1_data /= np.max(orig_rep1_data)
+    orig_rep1_data /= np.max(np.abs(orig_rep1_data))
 
     warp_rep1_data = np.transpose(np.squeeze(sen_data[1, :, path_within[:, 1]]))
-    warp_rep1_data /= np.max(warp_rep1_data)
+    warp_rep1_data /= np.max(np.abs(warp_rep1_data))
 
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
     fig, axs = plt.subplots(2, 2)
@@ -115,5 +115,41 @@ if __name__ == '__main__':
     axs[1][0].set_title('Original Sen 0 Rep 1')
     h11 = axs[1][1].imshow(warp_rep1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen 0 Rep 1')
-    fig.suptitle('Within Sentence')
+    fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within))
+    fig.tight_layout()
+    plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_within_ni{}_{}_r{}_{}.png'.format(num_instances,
+                                                                                     sen_type,
+                                                                                     radius,
+                                                                                     args.dist),
+                bbox_inches='tight')
+
+    orig_sen0_data = np.squeeze(sen_data[0, :, :])
+    orig_sen0_data /= np.max(np.abs(orig_sen0_data))
+
+    warp_sen0_data = np.transpose(np.squeeze(sen_data[0, :, path_without[:, 0]]))
+    warp_sen0_data /= np.max(np.abs(warp_sen0_data))
+
+    orig_sen1_data = np.squeeze(sen_data[num_instances, :, :])
+    orig_sen1_data /= np.max(np.abs(orig_sen1_data))
+
+    warp_sen1_data = np.transpose(np.squeeze(sen_data[num_instances, :, path_without[:, 1]]))
+    warp_sen1_data /= np.max(np.abs(warp_sen1_data))
+
+    # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
+    fig, axs = plt.subplots(2, 2)
+    h00 = axs[0][0].imshow(orig_sen0_data, interpolation='nearest', aspect='auto')
+    axs[0][0].set_title('Original Sen 0 Rep 0')
+    h01 = axs[0][1].imshow(warp_sen0_data, interpolation='nearest', aspect='auto')
+    axs[0][1].set_title('Warped Sen 0 Rep 0')
+    h10 = axs[1][0].imshow(orig_sen1_data, interpolation='nearest', aspect='auto')
+    axs[1][0].set_title('Original Sen 1 Rep 0')
+    h11 = axs[1][1].imshow(warp_sen1_data, interpolation='nearest', aspect='auto')
+    axs[1][1].set_title('Warped Sen 1 Rep 0')
+    fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without))
     plt.show()
+    fig.tight_layout()
+    plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_without_ni{}_{}_r{}_{}.png'.format(num_instances,
+                                                                                      sen_type,
+                                                                                      radius,
+                                                                                      args.dist),
+                bbox_inches='tight')
