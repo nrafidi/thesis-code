@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+import matplotlib.pyplot as plt
 import argparse
 import numpy as np
 import load_data_ordered as load_data
@@ -68,7 +71,7 @@ if __name__ == '__main__':
                                               radius=radius,
                                               dist=dist)
 
-    print(dtw_within)
+    print('Within sentence dtw distance: {}'.format(dtw_within))
     path_within = np.array(path_within)
     print(path_within.shape)
 
@@ -76,14 +79,26 @@ if __name__ == '__main__':
                                                 np.transpose(np.squeeze(sen_data[10, :, :])),
                                                 radius=radius,
                                                 dist=dist)
-    print(dtw_without)
+    print('Across sentence dtw distance: {}'.format(dtw_without))
 
     dist_noalign_within = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
                                   np.squeeze(sen_data[1, :, i])) for i in range(sen_data.shape[-1])])
 
-    print(dist_noalign_within)
+    print('Within sentence no align distance: {}'.format(dist_noalign_within))
 
     dist_noalign_without = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
                                          np.squeeze(sen_data[10, :, i])) for i in range(sen_data.shape[-1])])
 
-    print(dist_noalign_without)
+    print('Across sentence no align distance: {}'.format(dist_noalign_without))
+
+    fig, axs = plt.subplots(2, 2, sharey=True)
+    h00 = axs[0][0].imshow(np.squeeze(sen_data[0, :, :]), interpolation='nearest', aspect='auto')
+    axs[0][0].set_title('Original Sen 0 Rep 0')
+    h01 = axs[0][1].imshow(np.squeeze(sen_data[0, :, path_within[:,0]]), interpolation='nearest', aspect='auto')
+    axs[0][1].set_title('Warped Sen 0 Rep 0')
+    h10 = axs[1][0].imshow(np.squeeze(sen_data[1, :, :]), interpolation='nearest', aspect='auto')
+    axs[1][0].set_title('Original Sen 0 Rep 1')
+    h11 = axs[1][1].imshow(np.squeeze(sen_data[1, :, path_within[:, 1]]), interpolation='nearest', aspect='auto')
+    axs[1][1].set_title('Warped Sen 0 Rep 1')
+    fig.suptitle('Within Sentence')
+    plt.show()
