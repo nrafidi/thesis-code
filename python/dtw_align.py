@@ -116,7 +116,7 @@ if __name__ == '__main__':
     axs[1][0].set_title('Original Sen 0 Rep 1')
     h11 = axs[1][1].imshow(warp_rep1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen 0 Rep 1')
-    fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within), fontsize=24)
+    fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within), fontsize=20)
     plt.subplots_adjust(top=0.85)
     plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_within_ni{}_{}_r{}_{}.png'.format(num_instances,
                                                                                      sen_type,
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     axs[1][0].set_title('Original Sen 1 Rep 0')
     h11 = axs[1][1].imshow(warp_sen1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen 1 Rep 0')
-    fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without), fontsize=24)
+    fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without), fontsize=20)
 
     plt.subplots_adjust(top=0.85)
     plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_without_ni{}_{}_r{}_{}.png'.format(num_instances,
