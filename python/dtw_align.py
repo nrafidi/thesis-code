@@ -81,6 +81,7 @@ if __name__ == '__main__':
                                                 np.transpose(np.squeeze(sen_data[num_instances, :, :])),
                                                 radius=radius,
                                                 dist=dist)
+    path_without = np.array(path_without)
     print('Across sentence dtw distance: {}'.format(dtw_without))
 
     dist_noalign_within = np.sum([cosine(np.squeeze(sen_data[0, :, i]),
