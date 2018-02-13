@@ -87,13 +87,13 @@ if __name__ == '__main__':
     comp_mat[10:, :10] = 1.0
 
     fig, axs = plt.subplots(1,3)
-    h0 = axs[0].imshow(euclid_mat, interpolation='nearest', aspect='auto')
+    h0 = axs[0].imshow(euclid_mat, interpolation='nearest') #, aspect='auto')
     fig.colorbar(h0, ax=axs[0], shrink=0.5)
     axs[0].set_title('Euclidean')
-    h1 = axs[1].imshow(cosine_mat, interpolation='nearest', aspect='auto')
+    h1 = axs[1].imshow(cosine_mat, interpolation='nearest') #, aspect='auto')
     fig.colorbar(h1, ax=axs[1], shrink=0.5)
     axs[1].set_title('Cosine')
-    h2 = axs[2].imshow(comp_mat, interpolation='nearest', aspect='auto')
+    h2 = axs[2].imshow(comp_mat, interpolation='nearest') #, aspect='auto')
     fig.colorbar(h2, ax=axs[2], shrink=0.5)
     axs[2].set_title('True')
     fig.suptitle('Repetition-Repetition RDMs\n{sen_type}'.format(sen_type=sen_type))
