@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     print('Across sentence no align distance: {}'.format(dist_noalign_without))
 
-    fig, axs = plt.subplots(2, 2, sharey=True)
+    fig, axs = plt.subplots(2, 2)
     h00 = axs[0][0].imshow(np.squeeze(sen_data[0, :, :]), interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen 0 Rep 0')
     h01 = axs[0][1].imshow(np.squeeze(sen_data[0, :, path_within[:,0]]), interpolation='nearest', aspect='auto')
