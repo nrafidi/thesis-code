@@ -57,7 +57,6 @@ if __name__ == '__main__':
   parser.add_argument("--experiment", required=True)
   parser.add_argument("--subject", required=True)
   parser.add_argument("--process_slug", default=DEFAULT_PROC)
-  parser.add_argument("--output_filename", required=True)
   parser.add_argument('--spacing', required=True)
   args = parser.parse_args()
 
