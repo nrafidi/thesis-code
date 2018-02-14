@@ -18,7 +18,7 @@ sub_to_struct = {
     'I' : 'RV'
   },
   'PassAct3' : {
-      'B' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/004', # Needs BEM
+      'B' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/004',
       'G' : 'krns5A', # Potentially mixed up with subject A
       'C' : 'struct1',
       'D' : 'krns5B',
@@ -30,8 +30,8 @@ sub_to_struct = {
       'V' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/065'
   },
     'PassAct3_Aud' : {
-        'C' : '/bigbrain/bigbrain.usr1/meg/structural/krns5D',
-        'D' : '/bigbrain/bigbrain.usr1/meg/structural/struct2',
+        'C' : 'krns5D',
+        'D' : 'struct2',
         'B' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/037',
         'E' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/046',
         'A' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/053'
