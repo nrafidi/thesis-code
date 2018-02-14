@@ -7,34 +7,34 @@ import fnmatch
 
 sub_to_struct = {
   '20questions' : {
-    'A' : '/bigbrain/bigbrain.usr1/meg/structural/MP',
-    'B' : '/bigbrain/bigbrain.usr1/meg/structural/DP',
-    'C' : '/bigbrain/bigbrain.usr1/meg/structural/C',
-    'D' : '/bigbrain/bigbrain.usr1/meg/structural/DB',
-    'E' : '/bigbrain/bigbrain.usr1/meg/structural/JW',
-    'F' : '/bigbrain/bigbrain.usr1/meg/structural/AD',
-    'G' : '/bigbrain/bigbrain.usr1/meg/structural/JM',
-    'H' : '/bigbrain/bigbrain.usr1/meg/structural/TS',
-    'I' : '/bigbrain/bigbrain.usr1/meg/structural/RV'
+    'A' : 'MP',
+    'B' : 'DP',
+    'C' : 'C',
+    'D' : 'DB',
+    'E' : 'JW',
+    'F' : 'AD',
+    'G' : 'JM',
+    'H' : 'TS',
+    'I' : 'RV'
   },
   'PassAct3' : {
-      'B' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/004', # Needs BEM
-      'G' : '/bigbrain/bigbrain.usr1/meg/structural/krns5A', # Potentially mixed up with subject A
-      'C' : '/bigbrain/bigbrain.usr1/meg/structural/struct1',
-      'D' : '/bigbrain/bigbrain.usr1/meg/structural/krns5B',
-      'E' : '/bigbrain/bigbrain.usr1/meg/structural/struct2',
-      'P' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/059',
-      'R' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/061',
-      'T' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/063',
-      'U' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/064',
-      'V' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/065'
+      'B' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/004', # Needs BEM
+      'G' : 'krns5A', # Potentially mixed up with subject A
+      'C' : 'struct1',
+      'D' : 'krns5B',
+      'E' : 'struct2',
+      'P' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/059',
+      'R' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/061',
+      'T' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/063',
+      'U' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/064',
+      'V' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/065'
   },
     'PassAct3_Aud' : {
         'C' : '/bigbrain/bigbrain.usr1/meg/structural/krns5D',
         'D' : '/bigbrain/bigbrain.usr1/meg/structural/struct2',
-        'B' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/037',
-        'E' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/046',
-        'A' : '/bigbrain/bigbrain.usr1/meg/structural_raw_all/053'
+        'B' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/037',
+        'E' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/046',
+        'A' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/053'
     }
 }
 
@@ -67,15 +67,19 @@ if __name__ == '__main__':
   spacing = args.spacing
 
   struct = sub_to_struct[experiment][subject]
+  if struct == 'NA':
+      raise IOError('Freesurfer Reconstruction has not yet been done for this subject.')
+
   trans_fname = TRANS_FNAME.format(experiment=experiment, subject=subject, struct=struct)
 
   if not os.path.isfile(trans_fname):
       raise IOError('Coregistration has not yet been done for this subject')
 
   trans = mne.read_trans(trans_fname)
-  empty_room_fname = EMPTY_FNAME.format(experiment=experiment, subject=subject, process_slug=process_slug)
 
-  cov = mne.compute_raw_covariance(mne.io.Raw(empty_room_fname))
+  # Needed for Inverse Solution
+  # empty_room_fname = EMPTY_FNAME.format(experiment=experiment, subject=subject, process_slug=process_slug)
+  # cov = mne.compute_raw_covariance(mne.io.Raw(empty_room_fname))
 
   fwd_path = FWD_PATH.format(experiment=experiment, subject=subject)
   if not os.path.exists(fwd_path):
