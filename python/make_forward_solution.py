@@ -67,12 +67,12 @@ if __name__ == '__main__':
 
   struct = sub_to_struct[experiment][subject]
   if struct == 'NA':
-      raise IOError('Freesurfer Reconstruction has not yet been done for this subject.')
+      raise IOError('Freesurfer Reconstruction has not yet been done for this subject. See the Freesurfer Recommended Reconstruction page.')
 
   trans_fname = TRANS_FNAME.format(experiment=experiment, subject=subject, struct=struct)
 
   if not os.path.isfile(trans_fname):
-      raise IOError('Coregistration has not yet been done for this subject')
+      raise IOError('Coregistration has not yet been done for this subject. Use mne_analyze on big-brain and follow MNE handbook chapter 7.')
 
   trans = mne.read_trans(trans_fname)
 
@@ -92,7 +92,7 @@ if __name__ == '__main__':
   bem_path = [fn for fn in os.listdir(BEM_PATH.format(struct=struct)) if fnmatch.fnmatch(fn, '*-bem-sol.fif')]
 
   if len(bem_path) == 0:
-      raise IOError('BEM has not yet been done for this subject')
+      raise IOError('BEM has not yet been done for this subject. See MNE_pipeline_2018.sh')
 
   bem_fname = pjoin(BEM_PATH.format(struct=struct), bem_path[0])
 
@@ -109,4 +109,4 @@ if __name__ == '__main__':
                                   src=src,
                                   bem=bem_fname)
 
-  mne.write_forward_solution(fwd_path, fwd)
+  mne.write_forward_solution(fwd_fname, fwd)
