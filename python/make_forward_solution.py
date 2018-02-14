@@ -101,9 +101,11 @@ if __name__ == '__main__':
   mne.set_config('SUBJECTS_DIR', SUBJ_DIR)
 
   # Not sure how to make sure this runs effectively
-  src = mne.setup_source_space(struct, spacing='oct6')
-  mne.write_source_spaces(src_file, src)
-
+  if os.path.isfile(src_file):
+      src = mne.read_source_spaces(src_file)
+  else:
+      src = mne.setup_source_space(struct, spacing='oct6')
+      mne.write_source_spaces(src_file, src)
 
   fwd = mne.make_forward_solution(raw.info, trans,
                                   src=src,
