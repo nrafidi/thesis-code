@@ -41,11 +41,11 @@ sub_to_struct = {
 
 DEFAULT_PROC = 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_lp-150_notch-60-120_beatremoval-first_blinkremoval-first'
 
-TRANS_FNAME = '/share/volume0/newmeg/{experiment}/data/raw/{subject}_{experiment}_01_raw-trans-{struct}-1.fif'
-EMPTY_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}_{experiment}_EmptyRoom_{process_slug}_raw.fif'
+TRANS_FNAME = '/share/volume0/newmeg/{experiment}/data/raw/{subject}/{subject}_{experiment}_01_raw-trans-{struct}-1.fif'
+EMPTY_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_EmptyRoom_{process_slug}_raw.fif'
 FWD_PATH = '/share/volume0/newmeg/{experiment}/data/fwd/{subject}'
 FWD_FNAME = '{fwd_path}/{subject}_{experiment}_{process_slug}_raw-{struct}-{spacing}-fwd.fif'
-PROC_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}_{experiment}_01_{process_slug}_raw.fif'
+PROC_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_01_{process_slug}_raw.fif'
 BEM_PATH = '/bigbrain/bigbrain.usr1/meg/structural/{struct}/bem/'
 SRC_FNAME = '/bigbrain/bigbrain.usr1/meg/structural/{struct}/bem/{struct}-{spacing}-src.fif'
 SUBJ_DIR = '/bigbrain/bigbrain.usr1/meg/structural/'
@@ -57,7 +57,7 @@ if __name__ == '__main__':
   parser.add_argument("--experiment", required=True)
   parser.add_argument("--subject", required=True)
   parser.add_argument("--process_slug", default=DEFAULT_PROC)
-  parser.add_argument('--spacing', required=True)
+  parser.add_argument('--spacing', type=int, required=True)
   args = parser.parse_args()
 
   experiment = args.experiment
