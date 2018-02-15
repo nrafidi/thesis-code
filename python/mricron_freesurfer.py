@@ -56,7 +56,7 @@ if __name__ == '__main__':
     if len(nifti) > 1:
         raise AssertionError('There seems to be more than one nifti file')
 
-    nifti = dir_to_use + '/' + nifti[0]
+    nifti = '/' + dir_to_use[19:] + '/' + nifti[0]
 
     free_surfer_call = FREE_SURFER.format(nifti=nifti, subjid=subjid)
 
