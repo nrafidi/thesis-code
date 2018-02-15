@@ -20,7 +20,7 @@ sub_to_raw_dir = {
     }
 }
 
-MRICRON = '/bigbrain/bigbrain.usr1/apps/mricron/dcm2nii -g n {dir}*.dcm'
+MRICRON = '/bigbrain/bigbrain.usr1/apps/mricron/dcm2nii -g n {dir}/*.dcm'
 FREE_SURFER = 'recon-all -i {nifti} -subjid {subjid} | tee "{subjid}"_surface.log'
 
 
