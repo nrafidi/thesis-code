@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     nifti = dir_to_use + '/' + nifti[0]
 
-    free_surfer_call = FREE_SURFER.format(nifti=nifti, subjide=subjid)
+    free_surfer_call = FREE_SURFER.format(nifti=nifti, subjid=subjid)
 
     print('Run the following in big-brain:\n{free}'.format(free=free_surfer_call))
 
