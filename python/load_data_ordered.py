@@ -348,17 +348,15 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 
 
 if __name__ == '__main__':
-    subject = 'B'
-    filters = [is_in_long_sentence, is_in_passive, is_first_noun]
-    experiment = 'krns2'
-    tmin= -0.5
-    tmax = 0.5
-    evokeds, labels, sentence_ids, time = load_raw(subject,
-                                                   experiment,
-                                                   filters,
-                                                   tmin,
-                                                   tmax)
-    print(evokeds.shape)
-    print(np.array(labels))
-    print(sentence_ids)
+    data, labels, time, final_inds = load_sentence_data(subject='A',
+                                                        word='noun1',
+                                                        sen_type='active',
+                                                        experiment='PassAct3',
+                                                        proc=DEFAULT_PROC,
+                                                        num_instances=1,
+                                                        reps_to_use=10,
+                                                        noMag=False,
+                                                        sorted_inds=None)
+    print(data.shape)
     print(time.shape)
+    print(labels)

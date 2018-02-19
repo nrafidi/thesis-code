@@ -21,8 +21,8 @@ import time
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
 MODES = ['acc', 'coef']
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['I', 'D', 'B', 'C', 'E', 'F', 'G', 'H']
+EXPERIMENTS = ['PassAct3']  # ,  'PassAct2', 'PassAct3']
+SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['passive', 'active'] #, 'active']
 WORDS = ['noun1', 'noun2', 'verb']
 WIN_LENS = [150, 100, 50, 25, 12]#, 50, 25, 12]
