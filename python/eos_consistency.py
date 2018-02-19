@@ -21,6 +21,11 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
+    if args.sen_type == 'active':
+        max_time = 2.0
+    else:
+        max_time = 3.0
+
     word_list = ['noun1', 'verb', 'noun2']
     eos_max_by_word = []
     # time_by_word = []
@@ -52,10 +57,23 @@ if __name__ == '__main__':
     for i_word in range(num_words):
         ax.bar(ind + width*i_word, mean_eos_max_by_word[i_word, :], width, color=colors[i_word], yerr=std_eos_max_by_word[i_word, :], label=word_list[i_word])
     ax.set_ylabel('Time of EOS Max')
-    ax.set_ylim(bottom=2.0)
-    ax.set_title('Consistency of EOS Max Time')
+    ax.set_ylim(bottom=max_time)
+    ax.set_title('Consistency of EOS Max Time\n{sen_type} {win_len} avgTime {avgTime} avgTest {avgTest} ni {ni}'.format(sen_type=args.sen_type,
+                                                                                                                win_len=args.win_len,
+                                                                                                                avgTime=args.avgTime,
+                                                                                                                avgTest=args.avgTest,
+                                                                                                                        ni=args.num_instances))
     ax.set_xticks(ind + width/2)
     ax.set_xticklabels(load_data.VALID_SUBS[args.experiment])
     ax.legend(loc=4)
+
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_max_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
     plt.show()
