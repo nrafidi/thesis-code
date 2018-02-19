@@ -52,6 +52,7 @@ if __name__ == '__main__':
     for i_word in range(num_words):
         ax.bar(ind + width*i_word, mean_eos_max_by_word[i_word, :], width, color=colors[i_word], yerr=std_eos_max_by_word[i_word, :], label=word_list[i_word])
     ax.set_ylabel('Time of EOS Max')
+    ax.set_ylim(bottom=2.0)
     ax.set_title('Consistency of EOS Max Time')
     ax.set_xticks(ind + width/2)
     ax.set_xticklabels(load_data.VALID_SUBS[args.experiment])
