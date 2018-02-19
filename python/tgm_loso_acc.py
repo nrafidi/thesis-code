@@ -79,7 +79,8 @@ def intersect_accs(exp,
     eos_max = np.concatenate(eos_max_by_sub, axis=0)
     print(word)
     print(eos_max)
-    print(np.var(eos_max, axis=1))
+    print(np.mean(eos_max, axis=1))
+    print(np.std(eos_max, axis=1))
     return intersection, acc_all, time, win_starts
 
 
