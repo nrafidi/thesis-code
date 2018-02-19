@@ -87,7 +87,11 @@ if __name__ == '__main__':
                                   avgTime=args.avgTime,
                                   avgTest=args.avgTest)
 
-    intersection = np.reshape(intersection, (306, args.win_len))
+    if args.avgTime == 'T':
+        reshape_dim = 1
+    else:
+        reshape_dim = args.win_len
+    intersection = np.reshape(intersection, (306, reshape_dim))
 
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
@@ -100,11 +104,12 @@ if __name__ == '__main__':
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
-    time_win = np.array(range(args.win_len))
-    time = time_win*2
-    ax.set_xticks(time_win[::25])
-    ax.set_xticklabels(time[::25])
-    ax.set_xlabel('Time (ms)')
+    if reshape_dim > 1:
+        time_win = np.array(range(args.win_len))
+        time = time_win*2
+        ax.set_xticks(time_win[::25])
+        ax.set_xticklabels(time[::25])
+        ax.set_xlabel('Time (ms)')
     ax.set_title('Fraction of subjects at time window {win_time}\n{sen_type} {word} {experiment}\n{win_len}ms {overlap}ms {num_instances} inst'.format(win_time=args.win_time,
                                                                                                                                                     sen_type=args.sen_type,
                                                                                                                                                     word=args.word,

@@ -22,6 +22,9 @@ def intersect_accs(exp,
                    avgTest='F'):
     top_dir = run_TGM_LOSO.TOP_DIR.format(exp=exp)
 
+    if num_instances == 1:
+        avgTest = 'F'
+
     acc_by_sub = []
     acc_intersect = []
     time_by_sub = []
