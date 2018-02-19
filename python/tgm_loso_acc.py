@@ -77,11 +77,8 @@ def intersect_accs(exp,
     time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
     win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0).astype('int')
     eos_max = np.concatenate(eos_max_by_sub, axis=0)
-    print(word)
-    print(eos_max)
-    print(np.mean(eos_max, axis=1))
-    print(np.std(eos_max, axis=1))
-    return intersection, acc_all, time, win_starts
+
+    return intersection, acc_all, time, win_starts, eos_max
 
 
 if __name__ == '__main__':
@@ -97,15 +94,15 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    intersection, acc_all, time, win_starts = intersect_accs(args.experiment,
-                                                             args.sen_type,
-                                                             args.word,
-                                                             win_len=args.win_len,
-                                                             overlap=args.overlap,
-                                                             adj=args.adj,
-                                                             num_instances=args.num_instances,
-                                                             avgTime=args.avgTime,
-                                                             avgTest=args.avgTest)
+    intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
+                                                                      args.sen_type,
+                                                                      args.word,
+                                                                      win_len=args.win_len,
+                                                                      overlap=args.overlap,
+                                                                      adj=args.adj,
+                                                                      num_instances=args.num_instances,
+                                                                      avgTime=args.avgTime,
+                                                                      avgTest=args.avgTest)
 
     frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
     mean_acc = np.mean(acc_all, axis=0)

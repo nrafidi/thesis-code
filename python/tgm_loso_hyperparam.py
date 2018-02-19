@@ -42,15 +42,15 @@ if __name__ == '__main__':
         arg_max_eos_win = []
         per_sub_max_eos_win = []
         for num_instances in num_insts:
-            intersection, acc_all, time, win_starts = tgm_loso_acc.intersect_accs(args.experiment,
-                                                                     args.sen_type,
-                                                                     args.word,
-                                                                     win_len=win_len,
-                                                                     overlap=12,
-                                                                     adj=args.adj,
-                                                                     num_instances=num_instances,
-                                                                     avgTime=args.avgTime,
-                                                                     avgTest=args.avgTest)
+            intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc.intersect_accs(args.experiment,
+                                                                                           args.sen_type,
+                                                                                           args.word,
+                                                                                           win_len=win_len,
+                                                                                           overlap=12,
+                                                                                           adj=args.adj,
+                                                                                           num_instances=num_instances,
+                                                                                           avgTime=args.avgTime,
+                                                                                           avgTest=args.avgTest)
 
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
