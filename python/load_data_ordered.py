@@ -303,26 +303,26 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 
     if sen_type == 'active':
         if word == 'noun1':
-            filters = [is_in_long_sentence, is_in_active, is_first_noun]
+            filters = [is_in_active, is_first_noun]
         elif word == 'verb':
-            filters = [is_in_long_sentence, is_in_active, is_first_non_to_be_verb]
+            filters = [is_in_active, is_first_non_to_be_verb]
         elif word == 'noun2':
-            filters = [is_in_long_sentence, is_in_active, is_second_noun]
+            filters = [is_in_active, is_second_noun]
         elif word == 'agent':
-            filters = [is_in_long_sentence, is_in_active, is_first_noun]
+            filters = [is_in_active, is_first_noun]
         else:
-            filters = [is_in_long_sentence, is_in_active, is_second_noun]
+            filters = [is_in_active, is_second_noun]
     else:
         if word == 'noun1':
-            filters = [is_in_long_sentence, is_in_passive, is_first_noun]
+            filters = [is_in_passive, is_first_noun]
         elif word == 'verb':
-            filters = [is_in_long_sentence, is_in_passive, is_first_non_to_be_verb]
+            filters = [is_in_passive, is_first_non_to_be_verb]
         elif word == 'noun2':
-            filters = [is_in_long_sentence, is_in_passive, is_second_noun]
+            filters = [is_in_passive, is_second_noun]
         elif word == 'agent':
-            filters = [is_in_long_sentence, is_in_passive, is_second_noun]
+            filters = [is_in_passive, is_second_noun]
         else:
-            filters = [is_in_long_sentence, is_in_passive, is_first_noun]
+            filters = [is_in_passive, is_first_noun]
 
     evokeds, labels, time, sen_ids = load_raw(subject, experiment, filters, tmin, tmax)
 
