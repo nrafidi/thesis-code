@@ -22,6 +22,12 @@ def intersect_accs(exp,
                    avgTest='F'):
     top_dir = run_TGM_LOSO.TOP_DIR.format(exp=exp)
 
+    if sen_type == 'active':
+        max_time = 2.0
+    else:
+        max_time = 3.0
+    time_adjust = win_len * 0.002
+
     if num_instances == 1:
         avgTest = 'F'
 
@@ -29,6 +35,7 @@ def intersect_accs(exp,
     acc_intersect = []
     time_by_sub = []
     win_starts_by_sub = []
+    eos_max_by_sub = []
     for sub in load_data.VALID_SUBS[exp]:
         save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
         result = np.load(run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
@@ -46,10 +53,22 @@ def intersect_accs(exp,
                                                        rep=10,
                                                        rsP=1,
                                                        mode='acc') + '.npz')
+        time = result['time']
+        win_starts = result['win_starts']
+        time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
+        time_ind = time_ind[0]
 
-        acc = np.mean(result['tgm_acc'], axis=0)
-        time_by_sub.append(result['time'][None, ...])
-        win_starts_by_sub.append(result['win_starts'][None, ...])
+        fold_acc = result['tgm_acc']
+        eos_max_fold = []
+        for i_fold in range(fold_acc.shape[0]):
+            diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
+            argo = np.argmax(diag_acc[time_ind])
+            eos_max_fold.append(time_ind[argo])
+        eos_max_fold = np.array(eos_max_fold)
+        eos_max_by_sub.append(eos_max_fold[None, :])
+        acc = np.mean(fold_acc, axis=0)
+        time_by_sub.append(time[None, ...])
+        win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.25
         acc_by_sub.append(acc[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
@@ -57,6 +76,10 @@ def intersect_accs(exp,
     intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
     time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
     win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0).astype('int')
+    eos_max = np.concatenate(eos_max_by_sub, axis=0)
+    print(sub)
+    print(word)
+    print(eos_max)
     return intersection, acc_all, time, win_starts
 
 
