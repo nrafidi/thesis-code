@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     [num_words, num_sub] = mean_eos_max_by_word.shape
     ind = np.arange(num_sub)
-    width = 0.35
+    width = 0.27
     colors = ['r', 'g', 'b', 'c', 'k', 'm']
     fig, ax = plt.subplots()
     for i_word in range(num_words):
