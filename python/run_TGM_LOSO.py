@@ -101,6 +101,10 @@ def run_tgm_exp(experiment,
                                                                   noMag=False,
                                                                   sorted_inds=None)
 
+    if experiment=='PassAct3':
+        new_labels = [[lab[0], lab[1]] for lab in labels]
+        labels = np.array(new_labels)
+
     tmin = time.min()
     tmax = time.max()
 

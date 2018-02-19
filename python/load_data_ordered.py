@@ -357,6 +357,6 @@ if __name__ == '__main__':
                                                         reps_to_use=10,
                                                         noMag=False,
                                                         sorted_inds=None)
-    print(data.shape)
-    print(time.shape)
-    print(labels)
+    new_labels = [[lab[0], lab[1]] for lab in labels]
+    new_labels = np.array(new_labels)
+    print(new_labels)
