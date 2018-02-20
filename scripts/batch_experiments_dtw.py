@@ -27,7 +27,7 @@ RADIUS = range(1, 151, 25)
 TMAXES = [0.3, 0.5, 0.8]
 SENSORS = ['all', 'separate', 'three', 'mag']
 NINSTS = [2, 5, 10]
-DISTS = ['euclidean', 'cosine']
+DISTS = ['cosine']
 
 JOB_NAME = '{sen}-{radius}-{dist}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
