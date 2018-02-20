@@ -77,7 +77,7 @@ def warp_data(sen_data, path, sensors):
         for i_group in range(0, path.shape[0]):
             i_sensor = i_group*3
             warp_sen_data[i_sensor:(i_sensor+3), :] = np.squeeze(sen_data[i_sensor:(i_sensor+3), path[i_group, :]])
-    return warp_sen_data
+    return np.transpose(warp_sen_data)
 
 
 def ktau_rdms(rdm1, rdm2):
