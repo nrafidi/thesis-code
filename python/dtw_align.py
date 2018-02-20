@@ -56,7 +56,7 @@ def noalign_dist(sen_data0, sen_data1, dist, sensors):
                                    np.squeeze(sen_data1[i_sensor, i])) for i in range(sen_data.shape[-1])])
     elif sensors == 'three':
         na_dist = 0.0
-        for i_sensor in range(0, sen_data0.shape[0]):
+        for i_sensor in range(0, sen_data0.shape[0], 3):
             na_dist += np.sum([dist(np.squeeze(sen_data0[i_sensor:(i_sensor+3), i]),
                                     np.squeeze(sen_data1[i_sensor:(i_sensor+3), i])) for i in range(sen_data.shape[-1])])
     else:
