@@ -119,6 +119,30 @@ if __name__ == '__main__':
     tmax = args.tmax
     sensors = args.sensors
 
+    fname_within = '/home/nrafidi/thesis_figs/{exp}_{sub}_dtw_rep_within_ni{ni}_' \
+                   '{sen_type}_r{rad}_rep{rep0}_{tmin}-{tmax}_{sensors}_{dist}.png'.format(exp=exp,
+                                                                                           sub=sub,
+                                                                                           rad=radius,
+                                                                                           ni=num_instances,
+                                                                                           sen_type=sen_type,
+                                                                                           rep0=rep0,
+                                                                                           tmin=tmin,
+                                                                                           tmax=tmax,
+                                                                                           sensors=sensors,
+                                                                                           dist=args.dist)
+
+    fname_without = '/home/nrafidi/thesis_figs/{exp}_{sub}_dtw_rep_without_ni{ni}_' \
+                   '{sen_type}_r{rad}_rep{rep0}_{tmin}-{tmax}_{sensors}_{dist}.png'.format(exp=exp,
+                                                                                           sub=sub,
+                                                                                           rad=radius,
+                                                                                           ni=num_instances,
+                                                                                           sen_type=sen_type,
+                                                                                           rep0=rep0,
+                                                                                           tmin=tmin,
+                                                                                           tmax=tmax,
+                                                                                           sensors=sensors,
+                                                                                           dist=args.dist)
+
     if rep0 < num_instances - 1:
         rep1 = rep0 + 1
     else:
@@ -196,10 +220,7 @@ if __name__ == '__main__':
     axs[1][1].set_title('Warped Sen 0 Rep 1')
     fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within), fontsize=18)
     plt.subplots_adjust(top=0.8)
-    plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_within_ni{}_{}_r{}_{}.png'.format(num_instances,
-                                                                                     sen_type,
-                                                                                     radius,
-                                                                                     args.dist),
+    plt.savefig(fname_within,
                 bbox_inches='tight')
 
     orig_sen0_data = np.squeeze(sen_data[rep0, :, :])
@@ -227,9 +248,6 @@ if __name__ == '__main__':
     fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without), fontsize=18)
 
     plt.subplots_adjust(top=0.8)
-    plt.savefig('/home/nrafidi/thesis_figs/dtw_rep_without_ni{}_{}_r{}_{}.png'.format(num_instances,
-                                                                                      sen_type,
-                                                                                      radius,
-                                                                                      args.dist),
+    plt.savefig(fname_without,
                 bbox_inches='tight')
     plt.show()
