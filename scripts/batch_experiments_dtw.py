@@ -23,7 +23,10 @@ import time
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B']
 SEN_TYPES = ['passive', 'active']
-RADIUS = range(1, 2501, 25)
+RADIUS = range(1, 151, 25)
+TMAXES = [0.3, 0.5, 0.8]
+SENSORS = ['all', 'separate', 'three', 'mag']
+NINSTS = [2, 5, 10]
 DISTS = ['euclidean', 'cosine']
 
 JOB_NAME = '{sen}-{radius}-{dist}-{id}'
@@ -38,13 +41,16 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},radius={radius},' \
-                'dist={dist} ' \
+                'dist={dist},tmax={tmax},sensors={sens},num_instances={ninst} ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
                                    SEN_TYPES,
                                    SUBJECTS,
                                    RADIUS,
+                                   TMAXES,
+                                   SENSORS,
+                                   NINSTS,
                                    DISTS)
     job_id = 0
     for grid in param_grid:
@@ -52,7 +58,10 @@ if __name__ == '__main__':
         sen = grid[1]
         sub = grid[2]
         radius = grid[3]
-        dist = grid[4]
+        tmax = grid[4]
+        sens = grid[5]
+        ninst = grid[6]
+        dist = grid[7]
 
         job_str = JOB_NAME.format(dist=dist,
                                   sub=sub,
@@ -73,6 +82,9 @@ if __name__ == '__main__':
                                     sen=sen,
                                     radius=radius,
                                     dist=dist,
+                                    tmax=tmax,
+                                    sens=sens,
+                                    ninst=ninst,
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)

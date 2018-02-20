@@ -295,11 +295,13 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
 
 
 def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use, noMag=False,
-                       sorted_inds=None):
+                       sorted_inds=None, tmin=None, tmax=None):
     # evoked, labels, sentence_ids, time = load_raw('A', 'PassAct3', [is_in_active, is_first_noun], tmin=-0.7, tmax=2.5)
 
-    tmin = TIME_LIMITS[sen_type][word]['tmin']
-    tmax = TIME_LIMITS[sen_type][word]['tmax']
+    if tmin is None:
+        tmin = TIME_LIMITS[sen_type][word]['tmin']
+    if tmax is None:
+        tmax = TIME_LIMITS[sen_type][word]['tmax']
 
     if sen_type == 'active':
         if word == 'noun1':
