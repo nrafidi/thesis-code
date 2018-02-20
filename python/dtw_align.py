@@ -17,7 +17,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
                                     dist=dist)
     elif sensors == 'separate':
         dtw = 0.0
-        sensor_paths = []
+        path = []
         for i_sensor in range(sen_data0.shape[0]):
             curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor, :])),
                                                    np.transpose(np.squeeze(sen_data1[i_sensor, :])),
@@ -25,11 +25,10 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
                                                    dist=dist)
             curr_path = np.array(curr_path)
             dtw += curr_dist
-            sensor_paths.append(curr_path[None, ...])
-        path = np.concatenate(sensor_paths, axis=0)
+            path.append(curr_path)
     elif sensors == 'three':
         dtw = 0.0
-        sensor_paths = []
+        path = []
         for i_sensor in range(0, sen_data0.shape[0], 3):
             curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
                                                    np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),
@@ -37,8 +36,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
                                                    dist=dist)
             curr_path = np.array(curr_path)
             dtw += curr_dist
-            sensor_paths.append(curr_path[None, ...])
-        path = np.concatenate(sensor_paths, axis=0)
+            path.append(curr_path)
     else:
         dtw, path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[2::3, :])),
                                     np.transpose(np.squeeze(sen_data1[2::3, :])),
@@ -67,19 +65,29 @@ def noalign_dist(sen_data0, sen_data1, dist, sensors):
     return na_dist
 
 
-def warp_data(sen_data, path, sensors):
+def warp_data(sen_data, path, path_ind, sensors):
     if sensors == 'all' or sensors == 'mag':
-        warp_sen_data = np.transpose(np.squeeze(sen_data[:, path]))
+        warp_sen_data = np.squeeze(sen_data[:, path[:, path_ind]])
     elif sensors == 'separate':
-        warp_sen_data = np.empty((sen_data.shape[0], path.shape[1]))
-        for i_sensor in range(path.shape[0]):
-            warp_sen_data[i_sensor, :] = np.squeeze(sen_data[i_sensor, path[i_sensor, :]])
+        warp_sen_data = []
+        min_time = 100000
+        for i_path, sensor_path in enumerate(path):
+            time = sensor_path.shape[0]
+            if time < min_time:
+                min_time = time
+            warp_sen_data.append(np.squeeze(sen_data[i_path, sensor_path[:, path_ind]]))
+        warp_sen_data = np.concatenate([wdata[None, :min_time] for wdata in warp_sen_data], axis=0)
     else:
-        warp_sen_data = np.empty((sen_data.shape[0], path.shape[1]))
-        for i_group in range(0, path.shape[0]):
-            i_sensor = i_group*3
-            warp_sen_data[i_sensor:(i_sensor+3), :] = np.squeeze(sen_data[i_sensor:(i_sensor+3), path[i_group, :]])
-    return np.transpose(warp_sen_data)
+        warp_sen_data = []
+        min_time = 100000
+        for i_path, sensor_path in enumerate(path):
+            i_sensor = i_path*3
+            time = sensor_path.shape[0]
+            if time < min_time:
+                min_time = time
+            warp_sen_data.append(np.squeeze(sen_data[i_sensor:(i_sensor+3), sensor_path[:, path_ind]]))
+        warp_sen_data = np.concatenate([wdata[:, :min_time] for wdata in warp_sen_data], axis=0)
+    return warp_sen_data
 
 
 def ktau_rdms(rdm1, rdm2):
@@ -201,13 +209,13 @@ if __name__ == '__main__':
     orig_rep0_data = np.squeeze(sen_data[rep0, :, :])
     orig_rep0_data /= np.max(np.abs(orig_rep0_data))
 
-    warp_rep0_data = warp_data(sen_data[rep0, :, :], path_within[..., 0], sensors)
+    warp_rep0_data = warp_data(sen_data[rep0, :, :], path_within, 0, sensors)
     warp_rep0_data /= np.max(np.abs(warp_rep0_data))
 
     orig_rep1_data = np.squeeze(sen_data[rep1, :, :])
     orig_rep1_data /= np.max(np.abs(orig_rep1_data))
 
-    warp_rep1_data = warp_data(sen_data[rep1, :, :], path_within[..., 1], sensors)
+    warp_rep1_data = warp_data(sen_data[rep1, :, :], path_within, 1, sensors)
     warp_rep1_data /= np.max(np.abs(warp_rep1_data))
 
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
@@ -232,13 +240,13 @@ if __name__ == '__main__':
     orig_sen0_data = np.squeeze(sen_data[rep0, :, :])
     orig_sen0_data /= np.max(np.abs(orig_sen0_data))
 
-    warp_sen0_data = warp_data(sen_data[rep0, :, :], path_without[..., 0], sensors)
+    warp_sen0_data = warp_data(sen_data[rep0, :, :], path_without, 0, sensors)
     warp_sen0_data /= np.max(np.abs(warp_sen0_data))
 
     orig_sen1_data = np.squeeze(sen_data[num_instances, :, :])
     orig_sen1_data /= np.max(np.abs(orig_sen1_data))
 
-    warp_sen1_data = warp_data(sen_data[rep0+num_instances, :, :], path_within[..., 1], sensors)
+    warp_sen1_data = warp_data(sen_data[rep0+num_instances, :, :], path_within, 1, sensors)
     warp_sen1_data /= np.max(np.abs(warp_sen1_data))
 
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
