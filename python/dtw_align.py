@@ -100,7 +100,7 @@ if __name__ == '__main__':
     parser.add_argument('--sen0', type=int, default=0)
     parser.add_argument('--sen1', type=int, default=6)
     parser.add_argument('--tmin', type=float, default=0.0)
-    parser.add_argument('--tmin', type=float, default=0.3)
+    parser.add_argument('--tmax', type=float, default=0.3)
     parser.add_argument('--sensors', choices=['all', 'separate', 'three', 'mag'])
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
@@ -211,13 +211,17 @@ if __name__ == '__main__':
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
     fig, axs = plt.subplots(2, 2)
     h00 = axs[0][0].imshow(orig_rep0_data, interpolation='nearest', aspect='auto')
-    axs[0][0].set_title('Original Sen 0 Rep 0')
+    axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
+                                                                rep0=rep0))
     h01 = axs[0][1].imshow(warp_rep0_data, interpolation='nearest', aspect='auto')
-    axs[0][1].set_title('Warped Sen 0 Rep 0')
+    axs[0][1].set_title('Warped Sen {sen0} Rep {rep0}'.format(sen0=sen0,
+                                                              rep0=rep0))
     h10 = axs[1][0].imshow(orig_rep1_data, interpolation='nearest', aspect='auto')
-    axs[1][0].set_title('Original Sen 0 Rep 1')
+    axs[1][0].set_title('Original Sen {sen0} Rep {rep1}'.format(sen0=sen0,
+                                                                rep1=rep1))
     h11 = axs[1][1].imshow(warp_rep1_data, interpolation='nearest', aspect='auto')
-    axs[1][1].set_title('Warped Sen 0 Rep 1')
+    axs[1][1].set_title('Warped Sen {sen0} Rep {rep1}'.format(sen0=sen0,
+                                                              rep1=rep1))
     fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within), fontsize=18)
     plt.subplots_adjust(top=0.8)
     plt.savefig(fname_within,
@@ -238,13 +242,17 @@ if __name__ == '__main__':
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
     fig, axs = plt.subplots(2, 2)
     h00 = axs[0][0].imshow(orig_sen0_data, interpolation='nearest', aspect='auto')
-    axs[0][0].set_title('Original Sen 0 Rep 0')
+    axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
+                                                                rep0=rep0))
     h01 = axs[0][1].imshow(warp_sen0_data, interpolation='nearest', aspect='auto')
-    axs[0][1].set_title('Warped Sen 0 Rep 0')
+    axs[0][1].set_title('Warped Sen {sen0} Rep {rep0}'.format(sen0=sen0,
+                                                              rep0=rep0))
     h10 = axs[1][0].imshow(orig_sen1_data, interpolation='nearest', aspect='auto')
-    axs[1][0].set_title('Original Sen 1 Rep 0')
+    axs[1][0].set_title('Original Sen {sen1} Rep {rep0}'.format(sen1=sen1,
+                                                                rep0=rep0))
     h11 = axs[1][1].imshow(warp_sen1_data, interpolation='nearest', aspect='auto')
-    axs[1][1].set_title('Warped Sen 1 Rep 0')
+    axs[1][1].set_title('Warped Sen {sen1} Rep {rep0}'.format(sen1=sen1,
+                                                              rep0=rep0))
     fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without), fontsize=18)
 
     plt.subplots_adjust(top=0.8)
