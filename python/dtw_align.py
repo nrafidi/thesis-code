@@ -23,6 +23,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
                                                    np.transpose(np.squeeze(sen_data1[i_sensor, :])),
                                                    radius=radius,
                                                    dist=dist)
+            curr_path = np.array(curr_path)
             dtw += curr_dist
             sensor_paths.append(curr_path[None, ...])
         path = np.concatenate(sensor_paths, axis=0)
@@ -34,6 +35,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
                                                    np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),
                                                    radius=radius,
                                                    dist=dist)
+            curr_path = np.array(curr_path)
             dtw += curr_dist
             sensor_paths.append(curr_path[None, ...])
         path = np.concatenate(sensor_paths, axis=0)
