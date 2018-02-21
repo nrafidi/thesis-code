@@ -82,9 +82,9 @@ if __name__ == '__main__':
 
     plt.show()
 
-    max_by_sens = np.max(max_by_rad, axis=0)
+    max_by_sens = np.max(max_by_rad, axis=1)
     print(max_by_sens)
-    best_sens = np.argmax(max_by_rad, axis=0)
+    best_sens = np.argmax(max_by_rad, axis=1)
     print(best_sens)
 
     # fig, ax = plt.subplots()
