@@ -82,6 +82,11 @@ if __name__ == '__main__':
 
     plt.show()
 
+    max_by_sens = np.max(max_by_rad, axis=0)
+    print(max_by_sens)
+    best_sens = np.argmax(max_by_rad, axis=0)
+    print(best_sens)
+
     # fig, ax = plt.subplots()
     # ax.plot(euclidean_rads, euclidean_scores, c='r', label='euclidean')
     # ax.plot(cosine_rads, cosine_scores, c='b', label='cosine')
