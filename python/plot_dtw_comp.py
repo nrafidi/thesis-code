@@ -30,12 +30,16 @@ if __name__ == '__main__':
     fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}_{sensors}_ni{ni}_{tmin}-{tmax}.npz'
     # fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}.npz'
 
+    rad_list = range(1, 151, 25)
+    ni_list = [2, 5, 10]
+    sens_list = ['all', 'separate', 'three', 'mag']
+
     scores = []
-    for radius in range(1, 151, 25):
+    for radius in rad_list:
         scores_by_ni = []
-        for ni in [2, 5, 10]:
+        for ni in ni_list:
             scores_by_sens = []
-            for sens in ['all', 'separate', 'three', 'mag']:
+            for sens in sens_list:
                 fname = fname_str.format(sen_type=sen_type,
                                          sen0=sen0,
                                          sen1=sen1,
@@ -57,6 +61,8 @@ if __name__ == '__main__':
     max_by_rad = np.max(scores, axis=0)
     best_rad = np.argmax(scores, axis=0)
     print(best_rad)
+
+
 
     fig, ax = plt.subplots()
     h = ax.imshow(max_by_rad, interpolation='nearest', vmin=-0.15, vmax=0.75)
@@ -80,13 +86,55 @@ if __name__ == '__main__':
                 tmax=tmax
             ), bbox_inches='tight')
 
-    plt.show()
+
 
     max_by_sens = np.max(max_by_rad, axis=1)
     print(max_by_sens)
     best_sens = np.argmax(max_by_rad, axis=1)
     print(best_sens)
 
+    sensor_to_plot = sens_list[best_sens[2]]
+    print(sensor_to_plot)
+    rad_to_plot = rad_list[best_rad[2, best_sens[2]]]
+    print(rad_to_plot)
+
+    fname = fname_str.format(sen_type=sen_type,
+                             sen0=sen0,
+                             sen1=sen1,
+                             radius=rad_to_plot,
+                             dist=dist,
+                             sensors=sensor_to_plot,
+                             ni=10,
+                             tmin=tmin,
+                             tmax=tmax)
+    result = np.load(fname)
+    dtw_mat = result['dtw_mat']
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(dtw_mat, interpolation='nearest') #, vmin=0.0, vmax=0.75)
+    # ax.set_xticks(range(4))
+    # ax.set_xticklabels(['all', 'separate', 'three', 'mag'])
+    # ax.set_xlabel('Sensor Treatment')
+    # ax.set_yticks(range(3))
+    # ax.set_yticklabels([2, 5, 10])
+    # ax.set_ylabel('Number of Instances')
+    ax.set_title('MEG RDM {sensor}\n{sen_type} {tmin}-{tmax}'.format(sensor=sensor_to_plot,
+                                                                     sen_type=sen_type,
+                                                                     tmin=tmin,
+                                                                     tmax=tmax))
+    plt.colorbar(h)
+
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/dtw_mat_best_ni10_{sen_type}_{sen0}vs{sen1}_{tmin}-{tmax}.png'.format(
+            sen_type=sen_type,
+            sen0=sen0,
+            sen1=sen1,
+            tmin=tmin,
+            tmax=tmax
+        ), bbox_inches='tight')
+
+
+    plt.show()
     # fig, ax = plt.subplots()
     # ax.plot(euclidean_rads, euclidean_scores, c='r', label='euclidean')
     # ax.plot(cosine_rads, cosine_scores, c='b', label='cosine')
