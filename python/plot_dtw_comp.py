@@ -53,13 +53,13 @@ if __name__ == '__main__':
         scores_by_ni = np.concatenate(scores_by_ni, axis=0)
         scores.append(scores_by_ni[None, ...])
     scores = np.concatenate(scores, axis=0)
-    print(scores)
+    # print(scores)
     max_by_rad = np.max(scores, axis=0)
     best_rad = np.argmax(scores, axis=0)
     print(best_rad)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(max_by_rad, interpolation='nearest')
+    h = ax.imshow(max_by_rad, interpolation='nearest', vmin=-0.15, vmax=0.75)
     ax.set_xticks(range(4))
     ax.set_xticklabels(['all', 'separate', 'three', 'mag'])
     ax.set_xlabel('Sensor Treatment')
@@ -70,6 +70,16 @@ if __name__ == '__main__':
                                                                                               tmin=tmin,
                                                                                               tmax=tmax))
     plt.colorbar(h)
+
+    plt.savefig(
+            '/home/nrafidi/thesis_figs/dtw_comp_{sen_type}_{sen0}vs{sen1}_{tmin}-{tmax}.png'.format(
+                sen_type=sen_type,
+                sen0=sen0,
+                sen1=sen1,
+                tmin=tmin,
+                tmax=tmax
+            ), bbox_inches='tight')
+
     plt.show()
 
     # fig, ax = plt.subplots()
