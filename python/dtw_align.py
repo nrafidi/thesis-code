@@ -280,10 +280,16 @@ if __name__ == '__main__':
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
+    axs[0].set_yticks(range(0, cost_mat_within.shape[0], 10))
     axs[0].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
+    axs[0].set_xticks(range(0, cost_mat_within.shape[0], 10))
+    axs[0].set_xticklabels(np.arange(tmin, tmax, tmax / 10.0))
     axs[0].set_title('Cost Matrix Within Sentence')
     h1 = axs[1].imshow(cost_mat_without, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
+    axs[1].set_yticks(range(0, cost_mat_without.shape[0], 10))
     axs[1].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
+    axs[1].set_xticks(range(0, cost_mat_without.shape[0], 10))
+    axs[1].set_xticklabels(np.arange(tmin, tmax, tmax / 10.0))
     axs[1].set_title('Cost Matrix Across Sentence')
 
     if sensors == 'all' or sensors == 'mag':
@@ -297,7 +303,9 @@ if __name__ == '__main__':
                                                                                                   sen0=sen0,
                                                                                                   sen1=sen1,
                                                                                                   sensors=sensors,
-                                                                                                  dist=args.dist))
+                                                                                                  dist=args.dist),
+                 fontsize=18)
+    plt.subplots_adjust(top=0.8)
     plt.savefig(fname_cost, bbox_inches='tight')
 
     fig, axs = plt.subplots(2, 2)
