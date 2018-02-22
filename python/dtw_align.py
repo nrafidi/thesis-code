@@ -257,11 +257,20 @@ if __name__ == '__main__':
     max_cost = np.max(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
     min_cost = np.min(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
 
-    fig, axs = plt.subplots(1, 2)
-    h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', vmin=min_cost, vmax=max_cost)
+    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+    h0 = axs[0].imshow(np.flipud(cost_mat_within), interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
+    axs[0].set_yticks(range(cost_mat_within.shape[0]))
     axs[0].set_title('Cost Matrix Within Sentence')
-    h1 = axs[1].imshow(cost_mat_without, interpolation='nearest', vmin=min_cost, vmax=max_cost)
+    h1 = axs[1].imshow(np.flipud(cost_mat_without), interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
+    axs[1].set_yticks(range(cost_mat_without.shape[0]))
     axs[1].set_title('Cost Matrix Across Sentence')
+
+    if sensors == 'all' or sensors == 'mag':
+        for i in range(path_within.shape[0]):
+            axs[0].scatter(path_within[i, 1], path_within[i, 0], c='k', marker='x')
+        for i in range(path_without.shape[0]):
+            axs[1].scatter(path_without[i, 1], path_without[i, 0], c='k', marker='x')
+
     plt.savefig(fname_cost, bbox_inches='tight')
 
     fig, axs = plt.subplots(2, 2)
