@@ -281,15 +281,15 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
     axs[0].set_yticks(np.linspace(0, cost_mat_within.shape[0], 10))
-    axs[0].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
+    axs[0].set_yticklabels(np.linspace(tmin, tmax, 10))
     axs[0].set_xticks(np.linspace(0, cost_mat_within.shape[0], 10))
-    axs[0].set_xticklabels(np.arange(tmin, tmax, tmax / 10.0))
+    axs[0].set_xticklabels(np.linspace(tmin, tmax, 10))
     axs[0].set_title('Cost Matrix Within Sentence')
     h1 = axs[1].imshow(cost_mat_without, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
     axs[1].set_yticks(np.linspace(0, cost_mat_without.shape[0], 10))
-    axs[1].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
+    axs[1].set_yticklabels(np.linspace(tmin, tmax, 10))
     axs[1].set_xticks(np.linspace(0, cost_mat_without.shape[0], 10))
-    axs[1].set_xticklabels(np.arange(tmin, tmax, tmax / 10.0))
+    axs[1].set_xticklabels(np.linspace(tmin, tmax, 10))
     axs[1].set_title('Cost Matrix Across Sentence')
 
     if sensors == 'all' or sensors == 'mag':
@@ -314,17 +314,25 @@ if __name__ == '__main__':
     h00 = axs[0][0].imshow(orig_rep0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                                 rep0=rep0))
+    axs[0][0].set_xticks(np.linspace(0, orig_rep0_data.shape[-1], 10))
+    axs[0][0].set_xticklabels(np.linspace(tmin, tmax, 10))
     h01 = axs[0][1].imshow(warp_rep0_data, interpolation='nearest', aspect='auto')
     axs[0][1].set_title('Warped Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                               rep0=rep0))
+    axs[0][1].set_xticks(np.linspace(0, warp_rep0_data.shape[-1], 10))
+    axs[0][1].set_xticklabels(np.linspace(tmin, tmax, 10))
     h10 = axs[1][0].imshow(orig_rep1_data, interpolation='nearest', aspect='auto')
     axs[1][0].set_title('Original Sen {sen0} Rep {rep1}'.format(sen0=sen0,
                                                                 rep1=rep1))
+    axs[1][0].set_xticks(np.linspace(0, orig_rep1_data.shape[-1], 10))
+    axs[1][0].set_xticklabels(np.linspace(tmin, tmax, 10))
     h11 = axs[1][1].imshow(warp_rep1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen {sen0} Rep {rep1}'.format(sen0=sen0,
                                                               rep1=rep1))
+    axs[1][1].set_xticks(np.linspace(0, warp_rep1_data.shape[-1], 10))
+    axs[1][1].set_xticklabels(np.linspace(tmin, tmax, 10))
     fig.suptitle('Within Sentence\nDTW: {} No Align: {}'.format(dtw_within, dist_noalign_within), fontsize=18)
-    plt.subplots_adjust(top=0.8)
+    plt.subplots_adjust(top=0.85)
     plt.savefig(fname_within,
                 bbox_inches='tight')
 
@@ -345,18 +353,26 @@ if __name__ == '__main__':
     h00 = axs[0][0].imshow(orig_sen0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                                 rep0=rep0))
+    axs[0][0].set_xticks(np.linspace(0, orig_sen0_data.shape[-1], 10))
+    axs[0][0].set_xticklabels(np.linspace(tmin, tmax, 10))
     h01 = axs[0][1].imshow(warp_sen0_data, interpolation='nearest', aspect='auto')
     axs[0][1].set_title('Warped Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                               rep0=rep0))
+    axs[0][1].set_xticks(np.linspace(0, warp_sen0_data.shape[-1], 10))
+    axs[0][1].set_xticklabels(np.linspace(tmin, tmax, 10))
     h10 = axs[1][0].imshow(orig_sen1_data, interpolation='nearest', aspect='auto')
     axs[1][0].set_title('Original Sen {sen1} Rep {rep0}'.format(sen1=sen1,
                                                                 rep0=rep0))
+    axs[1][0].set_xticks(np.linspace(0, orig_sen1_data.shape[-1], 10))
+    axs[1][0].set_xticklabels(np.linspace(tmin, tmax, 10))
     h11 = axs[1][1].imshow(warp_sen1_data, interpolation='nearest', aspect='auto')
     axs[1][1].set_title('Warped Sen {sen1} Rep {rep0}'.format(sen1=sen1,
                                                               rep0=rep0))
+    axs[1][1].set_xticks(np.linspace(0, warp_sen1_data.shape[-1], 10))
+    axs[1][1].set_xticklabels(np.linspace(tmin, tmax, 10))
     fig.suptitle('Across Sentence\nDTW: {} No Align: {}'.format(dtw_without, dist_noalign_without), fontsize=18)
 
-    plt.subplots_adjust(top=0.8)
+    plt.subplots_adjust(top=0.85)
     plt.savefig(fname_without,
                 bbox_inches='tight')
     plt.show()
