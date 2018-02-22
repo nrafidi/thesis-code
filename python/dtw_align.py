@@ -42,7 +42,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
         for i_sensor in range(0, sen_data0.shape[0], 3):
             if radius < 0:
                 curr_dist, curr_path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
-                                                   np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),radius=radius,
+                                                   np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),
                                                    dist=dist)
             else:
                 curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
