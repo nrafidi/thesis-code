@@ -66,11 +66,11 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(max_by_rad, interpolation='nearest', vmin=-0.15, vmax=0.75)
-    ax.set_xticks(range(4))
-    ax.set_xticklabels(['all', 'separate', 'three', 'mag'])
+    ax.set_xticks(range(len(sens_list)))
+    ax.set_xticklabels(sens_list)
     ax.set_xlabel('Sensor Treatment')
-    ax.set_yticks(range(3))
-    ax.set_yticklabels([2, 5, 10])
+    ax.set_yticks(range(len(ni_list)))
+    ax.set_yticklabels(ni_list)
     ax.set_ylabel('Number of Instances')
     ax.set_title('Correlation between MEG and Binary Matrix\n{sen_type} {tmin}-{tmax}'.format(sen_type=sen_type,
                                                                                               tmin=tmin,
