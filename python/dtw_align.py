@@ -280,10 +280,10 @@ if __name__ == '__main__':
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
-    axs[0].set_yticklabels(range(tmin, tmax, tmax/10.0))
+    axs[0].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
     axs[0].set_title('Cost Matrix Within Sentence')
     h1 = axs[1].imshow(cost_mat_without, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
-    axs[1].set_yticks(range(tmin, tmax, tmax/10.0))
+    axs[1].set_yticklabels(np.arange(tmin, tmax, tmax/10.0))
     axs[1].set_title('Cost Matrix Across Sentence')
 
     if sensors == 'all' or sensors == 'mag':
