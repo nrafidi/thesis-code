@@ -11,18 +11,28 @@ import fastdtw
 
 def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
     if sensors == 'all':
-        dtw, path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0)),
+        if radius < 0:
+            dtw, path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0)),
                                     np.transpose(np.squeeze(sen_data1)),
-                                    radius=radius,
                                     dist=dist)
+        else:
+            dtw, path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0)),
+                                        np.transpose(np.squeeze(sen_data1)),
+                                        radius=radius,
+                                        dist=dist)
     elif sensors == 'separate':
         dtw = 0.0
         path = []
         for i_sensor in range(sen_data0.shape[0]):
-            curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor, :])),
+            if radius < 0:
+                curr_dist, curr_path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0[i_sensor, :])),
                                                    np.transpose(np.squeeze(sen_data1[i_sensor, :])),
-                                                   radius=radius,
                                                    dist=dist)
+            else:
+                curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor, :])),
+                                                       np.transpose(np.squeeze(sen_data1[i_sensor, :])),
+                                                       radius=radius,
+                                                       dist=dist)
             curr_path = np.array(curr_path)
             dtw += curr_dist
             path.append(curr_path)
@@ -30,18 +40,28 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
         dtw = 0.0
         path = []
         for i_sensor in range(0, sen_data0.shape[0], 3):
-            curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
-                                                   np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),
-                                                   radius=radius,
+            if radius < 0:
+                curr_dist, curr_path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
+                                                   np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),radius=radius,
                                                    dist=dist)
+            else:
+                curr_dist, curr_path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[i_sensor:(i_sensor + 3), :])),
+                                                       np.transpose(np.squeeze(sen_data1[i_sensor:(i_sensor + 3), :])),
+                                                       radius=radius,
+                                                       dist=dist)
             curr_path = np.array(curr_path)
             dtw += curr_dist
             path.append(curr_path)
     else:
-        dtw, path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[2::3, :])),
+        if radius < 0:
+            dtw, path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0[2::3, :])),
                                     np.transpose(np.squeeze(sen_data1[2::3, :])),
-                                    radius=radius,
                                     dist=dist)
+        else:
+            dtw, path = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data0[2::3, :])),
+                                        np.transpose(np.squeeze(sen_data1[2::3, :])),
+                                        radius=radius,
+                                        dist=dist)
     return dtw, path
 
 
@@ -125,7 +145,7 @@ if __name__ == '__main__':
     parser.add_argument('--subject', default='B')
     parser.add_argument('--sen_type', choices=['active', 'passive'])
     parser.add_argument('--dist', choices=['euclidean', 'cosine'])
-    parser.add_argument('--radius', type=int)
+    parser.add_argument('--radius', type=int) # if -1 use exact dtw
     parser.add_argument('--num_instances', type=int)
     parser.add_argument('--rep', type=int)
     parser.add_argument('--sen0', type=int, default=0)
@@ -256,6 +276,7 @@ if __name__ == '__main__':
 
     max_cost = np.max(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
     min_cost = np.min(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
+
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', aspect='auto', vmin=min_cost, vmax=max_cost)
