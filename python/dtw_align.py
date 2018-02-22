@@ -10,7 +10,7 @@ import fastdtw
 
 
 def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
-    if sensors == 'all':
+    if sensors == 'all' or sensors == 'nomag':
         if radius < 0:
             dtw, path = fastdtw.dtw(np.transpose(np.squeeze(sen_data0)),
                                     np.transpose(np.squeeze(sen_data1)),
@@ -66,7 +66,7 @@ def apply_dtw(sen_data0, sen_data1, radius, dist, sensors):
 
 
 def noalign_dist(sen_data0, sen_data1, dist, sensors):
-    if sensors == 'all':
+    if sensors == 'all' or sensors == 'nomag':
         na_dist = np.sum([dist(np.squeeze(sen_data0[:, i]),
                        np.squeeze(sen_data1[:, i])) for i in range(sen_data.shape[-1])])
     elif sensors == 'separate':
@@ -91,7 +91,7 @@ def make_cost_matrix(sen_data0, sen_data1, dist, sensors):
     cost_mat = np.empty((t0, t1))
     for i in range(t0):
         for j in range(t1):
-            if sensors == 'all':
+            if sensors == 'all' or sensors == 'nomag':
                 cost_mat[i, j] = dist(np.squeeze(sen_data0[:, i]), np.squeeze(sen_data1[:, j]))
             elif sensors == 'separate':
                 cost_mat[i, j] = 0.0
@@ -107,7 +107,7 @@ def make_cost_matrix(sen_data0, sen_data1, dist, sensors):
 
 
 def warp_data(sen_data, path, path_ind, sensors):
-    if sensors == 'all' or sensors == 'mag':
+    if sensors == 'all' or sensors == 'mag' or sensors == 'nomag':
         warp_sen_data = np.squeeze(sen_data[:, path[:, path_ind]])
     elif sensors == 'separate':
         warp_sen_data = []
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     parser.add_argument('--sen1', type=int, default=6)
     parser.add_argument('--tmin', type=float, default=0.0)
     parser.add_argument('--tmax', type=float, default=0.3)
-    parser.add_argument('--sensors', choices=['all', 'separate', 'three', 'mag'])
+    parser.add_argument('--sensors', choices=['all', 'separate', 'three', 'mag', 'nomag'])
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
     args = parser.parse_args()
@@ -222,7 +222,7 @@ if __name__ == '__main__':
                                                                   proc=proc,
                                                                   num_instances=num_instances,
                                                                   reps_to_use=10,
-                                                                  noMag=False,
+                                                                  noMag=sensors == 'nomag',
                                                                   sorted_inds=None,
                                                                   tmin=tmin,
                                                                   tmax=tmax)
