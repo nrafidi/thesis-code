@@ -317,7 +317,7 @@ if __name__ == '__main__':
     plt.subplots_adjust(top=0.8)
     plt.savefig(fname_cost, bbox_inches='tight')
 
-    fig, axs = plt.subplots(2, 2)
+    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
     h00 = axs[0][0].imshow(orig_rep0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                                 rep0=rep0))
@@ -356,7 +356,7 @@ if __name__ == '__main__':
     warp_sen1_data /= np.max(np.abs(warp_sen1_data))
 
     # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
-    fig, axs = plt.subplots(2, 2)
+    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
     h00 = axs[0][0].imshow(orig_sen0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
                                                                 rep0=rep0))
