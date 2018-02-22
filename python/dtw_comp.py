@@ -23,10 +23,10 @@ if __name__ == '__main__':
     parser.add_argument('--radius', type=int)
     parser.add_argument('--num_instances', type=int)
     parser.add_argument('--sensors', choices=['all', 'separate', 'three', 'mag'])
-    parser.add_argument('--tmin', type=float, default=0.0)
-    parser.add_argument('--tmax', type=float, default=0.3)
+    parser.add_argument('--tmin', type=float, default=0.5)
+    parser.add_argument('--tmax', type=float, default=0.8)
     parser.add_argument('--sen0', type=int, default=0)
-    parser.add_argument('--sen1', type=int, default=6)
+    parser.add_argument('--sen1', type=int, default=8)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
     args = parser.parse_args()
