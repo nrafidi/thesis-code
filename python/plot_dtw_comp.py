@@ -30,9 +30,9 @@ if __name__ == '__main__':
     fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}_{sensors}_ni{ni}_{tmin}-{tmax}.npz'
     # fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}.npz'
 
-    rad_list = range(1, 101, 25)
+    rad_list = range(1, 151, 25)
     ni_list = [2, 5, 10]
-    sens_list = ['all', 'separate', 'three', 'mag']
+    sens_list = ['all', 'three', 'mag'] #, 'separate']
 
     scores = []
     for radius in rad_list:
