@@ -65,6 +65,27 @@ def noalign_dist(sen_data0, sen_data1, dist, sensors):
     return na_dist
 
 
+def make_cost_matrix(sen_data0, sen_data1, dist, sensors):
+    t0 = sen_data0.shape[-1]
+    t1 = sen_data1.shape[-1]
+    cost_mat = np.empty((t0, t1))
+    for i in range(t0):
+        for j in range(t1):
+            if sensors == 'all':
+                cost_mat[i, j] = dist(np.squeeze(sen_data0[:, i]), np.squeeze(sen_data1[:, j]))
+            elif sensors == 'separate':
+                cost_mat[i, j] = 0.0
+                for i_sensor in range(sen_data0.shape[0]):
+                    cost_mat[i, j] += dist(np.squeeze(sen_data0[i_sensor, i]), np.squeeze(sen_data1[i_sensor, j]))
+            elif sensors == 'three':
+                cost_mat[i, j] = 0.0
+                for i_sensor in range(0, sen_data0.shape[0], 3):
+                    cost_mat[i, j] += dist(np.squeeze(sen_data0[i_sensor:(i_sensor+3), i]), np.squeeze(sen_data1[i_sensor:(i_sensor+3), j]))
+            else:
+                cost_mat[i, j] = dist(np.squeeze(sen_data0[2::3, i]), np.squeeze(sen_data1[2::3, j]))
+    return cost_mat
+
+
 def warp_data(sen_data, path, path_ind, sensors):
     if sensors == 'all' or sensors == 'mag':
         warp_sen_data = np.squeeze(sen_data[:, path[:, path_ind]])
@@ -152,6 +173,17 @@ if __name__ == '__main__':
                                                                                            tmax=tmax,
                                                                                            sensors=sensors,
                                                                                            dist=args.dist)
+    fname_cost = '/home/nrafidi/thesis_figs/{exp}_{sub}_dtw_cost_ni{ni}_' \
+                 '{sen_type}_r{rad}_rep{rep0}_{tmin}-{tmax}_{sensors}_{dist}.png'.format(exp=exp,
+                                                                                         sub=sub,
+                                                                                         rad=radius,
+                                                                                         ni=num_instances,
+                                                                                         sen_type=sen_type,
+                                                                                         rep0=rep0,
+                                                                                         tmin=tmin,
+                                                                                         tmax=tmax,
+                                                                                         sensors=sensors,
+                                                                                         dist=args.dist)
 
     if rep0 < num_instances - 1:
         rep1 = rep0 + 1
@@ -193,10 +225,14 @@ if __name__ == '__main__':
     print('Within sentence dtw distance: {}'.format(dtw_within))
     path_within = np.array(path_within)
 
+    cost_mat_within = make_cost_matrix(sen_data[rep0, :, :], sen_data[rep1, :, :], dist, sensors)
+
     dtw_without, path_without = apply_dtw(sen_data[rep0, :, :], sen_data[rep0 + num_instances, :, :], radius, dist, sensors)
 
     path_without = np.array(path_without)
     print('Across sentence dtw distance: {}'.format(dtw_without))
+
+    cost_mat_without = make_cost_matrix(sen_data[rep0, :, :], sen_data[rep0 + num_instances, :, :], dist, sensors)
 
     dist_noalign_within = noalign_dist(sen_data[rep0, :, :], sen_data[rep1, :, :], dist, sensors)
 
@@ -218,7 +254,16 @@ if __name__ == '__main__':
     warp_rep1_data = warp_data(sen_data[rep1, :, :], path_within, 1, sensors)
     warp_rep1_data /= np.max(np.abs(warp_rep1_data))
 
-    # print(np.sum(np.equal(warp_rep0_data, orig_rep0_data)))
+    max_cost = np.max(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
+    min_cost = np.min(np.concatenate([cost_mat_within, cost_mat_without], axis=0))
+
+    fig, axs = plt.subplots(1, 2)
+    h0 = axs[0].imshow(cost_mat_within, interpolation='nearest', vmin=min_cost, vmax=max_cost)
+    axs[0].set_title('Cost Matrix Within Sentence')
+    h1 = axs[1].imshow(cost_mat_without, interpolation='nearest', vmin=min_cost, vmax=max_cost)
+    axs[1].set_title('Cost Matrix Across Sentence')
+    plt.savefig(fname_cost, bbox_inches='tight')
+
     fig, axs = plt.subplots(2, 2)
     h00 = axs[0][0].imshow(orig_rep0_data, interpolation='nearest', aspect='auto')
     axs[0][0].set_title('Original Sen {sen0} Rep {rep0}'.format(sen0=sen0,
