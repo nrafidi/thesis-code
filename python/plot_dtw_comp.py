@@ -10,11 +10,11 @@ if __name__ == '__main__':
     parser.add_argument('--sen_type', choices=['active', 'passive'])
     parser.add_argument('--dist', choices=['euclidean', 'cosine'], default='cosine')
     parser.add_argument('--sen0', type=int, default=0)
-    parser.add_argument('--sen1', type=int, default=6)
+    parser.add_argument('--sen1', type=int, default=8)
     # parser.add_argument('--num_instances', type=int)
     # parser.add_argument('--sensors', choices=['all', 'separate', 'three', 'mag'])
-    parser.add_argument('--tmin', type=float, default=0.0)
-    parser.add_argument('--tmax', type=float, default=0.3)
+    parser.add_argument('--tmin', type=float, default=0.5)
+    parser.add_argument('--tmax', type=float, default=0.8)
     args = parser.parse_args()
 
     sen_type = args.sen_type
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}_{sensors}_ni{ni}_{tmin}-{tmax}.npz'
     # fname_str = '/share/volume0/nrafidi/DTW/dtw_mat_score_{sen_type}_{sen0}vs{sen1}_{radius}_{dist}.npz'
 
-    rad_list = range(1, 151, 25)
+    rad_list = range(1, 101, 25)
     ni_list = [2, 5, 10]
     sens_list = ['all', 'separate', 'three', 'mag']
 
