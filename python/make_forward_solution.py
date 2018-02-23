@@ -23,7 +23,7 @@ sub_to_struct = {
       'C' : 'struct1',
       'D' : 'krns5B',
       'E' : 'struct2',
-      'P' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/059',
+      'P' : 'PassAct3_P', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/059',
       'R' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/061',
       'T' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/063',
       'U' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/064',
@@ -42,7 +42,6 @@ sub_to_struct = {
 DEFAULT_PROC = 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_lp-150_notch-60-120_beatremoval-first_blinkremoval-first'
 
 TRANS_FNAME = '/share/volume0/newmeg/{experiment}/data/raw/{subject}/{subject}_{experiment}_01_raw-trans-{struct}-1.fif'
-EMPTY_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_EmptyRoom_{process_slug}_raw.fif'
 FWD_PATH = '/share/volume0/newmeg/{experiment}/data/fwd/{subject}'
 FWD_FNAME = '{fwd_path}/{subject}_{experiment}_{process_slug}_raw-{struct}-{spacing}-fwd.fif'
 PROC_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_01_{process_slug}_raw.fif'
@@ -51,12 +50,69 @@ SRC_FNAME = '/bigbrain/bigbrain.usr1/meg/structural/{struct}/bem/{struct}-{spaci
 SUBJ_DIR = '/bigbrain/bigbrain.usr1/meg/structural/'
 
 
+def make_forward_solution(experiment,
+                          subject,
+                          spacing,
+                          process_slug=DEFAULT_PROC):
+    struct = sub_to_struct[experiment][subject]
+    if struct == 'NA':
+        raise IOError(
+            'Freesurfer Reconstruction has not yet been done for this subject. See the Freesurfer Recommended Reconstruction page.')
+
+    trans_fname = TRANS_FNAME.format(experiment=experiment, subject=subject, struct=struct)
+
+    if not os.path.isfile(trans_fname):
+        raise IOError(
+            'Coregistration has not yet been done for this subject. Use mne_analyze on big-brain and follow MNE handbook chapter 7.')
+
+    trans = mne.read_trans(trans_fname)
+
+    fwd_path = FWD_PATH.format(experiment=experiment, subject=subject)
+    if not os.path.exists(fwd_path):
+        try:
+            os.mkdir(fwd_path)
+        except:
+            os.mkdir(FWD_PATH.format(experiment=experiment, subject=''))
+            os.mkdir(fwd_path)
+
+    fwd_fname = FWD_FNAME.format(fwd_path=fwd_path, subject=subject, experiment=experiment, process_slug=process_slug,
+                                 struct=struct, spacing=spacing)
+
+    raw = mne.io.Raw(PROC_FNAME.format(experiment=experiment, subject=subject, process_slug=process_slug))
+
+    bem_path = [fn for fn in os.listdir(BEM_PATH.format(struct=struct)) if fnmatch.fnmatch(fn, '*-bem-sol.fif')]
+
+    if len(bem_path) == 0:
+        raise IOError('BEM has not yet been done for this subject. See MNE_pipeline_2018.sh')
+
+    bem_fname = pjoin(BEM_PATH.format(struct=struct), bem_path[0])
+
+    src_file = SRC_FNAME.format(struct=struct, spacing=spacing)
+
+    mne.set_config('SUBJECTS_DIR', SUBJ_DIR)
+
+    # Not sure how to make sure this runs effectively
+    if os.path.isfile(src_file):
+        src = mne.read_source_spaces(src_file)
+    else:
+        src = mne.setup_source_space(struct, spacing='oct6')
+        mne.write_source_spaces(src_file, src)
+
+    fwd = mne.make_forward_solution(raw.info, trans,
+                                    src=src,
+                                    bem=bem_fname)
+
+    mne.write_forward_solution(fwd_fname, fwd)
+
+    return fwd
+
+
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
-  parser.add_argument("--experiment", required=True)
-  parser.add_argument("--subject", required=True)
-  parser.add_argument("--process_slug", default=DEFAULT_PROC)
+  parser.add_argument('--experiment', required=True)
+  parser.add_argument('--subject', required=True)
+  parser.add_argument('--process_slug', default=DEFAULT_PROC)
   parser.add_argument('--spacing', type=int, required=True)
   args = parser.parse_args()
 
@@ -65,50 +121,7 @@ if __name__ == '__main__':
   process_slug = args.process_slug
   spacing = args.spacing
 
-  struct = sub_to_struct[experiment][subject]
-  if struct == 'NA':
-      raise IOError('Freesurfer Reconstruction has not yet been done for this subject. See the Freesurfer Recommended Reconstruction page.')
-
-  trans_fname = TRANS_FNAME.format(experiment=experiment, subject=subject, struct=struct)
-
-  if not os.path.isfile(trans_fname):
-      raise IOError('Coregistration has not yet been done for this subject. Use mne_analyze on big-brain and follow MNE handbook chapter 7.')
-
-  trans = mne.read_trans(trans_fname)
-
-  # Needed for Inverse Solution
-  # empty_room_fname = EMPTY_FNAME.format(experiment=experiment, subject=subject, process_slug=process_slug)
-  # cov = mne.compute_raw_covariance(mne.io.Raw(empty_room_fname))
-
-  fwd_path = FWD_PATH.format(experiment=experiment, subject=subject)
-  if not os.path.exists(fwd_path):
-      os.mkdir(fwd_path)
-
-  fwd_fname = FWD_FNAME.format(fwd_path=fwd_path, subject=subject, experiment=experiment, process_slug=process_slug,
-                               struct=struct, spacing=spacing)
-
-  raw = mne.io.Raw(PROC_FNAME.format(experiment=experiment, subject=subject, process_slug=process_slug))
-
-  bem_path = [fn for fn in os.listdir(BEM_PATH.format(struct=struct)) if fnmatch.fnmatch(fn, '*-bem-sol.fif')]
-
-  if len(bem_path) == 0:
-      raise IOError('BEM has not yet been done for this subject. See MNE_pipeline_2018.sh')
-
-  bem_fname = pjoin(BEM_PATH.format(struct=struct), bem_path[0])
-
-  src_file = SRC_FNAME.format(struct=struct, spacing=spacing)
-
-  mne.set_config('SUBJECTS_DIR', SUBJ_DIR)
-
-  # Not sure how to make sure this runs effectively
-  if os.path.isfile(src_file):
-      src = mne.read_source_spaces(src_file)
-  else:
-      src = mne.setup_source_space(struct, spacing='oct6')
-      mne.write_source_spaces(src_file, src)
-
-  fwd = mne.make_forward_solution(raw.info, trans,
-                                  src=src,
-                                  bem=bem_fname)
-
-  mne.write_forward_solution(fwd_fname, fwd)
+  fwd = make_forward_solution(experiment,
+                              subject,
+                              spacing,
+                              process_slug)
