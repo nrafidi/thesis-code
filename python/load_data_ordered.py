@@ -392,14 +392,16 @@ if __name__ == '__main__':
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
     ax.set_xticks(range(0, len(time), 250))
-    ax.set_xticklabels(time[::250])
+    label_time = time[::250]
+    label_time[label_time < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
     ax.set_xlabel('Time')
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.01*500
+        max_line = 2.51*500
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.01*500
+        max_line = 3.51*500
 
     for i_v, v in enumerate(np.arange(0.5*500, max_line, 0.5*500)):
         ax.axvline(x=v, color='k')
