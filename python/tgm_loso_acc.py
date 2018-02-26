@@ -118,7 +118,7 @@ if __name__ == '__main__':
     print(mean_acc.shape)
     for sub in range(acc_all.shape[0]):
         fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(acc_all[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+        h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
         ax.set_ylabel('Test Time')
         ax.set_xlabel('Train Time')
         ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
