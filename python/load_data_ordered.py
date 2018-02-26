@@ -1,4 +1,5 @@
 import numpy as np
+import argparse
 import hippo.io
 import hippo.query
 import re
@@ -350,15 +351,29 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--sen_type')
+    args = parser.parse_args()
     data, labels, time, final_inds = load_sentence_data(subject='A',
                                                         word='noun1',
-                                                        sen_type='active',
+                                                        sen_type=args.sen_type,
                                                         experiment='PassAct3',
                                                         proc=DEFAULT_PROC,
                                                         num_instances=1,
                                                         reps_to_use=10,
                                                         noMag=False,
                                                         sorted_inds=None)
+    print(data.shape)
     new_labels = [[lab[0], lab[1]] for lab in labels]
     new_labels = np.array(new_labels)
     print(new_labels)
+
+    sen_set = np.unique(labels, axis=0).tolist()
+    num_labels = labels.shape[0]
+    sen_ints = np.empty((num_labels,))
+    for i_l in range(num_labels):
+        for j_l, l in enumerate(sen_set):
+            if np.all(l == labels[i_l, :]):
+                sen_ints[i_l] = j_l
+                break
+    print(sen_set)
