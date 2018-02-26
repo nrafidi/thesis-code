@@ -423,6 +423,8 @@ if __name__ == '__main__':
     fig2, ax2 = plot_data_array(np.squeeze(np.mean(data[np.logical_not(short_sens), :, :], axis=0)), time, args.sen_type)
     ax2.set_title('Long Sentences')
 
+    assert not np.all(np.mean(data, axis=0) == np.mean(data[np.logical_not(short_sens), :, :], axis=0))
+
     sen_set = np.unique(new_labels, axis=0).tolist()
     num_labels = new_labels.shape[0]
     sen_ints = np.empty((num_labels,))
