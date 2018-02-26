@@ -414,6 +414,7 @@ if __name__ == '__main__':
     short_sens = [len(lab) == 2 for lab in labels]
     new_labels = np.array(new_labels)
     print(new_labels)
+    print(np.array(short_sens))
 
     fig0, ax0 = plot_data_array(np.squeeze(np.mean(data, axis=0)), time, args.sen_type)
     ax0.set_title('All Data')
