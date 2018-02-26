@@ -401,7 +401,7 @@ if __name__ == '__main__':
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
         max_line = 3.01*500
 
-    for i_v, v in enumerate(np.arange(-0.5*500, max_line, 0.5*500)):
+    for i_v, v in enumerate(np.arange(0.5*500, max_line, 0.5*500)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
             plt.text(v + 0.05*500, 2, text_to_write[i_v])
