@@ -66,9 +66,10 @@ def intersect_accs(exp,
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
-            fig, ax = plt.subplots()
-            ax.plot(diag_acc)
-            ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
+            if sub =='A':
+                fig, ax = plt.subplots()
+                ax.plot(diag_acc)
+                ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
             argo = np.argmax(diag_acc[time_ind])
             eos_max_fold.append(time_ind[argo])
         eos_max_fold = np.array(eos_max_fold)
