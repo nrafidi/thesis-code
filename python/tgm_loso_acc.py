@@ -130,18 +130,18 @@ if __name__ == '__main__':
         ax.set_xticklabels(label_time)
         ax.set_yticks(range(0, len(time), 250))
         ax.set_yticklabels(label_time)
-        time_adjust = args.win_len*0.002
-        if args.sen_type == 'active':
-            text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-            max_line = 2.0 - time_adjust + 0.01
-        else:
-            text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-            max_line = 3.0 - time_adjust + 0.01
-
-        for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
-            ax.axvline(x=v, color='k')
-            if i_v < len(text_to_write):
-                plt.text(v + 0.05, 0.2, text_to_write[i_v])
+        # time_adjust = args.win_len*0.002
+        # if args.sen_type == 'active':
+        #     text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        #     max_line = 2.0 - time_adjust + 0.01
+        # else:
+        #     text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        #     max_line = 3.0 - time_adjust + 0.01
+        #
+        # for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
+        #     ax.axvline(x=v, color='k')
+        #     if i_v < len(text_to_write):
+        #         plt.text(v + 0.05, 0.2, text_to_write[i_v])
         plt.colorbar(h)
 
     # fig, ax = plt.subplots()
