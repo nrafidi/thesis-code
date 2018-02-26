@@ -393,7 +393,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Sensors')
     ax.set_xticks(range(0, len(time), 250))
     label_time = time[::250]
-    label_time[label_time < 1e-15] = 0.0
+    label_time[np.abs(label_time) < 1e-15] = 0.0
     ax.set_xticklabels(label_time)
     ax.set_xlabel('Time')
     if args.sen_type == 'active':
@@ -406,7 +406,7 @@ if __name__ == '__main__':
     for i_v, v in enumerate(np.arange(0.5*500, max_line, 0.5*500)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05*500, 2, text_to_write[i_v])
+            plt.text(v + 0.05*500, 15, text_to_write[i_v])
 
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
     new_labels = np.array(new_labels)
