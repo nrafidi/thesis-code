@@ -365,6 +365,36 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
     return data, labels, time, final_inds
 
 
+def plot_data_array(data, time, sen_type):
+    sorted_inds, sorted_reg = sort_sensors()
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(data[sorted_inds, :], interpolation='nearest', aspect='auto')
+    ax.set_yticks(yticks_sens)
+    ax.set_yticklabels(uni_reg)
+    ax.set_ylabel('Sensors')
+    ax.set_xticks(range(0, len(time), 250))
+    label_time = time[::250]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
+    ax.set_xlabel('Time')
+    if sen_type == 'active':
+        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        max_line = 2.51 * 500
+    else:
+        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        max_line = 3.51 * 500
+
+    for i_v, v in enumerate(np.arange(0.5 * 500, max_line, 0.5 * 500)):
+        ax.axvline(x=v, color='k')
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
+
+    return fig, ax
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--sen_type')
@@ -380,37 +410,17 @@ if __name__ == '__main__':
                                                         sorted_inds=None)
 
     print(data.shape)
-
-    sorted_inds, sorted_reg = sort_sensors()
-    uni_reg = np.unique(sorted_reg)
-    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
-
-    mean_data = np.squeeze(np.mean(data, axis=0))
-    fig, ax = plt.subplots()
-    h = ax.imshow(mean_data[sorted_inds, :], interpolation='nearest', aspect='auto')
-    ax.set_yticks(yticks_sens)
-    ax.set_yticklabels(uni_reg)
-    ax.set_ylabel('Sensors')
-    ax.set_xticks(range(0, len(time), 250))
-    label_time = time[::250]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_xlabel('Time')
-    if args.sen_type == 'active':
-        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.51*500
-    else:
-        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.51*500
-
-    for i_v, v in enumerate(np.arange(0.5*500, max_line, 0.5*500)):
-        ax.axvline(x=v, color='k')
-        if i_v < len(text_to_write):
-            plt.text(v + 0.05*500, 15, text_to_write[i_v])
-
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
+    short_sens = [len(lab) == 2 for lab in labels]
     new_labels = np.array(new_labels)
     print(new_labels)
+
+    fig0, ax0 = plot_data_array(np.squeeze(np.mean(data, axis=0)), time, args.sen_type)
+    ax0.set_title('All Data')
+    fig1, ax1 = plot_data_array(np.squeeze(np.mean(data[short_sens, :, :], axis=0)), time, args.sen_type)
+    ax1.set_title('Short Sentences')
+    fig2, ax2 = plot_data_array(np.squeeze(np.mean(data[np.logical_not(short_sens), :, :], axis=0)), time, args.sen_type)
+    ax2.set_title('Long Sentences')
 
     sen_set = np.unique(new_labels, axis=0).tolist()
     num_labels = new_labels.shape[0]
