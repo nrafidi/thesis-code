@@ -391,6 +391,20 @@ if __name__ == '__main__':
     ax.set_yticks(yticks_sens)
     ax.set_yticklabels(uni_reg)
     ax.set_ylabel('Sensors')
+    ax.set_xticks(range(0, len(time), 250))
+    ax.set_xticklabels(time[::250])
+    ax.set_xlabel('Time')
+    if args.sen_type == 'active':
+        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        max_line = 2.01
+    else:
+        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        max_line = 3.01
+
+    for i_v, v in enumerate(np.arange(-0.5, max_line, 0.5)):
+        ax.axvline(x=v, color='k')
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05, 0.8, text_to_write[i_v])
 
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
     new_labels = np.array(new_labels)
