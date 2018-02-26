@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
     mean_acc = np.mean(acc_all, axis=0)
-
+    print(mean_acc.shape)
     for sub in range(acc_all.shape[0]):
         fig, ax = plt.subplots()
         h = ax.imshow(np.squeeze(acc_all[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
@@ -124,24 +124,25 @@ if __name__ == '__main__':
         ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                                           word=args.word,
                                                                                                           experiment=args.experiment))
-        # ax.set_xticks(range(0, len(time), 250))
-        # label_time = time[::250]
-        # label_time[np.abs(label_time) < 1e-15] = 0.0
-        # ax.set_xticklabels(label_time)
-        # ax.set_yticks(range(0, len(time), 250))
-        # ax.set_yticklabels(label_time)
+        ax.set_xticks(range(0, len(time[win_starts]), 25))
+        label_time = time[win_starts]
+        label_time = label_time[::25]
+        label_time[np.abs(label_time) < 1e-15] = 0.0
+        ax.set_xticklabels(label_time)
+        ax.set_yticks(range(0, len(time[win_starts]), 25))
+        ax.set_yticklabels(label_time)
         time_adjust = args.win_len
         if args.sen_type == 'active':
             text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-            max_line = 2.51 * 500
+            max_line = 2.51 * 42
         else:
             text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-            max_line = 3.51 * 500
+            max_line = 3.51 * 42
 
-        for i_v, v in enumerate(np.arange(0.5 * 500, max_line, 0.5 * 500)):
+        for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
+                plt.text(v + 0.05 * 42, 0.2, text_to_write[i_v])
         plt.colorbar(h)
 
     # fig, ax = plt.subplots()
