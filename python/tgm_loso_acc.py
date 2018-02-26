@@ -146,6 +146,34 @@ if __name__ == '__main__':
                 plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='r')
         plt.colorbar(h)
 
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
+    ax.set_ylabel('Test Time')
+    ax.set_xlabel('Train Time')
+    ax.set_title(
+        'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                  word=args.word,
+                                                                  experiment=args.experiment))
+    ax.set_xticks(range(0, len(time[win_starts]), 21))
+    label_time = time[win_starts]
+    label_time = label_time[::21]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
+    ax.set_yticks(range(0, len(time[win_starts]), 21))
+    ax.set_yticklabels(label_time)
+    time_adjust = args.win_len
+    if args.sen_type == 'active':
+        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        max_line = 2.51 * 42
+    else:
+        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        max_line = 3.51 * 42
+
+    for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
+        ax.axvline(x=v, color='r')
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='r')
+    plt.colorbar(h)
     # fig, ax = plt.subplots()
     # ax.plot(np.diag(intersection))
     # ax.set_ylabel('Number of Subjects with > chance acc')
