@@ -55,7 +55,7 @@ if __name__ == '__main__':
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
             # print(time_ind)
-            frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
+            frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
             max_mean_acc = np.max(mean_acc[time_ind])
