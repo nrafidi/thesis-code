@@ -102,7 +102,7 @@ def run_tgm_exp(experiment,
                                                                   sorted_inds=None)
 
     if experiment=='PassAct3':
-        new_labels = [[lab[0], lab[1]] for lab in labels]
+        new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
         labels = np.array(new_labels)
 
     tmin = time.min()

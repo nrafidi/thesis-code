@@ -48,11 +48,11 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
-                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
+                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=True ' \
                 '-e {errfile} -o {outfile} submit_experiment.sh'
 
-    param_grid = itertools.product(EXPERIMENTS,
-                                   WIN_LENS,
+    param_grid = itertools.product(MODES,
+                                   EXPERIMENTS,
                                    OVERLAPS,
                                    IS_PERMS,
                                    ALGS,
@@ -64,12 +64,12 @@ if __name__ == '__main__':
                                    RANDOM_STATES,
                                    SEN_TYPES,
                                    WORDS,
-                                   SUBJECTS,
-                                   MODES)
+                                   WIN_LENS,
+                                   SUBJECTS)
     job_id = 0
     for grid in param_grid:
-        exp = grid[0]
-        win_len = grid[1]
+        mode = grid[0]
+        exp = grid[1]
         overlap = grid[2]
         isPerm = grid[3]
         alg = grid[4]
@@ -81,8 +81,8 @@ if __name__ == '__main__':
         rs = grid[10]
         sen = grid[11]
         word = grid[12]
-        sub = grid[13]
-        mode= grid[14]
+        win_len = grid[13]
+        sub = grid[14]
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,

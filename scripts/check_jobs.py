@@ -35,8 +35,8 @@ if __name__ == '__main__':
     job_id = 0
     successful_jobs = 0
     for grid in param_grid:
-        exp = grid[0]
-        win_len = grid[1]
+        mode = grid[0]
+        exp = grid[1]
         overlap = grid[2]
         isPerm = grid[3]
         alg = grid[4]
@@ -48,8 +48,8 @@ if __name__ == '__main__':
         rs = grid[10]
         sen = grid[11]
         word = grid[12]
-        sub = grid[13]
-        mode = grid[14]
+        win_len = grid[13]
+        sub = grid[14]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
