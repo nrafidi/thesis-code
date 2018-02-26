@@ -141,9 +141,9 @@ if __name__ == '__main__':
             max_line = 3.51 * 42
 
         for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
-            ax.axvline(x=v, color='r')
+            ax.axvline(x=v, color='m')
             if i_v < len(text_to_write):
-                plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='r')
+                plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='m')
         plt.colorbar(h)
 
     fig, ax = plt.subplots()
@@ -170,9 +170,9 @@ if __name__ == '__main__':
         max_line = 3.51 * 42
 
     for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
-        ax.axvline(x=v, color='r')
+        ax.axvline(x=v, color='m')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='r')
+            plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='m')
     plt.colorbar(h)
     # fig, ax = plt.subplots()
     # ax.plot(np.diag(intersection))
