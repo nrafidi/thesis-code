@@ -141,9 +141,9 @@ if __name__ == '__main__':
             max_line = 3.51 * 42
 
         for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
-            ax.axvline(x=v, color='m')
+            ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='m')
+                plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='k')
         plt.colorbar(h)
 
     fig, ax = plt.subplots()
@@ -170,10 +170,20 @@ if __name__ == '__main__':
         max_line = 3.51 * 42
 
     for i_v, v in enumerate(np.arange(0.5 * 42, max_line, 0.5 * 42)):
-        ax.axvline(x=v, color='m')
+        ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='m')
+            plt.text(v + 0.05 * 42, 21, text_to_write[i_v], color='k')
     plt.colorbar(h)
+
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
+
     # fig, ax = plt.subplots()
     # ax.plot(np.diag(intersection))
     # ax.set_ylabel('Number of Subjects with > chance acc')
