@@ -66,10 +66,10 @@ def intersect_accs(exp,
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
-            if sub =='A':
-                fig, ax = plt.subplots()
-                ax.plot(diag_acc)
-                ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
+            # if sub =='A':
+            #     fig, ax = plt.subplots()
+            #     ax.plot(diag_acc)
+            #     ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
             argo = np.argmax(diag_acc[time_ind])
             eos_max_fold.append(time_ind[argo])
         eos_max_fold = np.array(eos_max_fold)
@@ -116,15 +116,15 @@ if __name__ == '__main__':
     frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
     mean_acc = np.mean(acc_all, axis=0)
 
-    # for sub in range(acc_all.shape[0]):
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(np.squeeze(mean_acc[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
-    #     ax.set_ylabel('Test Time')
-    #     ax.set_xlabel('Train Time')
-    #     ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-    #                                                                                                       word=args.word,
-    #                                                                                                       experiment=args.experiment))
-    #     plt.colorbar(h)
+    for sub in range(acc_all.shape[0]):
+        fig, ax = plt.subplots()
+        h = ax.imshow(np.squeeze(mean_acc[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+        ax.set_ylabel('Test Time')
+        ax.set_xlabel('Train Time')
+        ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                                                                          word=args.word,
+                                                                                                          experiment=args.experiment))
+        plt.colorbar(h)
 
     # fig, ax = plt.subplots()
     # ax.plot(np.diag(intersection))
