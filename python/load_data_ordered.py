@@ -364,16 +364,16 @@ if __name__ == '__main__':
                                                         noMag=False,
                                                         sorted_inds=None)
     print(data.shape)
-    new_labels = [[lab[0], lab[1]] for lab in labels]
+    new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
     new_labels = np.array(new_labels)
     print(new_labels)
 
-    sen_set = np.unique(labels, axis=0).tolist()
-    num_labels = labels.shape[0]
+    sen_set = np.unique(new_labels, axis=0).tolist()
+    num_labels = new_labels.shape[0]
     sen_ints = np.empty((num_labels,))
     for i_l in range(num_labels):
         for j_l, l in enumerate(sen_set):
-            if np.all(l == labels[i_l, :]):
+            if np.all(l == new_labels[i_l, :]):
                 sen_ints[i_l] = j_l
                 break
     print(sen_set)
