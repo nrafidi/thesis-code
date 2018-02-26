@@ -113,7 +113,7 @@ if __name__ == '__main__':
                                                                       avgTime=args.avgTime,
                                                                       avgTest=args.avgTest)
 
-    frac_sub = np.diag(intersection).astype('float')/float(len(load_data.VALID_SUBS[args.experiment]))
+    frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
     mean_acc = np.mean(acc_all, axis=0)
     print(mean_acc.shape)
     for sub in range(acc_all.shape[0]):
@@ -121,9 +121,10 @@ if __name__ == '__main__':
         h = ax.imshow(np.squeeze(acc_all[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
         ax.set_ylabel('Test Time')
         ax.set_xlabel('Train Time')
-        ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                                          word=args.word,
-                                                                                                          experiment=args.experiment))
+        ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
+                                                                                sen_type=args.sen_type,
+                                                                                word=args.word,
+                                                                                experiment=args.experiment))
         ax.set_xticks(range(0, len(time[win_starts]), 21))
         label_time = time[win_starts]
         label_time = label_time[::21]
