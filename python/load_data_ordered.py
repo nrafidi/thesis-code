@@ -396,15 +396,15 @@ if __name__ == '__main__':
     ax.set_xlabel('Time')
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.01
+        max_line = 2.01*500
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.01
+        max_line = 3.01*500
 
-    for i_v, v in enumerate(np.arange(-0.5, max_line, 0.5)):
+    for i_v, v in enumerate(np.arange(-0.5*500, max_line, 0.5*500)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05, 0.8, text_to_write[i_v])
+            plt.text(v + 0.05*500, 2, text_to_write[i_v])
 
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
     new_labels = np.array(new_labels)
