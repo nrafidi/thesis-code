@@ -5,6 +5,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
+import os
 import run_TGM_LOSO
 
 
@@ -38,7 +39,7 @@ def intersect_accs(exp,
     eos_max_by_sub = []
     for sub in load_data.VALID_SUBS[exp]:
         save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
-        result = np.load(run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
+        result_fname = run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
                                                        sub=sub,
                                                        sen_type=sen_type,
                                                        word=word,
@@ -52,7 +53,10 @@ def intersect_accs(exp,
                                                        inst=num_instances,
                                                        rep=10,
                                                        rsP=1,
-                                                       mode='acc') + '.npz')
+                                                       mode='acc') + '.npz'
+        if not os.path.isfile(result_fname):
+            continue
+        result = np.load(result_fname)
         time = result['time']
         win_starts = result['win_starts']
         time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
