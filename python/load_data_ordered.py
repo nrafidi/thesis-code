@@ -2,8 +2,12 @@ import numpy as np
 import argparse
 import hippo.io
 import hippo.query
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 import re
 import string
+import scipy.io as sio
 import path_constants
 
 NUM_SENTENCES = 16
@@ -40,6 +44,8 @@ IRR_WORDS = {'krns2': ['was', 'by'],
              'PassAct2': ['was', 'by', 'the'],
              'PassAct3': ['was', 'by', 'the']}
 
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+
 # Old slugs:
 # 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
 # 'sss_emptyroom-4-10-2-2_band-1-150_notch-60-120_beatremoval-first_blinkremoval-first'
@@ -49,6 +55,15 @@ IRR_WORDS = {'krns2': ['was', 'by'],
 # DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
 DEFAULT_PROC = 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_lp-150_notch-60-120_beatremoval-first_blinkremoval-first'
 PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pdtwSyn.mat'
+
+
+def sort_sensors():
+    load_var = sio.loadmat(SENSOR_MAP)
+    sensor_reg = load_var['sensor_reg']
+    sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
+    sorted_inds = np.argsort(sensor_reg)
+    sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
+    return sorted_inds, sorted_reg
 
 
 def get_sen_num_from_id(sen_id):
@@ -363,7 +378,20 @@ if __name__ == '__main__':
                                                         reps_to_use=10,
                                                         noMag=False,
                                                         sorted_inds=None)
+
     print(data.shape)
+
+    sorted_inds, sorted_reg = sort_sensors()
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
+    mean_data = np.squeeze(np.mean(data, axis=0))
+    fig, ax = plt.subplots()
+    h = ax.imshow(mean_data[sorted_inds, :], interpolation='nearest', aspect='auto')
+    ax.set_yticks(yticks_sens)
+    ax.set_yticklabels(uni_reg)
+    ax.set_ylabel('Sensors')
+
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
     new_labels = np.array(new_labels)
     print(new_labels)
@@ -377,3 +405,4 @@ if __name__ == '__main__':
                 sen_ints[i_l] = j_l
                 break
     print(sen_set)
+    plt.show()
