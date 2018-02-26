@@ -118,7 +118,7 @@ if __name__ == '__main__':
 
     for sub in range(acc_all.shape[0]):
         fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(mean_acc[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+        h = ax.imshow(np.squeeze(acc_all[0, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
         ax.set_ylabel('Test Time')
         ax.set_xlabel('Train Time')
         ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
