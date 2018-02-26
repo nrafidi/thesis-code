@@ -17,8 +17,8 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.EXPERIMENTS,
-                                   batch_exp.WIN_LENS,
+    param_grid = itertools.product(batch_exp.MODES,
+                                   batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.ALGS,
@@ -30,8 +30,8 @@ if __name__ == '__main__':
                                    batch_exp.RANDOM_STATES,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
-                                   batch_exp.SUBJECTS,
-                                   batch_exp.MODES)
+                                   batch_exp.WIN_LENS,
+                                   batch_exp.SUBJECTS)
     job_id = 0
     successful_jobs = 0
     for grid in param_grid:
