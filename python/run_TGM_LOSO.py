@@ -91,19 +91,27 @@ def run_tgm_exp(experiment,
         print(fname)
         return
 
-    data, labels, time, final_inds = load_data.load_sentence_data(subject=subject,
-                                                                  word='noun1',
-                                                                  sen_type=sen_type,
-                                                                  experiment=experiment,
-                                                                  proc=proc,
-                                                                  num_instances=num_instances,
-                                                                  reps_to_use=reps_to_use,
-                                                                  noMag=False,
-                                                                  sorted_inds=None)
 
     if experiment=='PassAct3':
+        data, labels, time, final_inds = load_data.load_PassAct3_matlab(subject=subject,
+                                                                        sen_type=sen_type,
+                                                                        num_instances=num_instances,
+                                                                        reps_to_use=reps_to_use,
+                                                                        noMag=False,
+                                                                        sorted_inds=None)
         new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
         labels = np.array(new_labels)
+    else:
+        data, labels, time, final_inds = load_data.load_sentence_data(subject=subject,
+                                                                      word='noun1',
+                                                                      sen_type=sen_type,
+                                                                      experiment=experiment,
+                                                                      proc=proc,
+                                                                      num_instances=num_instances,
+                                                                      reps_to_use=reps_to_use,
+                                                                      noMag=False,
+                                                                      sorted_inds=None)
+
 
     tmin = time.min()
     tmax = time.max()

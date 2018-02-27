@@ -55,6 +55,7 @@ SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megV
 # DEFAULT_PROC = 'trans-D_nsb-5_cb-0_empty-4-10-2-2_band-1-150_notch-60-120_beats-head-meas_blinks-head-meas'
 DEFAULT_PROC = 'trans-D_nsb-5_cb-0_emptyroom-4-10-2-2_lp-150_notch-60-120_beatremoval-first_blinkremoval-first'
 PDTW_FILE = '/share/volume0/newmeg/{exp}/avg/{exp}_{sub}_{proc}_parsed_{word}_pdtwSyn.mat'
+PA3_FILE = '/share/volume0/newmeg/PassAct3/parsed/{sub}/hippoParse_parsed.mat'
 
 
 def sort_sensors():
@@ -308,6 +309,38 @@ def load_raw(subject, experiment, filters, tmin, tmax, proc=DEFAULT_PROC):
         time = time[:min_size]
 
     return evokeds, labels, time, sentence_ids
+
+
+def load_PassAct3_matlab(subject, sen_type, num_instances, reps_to_use, noMag=False, sorted_inds=None):
+    pa3_file = PA3_FILE.format(sub=subject)
+    result = sio.loadmat(pa3_file)
+    if sen_type == 'active':
+        inds = range(16)
+    else:
+        inds = range(16, 32)
+    full_data = result['fullData']
+    full_data = np.stack(np.squeeze(full_data[:, inds]))
+    time = result['fullTime']
+    labels = np.squeeze(result['words']).tolist()
+    labels = [np.squeeze(w) for w in labels]
+    labels = [[str(w[0]) for w in wo if w not in IRR_WORDS['PassAct3']] for wo in labels]
+    data, labels, sen_ids = avg_data(
+        full_data, labels,
+        sentence_ids_raw=inds, experiment='PassAct3', num_instances=num_instances, reps_to_use=reps_to_use)
+    if noMag:
+        inds_to_remove = range(2, data.shape[1], 3)
+    else:
+        inds_to_remove = []
+    if sorted_inds is None:
+        ordered_inds = range(data.shape[1])
+    else:
+        ordered_inds = sorted_inds
+
+    final_inds = [i for i in ordered_inds if i not in inds_to_remove]
+    data = data[:, final_inds, :]
+
+    return data, labels, time, final_inds
+
 
 
 def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances, reps_to_use, noMag=False,
