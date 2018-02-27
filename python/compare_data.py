@@ -31,6 +31,8 @@ if __name__ == '__main__':
     is_long_old = [len(lab) > 2 for lab in labels_old]
     labels_old = np.array(new_labels)
 
+    min_time = np.min([data_new.shape[-1], data_old.shape[-1]])
+
     for i in range(labels_new.shape[0]):
         for j in range(labels_old.shape[0]):
             if np.array_equal(labels_new[i, :], labels_old[j, :]):
@@ -50,11 +52,20 @@ if __name__ == '__main__':
                         plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
                 ax[1].set_title('Old')
                 fig.suptitle(labels_new[i, :])
+                # fig, ax = plt.subplots()
+                # ax.imshow(np.squeeze(np.abs(data_new[i, :, :min_time] - data_old[j, :, :min_time])), interpolation='nearest', aspect='auto')
+                # fig.suptitle('Absolute difference')
 
-                min_time = np.min([data_new.shape[-1], data_old.shape[-1]])
-                fig, ax = plt.subplots()
-                ax.imshow(np.squeeze(np.abs(data_new[i, :, :min_time] - data_old[j, :, :min_time])), interpolation='nearest', aspect='auto')
-                fig.suptitle('Absolute difference')
+    total_mean_new_long = np.squeeze(np.mean(data_new[is_long_new, :, :], axis=0))
+    total_mean_old_long = np.squeeze(np.mean(data_old[is_long_old, :, :], axis=0))
+    fig, ax = plt.subplots(1, 2, figsize=(20, 10))
+    ax[0].imshow(total_mean_new_long, interpolation='nearest', aspect='auto')
+    ax[0].set_title('New')
+    ax[1].imshow(total_mean_old_long, interpolation='nearest', aspect='auto')
+    ax[1].set_title('Old')
 
-    total_mean_new = np.mean(kjqwet9iu)
+    fig, ax = plt.subplots()
+    ax.imshow(np.squeeze(np.abs(total_mean_new_long[:,:min_time] - total_mean_old_long[:,:min_time])),
+              interpolation='nearest', aspect='auto')
+    ax.set_title('Absolute Difference - Long Sentences')
     plt.show()
