@@ -101,6 +101,8 @@ def run_tgm_exp(experiment,
                                                                         sorted_inds=None)
         new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
         labels = np.array(new_labels)
+        print(data.shape)
+        print(labels.shape)
     else:
         data, labels, time, final_inds = load_data.load_sentence_data(subject=subject,
                                                                       word='noun1',
@@ -111,6 +113,8 @@ def run_tgm_exp(experiment,
                                                                       reps_to_use=reps_to_use,
                                                                       noMag=False,
                                                                       sorted_inds=None)
+        print(data.shape)
+        print(np.array(labels).shape)
 
 
     tmin = time.min()
