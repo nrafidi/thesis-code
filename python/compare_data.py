@@ -15,7 +15,7 @@ if __name__ == '__main__':
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
     is_long_old = [len(lab) > 2 for lab in labels_old]
     labels_old = np.array(new_labels)
-
+    time_old = np.squeeze(time_old)
     inds_to_plot = np.logical_and(time_old >= -0.5, time_old <=4.0)
     print(inds_to_plot.shape)
     print(time_old.shape)
