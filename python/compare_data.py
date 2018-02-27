@@ -27,9 +27,14 @@ if __name__ == '__main__':
                                                                                   sorted_inds=None,
                                                                                   tmin=-0.5,
                                                                                   tmax=4.0)
+    data_old = data_old[:, :, ::2]
+
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
     is_long_old = [len(lab) > 2 for lab in labels_old]
     labels_old = np.array(new_labels)
+
+    print(time_new[:10])
+    print(time_old[:10])
 
     min_time = np.min([data_new.shape[-1], data_old.shape[-1]])
 
