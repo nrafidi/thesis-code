@@ -101,11 +101,11 @@ if __name__ == '__main__':
     ax[0].set_title('New')
     ax[1].imshow(total_mean_old_long[:, ::2], interpolation='nearest', aspect='auto')
     ax[1].set_title('Old')
-    for i_v, v in enumerate(np.arange(0.0, max_line, 0.25 * 500)):
+    for i_v, v in enumerate(np.arange(0.0, max_line/2.0, 0.25 * 500)):
         ax[0].axvline(x=v, color='k')
         if i_v < len(text_to_write):
             ax[0].text(v + 0.05 * 500, 15, text_to_write[i_v])
-    for i_v, v in enumerate(np.arange(0.0, max_line, 0.25 * 500)):
+    for i_v, v in enumerate(np.arange(0.0, max_line/2.0, 0.25 * 500)):
         ax[1].axvline(x=v, color='k')
         if i_v < len(text_to_write):
             ax[1].text(v + 0.05 * 500, 15, text_to_write[i_v])
