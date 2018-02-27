@@ -29,11 +29,11 @@ if __name__ == '__main__':
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
     labels_old = np.array(new_labels)
 
-    label_match = np.where(labels_new == labels_old)
-
-    for match in label_match:
-        fig, ax = plt.subplots(1, 2, figsize=(10,10))
-        h0 = ax[0].imshow(np.squeeze(data_new[match, :, :]), interpolation='nearest')
-        h1 = ax[1].imshow(np.squeeze(data_old[match, :, :]), interpolation='nearest')
-        fig.suptitle(labels_new[match, :])
+    for i in range(labels_new.shape[0]):
+        for j in range(labels_old.shape[0]):
+            if np.array_equal(labels_new[i, :], labels_old[j, :]):
+                fig, ax = plt.subplots(1, 2, figsize=(10,10))
+                h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest')
+                h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest')
+            fig.suptitle(labels_new[i, :])
     plt.show()
