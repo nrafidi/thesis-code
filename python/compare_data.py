@@ -35,5 +35,5 @@ if __name__ == '__main__':
                 fig, ax = plt.subplots(1, 2, figsize=(10,10))
                 h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest')
                 h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest')
-            fig.suptitle(labels_new[i, :])
+                fig.suptitle(labels_new[i, :])
     plt.show()
