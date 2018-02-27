@@ -13,6 +13,7 @@ if __name__ == '__main__':
                                                                                     noMag=False,
                                                                                     sorted_inds=None)
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_new]
+    is_long_new = [len(lab) > 2 for lab in labels_new]
     labels_new = np.array(new_labels)
 
     data_old, labels_old, time_old, final_inds_old = load_data.load_sentence_data(subject='A',
@@ -25,8 +26,9 @@ if __name__ == '__main__':
                                                                                   noMag=False,
                                                                                   sorted_inds=None,
                                                                                   tmin=-0.5,
-                                                                                  tmax=5.0)
+                                                                                  tmax=4.0)
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
+    is_long_old = [len(lab) > 2 for lab in labels_old]
     labels_old = np.array(new_labels)
 
     for i in range(labels_new.shape[0]):
@@ -53,4 +55,6 @@ if __name__ == '__main__':
                 fig, ax = plt.subplots()
                 ax.imshow(np.squeeze(np.abs(data_new[i, :, :min_time] - data_old[j, :, :min_time])), interpolation='nearest', aspect='auto')
                 fig.suptitle('Absolute difference')
+
+    total_mean_new = np.mean(kjqwet9iu)
     plt.show()
