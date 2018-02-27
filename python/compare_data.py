@@ -40,7 +40,7 @@ if __name__ == '__main__':
                     ax[0].axvline(x=v, color='k')
                     if i_v < len(text_to_write):
                         plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
-                ax[1].set_title('New')
+                ax[0].set_title('New')
                 h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest', aspect='auto')
                 for i_v, v in enumerate(np.arange(0.5 * 500, max_line, 0.5 * 500)):
                     ax[1].axvline(x=v, color='k')
