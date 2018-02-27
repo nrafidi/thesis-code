@@ -32,8 +32,8 @@ if __name__ == '__main__':
     for i in range(labels_new.shape[0]):
         for j in range(labels_old.shape[0]):
             if np.array_equal(labels_new[i, :], labels_old[j, :]):
-                fig, ax = plt.subplots(1, 2, figsize=(10,10))
-                h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest')
-                h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest')
+                fig, ax = plt.subplots(1, 2, figsize=(10, 20))
+                h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest', aspect='auto')
+                h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest', aspect='auto')
                 fig.suptitle(labels_new[i, :])
     plt.show()
