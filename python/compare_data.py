@@ -6,6 +6,8 @@ import load_data_ordered as load_data
 
 
 if __name__ == '__main__':
+    tmin = -0.5
+    tmax = 4.0
     data_old, labels_old, time_old, final_inds_old = load_data.load_PassAct3_matlab(subject='A',
                                                                                     sen_type='active',
                                                                                     num_instances=1,
@@ -16,7 +18,7 @@ if __name__ == '__main__':
     is_long_old = [len(lab) > 2 for lab in labels_old]
     labels_old = np.array(new_labels)
     time_old = np.squeeze(time_old)
-    inds_to_plot = np.logical_and(time_old >= -0.5, time_old <=4.0)
+    inds_to_plot = np.logical_and(time_old >= tmin, time_old <=tmax)
     print(inds_to_plot.shape)
     print(time_old.shape)
     print(data_old.shape)
@@ -32,8 +34,8 @@ if __name__ == '__main__':
                                                                                   reps_to_use=10,
                                                                                   noMag=False,
                                                                                   sorted_inds=None,
-                                                                                  tmin=-0.5,
-                                                                                  tmax=4.0)
+                                                                                  tmin=tmin,
+                                                                                  tmax=tmax)
 
     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_new]
     is_long_new = [len(lab) > 2 for lab in labels_new]
@@ -52,13 +54,13 @@ if __name__ == '__main__':
                 h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest', aspect='auto')
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
                 max_line = 2.51 * 500
-                for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
+                for i_v, v in enumerate(np.arange(tmin * 500, max_line, 0.5 * 500)):
                     ax[0].axvline(x=v, color='k')
                     if i_v < len(text_to_write):
                         ax[0].text(v + 0.05 * 500, 15, text_to_write[i_v])
                 ax[0].set_title('New')
                 h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest', aspect='auto')
-                for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
+                for i_v, v in enumerate(np.arange(tmin * 500, max_line, 0.5 * 500)):
                     ax[1].axvline(x=v, color='k')
                     if i_v < len(text_to_write):
                         ax[1].text(v + 0.05 * 500, 15, text_to_write[i_v])
@@ -75,11 +77,11 @@ if __name__ == '__main__':
     ax[0].set_title('New')
     ax[1].imshow(total_mean_old_long, interpolation='nearest', aspect='auto')
     ax[1].set_title('Old')
-    for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
+    for i_v, v in enumerate(np.arange(tmin * 500, max_line, 0.5 * 500)):
         ax[0].axvline(x=v, color='k')
         if i_v < len(text_to_write):
             ax[0].text(v + 0.05 * 500, 15, text_to_write[i_v])
-    for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
+    for i_v, v in enumerate(np.arange(tmin * 500, max_line, 0.5 * 500)):
         ax[1].axvline(x=v, color='k')
         if i_v < len(text_to_write):
             ax[1].text(v + 0.05 * 500, 15, text_to_write[i_v])
@@ -88,9 +90,9 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.imshow(np.squeeze(np.abs(total_mean_new_long[:,:min_time] - total_mean_old_long[:,:min_time])),
               interpolation='nearest', aspect='auto')
-    for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
-        ax.axvline(x=v, color='k')
+    for i_v, v in enumerate(np.arange(tmin * 500, max_line, 0.5 * 500)):
+        ax.axvline(x=v, color='w')
         if i_v < len(text_to_write):
-            ax.text(v + 0.05 * 500, 15, text_to_write[i_v])
+            ax.text(v + 0.05 * 500, 15, text_to_write[i_v], color='w')
     ax.set_title('Absolute Difference - Long Sentences')
     plt.show()
