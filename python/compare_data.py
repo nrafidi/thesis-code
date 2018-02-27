@@ -32,8 +32,18 @@ if __name__ == '__main__':
     for i in range(labels_new.shape[0]):
         for j in range(labels_old.shape[0]):
             if np.array_equal(labels_new[i, :], labels_old[j, :]):
-                fig, ax = plt.subplots(1, 2, figsize=(10, 20))
+                fig, ax = plt.subplots(1, 2, figsize=(20, 10))
                 h0 = ax[0].imshow(np.squeeze(data_new[i, :, :]), interpolation='nearest', aspect='auto')
+                text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+                max_line = 2.51 * 500
+                for i_v, v in enumerate(np.arange(0.5 * 500, max_line, 0.5 * 500)):
+                    ax[0].axvline(x=v, color='k')
+                    if i_v < len(text_to_write):
+                        plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
                 h1 = ax[1].imshow(np.squeeze(data_old[j, :, :]), interpolation='nearest', aspect='auto')
+                for i_v, v in enumerate(np.arange(0.5 * 500, max_line, 0.5 * 500)):
+                    ax[1].axvline(x=v, color='k')
+                    if i_v < len(text_to_write):
+                        plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
                 fig.suptitle(labels_new[i, :])
     plt.show()
