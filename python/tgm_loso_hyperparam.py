@@ -27,7 +27,7 @@ if __name__ == '__main__':
         max_time = 3.0
 
     win_lens = [12, 25, 50, 100, 150]
-    num_insts = [1, 2, 5, 10]
+    num_insts = [2, 1, 5, 10]
 
     frac_sub_tot = []
     mean_acc_tot = []
@@ -35,6 +35,7 @@ if __name__ == '__main__':
     arg_max_eos = []
     per_sub_max_eos = []
     for win_len in win_lens:
+        print(win_len)
         time_adjust = win_len * 0.002
         frac_sub_win = []
         mean_acc_win = []
@@ -42,6 +43,7 @@ if __name__ == '__main__':
         arg_max_eos_win = []
         per_sub_max_eos_win = []
         for num_instances in num_insts:
+            print(num_instances)
             intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc.intersect_accs(args.experiment,
                                                                                            args.sen_type,
                                                                                            args.word,
@@ -52,7 +54,6 @@ if __name__ == '__main__':
                                                                                            avgTime=args.avgTime,
                                                                                            avgTest=args.avgTest)
 
-            print(eos_max.shape)
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
             # print(time_ind)
@@ -78,7 +79,7 @@ if __name__ == '__main__':
                 argo = np.argmax(diag_acc[time_ind])
                 sub_eos_max.append(time_ind[argo])
             sub_eos_max = np.array(sub_eos_max)
-            print(sub_eos_max.shape)
+            # print(sub_eos_max.shape)
             per_sub_max_eos_win.append(sub_eos_max[None, ...])
 
         per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
