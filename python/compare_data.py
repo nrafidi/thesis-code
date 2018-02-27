@@ -6,17 +6,21 @@ import load_data_ordered as load_data
 
 
 if __name__ == '__main__':
-    data_new, labels_new, time_new, final_inds_new = load_data.load_PassAct3_matlab(subject='A',
+    data_old, labels_old, time_old, final_inds_old = load_data.load_PassAct3_matlab(subject='A',
                                                                                     sen_type='active',
                                                                                     num_instances=1,
                                                                                     reps_to_use=10,
                                                                                     noMag=False,
                                                                                     sorted_inds=None)
-    new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_new]
-    is_long_new = [len(lab) > 2 for lab in labels_new]
-    labels_new = np.array(new_labels)
+    new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
+    is_long_old = [len(lab) > 2 for lab in labels_old]
+    labels_old = np.array(new_labels)
 
-    data_old, labels_old, time_old, final_inds_old = load_data.load_sentence_data(subject='A',
+    inds_to_plot = np.logical_and(time_old >= -0.5, time_old <=4.0)
+    data_old = data_old[:, :, inds_to_plot]
+    time_old = time_old[inds_to_plot]
+
+    data_new, labels_new, time_new, final_inds_new = load_data.load_sentence_data(subject='A',
                                                                                   word='noun1',
                                                                                   sen_type='active',
                                                                                   experiment='PassAct3',
@@ -27,14 +31,14 @@ if __name__ == '__main__':
                                                                                   sorted_inds=None,
                                                                                   tmin=-0.5,
                                                                                   tmax=4.0)
-    data_old = data_old[:, :, ::2]
 
-    new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_old]
-    is_long_old = [len(lab) > 2 for lab in labels_old]
-    labels_old = np.array(new_labels)
+    new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels_new]
+    is_long_new = [len(lab) > 2 for lab in labels_new]
+    labels_new = np.array(new_labels)
 
-    print(time_new[:10])
     print(time_old[:10])
+    print(time_new[:10])
+
 
     min_time = np.min([data_new.shape[-1], data_old.shape[-1]])
 
