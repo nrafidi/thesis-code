@@ -324,7 +324,7 @@ def load_PassAct3_matlab(subject, sen_type, num_instances, reps_to_use, noMag=Fa
     labels = np.squeeze(result['words']).tolist()
     labels = [np.squeeze(w) for w in labels]
     labels = [[str(w[0]) for w in wo if w not in IRR_WORDS['PassAct3']] for wo in labels]
-    labels = labels[inds]
+    labels = [l for i_l, l in enumerate(labels) if i_l in inds]
     data, labels, sen_ids = avg_data(
         full_data, labels,
         sentence_ids_raw=inds, experiment='PassAct3', num_instances=num_instances, reps_to_use=reps_to_use)
