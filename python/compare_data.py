@@ -49,7 +49,8 @@ if __name__ == '__main__':
                 ax[1].set_title('Old')
                 fig.suptitle(labels_new[i, :])
 
+                min_time = np.min([data_new.shape[-1], data_old.shape[-1]])
                 fig, ax = plt.subplots()
-                ax.imshow(np.squeeze(np.abs(data_new[i, :, :] - data_old[j, :, :])), interpolation='nearest', aspect='auto')
+                ax.imshow(np.squeeze(np.abs(data_new[i, :, :min_time] - data_old[j, :, :min_time])), interpolation='nearest', aspect='auto')
                 fig.suptitle('Absolute difference')
     plt.show()
