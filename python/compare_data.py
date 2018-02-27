@@ -17,6 +17,7 @@ if __name__ == '__main__':
     labels_old = np.array(new_labels)
 
     inds_to_plot = np.logical_and(time_old >= -0.5, time_old <=4.0)
+    print(inds_to_plot.shape)
     print(time_old.shape)
     print(data_old.shape)
     data_old = data_old[:, :, inds_to_plot]
