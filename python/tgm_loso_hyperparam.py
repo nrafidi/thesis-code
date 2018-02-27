@@ -26,7 +26,7 @@ if __name__ == '__main__':
     else:
         max_time = 3.0
 
-    win_lens = [12, 25, 50, 100, 150]
+    win_lens = [12, 25, 50] #, 100, 150]
     num_insts = [1, 2, 5, 10]
 
     frac_sub_tot = []
@@ -52,6 +52,7 @@ if __name__ == '__main__':
                                                                                            avgTime=args.avgTime,
                                                                                            avgTest=args.avgTest)
 
+            print(eos_max.shape)
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
             # print(time_ind)
