@@ -204,7 +204,7 @@ if __name__ == '__main__':
     parser.add_argument('--reps_to_use', type=int, default=10)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
-    parser.add_argument('--force', default='False', choices=['True', 'False'])
+    parser.add_argument('--force') #, default='False', choices=['True', 'False'])
     parser.add_argument('--mode', choices=['acc', 'coef'])
 
     args = parser.parse_args()
