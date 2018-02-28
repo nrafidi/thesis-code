@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import load_data_ordered as load_data_mine
-import load_data as load_data_new
+# import load_data as load_data_new
 
 
 if __name__ == '__main__':
