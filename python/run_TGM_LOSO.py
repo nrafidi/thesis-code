@@ -215,19 +215,19 @@ if __name__ == '__main__':
     print(args)
     # Check that parameter setting is valid
     total_valid = True
-    is_valid = args.reps_to_use <= NUM_REPS[args.experiment]
-    total_valid = total_valid and is_valid
-    if not is_valid:
-        print('num reps  wrong')
+    # is_valid = args.reps_to_use <= NUM_REPS[args.experiment]
+    # total_valid = total_valid and is_valid
+    # if not is_valid:
+    #     print('num reps  wrong')
     is_valid = args.subject in VALID_SUBS[args.experiment]
     total_valid = total_valid and is_valid
     if not is_valid:
         print('subject wrong')
-    if args.num_instances != 2:
-        is_valid = (args.reps_to_use % args.num_instances) == 0
-        total_valid = total_valid and is_valid
-        if not is_valid:
-            print('instances wrong')
+    # if args.num_instances != 2:
+    #     is_valid = (args.reps_to_use % args.num_instances) == 0
+    #     total_valid = total_valid and is_valid
+    #     if not is_valid:
+    #         print('instances wrong')
     if args.mode == 'coef':
         is_valid = not str_to_bool(args.doTestAvg)
         total_valid = total_valid and is_valid
