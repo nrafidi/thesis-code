@@ -40,6 +40,7 @@ if __name__ == '__main__':
                                                                                                                               tmin=tmin,
                                                                                                                               tmax=tmax)
 
+    print(data_new.shape)
     print(labels_new)
     print(indices_in_master_experiment_stimuli)
     def num_stimulus_words(stimuli_dict_):
