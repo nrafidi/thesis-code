@@ -90,7 +90,7 @@ if __name__ == '__main__':
                                   word=word,
                                   id=job_id)
 
-        dir_str = JOB_DIR.format(exp=grid[0])
+        dir_str = JOB_DIR.format(exp=exp)
         if not os.path.exists(dir_str):
             os.mkdir(dir_str)
 
