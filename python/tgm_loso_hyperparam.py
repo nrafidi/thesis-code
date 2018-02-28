@@ -103,7 +103,7 @@ if __name__ == '__main__':
     arg_max_eos = np.concatenate(arg_max_eos, axis=0)
 
     per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
-    print(mean_acc_tot[1, 2])
+    # print(mean_acc_tot[1, 2])
 
     fig, axs = plt.subplots(1, 2)
     h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
