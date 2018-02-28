@@ -3,7 +3,9 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import load_data_ordered as load_data_mine
-from load_data import load_sentence_data_v2, punctution_regex, read_stimuli
+import sys
+sys.path.append('/home/nrafidi/syntax_vs_semantics/')
+import load_data as load_data_new
 
 
 if __name__ == '__main__':
@@ -28,7 +30,7 @@ if __name__ == '__main__':
 
     # subject, align_to, voice, experiment, proc, num_instances, reps_filter,
     # sensor_type = None, is_region_sorted = True):
-    data_new, labels_new, indices_in_master_experiment_stimuli, time_new, sensor_regions= load_sentence_data_v2(subject='A',
+    data_new, labels_new, indices_in_master_experiment_stimuli, time_new, sensor_regions= load_data_new.load_sentence_data_v2(subject='A',
                                                                                                                               align_to='noun1',
                                                                                                                               voice=('active', 'passive'),
                                                                                                                               experiment='PassAct3',
@@ -40,9 +42,9 @@ if __name__ == '__main__':
 
     def num_stimulus_words(stimuli_dict_):
         return len(
-            [w for w in punctuation_regex.sub('', stimuli_dict_['stimulus']).strip().split() if len(w.strip()) > 0])
+            [w for w in load_data_new.punctuation_regex.sub('', stimuli_dict_['stimulus']).strip().split() if len(w.strip()) > 0])
 
-    stimuli_annotations = list(read_stimuli('PassAct3'))
+    stimuli_annotations = list(load_data_new.read_stimuli('PassAct3'))
     assert(len(stimuli_annotations) == data_new.shape[0])
     indicator_long = np.array([num_stimulus_words(s) >= 4 for s in stimuli_annotations])
     indicator_active = np.array([s['voice'] == 'active' for s in stimuli_annotations])
