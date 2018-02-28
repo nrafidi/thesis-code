@@ -36,7 +36,9 @@ if __name__ == '__main__':
                                                                                                                               num_instances=1,
                                                                                                                               reps_filter=None,
                                                                                                                               sensor_type=None,
-                                                                                                                              is_region_sorted=False)
+                                                                                                                              is_region_sorted=False,
+                                                                                                                              tmin=tmin,
+                                                                                                                              tmax=tmax)
 
     def num_stimulus_words(stimuli_dict_):
         return len(
@@ -50,9 +52,9 @@ if __name__ == '__main__':
 
     is_long_new =np.logical_and(indicator_active, indicator_long)
     time_new = np.squeeze(time_new)
-    inds_to_plot = np.logical_and(time_new >= (tmin), time_new <= (tmax))
-    data_new = data_new[:, :, inds_to_plot]
-    time_new = time_new[inds_to_plot]
+    # inds_to_plot = np.logical_and(time_new >= (tmin), time_new <= (tmax))
+    # data_new = data_new[:, :, inds_to_plot]
+    # time_new = time_new[inds_to_plot]
     print(time_old[:10])
     print(time_new[:10])
 
