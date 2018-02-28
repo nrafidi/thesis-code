@@ -91,17 +91,17 @@ def run_tgm_exp(experiment,
         print(fname)
         return
 
-    data, labels, indices_in_master_experiment_stimuli, time, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
-                                                                                                                align_to=word,
-                                                                                                                voice=sen_type,
-                                                                                                                experiment=experiment,
-                                                                                                                proc=proc,
-                                                                                                                num_instances=num_instances,
-                                                                                                                reps_filter=reps_to_use,
-                                                                                                                sensor_type=None,
-                                                                                                                is_region_sorted=False,
-                                                                                                                tmin=None,
-                                                                                                                tmax=None)
+    data, labels, sen_ints, time, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
+                                                                                   align_to=word,
+                                                                                   voice=sen_type,
+                                                                                   experiment=experiment,
+                                                                                   proc=proc,
+                                                                                   num_instances=num_instances,
+                                                                                   reps_filter=reps_to_use,
+                                                                                   sensor_type=None,
+                                                                                   is_region_sorted=False,
+                                                                                   tmin=None,
+                                                                                   tmax=None)
 
     # if experiment=='PassAct3':
     #     data, labels, time, final_inds = load_data.load_PassAct3_matlab(subject=subject,
@@ -138,16 +138,16 @@ def run_tgm_exp(experiment,
 
     win_starts = range(0, total_win - win_len, overlap)
 
-    sen_set = np.unique(labels, axis=0).tolist()
-    num_labels = labels.shape[0]
-    sen_ints = np.empty((num_labels,))
-    for i_l in range(num_labels):
-        for j_l, l in enumerate(sen_set):
-            if np.all(l == labels[i_l, :]):
-                sen_ints[i_l] = j_l
-                break
+    # sen_set = np.unique(labels, axis=0).tolist()
+    # num_labels = labels.shape[0]
+    # sen_ints = np.empty((num_labels,))
+    # for i_l in range(num_labels):
+    #     for j_l, l in enumerate(sen_set):
+    #         if np.all(l == labels[i_l, :]):
+    #             sen_ints[i_l] = j_l
+    #             break
 
-    labels = labels[:, WORD_COLS[experiment][word]]
+    # labels = labels[:, WORD_COLS[experiment][word]]
 
     if isPerm:
         random.seed(random_state_perm)
