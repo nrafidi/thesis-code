@@ -44,6 +44,7 @@ if __name__ == '__main__':
     dir_to_use = ''
     for dir_name, subdir_list, file_list in os.walk(root_dir):
         if dir_name[-2:] == '/3':
+            print(file_list)
             if len(file_list) != 176:
                 raise AssertionError('Directory {} has unexpected number of dicoms: {}'.format(dir_name, len(file_list)))
             dir_to_use = dir_name
