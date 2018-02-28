@@ -45,6 +45,10 @@ def str_to_bool(str_bool):
     else:
         return True
 
+def str_to_none(str_thing):
+    if str_thing =='None':
+        return None
+
 
 # Runs the TGM experiment
 def run_tgm_exp(experiment,
@@ -247,7 +251,7 @@ if __name__ == '__main__':
                     doTimeAvg=str_to_bool(args.doTimeAvg),
                     doTestAvg=str_to_bool(args.doTestAvg),
                     num_instances=args.num_instances,
-                    reps_to_use=args.reps_to_use,
+                    reps_to_use=str_to_none(args.reps_to_use),
                     proc=args.proc,
                     random_state_perm=args.perm_random_state,
                     force=str_to_bool(args.force),
