@@ -40,6 +40,8 @@ if __name__ == '__main__':
                                                                                                                               tmin=tmin,
                                                                                                                               tmax=tmax)
 
+    print(labels_new)
+    print(indices_in_master_experiment_stimuli)
     def num_stimulus_words(stimuli_dict_):
         return len(
             [w for w in load_data_new.punctuation_regex.sub('', stimuli_dict_['stimulus']).strip().split() if len(w.strip()) > 0])

@@ -1,5 +1,5 @@
 import argparse
-import load_data_ordered as load_data
+from syntax_vs_semantics import load_data
 import models
 import numpy as np
 import os.path
@@ -91,30 +91,41 @@ def run_tgm_exp(experiment,
         print(fname)
         return
 
+    data, labels, indices_in_master_experiment_stimuli, time, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
+                                                                                                                align_to=word,
+                                                                                                                voice=sen_type,
+                                                                                                                experiment=experiment,
+                                                                                                                proc=proc,
+                                                                                                                num_instances=num_instances,
+                                                                                                                reps_filter=reps_to_use,
+                                                                                                                sensor_type=None,
+                                                                                                                is_region_sorted=False,
+                                                                                                                tmin=None,
+                                                                                                                tmax=None)
 
-    if experiment=='PassAct3':
-        data, labels, time, final_inds = load_data.load_PassAct3_matlab(subject=subject,
-                                                                        sen_type=sen_type,
-                                                                        num_instances=num_instances,
-                                                                        reps_to_use=reps_to_use,
-                                                                        noMag=False,
-                                                                        sorted_inds=None)
-        new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
-        labels = np.array(new_labels)
-        print(data.shape)
-        print(labels.shape)
-    else:
-        data, labels, time, final_inds = load_data.load_sentence_data(subject=subject,
-                                                                      word='noun1',
-                                                                      sen_type=sen_type,
-                                                                      experiment=experiment,
-                                                                      proc=proc,
-                                                                      num_instances=num_instances,
-                                                                      reps_to_use=reps_to_use,
-                                                                      noMag=False,
-                                                                      sorted_inds=None)
-        print(data.shape)
-        print(np.array(labels).shape)
+    # if experiment=='PassAct3':
+    #     data, labels, time, final_inds = load_data.load_PassAct3_matlab(subject=subject,
+    #                                                                     sen_type=sen_type,
+    #                                                                     num_instances=num_instances,
+    #                                                                     reps_to_use=reps_to_use,
+    #                                                                     noMag=False,
+    #                                                                     sorted_inds=None)
+    #     new_labels = [lab if len(lab) > 2 else [lab[0], lab[1], ''] for lab in labels]
+    #     labels = np.array(new_labels)
+    #     print(data.shape)
+    #     print(labels.shape)
+    # else:
+    #     data, labels, time, final_inds = load_data.load_sentence_data(subject=subject,
+    #                                                                   word='noun1',
+    #                                                                   sen_type=sen_type,
+    #                                                                   experiment=experiment,
+    #                                                                   proc=proc,
+    #                                                                   num_instances=num_instances,
+    #                                                                   reps_to_use=reps_to_use,
+    #                                                                   noMag=False,
+    #                                                                   sorted_inds=None)
+    #     print(data.shape)
+    #     print(np.array(labels).shape)
 
 
     tmin = time.min()
