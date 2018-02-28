@@ -1,6 +1,9 @@
 import argparse
-import load_data
+
 import matplotlib
+
+from python.boneyard import load_data
+
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
@@ -44,7 +47,7 @@ if __name__ == '__main__':
     evokeds = baseline_correct(evokeds, time)
 
     avg_data, labels_avg, _ = load_data.avg_data(evokeds, labels, experiment=args.experiment,
-                                              num_instances=args.num_instances, reps_to_use=args.reps_to_use)
+                                                 num_instances=args.num_instances, reps_to_use=args.reps_to_use)
 
     sorted_inds, sorted_reg = sort_sensors()
     avg_data = avg_data[:, sorted_inds, :]

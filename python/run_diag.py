@@ -1,10 +1,12 @@
 import argparse
-import load_data
-import models
-import numpy as np
 import os.path
 import random
+
+import numpy as np
 from sklearn.model_selection import StratifiedKFold
+
+import models
+from python.boneyard import load_data
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_Diag/'
 SAVE_DIR = '{top_dir}/{sub}/'

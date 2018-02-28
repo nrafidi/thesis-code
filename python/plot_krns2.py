@@ -2,11 +2,9 @@ import matplotlib
 matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
-import load_data
-from scipy.stats.mstats import zscore
+from python.boneyard import load_data
 import agg_TGM
 import run_TGM
-import coef_sim
 
 
 def avg_over_sub(sub_results):

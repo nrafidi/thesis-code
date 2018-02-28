@@ -1,20 +1,17 @@
 import argparse
+
 import matplotlib
+
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
-import load_data
-from scipy.stats.mstats import zscore
+from python.boneyard import load_data
 import scipy.io as sio
 import agg_TGM
 import run_TGM
-import coef_sim
 from scipy.stats import norm
 from scipy import stats
-import warnings
 import os
-from scipy.stats import kendalltau
-
 
 SENSOR_MAP = '/home/nrafidi/sensormap.mat'
 PERM_FILE = '/share/volume0/nrafidi/{exp}_TGM/{sub}/TGM_{sub}_{sen_type}_{word}_w{win_len}_o{overlap}_pd{pdtw}_pr{perm}_F{num_folds}_alg{alg}_' \

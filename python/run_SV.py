@@ -1,13 +1,14 @@
 import argparse
-import load_data
-import models
-import numpy as np
 import os.path
 import random
-from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import KFold
+
+import numpy as np
 from sklearn.decomposition import PCA
-import warnings
+from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
+
+import models
+from python.boneyard import load_data
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_SV/'
 SAVE_DIR = '{top_dir}/{sub}/'
@@ -128,19 +129,19 @@ def run_sv_exp(experiment,
         sentence_ids = range(data_raw.shape[0])
     else:
         data_raw, labels, time, sentence_ids = load_data.load_raw(subject=subject,
-                                                       word=word,
-                                                       sen_type=sen_type,
-                                                       experiment=experiment,
-                                                       proc=proc)
+                                                                  word=word,
+                                                                  sen_type=sen_type,
+                                                                  experiment=experiment,
+                                                                  proc=proc)
 
     print(data_raw.shape)
 
     data, labels, sentence_ids = load_data.avg_data(data_raw=data_raw,
-                                         labels_raw=labels,
-                                         sentence_ids_raw=sentence_ids,
-                                         experiment=experiment,
-                                         num_instances=num_instances,
-                                         reps_to_use=reps_to_use)
+                                                    labels_raw=labels,
+                                                    sentence_ids_raw=sentence_ids,
+                                                    experiment=experiment,
+                                                    num_instances=num_instances,
+                                                    reps_to_use=reps_to_use)
     print(data.shape)
 
     l_set = np.unique(labels)
@@ -158,12 +159,13 @@ def run_sv_exp(experiment,
         elif only_art1 and only_art2:
             semantic_vectors = np.concatenate([load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1)),
                                                load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 2))],
-                                               axis=1)
+                                              axis=1)
         else:
             semantic_vectors = load_data.load_one_hot(labels)
             if inc_art1:
                 semantic_vectors = np.concatenate([semantic_vectors,
-                                                   load_data.load_one_hot(load_data.get_arts_from_senid(sentence_ids, 1))],
+                                                   load_data.load_one_hot(
+                                                       load_data.get_arts_from_senid(sentence_ids, 1))],
                                                   axis=1)
             if inc_art2:
                 semantic_vectors = np.concatenate([semantic_vectors,

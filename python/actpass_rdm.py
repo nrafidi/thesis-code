@@ -1,6 +1,9 @@
 import argparse
-import load_data
+
 import matplotlib
+
+from python.boneyard import load_data
+
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
@@ -93,9 +96,9 @@ def load_sentence_data(subject, word, sen_type, experiment, proc, num_instances,
                                                         experiment=experiment, proc=proc,
                                                         tmin=tmin, tmax=tmax)
     data, labels, sen_ids = load_data.avg_data(evokeds, labels, sentence_ids_raw=sen_ids,
-                                                           experiment=experiment,
-                                                           num_instances=num_instances,
-                                                           reps_to_use=reps_to_use)
+                                               experiment=experiment,
+                                               num_instances=num_instances,
+                                               reps_to_use=reps_to_use)
     labels = np.array(labels)
     label_sort_inds = np.argsort(sen_ids)
     labels = labels[label_sort_inds]

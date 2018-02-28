@@ -1,12 +1,14 @@
 import argparse
-import load_data
-import models
-import numpy as np
 import os.path
 import random
-from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import KFold
 import warnings
+
+import numpy as np
+from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
+
+import models
+from python.boneyard import load_data
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM/'
 SAVE_DIR = '{top_dir}/{sub}/'

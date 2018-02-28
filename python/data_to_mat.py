@@ -1,7 +1,9 @@
 import argparse
-import load_data
+
 import numpy as np
 import scipy.io as sio
+
+from python.boneyard import load_data
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 SAVE_DIR = '/share/volume0/newmeg/{}/tom/'

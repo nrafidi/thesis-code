@@ -2,13 +2,10 @@ import matplotlib
 matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
-import load_data
-from scipy.stats.mstats import zscore
+from python.boneyard import load_data
 import scipy.io as sio
 import agg_TGM
 import run_TGM
-import coef_sim
-
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -137,7 +134,7 @@ if __name__ == '__main__':
             if w > 0:
                 vmax = 100 #(w/o)*len(load_data.VALID_SUBS[exp])*param_specs['F']
             else:
-                vmax = len(load_data.VALID_SUBS[exp])*param_specs['F']
+                vmax = len(load_data.VALID_SUBS[exp]) * param_specs['F']
 
             fig, ax = plt.subplots()
             h = ax.imshow(sub_tgm, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
