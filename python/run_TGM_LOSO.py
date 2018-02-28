@@ -85,7 +85,7 @@ def run_tgm_exp(experiment,
                              rsP=random_state_perm,
                              mode=mode)
 
-
+    print(force)
     if os.path.isfile(fname + '.npz') and not force:
         print('Job already completed. Skipping Job.')
         print(fname)
