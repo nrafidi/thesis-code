@@ -3,8 +3,6 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import load_data_ordered as load_data_mine
-import sys
-sys.path.append('/home/nrafidi/syntax_vs_semantics/')
 import load_data as load_data_new
 
 
