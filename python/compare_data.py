@@ -33,7 +33,7 @@ if __name__ == '__main__':
                                                                                                                               voice=('active', 'passive'),
                                                                                                                               experiment='PassAct3',
                                                                                                                               proc=None,
-                                                                                                                              num_instances=1,
+                                                                                                                              num_instances=2,
                                                                                                                               reps_filter=None,
                                                                                                                               sensor_type=None,
                                                                                                                               is_region_sorted=False,
