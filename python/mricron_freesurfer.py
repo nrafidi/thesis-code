@@ -55,7 +55,7 @@ if __name__ == '__main__':
     nifti = [fn for fn in os.listdir(dir_to_use) if fnmatch.fnmatch(fn, 'co*.nii')]
 
     if len(nifti) > 1:
-        raise Warning('There seems to be more than one nifti file. Giving you the first one.')
+        print('There seems to be more than one nifti file. Giving you the first one.')
         nifti = nifti[0]
 
     nifti = '/' + dir_to_use[19:] + '/' + nifti[0]
