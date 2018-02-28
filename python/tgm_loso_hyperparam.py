@@ -53,7 +53,7 @@ if __name__ == '__main__':
                                                                                            num_instances=num_instances,
                                                                                            avgTime=args.avgTime,
                                                                                            avgTest=args.avgTest)
-
+            time = np.squeeze(time)
             time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
             time_ind = time_ind[0]
             # print(time_ind)
