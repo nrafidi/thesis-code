@@ -11,7 +11,11 @@ SAVE_DIR = '{top_dir}/{sub}/'
 SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'nr{rep}_rsPerm{rsP}_{mode}'
-
+NUM_SENTENCES = 16
+NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
+VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+              'PassAct2': ['A', 'B', 'C'],
+              'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive']
 
@@ -211,11 +215,11 @@ if __name__ == '__main__':
     print(args)
     # Check that parameter setting is valid
     total_valid = True
-    is_valid = args.reps_to_use <= load_data.NUM_REPS[args.experiment]
+    is_valid = args.reps_to_use <= NUM_REPS[args.experiment]
     total_valid = total_valid and is_valid
     if not is_valid:
         print('num reps  wrong')
-    is_valid = args.subject in load_data.VALID_SUBS[args.experiment]
+    is_valid = args.subject in VALID_SUBS[args.experiment]
     total_valid = total_valid and is_valid
     if not is_valid:
         print('subject wrong')
