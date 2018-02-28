@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     is_long_new =np.logical_and(indicator_active, indicator_long)
     time_new = np.squeeze(time_new)
-    inds_to_plot = np.logical_and(time_new >= (tmin + 0.5), time_new <= (tmax + 0.5))
+    inds_to_plot = np.logical_and(time_new >= (tmin), time_new <= (tmax))
     data_new = data_new[:, :, inds_to_plot]
     time_new = time_new[inds_to_plot]
     print(time_old[:10])
