@@ -32,7 +32,7 @@ ALGS = ['lr-l1']  # GNB
 ADJS = [None]
 DO_AVGS = [True, False]#, True]  # True
 NUM_INSTANCESS = [2, 1, 5, 10]#, 5, 10, 1]
-REPS_TO_USES = [10]  # 10
+REPS_TO_USES = [None]  # 10
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
