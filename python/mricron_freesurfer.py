@@ -53,10 +53,8 @@ if __name__ == '__main__':
     call(MRICRON.format(dir=dir_to_use), shell=True)
 
     nifti = [fn for fn in os.listdir(dir_to_use) if fnmatch.fnmatch(fn, 'co*.nii')]
-    print(nifti)
     if len(nifti) > 1:
         print('There seems to be more than one nifti file. Giving you the first one.')
-        nifti = nifti[0]
 
     nifti = '/' + dir_to_use[19:] + '/' + nifti[0]
 
