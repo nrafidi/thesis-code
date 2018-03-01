@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 import mne
 import argparse
 import os
@@ -7,9 +10,7 @@ import hippo.io
 import hippo.query
 from syntax_vs_semantics import load_data
 from six import iteritems
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+
 
 RAW_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_{block}_{process_slug}_raw.fif'
 EMPTY_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_EmptyRoom_{process_slug}_raw.fif'
