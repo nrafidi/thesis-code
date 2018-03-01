@@ -229,7 +229,10 @@ if __name__ == '__main__':
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  evokeds = mne.EvokedArray(epochs.data, epochs.info, tmin=-0.5, comment='', nave=1, kind='average', verbose=None)
+  attrs = vars(epochs)
+  for item in attrs.items():
+      print(item)
+  evokeds = mne.EvokedArray(np.ndarray(epochs), epochs.info, tmin=-0.5, comment='', nave=1, kind='average', verbose=None)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
@@ -240,9 +243,7 @@ if __name__ == '__main__':
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
 
-  attrs = vars(src)
-  for item in attrs.items():
-      print(item)
+
 
   fig, ax = plt.subplots()
   h = ax.imshow(src.data, interpolation='nearest', aspect='auto')
