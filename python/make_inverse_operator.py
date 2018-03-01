@@ -207,12 +207,12 @@ if __name__ == '__main__':
   #                                limit_depth_chs=args.no_limit_depth_chs,
   #                                rank=args.rank)
 
-  epochs, labels, indices_in_master_experiment_stimuli, time = load_data.load_epochs(args.subject,
-                                                                                     args.experiment,
-                                                                                     filter_sets=[[load_data.is_in_active, load_data.is_first_noun]],
-                                                                                     tmin=-0.5,
-                                                                                     tmax=4.0,
-                                                                                     proc=args.process_slug)
+  epochs, labels, indices_in_master_experiment_stimuli, time = load_epochs(args.subject,
+                                                                           args.experiment,
+                                                                           filter_sets=[[load_data.is_in_active, load_data.is_first_noun]],
+                                                                           tmin=-0.5,
+                                                                           tmax=4.0,
+                                                                           proc=args.process_slug)
   print(epochs)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
