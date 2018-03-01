@@ -241,10 +241,10 @@ if __name__ == '__main__':
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
 
-  data = src._data
+  print(src)
 
   fig, ax = plt.subplots()
-  h = ax.imshow(data, interpolation='nearest', aspect='auto')
+  h = ax.imshow(src, interpolation='nearest', aspect='auto')
   ax.set_xticks(range(0, len(time), 250))
   label_time = time[::250]
   label_time[np.abs(label_time) < 1e-15] = 0.0
