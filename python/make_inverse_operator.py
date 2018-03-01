@@ -241,7 +241,9 @@ if __name__ == '__main__':
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
 
-  print(src)
+  attrs = vars(src)
+  for item in attrs.items():
+      print(item)
 
   fig, ax = plt.subplots()
   h = ax.imshow(src, interpolation='nearest', aspect='auto')
