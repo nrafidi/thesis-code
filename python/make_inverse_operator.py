@@ -2,13 +2,14 @@ import mne
 import argparse
 import os
 import numpy as np
-import numpy.matlib
 import make_forward_solution as fwd_soln
 import hippo.io
 import hippo.query
 from syntax_vs_semantics import load_data
 from six import iteritems
-
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 RAW_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_{block}_{process_slug}_raw.fif'
 EMPTY_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_EmptyRoom_{process_slug}_raw.fif'
@@ -148,6 +149,17 @@ def make_inverse_operator(experiment,
   return inv
 
 
+def is_in_long_sentence(ordered_sentence_usis):
+    count = 0
+    result = False
+    for usi, annotation in ordered_sentence_usis:
+        count += 1
+        if count > 4:
+            result = True
+    for _ in range(count):
+        yield result
+
+
 def load_epochs(subject, experiment, filter_sets, tmin, tmax, proc=fwd_soln.DEFAULT_PROC):
 
 
@@ -171,9 +183,9 @@ def load_epochs(subject, experiment, filter_sets, tmin, tmax, proc=fwd_soln.DEFA
                 num_uels = len(v)
             elif num_uels != len(v):
                 raise ValueError('Unable to proceed, expected all usis to have the same number of uels')
-        labels.append(numpy.matlib.repmat(np.array([load_data.punctuation_regex.sub('', a['stimulus']).lower() for _, a in set_usis]), num_uels, 1))
+        labels.append(np.array([load_data.punctuation_regex.sub('', a['stimulus']).lower() for _, a in set_usis]))
         indices_in_master_experiment_stimuli.append(
-            numpy.matlib.repmat(np.array([a['index_in_master_experiment_stimuli'] for _, a in set_usis]), num_uels, 1))
+            np.array([a['index_in_master_experiment_stimuli'] for _, a in set_usis]))
         set_num_uels.append(num_uels)
 
     epochs = hippo.io.load_mne_epochs(uels, preprocessing=proc, baseline=None, tmin=tmin, tmax=tmax)
@@ -211,16 +223,11 @@ if __name__ == '__main__':
   epochs, labels, indices_in_master_experiment_stimuli, time = load_epochs(args.subject,
                                                                            args.experiment,
                                                                            filter_sets=[[load_data.is_in_active,
-                                                                                         load_data.is_first_noun]],
+                                                                                         load_data.is_first_noun,
+                                                                                         is_in_long_sentence]],
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  attrs = vars(epochs)
-  for item in attrs.items():
-      print(item[0])
-
-  print(indices_in_master_experiment_stimuli)
-  print(labels)
   evokeds = epochs.average()
   print(evokeds)
   src = apply_inverse_operator(args.experiment,
@@ -232,4 +239,20 @@ if __name__ == '__main__':
                                depth=args.depth,
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
-  print(src)
+
+  data = np.ndarray(src)
+  fig, ax = plt.subplots()
+  h = ax.imshow(data, interpolation='nearest', aspect='auto')
+  ax.set_xticks(range(0, len(time), 250))
+  label_time = time[::250]
+  label_time[np.abs(label_time) < 1e-15] = 0.0
+  ax.set_xticklabels(label_time)
+  ax.set_xlabel('Time')
+  text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+  max_line = 2.51 * 500
+
+  for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
+      ax.axvline(x=v, color='k')
+      if i_v < len(text_to_write):
+          plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
+
