@@ -241,6 +241,7 @@ if __name__ == '__main__':
                                rank=args.rank)
 
   data = src._data
+
   fig, ax = plt.subplots()
   h = ax.imshow(data, interpolation='nearest', aspect='auto')
   ax.set_xticks(range(0, len(time), 250))
