@@ -2,6 +2,7 @@ import mne
 import argparse
 import os
 import make_forward_solution as fwd_soln
+from syntax_vs_semantics import load_data
 
 
 RAW_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_{block}_{process_slug}_raw.fif'
@@ -161,3 +162,20 @@ if __name__ == '__main__':
                                  limit_depth_chs=args.no_limit_depth_chs,
                                  rank=args.rank)
 
+  result_epochs, labels, indices_in_master_experiment_stimuli, time = load_data.load_raw_v2(args.subject,
+                                                                                            args.experiment,
+                                                                                            filter_sets=[load_data.is_in_active, load_data.is_first_noun],
+                                                                                            tmin=-0.5,
+                                                                                            tmax=4.0,
+                                                                                            proc=None)
+  print(result_epochs.shape)
+  src = apply_inverse_operator(args.experiment,
+                               args.subject,
+                               args.process_slug,
+                               args.spacing,
+                               result_epochs,
+                               loose=args.loose,
+                               depth=args.depth,
+                               limit_depth_chs=args.no_limit_depth_chs,
+                               rank=args.rank)
+  print(src.shape)
