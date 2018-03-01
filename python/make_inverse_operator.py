@@ -258,6 +258,6 @@ if __name__ == '__main__':
   for i_v, v in enumerate(np.arange(0.0, max_line, 0.5 * 1000)):
       ax.axvline(x=v, color='r')
       if i_v < len(text_to_write):
-          plt.text(v + 0.05 * 1000, 150, text_to_write[i_v], color='r')
+          plt.text(v + 0.05 * 1000, 1500, text_to_write[i_v], color='r')
 
   plt.show()
