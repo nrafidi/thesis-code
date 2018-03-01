@@ -229,8 +229,7 @@ if __name__ == '__main__':
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  evokeds = epochs.average()
-  print(evokeds)
+  evokeds = mne.EvokedArray(epochs.data, epochs.info, tmin=-0.5, comment='', nave=1, kind='average', verbose=None)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
