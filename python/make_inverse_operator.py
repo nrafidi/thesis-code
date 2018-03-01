@@ -246,7 +246,7 @@ if __name__ == '__main__':
       print(item)
 
   fig, ax = plt.subplots()
-  h = ax.imshow(src, interpolation='nearest', aspect='auto')
+  h = ax.imshow(src.data, interpolation='nearest', aspect='auto')
   ax.set_xticks(range(0, len(time), 250))
   label_time = time[::250]
   label_time[np.abs(label_time) < 1e-15] = 0.0
