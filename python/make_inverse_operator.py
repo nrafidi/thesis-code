@@ -229,10 +229,9 @@ if __name__ == '__main__':
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  attrs = vars(epochs)
-  for item in attrs.items():
-      print(item)
-  evokeds = mne.EvokedArray(np.ndarray(epochs), epochs.info, tmin=-0.5, comment='', nave=1, kind='average', verbose=None)
+
+  evokeds = epochs.average()
+  #mne.EvokedArray(np.ndarray(epochs), epochs.info, tmin=-0.5, comment='', nave=1, kind='average', verbose=None)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
