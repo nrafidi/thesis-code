@@ -154,14 +154,14 @@ if __name__ == '__main__':
   parser.add_argument('--rank', default=None)
   args = parser.parse_args()
 
-  inv_op = make_inverse_operator(args.experiment,
-                                 args.subject,
-                                 args.process_slug,
-                                 args.spacing,
-                                 loose=args.loose,
-                                 depth=args.depth,
-                                 limit_depth_chs=args.no_limit_depth_chs,
-                                 rank=args.rank)
+  # inv_op = make_inverse_operator(args.experiment,
+  #                                args.subject,
+  #                                args.process_slug,
+  #                                args.spacing,
+  #                                loose=args.loose,
+  #                                depth=args.depth,
+  #                                limit_depth_chs=args.no_limit_depth_chs,
+  #                                rank=args.rank)
 
   result_epochs, labels, indices_in_master_experiment_stimuli, time = load_data.load_raw_v2(args.subject,
                                                                                             args.experiment,
@@ -169,7 +169,8 @@ if __name__ == '__main__':
                                                                                             tmin=-0.5,
                                                                                             tmax=4.0,
                                                                                             proc=None)
-  print(result_epochs.shape)
+  for res in result_epochs:
+      print(res.shape)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
