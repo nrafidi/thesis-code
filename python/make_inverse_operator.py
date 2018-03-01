@@ -1,6 +1,7 @@
 import mne
 import argparse
 import os
+import numpy as np
 import make_forward_solution as fwd_soln
 from syntax_vs_semantics import load_data
 
@@ -20,6 +21,7 @@ def apply_inverse_operator(experiment,
                            depth=0.8,
                            limit_depth_chs=True,
                            rank=None):
+    struct = fwd_soln.sub_to_struct[experiment][subject]
     inv_path = INV_OP_PATH.format(experiment=experiment, subject=subject)
 
     inv_fname = INV_OP_FNAME.format(inv_path=inv_path,
@@ -27,6 +29,7 @@ def apply_inverse_operator(experiment,
                                     subject=subject,
                                     process_slug=process_slug,
                                     spacing=spacing,
+                                    struct=struct,
                                     loose=loose,
                                     depth=depth,
                                     limit=limit_depth_chs,
@@ -169,13 +172,12 @@ if __name__ == '__main__':
                                                                                             tmin=-0.5,
                                                                                             tmax=4.0,
                                                                                             proc=None)
-  for res in result_epochs:
-      print(res.shape)
+  evokeds = np.squeeze(np.mean(result_epochs[0], axis=1))
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
                                args.spacing,
-                               result_epochs,
+                               evokeds,
                                loose=args.loose,
                                depth=args.depth,
                                limit_depth_chs=args.no_limit_depth_chs,
