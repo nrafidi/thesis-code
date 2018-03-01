@@ -170,9 +170,9 @@ def load_epochs(subject, experiment, filter_sets, tmin, tmax, proc=fwd_soln.DEFA
                 num_uels = len(v)
             elif num_uels != len(v):
                 raise ValueError('Unable to proceed, expected all usis to have the same number of uels')
-        labels.append(np.array([load_data.punctuation_regex.sub('', a['stimulus']).lower() for _, a in set_usis]))
+        labels.append(np.matlib.repmat(np.array([load_data.punctuation_regex.sub('', a['stimulus']).lower() for _, a in set_usis]), num_uels))
         indices_in_master_experiment_stimuli.append(
-            np.array([a['index_in_master_experiment_stimuli'] for _, a in set_usis]))
+            np.matlib.repmat(np.array([a['index_in_master_experiment_stimuli'] for _, a in set_usis]), num_uels))
         set_num_uels.append(num_uels)
 
     epochs = hippo.io.load_mne_epochs(uels, preprocessing=proc, baseline=None, tmin=tmin, tmax=tmax)
@@ -216,7 +216,7 @@ if __name__ == '__main__':
                                                                            proc=args.process_slug)
   attrs = vars(epochs)
   for item in attrs.items():
-      print(item)
+      print(item[0])
 
   print(indices_in_master_experiment_stimuli)
   print(labels)
