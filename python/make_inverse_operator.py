@@ -256,3 +256,4 @@ if __name__ == '__main__':
       if i_v < len(text_to_write):
           plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
 
+  plt.show()
