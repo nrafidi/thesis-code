@@ -24,7 +24,7 @@ sub_to_struct = {
       'D' : 'krns5B',
       'E' : 'struct2',
       'P' : 'PassAct3_P', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/059',
-      'R' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/061',
+      'R' : 'PassAct3_R', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/061',
       'T' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/063',
       'U' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/064',
       'V' : 'NA', #'/bigbrain/bigbrain.usr1/meg/structural_raw_all/065'
