@@ -3,7 +3,10 @@ import argparse
 import os
 import numpy as np
 import make_forward_solution as fwd_soln
+import hippo.io
+import hippo.query
 from syntax_vs_semantics import load_data
+from six import iteritems
 
 
 RAW_FNAME = '/share/volume0/newmeg/{experiment}/data/{process_slug}/{subject}/{subject}_{experiment}_{block}_{process_slug}_raw.fif'
@@ -144,6 +147,44 @@ def make_inverse_operator(experiment,
   return inv
 
 
+def load_epochs(subject, experiment, filter_sets, tmin, tmax, proc=fwd_soln.DEFAULT_PROC):
+
+
+    exp_sub = [(experiment, subject)]
+
+    filter_set_usis = load_data.filtered_query(experiment, filter_sets)
+    id_uels = list()
+    uels = list()
+    labels = list()
+    indices_in_master_experiment_stimuli = list()
+    set_num_uels = list()
+    for set_usis in filter_set_usis:
+        order_dict = dict([(kv[0], i) for i, kv in enumerate(set_usis)])
+        set_uels = hippo.query.get_uels_from_usis([k for k, v in set_usis], experiment_subjects=exp_sub)
+        set_uels = list(sorted(iteritems(set_uels), key=lambda id_uel: order_dict[id_uel[0]]))
+        id_uels.extend(set_uels)
+        num_uels = None
+        for k, v in set_uels:
+            uels.extend(v)
+            if num_uels is None:
+                num_uels = len(v)
+            elif num_uels != len(v):
+                raise ValueError('Unable to proceed, expected all usis to have the same number of uels')
+        labels.append(np.array([load_data.punctuation_regex.sub('', a['stimulus']).lower() for _, a in set_usis]))
+        indices_in_master_experiment_stimuli.append(
+            np.array([a['index_in_master_experiment_stimuli'] for _, a in set_usis]))
+        set_num_uels.append(num_uels)
+
+    epochs = hippo.io.load_mne_epochs(uels, preprocessing=proc, baseline=None, tmin=tmin, tmax=tmax)
+
+    labels = np.concatenate(labels, axis=0)
+    indices_in_master_experiment_stimuli = np.concatenate(indices_in_master_experiment_stimuli, axis=0)
+
+    time = np.arange(tmin, tmax + 1e-3, 1e-3)
+
+    return epochs, labels, indices_in_master_experiment_stimuli, time
+
+
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
@@ -166,20 +207,20 @@ if __name__ == '__main__':
   #                                limit_depth_chs=args.no_limit_depth_chs,
   #                                rank=args.rank)
 
-  result_epochs, labels, indices_in_master_experiment_stimuli, time = load_data.load_raw_v2(args.subject,
-                                                                                            args.experiment,
-                                                                                            filter_sets=[[load_data.is_in_active, load_data.is_first_noun]],
-                                                                                            tmin=-0.5,
-                                                                                            tmax=4.0,
-                                                                                            proc=None)
-  evokeds = np.squeeze(np.mean(result_epochs[0], axis=1))
+  epochs, labels, indices_in_master_experiment_stimuli, time = load_data.load_epochs(args.subject,
+                                                                                     args.experiment,
+                                                                                     filter_sets=[[load_data.is_in_active, load_data.is_first_noun]],
+                                                                                     tmin=-0.5,
+                                                                                     tmax=4.0,
+                                                                                     proc=args.process_slug)
+  print(epochs)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
                                args.spacing,
-                               evokeds,
+                               epochs,
                                loose=args.loose,
                                depth=args.depth,
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
-  print(src.shape)
+  print(src)
