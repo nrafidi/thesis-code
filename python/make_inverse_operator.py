@@ -240,7 +240,7 @@ if __name__ == '__main__':
                                limit_depth_chs=args.no_limit_depth_chs,
                                rank=args.rank)
 
-  data = np.ndarray(src)
+  data = src._data
   fig, ax = plt.subplots()
   h = ax.imshow(data, interpolation='nearest', aspect='auto')
   ax.set_xticks(range(0, len(time), 250))
