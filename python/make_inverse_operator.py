@@ -213,12 +213,15 @@ if __name__ == '__main__':
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  print(epochs)
+  print(type(epochs))
+  evokeds = epochs.average()
+  print(type(evokeds))
+  print(evokeds)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
                                args.process_slug,
                                args.spacing,
-                               epochs,
+                               evokeds,
                                loose=args.loose,
                                depth=args.depth,
                                limit_depth_chs=args.no_limit_depth_chs,
