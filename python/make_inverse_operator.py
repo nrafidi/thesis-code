@@ -146,7 +146,7 @@ if __name__ == '__main__':
   parser.add_argument('--experiment', required=True)
   parser.add_argument('--subject', required=True)
   parser.add_argument('--process_slug', default=fwd_soln.DEFAULT_PROC)
-  parser.add_argument('--spacing', required=True, choices=[7, 20])
+  parser.add_argument('--spacing', required=True, choices=[7, 20], type=int)
   parser.add_argument('--loose', type=float, default=0.2)
   parser.add_argument('--depth', type=float, default=0.8)
   parser.add_argument('--no_limit_depth_chs', action='store_false') # Doing this so it will default to true when flag not included
