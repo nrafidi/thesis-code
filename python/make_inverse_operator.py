@@ -247,17 +247,17 @@ if __name__ == '__main__':
 
   fig, ax = plt.subplots()
   h = ax.imshow(src.data, interpolation='nearest', aspect='auto')
-  ax.set_xticks(range(0, len(time), 250))
-  label_time = time[::250]
+  ax.set_xticks(range(0, len(time), 500))
+  label_time = time[::500]
   label_time[np.abs(label_time) < 1e-15] = 0.0
   ax.set_xticklabels(label_time)
   ax.set_xlabel('Time')
   text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-  max_line = 2.51 * 500
+  max_line = 2.51 * 1000
 
-  for i_v, v in enumerate(np.arange(0.0 * 500, max_line, 0.5 * 500)):
-      ax.axvline(x=v, color='k')
+  for i_v, v in enumerate(np.arange(0.0, max_line, 0.5 * 1000)):
+      ax.axvline(x=v, color='r')
       if i_v < len(text_to_write):
-          plt.text(v + 0.05 * 500, 15, text_to_write[i_v])
+          plt.text(v + 0.05 * 1000, 150, text_to_write[i_v], color='r')
 
   plt.show()
