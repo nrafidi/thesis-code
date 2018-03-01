@@ -209,13 +209,18 @@ if __name__ == '__main__':
 
   epochs, labels, indices_in_master_experiment_stimuli, time = load_epochs(args.subject,
                                                                            args.experiment,
-                                                                           filter_sets=[[load_data.is_in_active, load_data.is_first_noun]],
+                                                                           filter_sets=[[load_data.is_in_active,
+                                                                                         load_data.is_first_noun]],
                                                                            tmin=-0.5,
                                                                            tmax=4.0,
                                                                            proc=args.process_slug)
-  print(type(epochs))
+  attrs = vars(epochs)
+  for item in attrs.items():
+      print(item)
+
+  print(indices_in_master_experiment_stimuli)
+  print(labels)
   evokeds = epochs.average()
-  print(type(evokeds))
   print(evokeds)
   src = apply_inverse_operator(args.experiment,
                                args.subject,
