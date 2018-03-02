@@ -133,7 +133,7 @@ if __name__ == '__main__':
             start_line = time_step
         else:
             max_line = 2.51 * 2 * time_step
-            start_line = -time_step
+            start_line = 0.0
     print(mean_acc.shape)
     for sub in range(acc_all.shape[0]):
         fig, ax = plt.subplots()
@@ -214,9 +214,19 @@ if __name__ == '__main__':
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
         max_line = 2.0 - time_adjust + 0.01
+        if args.word == 'noun1':
+            start_line = -0.5 - time_adjust
+        else:
+            start_line = -1.0 - time_adjust
+
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
         max_line = 3.0 - time_adjust + 0.01
+        if args.word == 'noun1':
+            start_line = -0.5 - time_adjust
+        else:
+            start_line = -1.5 - time_adjust
+
 
     for i_v, v in enumerate(np.arange(-0.5 - time_adjust, max_line, 0.5)):
         ax.axvline(x=v, color='k')
