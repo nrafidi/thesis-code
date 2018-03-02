@@ -133,7 +133,7 @@ if __name__ == '__main__':
             start_line = time_step
         else:
             max_line = 2.51 * 2 * time_step
-            start_line = 0.0
+            start_line = -time_step
     print(mean_acc.shape)
     for sub in range(acc_all.shape[0]):
         fig, ax = plt.subplots()
