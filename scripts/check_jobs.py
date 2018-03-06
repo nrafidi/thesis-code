@@ -51,7 +51,7 @@ if __name__ == '__main__':
         win_len = grid[13]
         sub = grid[14]
 
-        if job_id == 617 or job_id == 711 or job_id == 1609 or job_id == 1650:
+        if 3000 <= job_id and job_id < 3020:
             print(job_id)
             print(grid)
         job_str = batch_exp.JOB_NAME.format(exp=exp,
