@@ -81,7 +81,8 @@ if __name__ == '__main__':
             sub_eos_max = np.array(sub_eos_max)
             # print(sub_eos_max.shape)
             per_sub_max_eos_win.append(sub_eos_max[None, ...])
-
+        for meow in per_sub_max_eos_win:
+            print(meow.shape)
         per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
         per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
         frac_sub_win = np.array(frac_sub_win)
