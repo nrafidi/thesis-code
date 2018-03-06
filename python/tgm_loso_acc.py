@@ -31,6 +31,10 @@ def intersect_accs(exp,
 
     if num_instances == 1:
         avgTest = 'F'
+    if exp == 'krns2':
+        rep = 10
+    else:
+        rep = None
 
     acc_by_sub = []
     acc_intersect = []
@@ -51,7 +55,7 @@ def intersect_accs(exp,
                                                        avgTm=avgTime,
                                                        avgTst=avgTest,
                                                        inst=num_instances,
-                                                       rep=None,
+                                                       rep=rep,
                                                        rsP=1,
                                                        mode='acc') + '.npz'
         if not os.path.isfile(result_fname):
