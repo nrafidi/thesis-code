@@ -71,7 +71,7 @@ def intersect_accs(exp,
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
-            if sub =='B':
+            if sub =='C':
                 fig, ax = plt.subplots()
                 ax.imshow(np.squeeze(fold_acc[i_fold, :, :]), interpolation='nearest', aspect='auto')
                 ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
@@ -80,7 +80,7 @@ def intersect_accs(exp,
         eos_max_fold = np.array(eos_max_fold)
         eos_max_by_sub.append(eos_max_fold[None, :])
         acc = np.mean(fold_acc, axis=0)
-        if sub == 'B':
+        if sub == 'C':
             fig, ax = plt.subplots()
             ax.plot(np.diag(acc))
             ax.set_title('B')
