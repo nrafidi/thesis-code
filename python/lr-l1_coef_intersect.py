@@ -64,11 +64,12 @@ def intersect_coef(exp,
         C_time = np.array(Cs[win_time])
         print(C_time)
         print(np.sum(coef_time))
-        if sub == 'B':
+        if sub == 'B' or sub == 'A' or sub == 'K':
             fig, ax = plt.subplots()
             meow = np.squeeze(np.sum(coef_time, axis=0))
-            ax.imshow(np.reshape(meow, (306, -1)), interpolation='nearest', aspect='auto', vmin=0.0, vmax=coef_time.shape[0])
-            ax.set_title('C sum over folds')
+            h = ax.imshow(np.reshape(meow, (306, -1)), interpolation='nearest', aspect='auto', vmin=0.0, vmax=coef_time.shape[0])
+            ax.set_title('number nonzero coef sum over folds\n{}'.format(sub))
+            fig.colorbar(h, ax=ax)
         coef_time = np.all(coef_time, axis=0)
 
         coef_by_sub.append(coef_time[None, ...])
