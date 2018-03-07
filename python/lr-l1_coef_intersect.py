@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
 import run_TGM_LOSO
+import os
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -32,10 +33,14 @@ def intersect_coef(exp,
                    avgTest='F'):
     top_dir = run_TGM_LOSO.TOP_DIR.format(exp=exp)
 
+    if exp == 'krns2':
+        rep = 10
+    else:
+        rep = None
     coef_by_sub = []
     for sub in load_data.VALID_SUBS[exp]:
         save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
-        result = np.load(run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
+        result_fname = run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
                                                        sub=sub,
                                                        sen_type=sen_type,
                                                        word=word,
@@ -47,16 +52,24 @@ def intersect_coef(exp,
                                                        avgTm=avgTime,
                                                        avgTst=avgTest,
                                                        inst=num_instances,
-                                                       rep=10,
+                                                       rep=rep,
                                                        rsP=1,
-                                                       mode='coef') + '.npz')
+                                                       mode='coef') + '.npz'
+        if not os.path.isfile(result_fname):
+            continue
+        result = np.load(result_fname)
         coef = result['coef']
         Cs = result['Cs']
         coef_time = np.array(coef[win_time] != 0)
         C_time = np.array(Cs[win_time])
         print(C_time)
         print(np.sum(coef_time))
+        if sub == 'C':
+            fig, ax = plt.subplots()
+            ax.imshow(np.squeeze(np.sum(coef_time, axis=0)), interpolation='nearest', aspect='auto')
+            ax.set_title('C sum over folds')
         coef_time = np.all(coef_time, axis=0)
+
         coef_by_sub.append(coef_time[None, ...])
     intersection = np.mean(np.concatenate(coef_by_sub, axis=0), axis=0)
     return intersection
