@@ -26,8 +26,8 @@ if __name__ == '__main__':
     else:
         max_time = 3.0
 
-    win_lens = [12, 25, 50] #, 100, 150]
-    num_insts = [1, 2, 5] #, 10]
+    win_lens = [12, 25, 50, 100] #, 100, 150]
+    num_insts = [1, 2, 5, 10]
 
     frac_sub_tot = []
     mean_acc_tot = []
