@@ -68,7 +68,7 @@ def intersect_coef(exp,
             fig, ax = plt.subplots()
             meow = np.squeeze(np.sum(coef_time, axis=0))
             h = ax.imshow(np.reshape(meow, (306, -1)), interpolation='nearest', aspect='auto', vmin=0.0, vmax=coef_time.shape[0])
-            ax.set_title('number nonzero coef sum over folds\n{}'.format(sub))
+            ax.set_title('number nonzero coef sum over classes\n{}'.format(sub))
             fig.colorbar(h, ax=ax)
         coef_time = np.all(coef_time, axis=0)
 
