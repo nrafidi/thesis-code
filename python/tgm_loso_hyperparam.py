@@ -135,9 +135,34 @@ if __name__ == '__main__':
         '/home/nrafidi/thesis_figs/{exp}_win_inst_comp_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
         ), bbox_inches='tight')
+
+
+    fig, ax = plt.subplots()
+    h0 = ax.imshow(frac_sub_tot + mean_acc_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
+    ax.set_xticks(range(len(num_insts)))
+    ax.set_xticklabels(num_insts)
+    ax.set_yticks(range(len(win_lens)))
+    ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+    ax.set_title('Frac Subjects > Chance + Max EOS Accuracy')
+    ax.set_xlabel('Number of Instances')
+    ax.set_ylabel('Window Length (ms)')
+    fig.colorbar(h0, ax=ax, shrink=0.5)
+    fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                             args.word,
+                                                                             args.avgTime,
+                                                                             args.avgTest))
+    fig.tight_layout()
+
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_win_inst_comp-sum_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
+        ), bbox_inches='tight')
     print(arg_max_eos)
     print(arg_max_tot)
     print(np.squeeze(per_sub_max_eos[:, 0, :]))
+
+
+
     plt.show()
 
 
