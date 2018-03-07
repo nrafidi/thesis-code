@@ -146,7 +146,7 @@ if __name__ == '__main__':
     ax.set_title('Frac Subjects > Chance + Max EOS Accuracy')
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    # fig.colorbar(h0, ax=ax, shrink=0.5)
+    fig.colorbar(h0, ax=ax)
     fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                              args.word,
                                                                              args.avgTime,
