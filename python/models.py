@@ -715,7 +715,7 @@ def lr_tgm_coef(data,
             train_data -= mu_train[None, :]
             train_data /= std_train[None, :]
 
-        model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+        model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
                                                           cv=2,
                                                           penalty=penalty,
                                                           solver='liblinear',
