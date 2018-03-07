@@ -62,6 +62,7 @@ def intersect_coef(exp,
         Cs = result['Cs']
         coef_time = np.array(coef[win_time] != 0)
         C_time = np.array(Cs[win_time])
+        print(sub)
         print(C_time)
         print(np.sum(coef_time))
         if sub == 'B' or sub == 'A' or sub == 'K':
