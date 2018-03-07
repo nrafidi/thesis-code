@@ -80,10 +80,10 @@ def intersect_accs(exp,
         eos_max_fold = np.array(eos_max_fold)
         eos_max_by_sub.append(eos_max_fold[None, :])
         acc = np.mean(fold_acc, axis=0)
-        # if sub == 'C':
-        #     fig, ax = plt.subplots()
-        #     ax.plot(np.diag(acc))
-        #     ax.set_title('B')
+        if sub == 'B':
+            fig, ax = plt.subplots()
+            ax.plot(acc[:, 0])
+            ax.set_title('B')
 
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
