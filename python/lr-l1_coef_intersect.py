@@ -66,6 +66,8 @@ def intersect_coef(exp,
         print(np.sum(coef_time))
         if sub == 'B':
             fig, ax = plt.subplots()
+            meow = np.squeeze(np.sum(coef_time, axis=0))
+            print(meow.shape)
             ax.imshow(np.squeeze(np.sum(coef_time, axis=0)), interpolation='nearest', aspect='auto')
             ax.set_title('C sum over folds')
         coef_time = np.all(coef_time, axis=0)
