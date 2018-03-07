@@ -146,12 +146,12 @@ if __name__ == '__main__':
     ax.set_title('Frac Subjects > Chance + Max EOS Accuracy')
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    fig.colorbar(h0, ax=ax, shrink=0.5)
+    # fig.colorbar(h0, ax=ax, shrink=0.5)
     fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                              args.word,
                                                                              args.avgTime,
                                                                              args.avgTest))
-    fig.tight_layout()
+    plt.subplots_adjust(top=0.8)
 
     plt.savefig(
         '/home/nrafidi/thesis_figs/{exp}_win_inst_comp-sum_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
