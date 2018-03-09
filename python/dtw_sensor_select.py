@@ -58,7 +58,7 @@ if __name__ == '__main__':
                                                                                    is_region_sorted=False,
                                                                                    tmin=tmin,
                                                                                    tmax=tmax)
-
+    data = data*1e12
     sen_ints = np.array(sen_ints)
     print(sen_ints == sen0)
     sen0_data = data[sen_ints == sen0, ...]
@@ -87,6 +87,7 @@ if __name__ == '__main__':
                                                            np.transpose(np.squeeze(sen_data[j, i_sensor, :])),
                                                            radius=radius,
                                                            dist=dist)
+                print(dtw_mat[i_sensor, i, j])
                 dtw_mat[i_sensor, j, i] = dtw_mat[i_sensor, i, j]
         score_mat[i_sensor], _ = ktau_rdms(comp_mat, np.squeeze(dtw_mat)[i_sensor, ...])
 
