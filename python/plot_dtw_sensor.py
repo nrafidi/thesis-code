@@ -46,7 +46,9 @@ if __name__ == '__main__':
                                                                                                  ni=num_instances))
 
     best_sens = np.argmax(score_mat)
+    worst_sens = np.argmin(score_mat)
     best_mat = np.squeeze(dtw_mat[best_sens, :, :])
+    worst_mat = np.squeeze(dtw_mat[worst_sens, :, :])
 
     fig, ax = plt.subplots()
     ax.imshow(best_mat, interpolation='nearest')
@@ -58,4 +60,17 @@ if __name__ == '__main__':
                                                                                                             tmin=tmin,
                                                                                                             tmax=tmax,
                                                                                                             ni=num_instances))
+
+    fig, ax = plt.subplots()
+    ax.imshow(worst_mat, interpolation='nearest')
+    ax.set_title('Worst Sensor score: {score}\n{exp} {sub} {sen0}vs{sen1}\nEOS {tmin}-{tmax} ni {ni}'.format(
+        score=np.max(score_mat),
+        exp=exp,
+        sub=sub,
+        sen0=sen0,
+        sen1=sen1,
+        tmin=tmin,
+        tmax=tmax,
+        ni=num_instances))
+
     plt.show()
