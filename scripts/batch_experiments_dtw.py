@@ -20,7 +20,7 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
+EXPERIMENTS = ['PassAct3']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B', 'C']
 RADIUS = range(1, 51, 25)
 TMAXES = [1.0]
