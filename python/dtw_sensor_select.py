@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     dtw_mat = np.empty((num_sensors, num_sen, num_sen))
     score_mat = np.empty((num_sensors,))
-    for i_sensor in range(sen_data.shape[0]):
+    for i_sensor in range(num_sensors):
         for i in range(num_sen):
             for j in range(i, num_sen):
                 dtw_mat[i_sensor, i, j], _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, i_sensor, :])),
