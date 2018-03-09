@@ -78,12 +78,12 @@ if __name__ == '__main__':
         scores.append(score_mat[None, ...])
 
     sub_scores = np.concatenate(scores, axis=0)
-    sub_corr = spearmanr(sub_scores, axis=1)
+    sub_corr, _ = spearmanr(sub_scores, axis=1)
 
     print('Correlation between subjects: {sub_corr}'.format(sub_corr=sub_corr))
 
     fig, ax = plt.subplots()
-    ax.plot(sub_scores[0, :], sub_scores[1, :])
+    ax.scatter(sub_scores[0, :], sub_scores[1, :])
     ax.set_xlabel('Subject B sensor scores')
     ax.set_ylabel('Subject C sensor scores')
 
