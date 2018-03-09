@@ -59,6 +59,8 @@ if __name__ == '__main__':
                                                                                    tmin=tmin,
                                                                                    tmax=tmax)
 
+    print(data.shape)
+    print(sen_ints)
     sen0_data = data[sen_ints == sen0, ...]
     sen1_data = data[sen_ints == sen1, ...]
     sen_data = np.concatenate([sen0_data, sen1_data], axis=0)
