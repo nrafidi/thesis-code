@@ -64,7 +64,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.imshow(worst_mat, interpolation='nearest')
     ax.set_title('Worst Sensor score: {score}\n{exp} {sub} {sen0}vs{sen1}\nEOS {tmin}-{tmax} ni {ni}'.format(
-        score=np.max(score_mat),
+        score=np.min(score_mat),
         exp=exp,
         sub=sub,
         sen0=sen0,
