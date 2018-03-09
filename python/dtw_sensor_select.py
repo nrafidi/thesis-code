@@ -59,8 +59,6 @@ if __name__ == '__main__':
                                                                                    tmin=tmin,
                                                                                    tmax=tmax)
 
-    print(data.shape)
-    print(sen_ints)
     sen0_data = data[sen_ints == sen0, ...]
     sen1_data = data[sen_ints == sen1, ...]
     sen_data = np.concatenate([sen0_data, sen1_data], axis=0)
@@ -74,6 +72,7 @@ if __name__ == '__main__':
     comp_mat[num_instances:, :num_instances] = 1.0
     # print(comp_mat)
 
+    print(sen_data.shape)
     num_sensors = sen_data.shape[1]
 
     dtw_mat = np.empty((num_sensors, num_sen, num_sen))
