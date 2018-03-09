@@ -21,15 +21,14 @@ import time
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['B']
-SEN_TYPES = ['passive', 'active']
-RADIUS = range(1, 151, 25)
-TMAXES = [0.8, 1.0]
-SENSORS = ['all', 'separate', 'three', 'mag']
+SUBJECTS = ['B', 'C']
+RADIUS = range(1, 51, 25)
+TMAXES = [1.0]
+SEN1S = [8, 16, 24]
 NINSTS = [2, 5, 10]
 DISTS = ['cosine']
 
-JOB_NAME = '{sen}-{radius}-{dist}-{id}'
+JOB_NAME = '{sen1}-{radius}-{dist}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
@@ -40,36 +39,34 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
-                'experiment={exp},subject={sub},sen_type={sen},radius={radius},' \
-                'dist={dist},tmax={tmax},sensors={sens},num_instances={ninst} ' \
+                'experiment={exp},subject={sub},radius={radius},sen1={sen1},' \
+                'dist={dist},tmax={tmax},num_instances={ninst} ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
-                                   SEN_TYPES,
                                    SUBJECTS,
                                    RADIUS,
                                    TMAXES,
-                                   SENSORS,
+                                   SEN1S,
                                    NINSTS,
                                    DISTS)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
-        sen = grid[1]
-        sub = grid[2]
-        radius = grid[3]
-        tmax = grid[4]
-        sens = grid[5]
-        ninst = grid[6]
-        dist = grid[7]
+        sub = grid[1]
+        radius = grid[2]
+        tmax = grid[3]
+        sen1 = grid[4]
+        ninst = grid[5]
+        dist = grid[6]
 
         job_str = JOB_NAME.format(dist=dist,
                                   sub=sub,
-                                  sen=sen,
+                                  sen1=sen1,
                                   radius=radius,
                                   id=job_id)
 
-        dir_str = JOB_DIR.format(exp=grid[0])
+        dir_str = JOB_DIR.format(exp=exp)
         if not os.path.exists(dir_str):
             os.mkdir(dir_str)
 
@@ -79,11 +76,10 @@ if __name__ == '__main__':
         call_str = qsub_call.format(job_name=job_str,
                                     exp=exp,
                                     sub=sub,
-                                    sen=sen,
+                                    sen1=sen1,
                                     radius=radius,
                                     dist=dist,
                                     tmax=tmax,
-                                    sens=sens,
                                     ninst=ninst,
                                     errfile=err_str,
                                     outfile=out_str)
@@ -91,5 +87,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 300:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
             time.sleep(30)

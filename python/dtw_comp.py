@@ -95,7 +95,7 @@ if __name__ == '__main__':
                                                    dist=dist)
             elif sensors == 'separate':
                 dist_sum = 0.0
-                for i_sensor in range(sen_data.shape[0]):
+                for i_sensor in range(sen_data.shape[1]):
                     curr_dist, _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, i_sensor, :])),
                                                        np.transpose(np.squeeze(sen_data[j, i_sensor, :])),
                                                        radius=radius,
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                 dtw_mat[i, j] = dist_sum
             elif sensors == 'three':
                 dist_sum = 0.0
-                for i_sensor in range(0, sen_data.shape[0], 3):
+                for i_sensor in range(0, sen_data.shape[1], 3):
                     curr_dist, _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, i_sensor:(i_sensor + 3), :])),
                                                    np.transpose(np.squeeze(sen_data[j, i_sensor:(i_sensor + 3), :])),
                                                    radius=radius,
