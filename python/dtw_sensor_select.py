@@ -6,7 +6,7 @@ from scipy.stats import kendalltau
 import fastdtw
 
 
-RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor_score_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor_score_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
 
 
 def ktau_rdms(rdm1, rdm2):
@@ -87,6 +87,6 @@ if __name__ == '__main__':
                 dtw_mat[i_sensor, j, i] = dtw_mat[i_sensor, i, j]
         score_mat[i_sensor], _ = ktau_rdms(comp_mat, np.squeeze(dtw_mat)[i_sensor, ...])
 
-    np.savez(RESULT_FNAME.format(sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
+    np.savez(RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
                                  ni=num_instances, tmin=tmin, tmax=tmax),
              scores=score_mat, dtw_mat = dtw_mat)
