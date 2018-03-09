@@ -78,6 +78,10 @@ if __name__ == '__main__':
         scores.append(score_mat[None, ...])
 
     sub_scores = np.concatenate(scores, axis=0)
+
+    good_sensors = np.where(np.all(sub_scores > 0.0, axis=0))
+    print('Good sensors: {good_sensors}'.format(good_sensors=good_sensors))
+
     sub_corr, _ = spearmanr(sub_scores, axis=1)
 
     print('Correlation between subjects: {sub_corr}'.format(sub_corr=sub_corr))
