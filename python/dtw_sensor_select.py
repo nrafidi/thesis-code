@@ -19,7 +19,7 @@ def ktau_rdms(rdm1, rdm2):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment', default='krns2')
+    parser.add_argument('--experiment', default='PassAct3')
     parser.add_argument('--subject', default='B')
     parser.add_argument('--dist', choices=['euclidean', 'cosine'])
     parser.add_argument('--radius', type=int)
