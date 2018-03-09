@@ -86,6 +86,8 @@ if __name__ == '__main__':
     ax.scatter(sub_scores[0, :], sub_scores[1, :])
     ax.plot(np.arange(-0.9, 1.0, 0.1), np.arange(-0.9, 1.0, 0.1), color='r')
     ax.set_xlabel('Subject B sensor scores')
+    ax.set_xlim([-1.0, 1.0])
     ax.set_ylabel('Subject C sensor scores')
+    ax.set_ylim([-1.0, 1.0])
 
     plt.show()
