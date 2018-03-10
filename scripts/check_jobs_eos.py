@@ -96,13 +96,12 @@ if __name__ == '__main__':
                     print('Job {} Failed'.format(job_str))
                     print(err_file)
                     print(grid)
-            else:
-                with open(out_str, 'r') as fid:
-                    meow = fid.read()
-                    if 'Skipping' in meow and 'already' not in meow:
-                        if was_success:
-                            successful_jobs -= 1
-                        skipped_jobs += 1
+            with open(out_str, 'r') as fid:
+                meow = fid.read()
+                if 'Skipping' in meow and 'already' not in meow:
+                    if was_success:
+                        successful_jobs -= 1
+                    skipped_jobs += 1
 
         job_id += 1
 
