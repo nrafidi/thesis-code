@@ -56,7 +56,7 @@ if __name__ == '__main__':
                                             word=word,
                                             id=job_id)
 
-        dir_str = batch_exp.JOB_DIR.format(exp=grid[0])
+        dir_str = batch_exp.JOB_DIR.format(exp=exp)
 
         err_str = batch_exp.ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
@@ -90,18 +90,22 @@ if __name__ == '__main__':
             # print('Job {} Did Not Run'.format(job_str))
             meow = 1
         else:
-            if os.stat(err_str).st_size != 0 and (not was_success):
+            with open(out_str, 'r') as fid:
+                meow = fid.read()
+                if 'Skipping' in meow and 'already' not in meow:
+                    skipped = True
+                    if was_success:
+                        successful_jobs -= 1
+                    skipped_jobs += 1
+                else:
+                    skipped=False
+            if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
                     print(err_file)
                     print(grid)
-            with open(out_str, 'r') as fid:
-                meow = fid.read()
-                if 'Skipping' in meow and 'already' not in meow:
-                    if was_success:
-                        successful_jobs -= 1
-                    skipped_jobs += 1
+
 
         job_id += 1
 
