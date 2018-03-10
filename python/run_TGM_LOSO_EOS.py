@@ -6,9 +6,9 @@ import os.path
 import random
 import warnings
 
-TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
+TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+SAVE_FILE = '{dir}TGM-LOSO-EOS_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{mode}'
 NUM_SENTENCES = 16
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
-    parser.add_argument('--force') #, default='False', choices=['True', 'False'])
+    parser.add_argument('--force', default='False', choices=['True', 'False'])
     parser.add_argument('--mode', choices=['acc', 'coef'])
 
     args = parser.parse_args()
