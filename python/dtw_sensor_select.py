@@ -53,11 +53,10 @@ if __name__ == '__main__':
     sen_ints = np.array(sen_ints)
 
     sen0_data = data[sen_ints == sen0, ...]
-    other_sens = range(sen0, np.max(sen_ints))
+    other_sens = range(sen0, np.max(sen_ints)+1)
 
     dtw_part = np.empty((len(other_sens), num_instances, num_instances))
     for i_sen1, sen1 in enumerate(other_sens):
-        print(sen1)
         sen1_data = data[sen_ints == sen1, ...]
         for i in range(num_instances):
             for j in range(num_instances):
