@@ -597,6 +597,7 @@ def lr_tgm_loso(data,
 
     cv_membership = []
     tgm_acc = np.empty((len(uni_sen_ints), n_w, n_w))
+    tgm_pred = np.empty((len(uni_sen_ints), n_w, n_w), dtype='object')
     i_split = 0
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
@@ -669,10 +670,11 @@ def lr_tgm_loso(data,
 
                 print(model.C_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
+                tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
                 print(tgm_acc[i_split, wi, wj])
         i_split += 1
 
-    return l_ints, cv_membership, tgm_acc
+    return l_ints, cv_membership, tgm_acc, tgm_pred
 
 
 def lr_tgm_coef(data,
