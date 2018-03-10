@@ -4,7 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import dtw_sensor_select as dtw_sens
 import argparse
-from scipy.stats import spearmanr
+from scipy.stats import spearmanr, kendalltau
+
+def ktau_rdms(rdm1, rdm2):
+    # from Mariya Toneva
+    diagonal_offset = -1 # exclude the main diagonal
+    lower_tri_inds = np.tril_indices(rdm1.shape[0], diagonal_offset)
+    rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[lower_tri_inds],rdm2[lower_tri_inds])
+    return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
 
 if __name__ == '__main__':

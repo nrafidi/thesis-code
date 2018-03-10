@@ -2,19 +2,10 @@ import argparse
 import numpy as np
 from syntax_vs_semantics import load_data
 from scipy.spatial.distance import euclidean, cosine
-from scipy.stats import kendalltau
 import fastdtw
 
 
-RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor_score_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
-
-
-def ktau_rdms(rdm1, rdm2):
-    # from Mariya Toneva
-    diagonal_offset = -1 # exclude the main diagonal
-    lower_tri_inds = np.tril_indices(rdm1.shape[0], diagonal_offset)
-    rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[lower_tri_inds],rdm2[lower_tri_inds])
-    return rdm_kendall_tau, rdm_kendall_tau_pvalue
+RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
 
 
 if __name__ == '__main__':
@@ -26,8 +17,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int)
     parser.add_argument('--tmin', type=float, default=0.0)
     parser.add_argument('--tmax', type=float, default=1.0)
+    parser.add_argument('--sensor', type=int)
     parser.add_argument('--sen0', type=int, default=0)
-    parser.add_argument('--sen1', type=int, default=8)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
     args = parser.parse_args()
@@ -38,9 +29,9 @@ if __name__ == '__main__':
     radius = args.radius
     num_instances = args.num_instances
     sen0 = args.sen0
-    sen1 = args.sen1
     tmin = args.tmin
     tmax = args.tmax
+    i_sensor=args.sensor
 
     if args.dist == 'euclidean':
         dist=euclidean
@@ -60,37 +51,21 @@ if __name__ == '__main__':
                                                                                    tmax=tmax)
     data = data*1e12
     sen_ints = np.array(sen_ints)
-    print(sen_ints == sen0)
+
     sen0_data = data[sen_ints == sen0, ...]
-    sen1_data = data[sen_ints == sen1, ...]
-    print(sen1_data.shape)
-    sen_data = np.concatenate([sen0_data, sen1_data], axis=0)
-    num_sen = num_instances*2
+    other_sens = range(sen0, np.max(sen_ints))
 
+    dtw_part = np.empty((len(other_sens), num_instances, num_instances))
+    for i_sen1, sen1 in enumerate(other_sens):
+        print(sen1)
+        sen1_data = data[sen_ints == sen1, ...]
+        for i in range(num_instances):
+            for j in range(num_instances):
+                dtw_part[i_sen1, i, j], _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen0_data[i, i_sensor, :])),
+                                                            np.transpose(np.squeeze(sen1_data[j, i_sensor, :])),
+                                                            radius=radius,
+                                                            dist=dist)
 
-    comp_mat = np.empty((num_sen, num_sen))
-    comp_mat[:num_instances, :num_instances] = 0.0
-    comp_mat[num_instances:, num_instances:] = 0.0
-    comp_mat[:num_instances, num_instances:] = 1.0
-    comp_mat[num_instances:, :num_instances] = 1.0
-    # print(comp_mat)
-
-    print(sen_data.shape)
-    num_sensors = sen_data.shape[1]
-
-    dtw_mat = np.empty((num_sensors, num_sen, num_sen))
-    score_mat = np.empty((num_sensors,))
-    for i_sensor in range(num_sensors):
-        for i in range(num_sen):
-            for j in range(i, num_sen):
-                dtw_mat[i_sensor, i, j], _ = fastdtw.fastdtw(np.transpose(np.squeeze(sen_data[i, i_sensor, :])),
-                                                           np.transpose(np.squeeze(sen_data[j, i_sensor, :])),
-                                                           radius=radius,
-                                                           dist=dist)
-                print(dtw_mat[i_sensor, i, j])
-                dtw_mat[i_sensor, j, i] = dtw_mat[i_sensor, i, j]
-        score_mat[i_sensor], _ = ktau_rdms(comp_mat, np.squeeze(dtw_mat)[i_sensor, ...])
-
-    np.savez(RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
-                                 ni=num_instances, tmin=tmin, tmax=tmax),
-             scores=score_mat, dtw_mat = dtw_mat)
+    np.savez(RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, radius=radius, dist=args.dist,
+                                 ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor),
+             dtw_part = dtw_part)
