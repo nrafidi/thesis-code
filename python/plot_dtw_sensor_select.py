@@ -13,19 +13,19 @@ RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_
 def ktau_rdms(rdm1, rdm2):
     # from Mariya Toneva
     diagonal_offset = -1 # exclude the main diagonal
-    lower_tri_inds = np.tril_indices(rdm1.shape[0], diagonal_offset)
-    rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[lower_tri_inds],rdm2[lower_tri_inds])
+    upper_tri_inds = np.triu_indices(rdm1.shape[0], diagonal_offset)
+    rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[upper_tri_inds],rdm2[upper_tri_inds])
     return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='PassAct3')
     parser.add_argument('--subject', default='B')
-    parser.add_argument('--dist', choices=['euclidean', 'cosine'])
-    parser.add_argument('--radius', type=int)
-    parser.add_argument('--num_instances', type=int)
+    parser.add_argument('--dist', choices=['euclidean', 'cosine'], default='cosine')
+    parser.add_argument('--radius', type=int, default=1)
+    parser.add_argument('--num_instances', type=int, default=10)
     parser.add_argument('--tmin', type=float, default=0.0)
-    parser.add_argument('--tmax', type=float, default=1.0)
+    parser.add_argument('--tmax', type=float, default=3.0)
 
     args = parser.parse_args()
 
