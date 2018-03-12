@@ -41,28 +41,25 @@ if __name__ == '__main__':
     else:
         dist=cosine
 
-    comp_rdm = np.ones(num_instances*32, num_instances*32, dtype=float)
+    comp_rdm = np.ones((num_instances*32, num_instances*32), dtype=float)
     total_rdm = np.empty((306, num_instances*32, num_instances*32), dtype='float')
     for sen0 in range(32):
         start_ind = sen0*num_instances
-        end_ind = start_ind + num_instances - 1
+        end_ind = start_ind + num_instances
         comp_rdm[start_ind:end_ind, start_ind:end_ind] = 0.0
         for i_sensor in range(306):
             result_fname = RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, radius=radius, dist=args.dist,
                                          ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
             if not os.path.isfile(result_fname):
+                print(result_fname)
                 break
             result = np.load(result_fname)
             dtw_part = result['dtw_part']
             other_sens = range(dtw_part.shape[0])
             for sen1 in other_sens:
                 start_ind_y = start_ind + sen1*num_instances
-                end_ind_y = start_ind_y + num_instances - 1
+                end_ind_y = start_ind_y + num_instances 
                 total_rdm[i_sensor, start_ind:end_ind, start_ind_y:end_ind_y] = dtw_part[sen1, :, :]
-
-    scores = np.empty((306,))
-    for i_sensor in range(306):
-        scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
 
     fig, ax = plt.subplots()
     ax.imshow(comp_rdm, interpolation='nearest')
@@ -70,7 +67,13 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.imshow(np.squeeze(total_rdm[2, :, :]), interpolation='nearest')
+    
+    plt.show()
 
+    scores = np.empty((306,))
+    for i_sensor in range(306):
+        print(i_sensor)
+        scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
 
     fig, ax = plt.subplots()
     ax.hist(scores)
