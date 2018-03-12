@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},radius={radius},sen0={sen0},' \
-                'dist={dist},tmin={tmin},tmax={tmax},sensor={sensor},num_instances={ninst} ' \
+                'dist={dist},tmin={tmin},tmax={tmax},sensor={sensor},num_instances={ninst},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
