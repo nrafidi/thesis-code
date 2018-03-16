@@ -9,7 +9,7 @@ EXPERIMENTS = ['krns2', 'PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['passive', 'active', 'pooled']
 WORDS = ['noun1', 'verb', 'voice']
-WIN_LENS = [150, 100, 50, 25, 12]
+WIN_LENS = [100, 50, 25, 12]
 OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l1']
@@ -28,7 +28,7 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=96:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
