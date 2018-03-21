@@ -175,7 +175,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=0.8)
+    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
     ax.set_title(
