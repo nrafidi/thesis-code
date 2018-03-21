@@ -126,7 +126,7 @@ if __name__ == '__main__':
     
     time_step = int(250/args.overlap)
     print(mean_acc.shape)
-
+    print(np.max(mean_acc))
     # for sub in range(acc_all.shape[0]):
     #     fig, ax = plt.subplots()
     #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
