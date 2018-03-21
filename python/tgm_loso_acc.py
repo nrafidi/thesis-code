@@ -143,29 +143,62 @@ if __name__ == '__main__':
             max_line = 2.51 * 2 * time_step
             start_line = 0.0
     print(mean_acc.shape)
-    for sub in range(acc_all.shape[0]):
-        fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
-        ax.set_ylabel('Test Time')
-        ax.set_xlabel('Train Time')
-        ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
-                                                                                sen_type=args.sen_type,
-                                                                                word=args.word,
-                                                                                experiment=args.experiment))
-        ax.set_xticks(range(0, len(time[win_starts]), time_step))
-        label_time = time[win_starts]
-        label_time = label_time[::time_step]
-        label_time[np.abs(label_time) < 1e-15] = 0.0
-        ax.set_xticklabels(label_time)
-        ax.set_yticks(range(0, len(time[win_starts]), time_step))
-        ax.set_yticklabels(label_time)
-        time_adjust = args.win_len
+    # for sub in range(acc_all.shape[0]):
+    #     fig, ax = plt.subplots()
+    #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+    #     ax.set_ylabel('Test Time')
+    #     ax.set_xlabel('Train Time')
+    #     ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
+    #                                                                             sen_type=args.sen_type,
+    #                                                                             word=args.word,
+    #                                                                             experiment=args.experiment))
+    #     ax.set_xticks(range(0, len(time[win_starts]), time_step))
+    #     label_time = time[win_starts]
+    #     label_time = label_time[::time_step]
+    #     label_time[np.abs(label_time) < 1e-15] = 0.0
+    #     ax.set_xticklabels(label_time)
+    #     ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    #     ax.set_yticklabels(label_time)
+    #     time_adjust = args.win_len
+    #
+    #     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+    #         ax.axvline(x=v, color='k')
+    #         if i_v < len(text_to_write):
+    #             plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
+    #     plt.colorbar(h)
 
-        for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-            ax.axvline(x=v, color='k')
-            if i_v < len(text_to_write):
-                plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
-        plt.colorbar(h)
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+    ax.set_ylabel('Test Time')
+    ax.set_xlabel('Train Time')
+    ax.set_title('Average TGM\n{sen_type} {word} {experiment}\navgTime={aT} avgTest={aTst}'.format(aT=args.avgTime,
+                                                                                                   aTst=args.avgTest,
+                                                                            sen_type=args.sen_type,
+                                                                            word=args.word,
+                                                                            experiment=args.experiment))
+    ax.set_xticks(range(0, len(time[win_starts]), time_step))
+    label_time = time[win_starts]
+    label_time = label_time[::time_step]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
+    ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    ax.set_yticklabels(label_time)
+    time_adjust = args.win_len
+
+    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+        ax.axvline(x=v, color='k')
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
+    plt.colorbar(h)
+
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
