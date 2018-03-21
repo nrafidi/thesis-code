@@ -21,6 +21,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
+    chance = tgm_loso_acc_eos.CHANCE[args.sen_type][args.word]
     win_lens = [12, 25, 50] #, 100, 150]
     num_insts = [1, 2, 5]
 
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     axs[0].set_xlabel('Number of Instances')
     axs[0].set_ylabel('Window Length (ms)')
     fig.colorbar(h0, ax=axs[0], shrink=0.5)
-    h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
+    h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest', vmin=chance, vmax=2.0*chance)
     axs[1].set_xticks(range(len(num_insts)))
     axs[1].set_xticklabels(num_insts)
     axs[1].set_yticks(range(len(win_lens)))
@@ -130,7 +131,7 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots()
-    h0 = ax.imshow(frac_sub_tot + mean_acc_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
+    h0 = ax.imshow(frac_sub_tot + mean_acc_tot, interpolation='nearest', vmin=chance + 0.5, vmax=2.0)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
     ax.set_yticks(range(len(win_lens)))
