@@ -8,6 +8,7 @@ import os
 from scipy.stats import spearmanr, kendalltau
 
 RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+SCORE_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{sub}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
 
 
 def ktau_rdms(rdm1, rdm2):
@@ -67,13 +68,14 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.imshow(np.squeeze(total_rdm[2, :, :]), interpolation='nearest')
-    
-    plt.show()
 
     scores = np.empty((306,))
     for i_sensor in range(306):
         print(i_sensor)
+        score_fname = SCORE_FNAME.format(exp=exp, sub=sub, radius=radius, dist=args.dist,
+                                           ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
         scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
+        np.savez(score_fname, sensor_score=scores[i_sensor])
 
     fig, ax = plt.subplots()
     ax.hist(scores)
