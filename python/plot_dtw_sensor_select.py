@@ -65,17 +65,23 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.imshow(comp_rdm, interpolation='nearest')
     ax.set_title('Model RDM')
-
-    fig, ax = plt.subplots()
-    ax.imshow(np.squeeze(total_rdm[2, :, :]), interpolation='nearest')
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_model-rdm_ni{ni}.png'.format(
+            ni=num_instances),
+        bbox_inches='tight')
 
     scores = np.empty((306,))
     for i_sensor in range(306):
         print(i_sensor)
         score_fname = SCORE_FNAME.format(exp=exp, sub=sub, radius=radius, dist=args.dist,
                                            ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
-        scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
-        np.savez(score_fname, sensor_score=scores[i_sensor])
+        if os.path.isfile(score_fname):
+            result = np.load(score_fname)
+            scores[i_sensor] = result['sensor_score']
+        else:
+            scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
+            np.savez(score_fname, sensor_score=scores[i_sensor])
 
     fig, ax = plt.subplots()
     ax.hist(scores)
@@ -85,5 +91,34 @@ if __name__ == '__main__':
                                                                                          tmin=tmin,
                                                                                          tmax=tmax,
                                                                                          ni=num_instances))
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_score-hist_{exp}_{sub}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+            exp=exp,
+            sub=sub,
+            radius=radius,
+            dist=args.dist,
+            ni=num_instances,
+            tmin=tmin,
+            tmax=tmax),
+        bbox_inches='tight')
+
+    best_sensor = np.argmax(scores)
+    print(best_sensor)
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(total_rdm[best_sensor, :, :]), interpolation='nearest', vmin=0.0, vmax=1.0)
+    plt.colorbar(h)
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_best-sensor_{exp}_{sub}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+            exp=exp,
+            sub=sub,
+            radius=radius,
+            dist=args.dist,
+            ni=num_instances,
+            tmin=tmin,
+            tmax=tmax),
+        bbox_inches='tight')
+
 
     plt.show()
