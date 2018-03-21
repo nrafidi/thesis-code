@@ -2,9 +2,22 @@ import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
-import dtw_sensor_select as dtw_sens
+import scipy.io as sio
 import argparse
 from scipy.stats import spearmanr, kendalltau
+
+SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+RESULT_FNAME = 'EOS_dtw_sensor_score_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+
+
+def sort_sensors():
+    load_var = sio.loadmat(SENSOR_MAP)
+    sensor_reg = load_var['sensor_reg']
+    sensor_reg = [str(sens[0][0]) for sens in sensor_reg]
+    sorted_inds = np.argsort(sensor_reg)
+    sorted_reg = [sensor_reg[ind] for ind in sorted_inds]
+    return sorted_inds, sorted_reg
+
 
 def ktau_rdms(rdm1, rdm2):
     # from Mariya Toneva
@@ -38,8 +51,8 @@ if __name__ == '__main__':
     scores = []
 
     for sub in ['B', 'C']:
-        result = np.load(dtw_sens.RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
-                                                      ni=num_instances, tmin=tmin, tmax=tmax))
+        result = np.load(RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
+                                             ni=num_instances, tmin=tmin, tmax=tmax))
 
         score_mat = result['scores']
         dtw_mat = result['dtw_mat']
@@ -53,6 +66,19 @@ if __name__ == '__main__':
                                                                                                      tmin=tmin,
                                                                                                      tmax=tmax,
                                                                                                      ni=num_instances))
+        fig.tight_layout()
+        plt.savefig(
+            '/home/nrafidi/thesis_figs/EOS_score-hist_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+                exp=exp,
+                sub=sub,
+                sen0=sen0,
+                sen1=sen1,
+                radius=radius,
+                dist=args.dist,
+                ni=num_instances,
+                tmin=tmin,
+                tmax=tmax),
+            bbox_inches='tight')
 
         best_sens = np.argmax(score_mat)
         worst_sens = np.argmin(score_mat)
@@ -69,6 +95,18 @@ if __name__ == '__main__':
                                                                                                                 tmin=tmin,
                                                                                                                 tmax=tmax,
                                                                                                                 ni=num_instances))
+        fig.tight_layout()
+        plt.savefig(
+            '/home/nrafidi/thesis_figs/EOS_best-sensor_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(exp=exp,
+                                                                                                                                   sub=sub,
+                                                                                                                                   sen0=sen0,
+                                                                                                                                   sen1=sen1,
+                                                                                                                                   radius=radius,
+                                                                                                                                   dist=args.dist,
+                                                                                                                                   ni=num_instances,
+                                                                                                                                   tmin=tmin,
+                                                                                                                                   tmax=tmax),
+            bbox_inches='tight')
 
         fig, ax = plt.subplots()
         ax.imshow(worst_mat/np.max(worst_mat), interpolation='nearest')
@@ -82,12 +120,27 @@ if __name__ == '__main__':
             tmax=tmax,
             ni=num_instances))
 
+        fig.tight_layout()
+        plt.savefig(
+            '/home/nrafidi/thesis_figs/EOS_worst-sensor_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+                exp=exp,
+                sub=sub,
+                sen0=sen0,
+                sen1=sen1,
+                radius=radius,
+                dist=args.dist,
+                ni=num_instances,
+                tmin=tmin,
+                tmax=tmax),
+            bbox_inches='tight')
         scores.append(score_mat[None, ...])
 
     sub_scores = np.concatenate(scores, axis=0)
-
+    sorted_inds, sorted_reg = sort_sensors()
+    sorted_sub_scores = sub_scores[:, sorted_inds]
     good_sensors = np.where(np.all(sub_scores > 0.0, axis=0))
     print('Good sensors: {good_sensors}'.format(good_sensors=good_sensors))
+    print(sorted_reg[good_sensors])
 
     sub_corr, _ = spearmanr(sub_scores, axis=1)
 
@@ -100,5 +153,18 @@ if __name__ == '__main__':
     ax.set_xlim([-1.0, 1.0])
     ax.set_ylabel('Subject C sensor scores')
     ax.set_ylim([-1.0, 1.0])
+
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_sub-corr_{exp}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+            exp=exp,
+            sen0=sen0,
+            sen1=sen1,
+            radius=radius,
+            dist=args.dist,
+            ni=num_instances,
+            tmin=tmin,
+            tmax=tmax),
+        bbox_inches='tight')
 
     plt.show()
