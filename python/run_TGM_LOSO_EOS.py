@@ -116,11 +116,14 @@ def run_tgm_exp(experiment,
     labels = np.empty((len(sen_ints),), dtype='string')
     for i_sen_int, sen_int in enumerate(sen_ints):
         word_list = stimuli_voice[sen_int]['stimulus'].split()
+        print(word_list)
         curr_voice = stimuli_voice[sen_int]['voice']
         if word != 'voice':
             labels[i_sen_int] = word_list[WORD_COLS[curr_voice][word]]
+            print(labels[i_sen_int])
         else:
             labels[i_sen_int] = curr_voice
+    print(labels)
     print(np.unique(labels))
     tmin = time.min()
     tmax = time.max()
