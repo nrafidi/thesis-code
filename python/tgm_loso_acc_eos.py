@@ -10,7 +10,16 @@ import run_TGM_LOSO_EOS
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
-
+CHANCE = {'pooled': {'noun1': 0.125,
+                     'verb': 0.25,
+                     'voice': 0.5},
+          'active': {'noun1': 0.25,
+                     'verb': 0.25,
+                     'voice': 0.5},
+          'passive': {'noun1': 0.25,
+                     'verb': 0.25,
+                     'voice': 0.5}
+          }
 
 def intersect_accs(exp,
                    sen_type,
@@ -23,10 +32,7 @@ def intersect_accs(exp,
                    avgTest='F'):
     top_dir = run_TGM_LOSO_EOS.TOP_DIR.format(exp=exp)
 
-    if word == 'voice':
-        chance = 0.5
-    else:
-        chance = 0.25
+    chance=CHANCE[sen_type][word]
 
     if num_instances == 1:
         avgTest = 'F'
@@ -103,6 +109,8 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
+    chance = CHANCE[args.sen_type][args.word]
+
     intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                       args.sen_type,
                                                                       args.word,
@@ -160,6 +168,33 @@ if __name__ == '__main__':
     fig.tight_layout()
     plt.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.0)
+    ax.set_ylabel('Test Time')
+    ax.set_xlabel('Train Time')
+    ax.set_title(
+        'Average TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
+                                                             word=args.word,
+                                                             experiment=args.experiment))
+    ax.set_xticks(range(0, len(time[win_starts]), time_step))
+    label_time = time[win_starts]
+    label_time = label_time[::time_step]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
+    ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    ax.set_yticklabels(label_time)
+
+    plt.colorbar(h)
+
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_avgtgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
