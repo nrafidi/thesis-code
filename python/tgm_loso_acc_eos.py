@@ -127,25 +127,25 @@ if __name__ == '__main__':
     time_step = int(250/args.overlap)
     print(mean_acc.shape)
 
-    for sub in range(acc_all.shape[0]):
-        fig, ax = plt.subplots()
-        h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
-        ax.set_ylabel('Test Time')
-        ax.set_xlabel('Train Time')
-        ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
-                                                                                sen_type=args.sen_type,
-                                                                                word=args.word,
-                                                                                experiment=args.experiment))
-        ax.set_xticks(range(0, len(time[win_starts]), time_step))
-        label_time = time[win_starts]
-        label_time = label_time[::time_step]
-        label_time[np.abs(label_time) < 1e-15] = 0.0
-        ax.set_xticklabels(label_time)
-        ax.set_yticks(range(0, len(time[win_starts]), time_step))
-        ax.set_yticklabels(label_time)
-        time_adjust = args.win_len
-
-        plt.colorbar(h)
+    # for sub in range(acc_all.shape[0]):
+    #     fig, ax = plt.subplots()
+    #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+    #     ax.set_ylabel('Test Time')
+    #     ax.set_xlabel('Train Time')
+    #     ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
+    #                                                                             sen_type=args.sen_type,
+    #                                                                             word=args.word,
+    #                                                                             experiment=args.experiment))
+    #     ax.set_xticks(range(0, len(time[win_starts]), time_step))
+    #     label_time = time[win_starts]
+    #     label_time = label_time[::time_step]
+    #     label_time[np.abs(label_time) < 1e-15] = 0.0
+    #     ax.set_xticklabels(label_time)
+    #     ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    #     ax.set_yticklabels(label_time)
+    #     time_adjust = args.win_len
+    #
+    #     plt.colorbar(h)
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
