@@ -106,7 +106,7 @@ if __name__ == '__main__':
     best_sensor = np.argmax(scores)
     print(best_sensor)
     fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(total_rdm[best_sensor, :, :]), interpolation='nearest', vmin=0.0, vmax=1.0)
+    h = ax.imshow(np.squeeze(total_rdm[best_sensor, :, :]), interpolation='nearest', vmin=0.0)
     plt.colorbar(h)
     fig.tight_layout()
     plt.savefig(
