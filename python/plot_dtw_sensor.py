@@ -7,7 +7,7 @@ import argparse
 from scipy.stats import spearmanr, kendalltau
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
-RESULT_FNAME = 'EOS_dtw_sensor_score_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor_score_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
 
 
 def sort_sensors():
