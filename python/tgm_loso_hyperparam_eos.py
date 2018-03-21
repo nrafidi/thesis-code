@@ -21,11 +21,6 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    if args.sen_type == 'active':
-        max_time = 2.0
-    else:
-        max_time = 3.0
-
     win_lens = [12, 25, 50] #, 100, 150]
     num_insts = [1, 2, 5]
 
@@ -54,21 +49,18 @@ if __name__ == '__main__':
                                                                                            avgTime=args.avgTime,
                                                                                            avgTest=args.avgTest)
             time = np.squeeze(time)
-            time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
-            time_ind = time_ind[0]
             # print(time_ind)
             frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
-            max_mean_acc = np.max(mean_acc[time_ind])
-            argmax_mean_acc = np.argmax(mean_acc[time_ind])
+            max_mean_acc = np.max(mean_acc)
+            argmax_mean_acc = np.argmax(mean_acc)
             # print(argmax_mean_acc)
-            arg_max_eos_win.append(time_ind[argmax_mean_acc])
+            arg_max_eos_win.append(argmax_mean_acc)
 
             arg_max_tot_win.append(np.argmax(mean_acc))
 
-            max_frac_sub = frac_sub[time_ind]
-            max_frac_sub = max_frac_sub[argmax_mean_acc]
+            max_frac_sub = frac_sub[argmax_mean_acc]
 
             frac_sub_win.append(max_frac_sub)
             mean_acc_win.append(max_mean_acc)
@@ -76,8 +68,8 @@ if __name__ == '__main__':
             sub_eos_max = []
             for i_sub in range(acc_all.shape[0]):
                 diag_acc = np.diag(np.squeeze(acc_all[i_sub, :, :]))
-                argo = np.argmax(diag_acc[time_ind])
-                sub_eos_max.append(time_ind[argo])
+                argo = np.argmax(diag_acc)
+                sub_eos_max.append(argo)
             sub_eos_max = np.array(sub_eos_max)
             # print(sub_eos_max.shape)
             per_sub_max_eos_win.append(sub_eos_max[None, ...])
