@@ -138,9 +138,9 @@ if __name__ == '__main__':
     sub_scores = np.concatenate(scores, axis=0)
     sorted_inds, sorted_reg = sort_sensors()
     sorted_sub_scores = sub_scores[:, sorted_inds]
-    good_sensors = np.where(np.all(sub_scores > 0.0, axis=0))
+    good_sensors = np.where(np.all(sub_scores > 0.0, axis=0))[0]
     print('Good sensors: {good_sensors}'.format(good_sensors=good_sensors))
-    print(sorted_reg[good_sensors])
+    print([sorted_reg[g_sens] for g_sens in good_sensors])
 
     sub_corr, _ = spearmanr(sub_scores, axis=1)
 
