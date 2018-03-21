@@ -121,7 +121,7 @@ def run_tgm_exp(experiment,
             labels[i_sen_int] = word_list[WORD_COLS[curr_voice][word]]
         else:
             labels[i_sen_int] = curr_voice
-
+    print(np.unique(labels))
     tmin = time.min()
     tmax = time.max()
 
