@@ -5,16 +5,16 @@ import time
 
 
 MODES = ['acc', 'coef']
-EXPERIMENTS = ['PassAct3', 'krns2']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
-SEN_TYPES = ['passive', 'active', 'pooled']
-WORDS = ['noun1', 'verb', 'voice']
+SEN_TYPES = ['pooled']#, 'passive', 'active']
+WORDS = ['voice', 'noun1', 'verb']
 WIN_LENS = [12, 25, 50]
 OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l1']
 ADJS = [None]
-DO_AVGS = [True, False]
+DO_AVGS = [False, True]
 NUM_INSTANCESS = [2, 1, 5]
 RANDOM_STATES = [1]
 
