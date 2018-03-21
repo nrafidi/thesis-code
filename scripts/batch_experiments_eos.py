@@ -5,7 +5,7 @@ import time
 
 
 MODES = ['acc', 'coef']
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['PassAct3', 'krns2']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['passive', 'active', 'pooled']
 WORDS = ['noun1', 'verb', 'voice']
