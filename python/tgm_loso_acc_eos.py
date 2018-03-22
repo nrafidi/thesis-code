@@ -201,7 +201,7 @@ if __name__ == '__main__':
     ax.set_xticklabels(label_time)
     ax.set_yticks(range(0, len(time[win_starts]), time_step))
     ax.set_yticklabels(label_time)
-
+    ax.axvline(x=0.625*time_step, color='w')
     plt.colorbar(h)
 
     fig.tight_layout()
