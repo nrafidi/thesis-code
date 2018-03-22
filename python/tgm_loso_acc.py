@@ -181,10 +181,11 @@ if __name__ == '__main__':
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
-    ax.set_title('Average TGM {sen_type} {word}\n{aT}{aTst}'.format(aT=aT,
-                                                                    aTst=aTst,
-                                                                    sen_type=args.sen_type,
-                                                                    word=args.word))
+    ax.set_title('Average TGM {sen_type} {word}\nNumber of Instances: {ni}\n{aT}{aTst}'.format(ni=args.num_instances,
+                                                                                               aT=aT,
+                                                                                               aTst=aTst,
+                                                                                               sen_type=args.sen_type,
+                                                                                               word=args.word))
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]
