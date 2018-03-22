@@ -179,8 +179,8 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
+    ax.set_ylabel('Train Time (s)')
+    ax.set_xlabel('Test Time (s)')
     ax.set_title('Average TGM {sen_type} {word}\nNumber of Instances: {ni} Window Size: {win}\n{aT}{aTst}'.format(ni=args.num_instances,
                                                                                                                   win=args.win_len*0.002,
                                                                                                                    aT=aT,
@@ -199,7 +199,7 @@ if __name__ == '__main__':
     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
         ax.axvline(x=v, color='w')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='w')
+            plt.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
     plt.colorbar(h)
     ax.set_xlim(left=time_step)
     ax.set_ylim(top=time_step)
@@ -214,8 +214,8 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
+    ax.set_ylabel('Train Time (s)')
+    ax.set_xlabel('Test Time (s)')
     ax.set_title(
         'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                   word=args.word,
