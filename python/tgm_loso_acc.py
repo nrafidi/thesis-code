@@ -112,6 +112,15 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
+    if args.avgTime == 'T':
+        aT = 'Time Average '
+    else:
+        aT = ''
+    if args.avgTest == 'T':
+        aTst = 'Test Average'
+    else:
+        aTst = ''
+
     intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                       args.sen_type,
                                                                       args.word,
@@ -169,14 +178,13 @@ if __name__ == '__main__':
     #     plt.colorbar(h)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
     ax.set_ylabel('Test Time')
     ax.set_xlabel('Train Time')
-    ax.set_title('Average TGM\n{sen_type} {word} {experiment}\navgTime={aT} avgTest={aTst}'.format(aT=args.avgTime,
-                                                                                                   aTst=args.avgTest,
-                                                                            sen_type=args.sen_type,
-                                                                            word=args.word,
-                                                                            experiment=args.experiment))
+    ax.set_title('Average TGM {sen_type} {word}\n{aT}{aTst}'.format(aT=aT,
+                                                                    aTst=aTst,
+                                                                    sen_type=args.sen_type,
+                                                                    word=args.word))
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]
@@ -187,11 +195,11 @@ if __name__ == '__main__':
     time_adjust = args.win_len
 
     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-        ax.axvline(x=v, color='k')
+        ax.axvline(x=v, color='w')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
+            plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='w')
     plt.colorbar(h)
-
+    ax.set_xlim(left=-0.5 - time_adjust*0.2)
     fig.tight_layout()
     plt.savefig(
         '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
