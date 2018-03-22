@@ -111,6 +111,15 @@ if __name__ == '__main__':
 
     chance = CHANCE[args.sen_type][args.word]
 
+    if args.avgTime == 'T':
+        aT = 'Time Average '
+    else:
+        aT = ''
+    if args.avgTest == 'T':
+        aTst = 'Test Average'
+    else:
+        aTst = ''
+
     intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                       args.sen_type,
                                                                       args.word,
@@ -176,12 +185,15 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
-    ax.set_title(
-        'Average TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                             word=args.word,
-                                                             experiment=args.experiment))
+    ax.set_ylabel('Train Time (s)')
+    ax.set_xlabel('Test Time (s)')
+    ax.set_title('Average TGM {sen_type} {word}\nNumber of Instances: {ni} Window Size: {win}\n{aT}{aTst}'.format(
+        ni=args.num_instances,
+        win=args.win_len * 0.002,
+        aT=aT,
+        aTst=aTst,
+        sen_type=args.sen_type,
+        word=args.word))
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]
