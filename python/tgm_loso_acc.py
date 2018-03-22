@@ -201,7 +201,8 @@ if __name__ == '__main__':
         if i_v < len(text_to_write):
             plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='w')
     plt.colorbar(h)
-    ax.set_xlim(left=-0.5 - time_adjust*0.2)
+    ax.set_xlim(left=time_step)
+    ax.set_ylim(top=time_step)
     fig.tight_layout()
     plt.savefig(
         '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
