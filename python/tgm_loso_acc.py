@@ -137,45 +137,30 @@ if __name__ == '__main__':
     time_step = int(250/args.overlap)
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+        max_line = 2.51 * 2 * time_step
+        start_line = time_step
         if args.word == 'noun1':
-            max_line = 2.51 * 2 * time_step
-            start_line = time_step
+            start_line -= 0.0
+        elif args.word == 'verb':
+            max_line -= 0.5
+            start_line -= 0.5
         else:
-            max_line = 2.01 * 2 * time_step
-            start_line = 0.5 * time_step
+            max_line -= 1.5
+            start_line -= 1.5
     else:
         text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+        max_line = 3.51 * 2 * time_step
+        start_line = time_step
         if args.word == 'noun1':
-            max_line = 3.51 * 2 * time_step
-            start_line = time_step
+            start_line -= 0.0
+        elif args.word == 'verb':
+            max_line -= 1.0
+            start_line -= 1.0
         else:
-            max_line = 2.51 * 2 * time_step
-            start_line = 0.0
+            max_line -= 2.5
+            start_line -= 2.5
     print(mean_acc.shape)
     print(np.max(mean_acc))
-    # for sub in range(acc_all.shape[0]):
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
-    #     ax.set_ylabel('Test Time')
-    #     ax.set_xlabel('Train Time')
-    #     ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
-    #                                                                             sen_type=args.sen_type,
-    #                                                                             word=args.word,
-    #                                                                             experiment=args.experiment))
-    #     ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    #     label_time = time[win_starts]
-    #     label_time = label_time[::time_step]
-    #     label_time[np.abs(label_time) < 1e-15] = 0.0
-    #     ax.set_xticklabels(label_time)
-    #     ax.set_yticks(range(0, len(time[win_starts]), time_step))
-    #     ax.set_yticklabels(label_time)
-    #     time_adjust = args.win_len
-    #
-    #     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-    #         ax.axvline(x=v, color='k')
-    #         if i_v < len(text_to_write):
-    #             plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
-    #     plt.colorbar(h)
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
@@ -243,42 +228,25 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
-    # fig, ax = plt.subplots()
-    # ax.plot(np.diag(intersection))
-    # ax.set_ylabel('Number of Subjects with > chance acc')
-    # ax.set_xlabel('Time')
-    # ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-    #                                                                              word=args.word,
-    #                                                                              experiment=args.experiment))
-
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    # ax.set_ylabel('Test Time')
-    # ax.set_xlabel('Train Time')
-    # ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-    #                                                                                  word=args.word,
-    #                                                                                  experiment=args.experiment))
-    # plt.colorbar(h)
-
     time_adjust = args.win_len*0.002
     fig, ax = plt.subplots()
     ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
     ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
-    if args.sen_type == 'active':
-        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.0 - time_adjust + 0.01
-        if args.word == 'noun1':
-            start_line = -0.5 - time_adjust
-        else:
-            start_line = -1.0 - time_adjust
-
-    else:
-        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.0 - time_adjust + 0.01
-        if args.word == 'noun1':
-            start_line = -0.5 - time_adjust
-        else:
-            start_line = -1.5 - time_adjust
+    # if args.sen_type == 'active':
+    #     text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+    #     max_line = 2.0 - time_adjust + 0.01
+    #     if args.word == 'noun1':
+    #         start_line = -0.5 - time_adjust
+    #     else:
+    #         start_line = -1.0 - time_adjust
+    #
+    # else:
+    #     text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+    #     max_line = 3.0 - time_adjust + 0.01
+    #     if args.word == 'noun1':
+    #         start_line = -0.5 - time_adjust
+    #     else:
+    #         start_line = -1.5 - time_adjust
 
 
     for i_v, v in enumerate(np.arange(start_line, max_line, 0.5)):
