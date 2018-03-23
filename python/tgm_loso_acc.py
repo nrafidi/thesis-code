@@ -230,8 +230,9 @@ if __name__ == '__main__':
 
     time_adjust = args.win_len*0.002
     fig, ax = plt.subplots()
-    ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
-    ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
+
+    ax.plot(np.diag(mean_acc), label='Accuracy')
+    ax.plot(frac_sub, label='Fraction of Subjects > Chance')
     # if args.sen_type == 'active':
     #     text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
     #     max_line = 2.0 - time_adjust + 0.01
@@ -248,7 +249,11 @@ if __name__ == '__main__':
     #     else:
     #         start_line = -1.5 - time_adjust
 
-
+    ax.set_xticks(range(0, len(time[win_starts]), time_step))
+    label_time = time[win_starts]
+    label_time = label_time[::time_step]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
