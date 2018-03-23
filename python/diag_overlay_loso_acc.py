@@ -155,13 +155,13 @@ if __name__ == '__main__':
     time_adjust = args.win_len*0.002
     fig, ax = plt.subplots()
     colors = ['r', 'g', 'b']
-    for i_word, word in word_list:
+    for i_word, word in enumerate(word_list):
         color = colors[i_word]
         acc = acc_diags[i_word]
         frac = frac_diags[i_word]
         above_thresh = frac > 0.5
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
-        for i_pt, pt in above_thresh:
+        for i_pt, pt in enumerate(above_thresh):
             if pt:
                 ax.scatter(i_pt, acc[i_pt] + 0.05, color=color, marker='*')
 
