@@ -249,7 +249,7 @@ if __name__ == '__main__':
     #         start_line = -1.5 - time_adjust
 
 
-    for i_v, v in enumerate(np.arange(start_line, max_line, 0.5)):
+    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
             plt.text(v + 0.05, 0.8, text_to_write[i_v])
