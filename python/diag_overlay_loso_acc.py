@@ -177,7 +177,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Accuracy/Fraction > Chance')
     ax.set_xlabel('Time')
     ax.set_ylim([0.0, 0.9])
-    ax.set_xlim([start_line, np.argmax(time)])
+    ax.set_xlim([start_line, max_line + time_step*2])
     ax.legend(loc=4)
     ax.set_title('Mean accuracy over subjects\n{sen_type} {experiment}'.format(sen_type=args.sen_type,
                                                                                experiment=args.experiment))
