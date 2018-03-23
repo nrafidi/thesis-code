@@ -159,7 +159,7 @@ if __name__ == '__main__':
         color = colors[i_word]
         acc = acc_diags[i_word]
         frac = frac_diags[i_word]
-        above_thresh = frac > 0.5
+        above_thresh = frac > 0.625
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
         for i_pt, pt in enumerate(above_thresh):
             if pt:
@@ -173,11 +173,11 @@ if __name__ == '__main__':
     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
         ax.axvline(x=v, color='k')
         if i_v < len(text_to_write):
-            plt.text(v + 0.05, 0.7, text_to_write[i_v])
+            plt.text(v + 0.1, 0.7, text_to_write[i_v])
     ax.set_ylabel('Accuracy/Fraction > Chance')
     ax.set_xlabel('Time')
     ax.set_ylim([0.0, 0.9])
-    ax.set_xlim([start_line, max_line + time_step*2])
+    ax.set_xlim([start_line, max_line + time_step*5])
     ax.legend(loc=4)
     ax.set_title('Mean accuracy over subjects\n{sen_type} {experiment}'.format(sen_type=args.sen_type,
                                                                                experiment=args.experiment))
