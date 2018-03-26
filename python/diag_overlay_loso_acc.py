@@ -231,7 +231,7 @@ if __name__ == '__main__':
         ax.set_ylabel('Accuracy')
         ax.set_xlabel('Time')
         ax.set_ylim([0.0, 0.9])
-        ax.set_xlim([start_line, max_line + time_step * 5])
+        ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         ax.legend(loc=1)
         ax.set_title('Mean accuracy over subjects\n{word} {experiment}'.format(word=word,
                                                                                experiment=args.experiment))
