@@ -221,7 +221,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
                 ax.axvline(x=v, color='k')
                 if i_v < len(text_to_write[i_sen]):
-                    plt.text(v + 0.1, 0.7 - i_sen*0.2, text_to_write[i_sen][i_v])
+                    plt.text(v + 0.15, 0.7 - i_sen*0.2, text_to_write[i_sen][i_v], color=color)
 
         ax.set_xticks(range(0, len(sen_time[-1]), time_step))
         label_time = sen_time[-1]
