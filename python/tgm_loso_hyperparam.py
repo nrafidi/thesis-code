@@ -74,7 +74,9 @@ if __name__ == '__main__':
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
             percentile_tot = int(perc * len(mean_acc))
+            print(percentile_tot)
             percentile_eos = int(perc * len(time_ind))
+            print(percentile_eos)
 
             mean_max_tot_win.append(np.max(mean_acc))
             sorted_tot_acc = np.sort(mean_acc)[::-1]
@@ -184,8 +186,10 @@ if __name__ == '__main__':
             axs[i][j].set_xticklabels(num_insts)
             axs[i][j].set_yticks(range(len(win_lens)))
             axs[i][j].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            axs[i][j].set_xlabel('Number of Instances')
-            axs[i][j].set_ylabel('Window Length (ms)')
+            if i == 2:
+                axs[i][j].set_xlabel('Number of Instances')
+            if j == 0:
+                axs[i][j].set_ylabel('Window Length (ms)')
 
 
     fig.suptitle('Accuracy and Consistency Scores\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
