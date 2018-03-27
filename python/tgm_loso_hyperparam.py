@@ -212,7 +212,7 @@ if __name__ == '__main__':
 
     num_sub = per_sub_max_tot.shape[2]
     half_sub = int(num_sub/2)
-    fig, axs = plt.subplots(2, half_sub, figsize=(20, 10))
+    fig, axs = plt.subplots(2, half_sub, figsize=(30, 10))
     for i_sub in range(num_sub):
         if i_sub < half_sub:
             i_ax = 0
@@ -220,7 +220,7 @@ if __name__ == '__main__':
             i_ax = 1
         j_ax = i_sub - half_sub*i_ax
         h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_tot[:, :, i_sub]), interpolation='nearest', vmin=0.25, vmax=1.0)
-        fig.colorbar(h, ax=axs[i_ax][j_ax], shrink=0.4)
+        fig.colorbar(h, ax=axs[i_ax][j_ax])
         axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
@@ -238,7 +238,7 @@ if __name__ == '__main__':
 
     num_sub = per_sub_max_eos.shape[2]
     half_sub = int(num_sub / 2)
-    fig, axs = plt.subplots(2, half_sub, figsize=(20, 10))
+    fig, axs = plt.subplots(2, half_sub, figsize=(30, 10))
     for i_sub in range(num_sub):
         if i_sub < half_sub:
             i_ax = 0
@@ -247,7 +247,7 @@ if __name__ == '__main__':
         j_ax = i_sub - half_sub * i_ax
         h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
                                    vmax=1.0)
-        fig.colorbar(h, ax=axs[i_ax][j_ax], shrink=0.4)
+        fig.colorbar(h, ax=axs[i_ax][j_ax])
         axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
