@@ -177,13 +177,40 @@ if __name__ == '__main__':
             axs[i][j].set_ylabel('Window Length (ms)')
 
 
-    fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+    fig.suptitle('Accuracy and Consistency Scores\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                              args.word,
                                                                              args.avgTime,
                                                                              args.avgTest),
                  fontsize=24)
     fig.tight_layout()
     plt.subplots_adjust(top=0.85)
+
+    fig, axs = plt.subplots(1, 2)
+    h0 = axs[0].imshow(frac_sub_tot + mean_max_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
+    axs[0].set_title('Combined Global Score')
+    fig.colorbar(h0, ax=axs[0])
+    h1 = axs[1].imshow(frac_sub_eos + mean_max_eos, interpolation='nearest', vmin=0.75, vmax=2.0)
+    axs[1].set_title('Combined Post-Sentence Score')
+    fig.colorbar(h1, ax=axs[1])
+
+    for i in range(2):
+        axs[i].set_xticks(range(len(num_insts)))
+        axs[i].set_xticklabels(num_insts)
+        axs[i].set_yticks(range(len(win_lens)))
+        axs[i].set_yticklabels(np.array(win_lens).astype('float') * 2)
+        axs[i].set_xlabel('Number of Instances')
+        axs[i].set_ylabel('Window Length (ms)')
+
+    fig.suptitle('Combined Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                             args.word,
+                                                                             args.avgTime,
+                                                                             args.avgTest),
+                 fontsize=24)
+    fig.tight_layout()
+    plt.subplots_adjust(top=0.85)
+
+
+
     plt.show()
     #
     # plt.savefig(
