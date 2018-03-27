@@ -170,12 +170,13 @@ if __name__ == '__main__':
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+            frac = frac_diags[i_word]
 
             if args.experiment == 'PassAct3' and word == 'verb' and sen_type == 'active':
                 acc = acc[time_step:]
+                frac = frac[time_step:]
 
-            frac = frac_diags[i_word]
-            above_thresh = frac > 0.625
+            above_thresh = frac > 0.5
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
@@ -221,7 +222,11 @@ if __name__ == '__main__':
             color = colors[i_sen]
             acc = sen_accs[i_sen][i_word]
             frac = sen_fracs[i_sen][i_word]
-            above_thresh = frac > 0.625
+            if args.experiment == 'PassAct3' and word == 'verb' and sen_type == 'active':
+                acc = acc[time_step:]
+                frac = frac[time_step:]
+
+            above_thresh = frac > 0.5
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
