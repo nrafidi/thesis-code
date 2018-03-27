@@ -241,7 +241,7 @@ if __name__ == '__main__':
     half_sub = int(num_sub / 2)
 
     fig = plt.figure(figsize = (30, 10))
-    grid = AxesGrid(fig, 111, nrow_ncols=(half_sub, 2),
+    grid = AxesGrid(fig, 111, nrows_ncols=(half_sub, 2),
                     axes_pad=0.05, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
