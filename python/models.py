@@ -632,7 +632,7 @@ def lr_tgm_loso(data,
             model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
                                                               cv=2,
                                                               penalty=penalty,
-                                                              solver='saga',
+                                                              solver='liblinear',
                                                               multi_class='ovr',
                                                               class_weight='balanced',
                                                               refit=True)
@@ -720,7 +720,7 @@ def lr_tgm_coef(data,
         model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
                                                           cv=2,
                                                           penalty=penalty,
-                                                          solver='saga',
+                                                          solver='liblinear',
                                                           multi_class='ovr',
                                                           refit=True)
 
