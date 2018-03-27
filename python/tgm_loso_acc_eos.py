@@ -34,8 +34,8 @@ def intersect_accs(exp,
 
     chance=CHANCE[sen_type][word]
 
-    if num_instances == 1:
-        avgTest = 'F'
+    # if num_instances == 1:
+    #     avgTest = 'F'
 
     acc_by_sub = []
     acc_intersect = []
