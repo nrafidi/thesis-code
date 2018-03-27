@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='F')
-    parser.add_argument('--percentile', type=float, default=0.75)
+    parser.add_argument('--percentile', type=float, default=0.1)
     args = parser.parse_args()
 
     if args.sen_type == 'active':
@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2, figsize=(7, 21))
+    fig, axs = plt.subplots(3, 2, figsize=(10, 18))
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0])
