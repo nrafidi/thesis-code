@@ -128,9 +128,13 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
+    num_sub = float(len(run_TGM_LOSO.VALID_SUBS[args.experiment]))
+    frac_thresh = (0.5*num_sub + 1.0)/num_sub
+
     sen_accs = []
     sen_fracs = []
     sen_time = []
+
     for sen_type in sen_type_list:
         acc_diags = []
         frac_diags = []
@@ -176,7 +180,7 @@ if __name__ == '__main__':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
-            above_thresh = frac > 0.625
+            above_thresh = frac > frac_thresh
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
@@ -226,7 +230,7 @@ if __name__ == '__main__':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
-            above_thresh = frac > 0.625
+            above_thresh = frac > frac_thresh
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
