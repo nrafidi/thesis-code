@@ -5,7 +5,7 @@ import time
 
 
 MODES = ['acc', 'coef']
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['pooled']#, 'passive', 'active']
 WORDS = ['voice', 'noun1', 'verb']
@@ -14,7 +14,7 @@ OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l1']
 ADJS = [None]
-DO_AVGS = [False, True]
+DO_AVGS = [True]
 NUM_INSTANCESS = [2, 1, 5]
 RANDOM_STATES = [1]
 
