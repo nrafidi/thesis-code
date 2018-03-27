@@ -247,14 +247,14 @@ if __name__ == '__main__':
         j_ax = i_sub - half_sub * i_ax
         h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
                                    vmax=1.0)
-        fig.colorbar(h, ax=axs[i_ax][j_ax])
         axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
         axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
         axs[i_ax][j_ax].set_yticklabels(np.array(win_lens).astype('float') * 2)
-        axs[i_ax][j_ax].set_xlabel('Number of Instances')
-        axs[i_ax][j_ax].set_ylabel('Window Length (ms)')
+    fig.colorbar(h)
+    axs[1][0].set_xlabel('Number of Instances')
+    axs[1][0].set_ylabel('Window Length (ms)')
     fig.suptitle('Per Subject Post-Sentence Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                               args.word,
                                                                               args.avgTime,
