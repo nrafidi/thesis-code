@@ -121,5 +121,21 @@ if __name__ == '__main__':
             tmax=tmax),
         bbox_inches='tight')
 
+    mean_sensor = np.mean(total_rdm, axis=0)
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(mean_sensor), interpolation='nearest', vmin=0.0)
+    ax.set_title('Average over Sensors')
+    plt.colorbar(h)
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_avg-sensor_{exp}_{sub}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(
+            exp=exp,
+            sub=sub,
+            radius=radius,
+            dist=args.dist,
+            ni=num_instances,
+            tmin=tmin,
+            tmax=tmax),
+        bbox_inches='tight')
 
     plt.show()
