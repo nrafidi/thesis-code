@@ -10,16 +10,26 @@ import run_TGM_LOSO_EOS
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
-CHANCE = {'pooled': {'noun1': 0.125,
-                     'verb': 0.25,
-                     'voice': 0.5},
-          'active': {'noun1': 0.25,
-                     'verb': 0.25,
-                     'voice': 0.5},
-          'passive': {'noun1': 0.25,
-                     'verb': 0.25,
-                     'voice': 0.5}
-          }
+CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
+                             'verb': 0.25,
+                             'voice': 0.5},
+                  'active': {'noun1': 0.25,
+                             'verb': 0.25,
+                             'voice': 0.5},
+                  'passive': {'noun1': 0.25,
+                             'verb': 0.25,
+                             'voice': 0.5}
+                    },
+          'PassAct3': {'pooled': {'noun1': 0.25,
+                             'verb': 0.25,
+                             'voice': 0.5},
+                  'active': {'noun1': 0.25,
+                             'verb': 0.25,
+                             'voice': 0.5},
+                  'passive': {'noun1': 0.25,
+                             'verb': 0.25,
+                             'voice': 0.5}
+                    }}
 
 def intersect_accs(exp,
                    sen_type,
