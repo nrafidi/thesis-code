@@ -7,7 +7,7 @@ import time
 MODES = ['acc', 'coef']
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
-SEN_TYPES = ['pooled']#, 'passive', 'active']
+SEN_TYPES = ['pooled', 'passive', 'active']
 WORDS = ['voice', 'noun1', 'verb']
 WIN_LENS = [12, 25, 50]
 OVERLAPS = [12]
