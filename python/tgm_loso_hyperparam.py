@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     per_sub_mean_tot = np.concatenate(per_sub_mean_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2, figsize=(10, 20))
+    fig, axs = plt.subplots(3, 2, figsize=(10, 10))
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0])
@@ -180,9 +180,10 @@ if __name__ == '__main__':
     fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                              args.word,
                                                                              args.avgTime,
-                                                                             args.avgTest))
+                                                                             args.avgTest),
+                 fontsize=24)
     fig.tight_layout()
-    plt.subplots_adjust(top=0.8)
+    plt.subplots_adjust(top=0.85)
     plt.show()
     #
     # plt.savefig(
