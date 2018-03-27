@@ -59,6 +59,7 @@ def intersect_accs(exp,
                                                          rsP=1,
                                                          mode='acc') + '.npz'
         if not os.path.isfile(result_fname):
+            print(result_fname)
             continue
         result = np.load(result_fname)
         time = np.squeeze(result['time'])
