@@ -84,7 +84,7 @@ if __name__ == '__main__':
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
             was_success = True
-            print(fname)
+            # print(grid)
         else:
             was_success = False
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
                     # print(err_file)
-                    # print(grid)
+                    print(grid)
 
 
         job_id += 1
