@@ -242,7 +242,7 @@ if __name__ == '__main__':
 
     fig = plt.figure(figsize = (30, 10))
     grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
-                    axes_pad=0.2, cbar_mode='single', cbar_location='right',
+                    axes_pad=0.3, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
     for i_ax, ax in enumerate(grid):
@@ -253,8 +253,9 @@ if __name__ == '__main__':
         ax.set_xticklabels(num_insts)
         ax.set_yticks(range(len(win_lens)))
         ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-        if i_ax== half_sub:
+        if i_ax >= half_sub:
             ax.set_xlabel('Number of Instances')
+        if i_ax == half_sub or i_ax == 0:
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
