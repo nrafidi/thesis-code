@@ -74,9 +74,9 @@ if __name__ == '__main__':
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
             percentile_tot = int(perc * len(mean_acc))
-            print(percentile_tot)
+            # print(percentile_tot)
             percentile_eos = int(perc * len(time_ind))
-            print(percentile_eos)
+            # print(percentile_eos)
 
             mean_max_tot_win.append(np.max(mean_acc))
             sorted_tot_acc = np.sort(mean_acc)[::-1]
@@ -205,7 +205,7 @@ if __name__ == '__main__':
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
-    mats_to_plot = [frac_sub_tot + mean_max_tot, frac_sub_eos + mean_max_eos]
+    mats_to_plot = [frac_sub_tot + mean_perc_tot, frac_sub_eos + mean_perc_eos]
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.75,
