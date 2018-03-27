@@ -60,9 +60,13 @@ def intersect_accs(exp,
                                                        mode='acc') + '.npz'
         if not os.path.isfile(result_fname):
             continue
-        result = np.load(result_fname)
-        time = np.squeeze(result['time'])
-        win_starts = result['win_starts']
+        try:
+            result = np.load(result_fname)
+            time = np.squeeze(result['time'])
+            win_starts = result['win_starts']
+        except:
+            print(result_fname)
+            continue
 
         time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
         time_ind = time_ind[0]
