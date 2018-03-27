@@ -212,7 +212,7 @@ if __name__ == '__main__':
 
     num_sub = per_sub_max_tot.shape[2]
     half_sub = int(num_sub/2)
-    fig, axs = plt.subplots(2, half_sub)
+    fig, axs = plt.subplots(2, half_sub, figsize=(20, 10))
     for i_sub in range(num_sub):
         if i_sub < half_sub:
             i_ax = 0
@@ -238,7 +238,7 @@ if __name__ == '__main__':
 
     num_sub = per_sub_max_eos.shape[2]
     half_sub = int(num_sub / 2)
-    fig, axs = plt.subplots(2, half_sub)
+    fig, axs = plt.subplots(2, half_sub, figsize=(20, 10))
     for i_sub in range(num_sub):
         if i_sub < half_sub:
             i_ax = 0
