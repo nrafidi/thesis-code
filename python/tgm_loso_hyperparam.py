@@ -154,16 +154,16 @@ if __name__ == '__main__':
     h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][1].set_title('Fraction of Subjects > Chance\nPost-Sentence Max Accuracy')
     fig.colorbar(h01, ax=axs[0][1])
-    h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
+    h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=0.75)
     axs[1][0].set_title('Global Max Accuracy')
     fig.colorbar(h10, ax=axs[1][0])
-    h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
+    h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=0.75)
     axs[1][1].set_title('Post-Sentence Max Accuracy')
     fig.colorbar(h11, ax=axs[1][1])
-    h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
+    h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', vmin=0.25, vmax=0.75)
     axs[2][0].set_title('Global Mean Accuracy')
     fig.colorbar(h20, ax=axs[2][0])
-    h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
+    h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', vmin=0.25, vmax=0.75)
     axs[2][1].set_title('Post-Sentence Mean Accuracy')
     fig.colorbar(h21, ax=axs[2][1])
 
@@ -219,8 +219,8 @@ if __name__ == '__main__':
         else:
             i_ax = 1
         j_ax = i_sub - half_sub*i_ax
-        h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_tot[:, :, i_sub]), interpolation='nearest', vmin=0.25, vmax=0.5)
-        fig.colorbar(h, ax=axs[i_ax][j_ax])
+        h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_tot[:, :, i_sub]), interpolation='nearest', vmin=0.25, vmax=0.75)
+        fig.colorbar(h, ax=axs[i_ax][j_ax], shrink=0.5)
         axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
@@ -246,8 +246,8 @@ if __name__ == '__main__':
             i_ax = 1
         j_ax = i_sub - half_sub * i_ax
         h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
-                                   vmax=0.5)
-        fig.colorbar(h, ax=axs[i_ax][j_ax])
+                                   vmax=0.75)
+        fig.colorbar(h, ax=axs[i_ax][j_ax], shrink=0.5)
         axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
