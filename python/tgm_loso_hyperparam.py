@@ -3,6 +3,7 @@ import load_data_ordered as load_data
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import AxesGrid
 import numpy as np
 import scipy.io as sio
 import run_TGM_LOSO
@@ -238,30 +239,55 @@ if __name__ == '__main__':
 
     num_sub = per_sub_max_eos.shape[2]
     half_sub = int(num_sub / 2)
-    fig, axs = plt.subplots(2, half_sub, figsize=(30, 10))
-    for i_sub in range(num_sub):
-        if i_sub < half_sub:
-            i_ax = 0
-        else:
-            i_ax = 1
-        j_ax = i_sub - half_sub * i_ax
-        h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
+
+    fig = plt.figure(figsize = (30, 10))
+    grid = AxesGrid(fig, 111, nrow_ncols=(half_sub, 2),
+                    axes_pad=0.05, cbar_mode='single', cbar_location='right',
+                    cbar_pad=0.1)
+
+    for i_ax, ax in enumerate(grid):
+        im = ax.imshow(np.squeeze(per_sub_max_eos[:, :, i_ax]), interpolation='nearest', vmin=0.25,
                                    vmax=1.0)
-        axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
-        axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
-        axs[i_ax][j_ax].set_xticklabels(num_insts)
-        axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
-        axs[i_ax][j_ax].set_yticklabels(np.array(win_lens).astype('float') * 2)
-    fig.colorbar(h)
-    axs[1][0].set_xlabel('Number of Instances')
-    axs[1][0].set_ylabel('Window Length (ms)')
+        ax.set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_ax])
+        ax.set_xticks(range(len(num_insts)))
+        ax.set_xticklabels(num_insts)
+        ax.set_yticks(range(len(win_lens)))
+        ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+        if i_ax== half_sub:
+            ax.set_xlabel('Number of Instances')
+            ax.set_ylabel('Window Length (ms)')
+
+    cbar = grid.cbar_axes[0].colorbar(im)
     fig.suptitle('Per Subject Post-Sentence Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                               args.word,
                                                                               args.avgTime,
                                                                               args.avgTest),
                  fontsize=24)
-    fig.tight_layout()
-    plt.subplots_adjust(top=0.85)
+
+    # fig, axs = plt.subplots(2, half_sub, figsize=(30, 10))
+    # for i_sub in range(num_sub):
+    #     if i_sub < half_sub:
+    #         i_ax = 0
+    #     else:
+    #         i_ax = 1
+    #     j_ax = i_sub - half_sub * i_ax
+    #     h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
+    #                                vmax=1.0)
+    #     axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
+    #     axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
+    #     axs[i_ax][j_ax].set_xticklabels(num_insts)
+    #     axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
+    #     axs[i_ax][j_ax].set_yticklabels(np.array(win_lens).astype('float') * 2)
+    # fig.colorbar(h)
+    # axs[1][0].set_xlabel('Number of Instances')
+    # axs[1][0].set_ylabel('Window Length (ms)')
+    # fig.suptitle('Per Subject Post-Sentence Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+    #                                                                           args.word,
+    #                                                                           args.avgTime,
+    #                                                                           args.avgTest),
+    #              fontsize=24)
+    # fig.tight_layout()
+    # plt.subplots_adjust(top=0.85)
 
 
 
