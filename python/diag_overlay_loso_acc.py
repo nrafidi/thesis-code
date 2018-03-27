@@ -176,7 +176,7 @@ if __name__ == '__main__':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
-            above_thresh = frac > 0.5
+            above_thresh = frac > 0.625
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
@@ -226,7 +226,7 @@ if __name__ == '__main__':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
-            above_thresh = frac > 0.5
+            above_thresh = frac > 0.625
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
