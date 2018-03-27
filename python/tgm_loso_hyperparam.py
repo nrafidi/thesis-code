@@ -198,32 +198,33 @@ if __name__ == '__main__':
                                                                              args.avgTest),
                  fontsize=24)
     fig.tight_layout()
-    plt.subplots_adjust(top=0.9)
+    plt.subplots_adjust(top=0.87)
 
-    fig, axs = plt.subplots(1, 2)
-    h0 = axs[0].imshow(frac_sub_tot + mean_max_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
-    axs[0].set_title('Combined Global Score')
-    fig.colorbar(h0, ax=axs[0], shrink=0.5)
-    h1 = axs[1].imshow(frac_sub_eos + mean_max_eos, interpolation='nearest', vmin=0.75, vmax=2.0)
-    axs[1].set_title('Combined Post-Sentence Score')
-    fig.colorbar(h1, ax=axs[1], shrink=0.5)
+    fig = plt.figure()
+    grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+                    axes_pad=0.3, cbar_mode='single', cbar_location='right',
+                    cbar_pad=0.1)
 
-    for i in range(2):
-        axs[i].set_xticks(range(len(num_insts)))
-        axs[i].set_xticklabels(num_insts)
-        axs[i].set_yticks(range(len(win_lens)))
-        axs[i].set_yticklabels(np.array(win_lens).astype('float') * 2)
-        axs[i].set_xlabel('Number of Instances')
-        axs[i].set_ylabel('Window Length (ms)')
+    mats_to_plot = [frac_sub_tot + mean_max_tot, frac_sub_eos + mean_max_eos]
+    titles = ['Combined Global Score', 'Combined Post-Sentence Score']
+    for i_ax, ax in enumerate(grid):
+        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.75,
+                       vmax=2.0)
+        ax.set_title(titles[i_ax])
+        ax.set_xticks(range(len(num_insts)))
+        ax.set_xticklabels(num_insts)
+        ax.set_yticks(range(len(win_lens)))
+        ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+        ax.set_xlabel('Number of Instances')
+        if i_ax == 0:
+            ax.set_ylabel('Window Length (ms)')
 
+    cbar = grid.cbar_axes[0].colorbar(im)
     fig.suptitle('Combined Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                             args.word,
-                                                                             args.avgTime,
-                                                                             args.avgTest),
+                                                                      args.word,
+                                                                      args.avgTime,
+                                                                      args.avgTest),
                  fontsize=24)
-    fig.tight_layout()
-    plt.subplots_adjust(top=0.85)
-
 
     num_sub = per_sub_max_tot.shape[2]
     half_sub = int(num_sub/2)
