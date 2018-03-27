@@ -50,8 +50,6 @@ if __name__ == '__main__':
         win_len = grid[12]
         sub = grid[13]
 
-        if job_id == 7892:
-            print(grid)
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
@@ -86,6 +84,7 @@ if __name__ == '__main__':
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
             was_success = True
+            print(fname)
         else:
             was_success = False
 
