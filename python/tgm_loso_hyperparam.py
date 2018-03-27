@@ -188,10 +188,10 @@ if __name__ == '__main__':
     fig, axs = plt.subplots(1, 2)
     h0 = axs[0].imshow(frac_sub_tot + mean_max_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
     axs[0].set_title('Combined Global Score')
-    fig.colorbar(h0, ax=axs[0])
+    fig.colorbar(h0, ax=axs[0], shrink=0.5)
     h1 = axs[1].imshow(frac_sub_eos + mean_max_eos, interpolation='nearest', vmin=0.75, vmax=2.0)
     axs[1].set_title('Combined Post-Sentence Score')
-    fig.colorbar(h1, ax=axs[1])
+    fig.colorbar(h1, ax=axs[1], shrink=0.5)
 
     for i in range(2):
         axs[i].set_xticks(range(len(num_insts)))
