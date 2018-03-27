@@ -221,7 +221,7 @@ if __name__ == '__main__':
         j_ax = i_sub - half_sub*i_ax
         h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_tot[:, :, i_sub]), interpolation='nearest', vmin=0.25, vmax=0.5)
         fig.colorbar(h, ax=axs[i_ax][j_ax])
-        axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[i_sub])
+        axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_sub])
         axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
         axs[i_ax][j_ax].set_xticklabels(num_insts)
         axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
