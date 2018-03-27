@@ -170,6 +170,10 @@ if __name__ == '__main__':
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+
+            if args.experiment == 'PassAct3' and word == 'verb' and sen_type == 'active':
+                acc = acc[time_step:]
+
             frac = frac_diags[i_word]
             above_thresh = frac > 0.625
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
