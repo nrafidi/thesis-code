@@ -138,4 +138,6 @@ if __name__ == '__main__':
             tmax=tmax),
         bbox_inches='tight')
 
+    mean_score = ktau_rdms(mean_sensor, comp_rdm)
+    print('Score of mean over sensors: {}'.format(mean_score))
     plt.show()
