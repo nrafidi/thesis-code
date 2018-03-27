@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
             mean_max_eos_win.append(np.max(mean_acc[time_ind]))
             mean_mean_eos_win.append(np.mean(mean_acc[time_ind]))
-            frac_sub_eos_win.append(time_ind[np.argmax(mean_acc[time_ind])])
+            frac_sub_eos_win.append(frac_sub[time_ind[np.argmax(mean_acc[time_ind])]])
 
             sub_eos_max = []
             sub_eos_mean = []
@@ -147,23 +147,23 @@ if __name__ == '__main__':
 
     per_sub_mean_tot = np.concatenate(per_sub_mean_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2)
-    h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
+    fig, axs = plt.subplots(3, 2, figsize=(20, 10))
+    h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0])
-    h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
+    h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][1].set_title('Fraction of Subjects > Chance\nPost-Sentence Max Accuracy')
     fig.colorbar(h01, ax=axs[0][1])
-    h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+    h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
     axs[1][0].set_title('Global Max Accuracy')
     fig.colorbar(h10, ax=axs[1][0])
-    h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+    h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
     axs[1][1].set_title('Post-Sentence Max Accuracy')
     fig.colorbar(h11, ax=axs[1][1])
-    h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+    h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
     axs[2][0].set_title('Global Mean Accuracy')
     fig.colorbar(h20, ax=axs[2][0])
-    h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+    h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
     axs[2][1].set_title('Post-Sentence Mean Accuracy')
     fig.colorbar(h21, ax=axs[2][1])
 
@@ -182,6 +182,7 @@ if __name__ == '__main__':
                                                                              args.avgTime,
                                                                              args.avgTest))
     fig.tight_layout()
+    plt.subplots_adjust(top=0.8)
     plt.show()
     #
     # plt.savefig(
