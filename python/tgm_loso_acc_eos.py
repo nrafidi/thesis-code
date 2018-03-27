@@ -42,7 +42,7 @@ def intersect_accs(exp,
                    avgTest='F'):
     top_dir = run_TGM_LOSO_EOS.TOP_DIR.format(exp=exp)
 
-    chance=CHANCE[sen_type][word]
+    chance=CHANCE[exp][sen_type][word]
 
     # if num_instances == 1:
     #     avgTest = 'F'
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    chance = CHANCE[args.sen_type][args.word]
+    chance = CHANCE[args.experiment][args.sen_type][args.word]
 
     if args.avgTime == 'T':
         aT = 'Time Average '
