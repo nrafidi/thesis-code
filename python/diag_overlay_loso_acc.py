@@ -120,7 +120,11 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type_list = ['active', 'passive']
-    word_list = ['noun1', 'verb', 'noun2']
+    if args.experiment == 'PassAct3':
+        word_list = ['noun1', 'verb']
+    else:
+        word_list = ['noun1', 'verb', 'noun2']
+
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
