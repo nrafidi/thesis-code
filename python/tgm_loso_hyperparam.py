@@ -210,6 +210,60 @@ if __name__ == '__main__':
     plt.subplots_adjust(top=0.85)
 
 
+    num_sub = per_sub_max_tot.shape[2]
+    half_sub = int(num_sub/2)
+    fig, axs = plt.subplots(2, half_sub)
+    for i_sub in range(num_sub):
+        if i_sub < half_sub:
+            i_ax = 0
+        else:
+            i_ax = 1
+        j_ax = i_sub - half_sub*i_ax
+        h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_tot[:, :, i_sub]), interpolation='nearest', vmin=0.25, vmax=0.5)
+        fig.colorbar(h, ax=axs[i_ax][j_ax])
+        axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[i_sub])
+        axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
+        axs[i_ax][j_ax].set_xticklabels(num_insts)
+        axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
+        axs[i_ax][j_ax].set_yticklabels(np.array(win_lens).astype('float') * 2)
+        axs[i_ax][j_ax].set_xlabel('Number of Instances')
+        axs[i_ax][j_ax].set_ylabel('Window Length (ms)')
+    fig.suptitle('Per Subject Global Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                      args.word,
+                                                                      args.avgTime,
+                                                                      args.avgTest),
+                 fontsize=24)
+    fig.tight_layout()
+    plt.subplots_adjust(top=0.85)
+
+    num_sub = per_sub_max_eos.shape[2]
+    half_sub = int(num_sub / 2)
+    fig, axs = plt.subplots(2, half_sub)
+    for i_sub in range(num_sub):
+        if i_sub < half_sub:
+            i_ax = 0
+        else:
+            i_ax = 1
+        j_ax = i_sub - half_sub * i_ax
+        h = axs[i_ax][j_ax].imshow(np.squeeze(per_sub_max_eos[:, :, i_sub]), interpolation='nearest', vmin=0.25,
+                                   vmax=0.5)
+        fig.colorbar(h, ax=axs[i_ax][j_ax])
+        axs[i_ax][j_ax].set_title(run_TGM_LOSO.VALID_SUBS[i_sub])
+        axs[i_ax][j_ax].set_xticks(range(len(num_insts)))
+        axs[i_ax][j_ax].set_xticklabels(num_insts)
+        axs[i_ax][j_ax].set_yticks(range(len(win_lens)))
+        axs[i_ax][j_ax].set_yticklabels(np.array(win_lens).astype('float') * 2)
+        axs[i_ax][j_ax].set_xlabel('Number of Instances')
+        axs[i_ax][j_ax].set_ylabel('Window Length (ms)')
+    fig.suptitle('Per Subject Post-Sentence Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                              args.word,
+                                                                              args.avgTime,
+                                                                              args.avgTest),
+                 fontsize=24)
+    fig.tight_layout()
+    plt.subplots_adjust(top=0.85)
+
+
 
     plt.show()
     #
