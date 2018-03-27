@@ -20,6 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--percentile', type=float, default=0.75)
     args = parser.parse_args()
 
     if args.sen_type == 'active':
@@ -30,16 +31,18 @@ if __name__ == '__main__':
     win_lens = [12, 25, 50, 100, 150]
     num_insts = [1, 2, 5, 10]
 
+    perc = args.percentile
+
     frac_sub_eos = []
     frac_sub_tot = []
     mean_max_eos = []
     mean_max_tot = []
-    mean_mean_eos = []
-    mean_mean_tot = []
+    mean_perc_eos = []
+    mean_perc_tot = []
     per_sub_max_eos = []
     per_sub_max_tot = []
-    per_sub_mean_tot = []
-    per_sub_mean_eos = []
+    per_sub_perc_tot = []
+    per_sub_perc_eos = []
     for win_len in win_lens:
         time_adjust = win_len * 0.002
 
@@ -47,12 +50,12 @@ if __name__ == '__main__':
         frac_sub_tot_win = []
         mean_max_eos_win = []
         mean_max_tot_win = []
-        mean_mean_eos_win = []
-        mean_mean_tot_win = []
+        mean_perc_eos_win = []
+        mean_perc_tot_win = []
         per_sub_max_eos_win = []
         per_sub_max_tot_win = []
-        per_sub_mean_tot_win = []
-        per_sub_mean_eos_win = []
+        per_sub_perc_tot_win = []
+        per_sub_perc_eos_win = []
         for num_instances in num_insts:
             intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc.intersect_accs(args.experiment,
                                                                                            args.sen_type,
@@ -70,33 +73,40 @@ if __name__ == '__main__':
             frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.diag(np.mean(acc_all, axis=0))
 
+            percentile_tot = int(perc * len(mean_acc))
+            percentile_eos = int(perc * len(time_ind))
+
             mean_max_tot_win.append(np.max(mean_acc))
-            mean_mean_tot_win.append(np.mean(mean_acc))
+            sorted_tot_acc = np.sort(mean_acc)[::-1]
+            mean_perc_tot_win.append(sorted_tot_acc[percentile_tot])
             frac_sub_tot_win.append(frac_sub[np.argmax(mean_acc)])
 
             mean_max_eos_win.append(np.max(mean_acc[time_ind]))
-            mean_mean_eos_win.append(np.mean(mean_acc[time_ind]))
+            sorted_eos_acc = np.sort(mean_acc[time_ind])[::-1]
+            mean_perc_eos_win.append(sorted_eos_acc[percentile_eos])
             frac_sub_eos_win.append(frac_sub[time_ind[np.argmax(mean_acc[time_ind])]])
 
             sub_eos_max = []
-            sub_eos_mean = []
+            sub_eos_perc = []
             sub_tot_max = []
-            sub_tot_mean = []
+            sub_tot_perc = []
             for i_sub in range(acc_all.shape[0]):
                 diag_acc = np.diag(np.squeeze(acc_all[i_sub, :, :]))
                 sub_tot_max.append(np.max(diag_acc))
-                sub_tot_mean.append(np.mean(diag_acc))
+                sorted_diag_acc = np.sort(diag_acc)[::-1]
+                sub_tot_perc.append(sorted_diag_acc[percentile_tot])
                 sub_eos_max.append(np.max(diag_acc[time_ind]))
-                sub_eos_mean.append(np.mean(diag_acc[time_ind]))
+                sorted_eos_diag_acc = np.sort(diag_acc[time_ind])[::-1]
+                sub_eos_perc.append(sorted_eos_diag_acc[percentile_eos])
             sub_tot_max = np.array(sub_tot_max)
-            sub_tot_mean = np.array(sub_tot_mean)
+            sub_tot_perc = np.array(sub_tot_perc)
             sub_eos_max = np.array(sub_eos_max)
-            sub_eos_mean = np.array(sub_eos_mean)
+            sub_eos_perc = np.array(sub_eos_perc)
 
             per_sub_max_eos_win.append(sub_eos_max[None, ...])
             per_sub_max_tot_win.append(sub_tot_max[None, ...])
-            per_sub_mean_tot_win.append(sub_tot_mean[None, ...])
-            per_sub_mean_eos_win.append(sub_eos_mean[None, ...])
+            per_sub_perc_tot_win.append(sub_tot_perc[None, ...])
+            per_sub_perc_eos_win.append(sub_eos_perc[None, ...])
 
         frac_sub_eos_win = np.array(frac_sub_eos_win)
         frac_sub_eos.append(frac_sub_eos_win[None, ...])
@@ -110,11 +120,11 @@ if __name__ == '__main__':
         mean_max_tot_win = np.array(mean_max_tot_win)
         mean_max_tot.append(mean_max_tot_win[None, ...])
 
-        mean_mean_eos_win = np.array(mean_mean_eos_win)
-        mean_mean_eos.append(mean_mean_eos_win[None, ...])
+        mean_perc_eos_win = np.array(mean_perc_eos_win)
+        mean_perc_eos.append(mean_perc_eos_win[None, ...])
 
-        mean_mean_tot_win = np.array(mean_mean_tot_win)
-        mean_mean_tot.append(mean_mean_tot_win[None, ...])
+        mean_perc_tot_win = np.array(mean_perc_tot_win)
+        mean_perc_tot.append(mean_perc_tot_win[None, ...])
 
         per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
         per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
@@ -122,11 +132,11 @@ if __name__ == '__main__':
         per_sub_max_tot_win = np.concatenate(per_sub_max_tot_win, axis=0)
         per_sub_max_tot.append(per_sub_max_tot_win[None, ...])
 
-        per_sub_mean_tot_win = np.concatenate(per_sub_mean_tot_win, axis=0)
-        per_sub_mean_tot.append(per_sub_mean_tot_win[None, ...])
+        per_sub_perc_tot_win = np.concatenate(per_sub_perc_tot_win, axis=0)
+        per_sub_perc_tot.append(per_sub_perc_tot_win[None, ...])
 
-        per_sub_mean_eos_win = np.concatenate(per_sub_mean_eos_win, axis=0)
-        per_sub_mean_eos.append(per_sub_mean_eos_win[None, ...])
+        per_sub_perc_eos_win = np.concatenate(per_sub_perc_eos_win, axis=0)
+        per_sub_perc_eos.append(per_sub_perc_eos_win[None, ...])
 
     frac_sub_eos = np.concatenate(frac_sub_eos, axis=0)
 
@@ -136,19 +146,19 @@ if __name__ == '__main__':
 
     mean_max_tot = np.concatenate(mean_max_tot, axis=0)
 
-    mean_mean_eos = np.concatenate(mean_mean_eos, axis=0)
+    mean_perc_eos = np.concatenate(mean_perc_eos, axis=0)
 
-    mean_mean_tot = np.concatenate(mean_mean_tot, axis=0)
+    mean_perc_tot = np.concatenate(mean_perc_tot, axis=0)
 
     per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
 
     per_sub_max_tot = np.concatenate(per_sub_max_tot, axis=0)
 
-    per_sub_mean_eos = np.concatenate(per_sub_mean_eos, axis=0)
+    per_sub_perc_eos = np.concatenate(per_sub_perc_eos, axis=0)
 
-    per_sub_mean_tot = np.concatenate(per_sub_mean_tot, axis=0)
+    per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2, figsize=(10, 10))
+    fig, axs = plt.subplots(3, 2, figsize=(10, 15))
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0])
@@ -161,11 +171,11 @@ if __name__ == '__main__':
     h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
     axs[1][1].set_title('Post-Sentence Max Accuracy')
     fig.colorbar(h11, ax=axs[1][1])
-    h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
-    axs[2][0].set_title('Global Mean Accuracy')
+    h20 = axs[2][0].imshow(mean_perc_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
+    axs[2][0].set_title('Global {}th Percentile'.format(int(perc*100)))
     fig.colorbar(h20, ax=axs[2][0])
-    h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
-    axs[2][1].set_title('Post-Sentence Mean Accuracy')
+    h21 = axs[2][1].imshow(mean_perc_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
+    axs[2][1].set_title('Post-Sentence {}th Percentile'.format(int(perc*100)))
     fig.colorbar(h21, ax=axs[2][1])
 
     for i in range(3):
