@@ -241,8 +241,8 @@ if __name__ == '__main__':
     half_sub = int(num_sub / 2)
 
     fig = plt.figure(figsize = (30, 10))
-    grid = AxesGrid(fig, 111, nrows_ncols=(half_sub, 2),
-                    axes_pad=0.05, cbar_mode='single', cbar_location='right',
+    grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
+                    axes_pad=0.2, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
     for i_ax, ax in enumerate(grid):
