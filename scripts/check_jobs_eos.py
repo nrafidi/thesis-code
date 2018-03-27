@@ -105,8 +105,8 @@ if __name__ == '__main__':
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
-                    print(err_file)
-                    print(grid)
+                    # print(err_file)
+                    # print(grid)
 
 
         job_id += 1
