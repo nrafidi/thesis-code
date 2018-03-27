@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2, figsize=(10, 18))
+    fig, axs = plt.subplots(3, 2)
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0])
