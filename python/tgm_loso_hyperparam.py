@@ -149,16 +149,22 @@ if __name__ == '__main__':
 
     fig, axs = plt.subplots(3, 2)
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
+    axs[0][0].set_title('Fraction of Subjects > Chance\nGlobal Max Accuracy')
     fig.colorbar(h00, ax=axs[0][0], shrink=0.5)
     h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.5, vmax=1.0)
+    axs[0][1].set_title('Fraction of Subjects > Chance\nPost-Sentence Max Accuracy')
     fig.colorbar(h01, ax=axs[0][1], shrink=0.5)
     h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
+    axs[1][0].set_title('Global Max Accuracy')
     fig.colorbar(h10, ax=axs[1][0], shrink=0.5)
     h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
+    axs[1][1].set_title('Post-Sentence Max Accuracy')
     fig.colorbar(h11, ax=axs[1][1], shrink=0.5)
     h20 = axs[2][0].imshow(mean_mean_tot, interpolation='nearest', vmin=0.25, vmax=0.5)
+    axs[2][0].set_title('Global Mean Accuracy')
     fig.colorbar(h20, ax=axs[2][0], shrink=0.5)
     h21 = axs[2][1].imshow(mean_mean_eos, interpolation='nearest', vmin=0.25, vmax=0.5)
+    axs[2][1].set_title('Post-Sentence Mean Accuracy')
     fig.colorbar(h21, ax=axs[2][1], shrink=0.5)
 
     for i in range(3):
@@ -167,7 +173,6 @@ if __name__ == '__main__':
             axs[i][j].set_xticklabels(num_insts)
             axs[i][j].set_yticks(range(len(win_lens)))
             axs[i][j].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            axs[i][j].set_title('Global Max Accuracy')
             axs[i][j].set_xlabel('Number of Instances')
             axs[i][j].set_ylabel('Window Length (ms)')
 
