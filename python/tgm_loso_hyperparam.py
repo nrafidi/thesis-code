@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-    fig, axs = plt.subplots(3, 2, figsize=(10, 15))
+    fig, axs = plt.subplots(3, 2, figsize=(12, 15))
     h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
     axs[0][0].set_title('Global Fraction of Subjects > Chance')
     fig.colorbar(h00, ax=axs[0][0], shrink=0.8)
@@ -194,7 +194,7 @@ if __name__ == '__main__':
                                                                              args.avgTest),
                  fontsize=24)
     fig.tight_layout()
-    plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=0.9)
 
     fig, axs = plt.subplots(1, 2)
     h0 = axs[0].imshow(frac_sub_tot + mean_max_tot, interpolation='nearest', vmin=0.75, vmax=2.0)
