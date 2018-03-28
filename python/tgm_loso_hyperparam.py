@@ -34,6 +34,8 @@ if __name__ == '__main__':
 
     perc = args.percentile
 
+    fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
+
     frac_sub_eos = []
     frac_sub_tot = []
     mean_max_eos = []
@@ -201,6 +203,11 @@ if __name__ == '__main__':
     fig.tight_layout()
     plt.subplots_adjust(top=0.87)
 
+    plt.savefig(fig_fname.format(
+                exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+                perc=perc, fig_type='single-mean-score-comp'
+            ), bbox_inches='tight')
+
     fig = plt.figure()
     grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
@@ -228,6 +235,11 @@ if __name__ == '__main__':
                                                                       args.avgTime,
                                                                       args.avgTest),
                  fontsize=24)
+
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='comb-perc-score-comp'
+    ), bbox_inches='tight')
 
     fig = plt.figure()
     grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
@@ -257,6 +269,10 @@ if __name__ == '__main__':
                                                                                  args.avgTest),
                  fontsize=24)
 
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='comb-max-score-comp'
+    ), bbox_inches='tight')
 
     num_sub = per_sub_max_tot.shape[2]
     half_sub = int(num_sub/2)
@@ -285,6 +301,11 @@ if __name__ == '__main__':
                                                                       args.avgTest),
                  fontsize=24)
 
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='sub-global-max-comp'
+    ), bbox_inches='tight')
+
     num_sub = per_sub_max_eos.shape[2]
     half_sub = int(num_sub / 2)
 
@@ -312,6 +333,11 @@ if __name__ == '__main__':
                                                                               args.avgTime,
                                                                               args.avgTest),
                  fontsize=24)
+
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='sub-post-max-comp'
+    ), bbox_inches='tight')
 
     plt.show()
     #
