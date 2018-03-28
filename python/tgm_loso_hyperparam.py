@@ -209,7 +209,7 @@ if __name__ == '__main__':
     mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
     vmin = np.min([np.min(mat) for mat in mats_to_plot])
     vmax = np.max([np.max(mat) for mat in mats_to_plot])
-    titles = ['Combined Global Score', 'Combined Post-Sentence Score']
+    titles = ['Global', 'Post-Sentence']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
                        vmax=vmax)
@@ -223,11 +223,35 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Combined Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+    fig.suptitle('Combined Percentile Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                       args.word,
                                                                       args.avgTime,
                                                                       args.avgTest),
                  fontsize=24)
+
+    mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
+    vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    titles = ['Global', 'Post-Sentence']
+    for i_ax, ax in enumerate(grid):
+        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
+                       vmax=vmax)
+        ax.set_title(titles[i_ax])
+        ax.set_xticks(range(len(num_insts)))
+        ax.set_xticklabels(num_insts)
+        ax.set_yticks(range(len(win_lens)))
+        ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+        ax.set_xlabel('Number of Instances')
+        if i_ax == 0:
+            ax.set_ylabel('Window Length (ms)')
+
+    cbar = grid.cbar_axes[0].colorbar(im)
+    fig.suptitle('Combined Max Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                                 args.word,
+                                                                                 args.avgTime,
+                                                                                 args.avgTest),
+                 fontsize=24)
+
 
     num_sub = per_sub_max_tot.shape[2]
     half_sub = int(num_sub/2)
