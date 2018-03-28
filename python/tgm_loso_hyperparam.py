@@ -207,6 +207,8 @@ if __name__ == '__main__':
                     cbar_pad=0.1)
 
     mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
+    vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    vmax = np.max([np.max(mat) for mat in mats_to_plot])
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.0,
