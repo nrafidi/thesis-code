@@ -254,7 +254,7 @@ if __name__ == '__main__':
                                                                       args.word,
                                                                       args.avgTime,
                                                                       args.avgTest),
-                 fontsize=24)
+                 fontsize=18)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
     ax.set_yticks(range(len(win_lens)))
