@@ -20,11 +20,11 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
-MODES = ['coef']
-EXPERIMENTS = ['PassAct3']  # ,  'PassAct2', 'PassAct3']
+MODES = ['acc']
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N']
-SEN_TYPES = ['passive', 'active'] #, 'active']
-WORDS = ['noun1', 'verb']
+SEN_TYPES = ['active'] #, 'active']
+WORDS = ['verb']
 WIN_LENS = [150, 100, 50, 25, 12]#, 50, 25, 12]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
