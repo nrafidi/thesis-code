@@ -211,8 +211,8 @@ if __name__ == '__main__':
     vmax = np.max([np.max(mat) for mat in mats_to_plot])
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
-        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.0,
-                       vmax=3.0)
+        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
+                       vmax=vmax)
         ax.set_title(titles[i_ax])
         ax.set_xticks(range(len(num_insts)))
         ax.set_xticklabels(num_insts)
