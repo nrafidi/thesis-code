@@ -209,8 +209,8 @@ if __name__ == '__main__':
     mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
-        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.75,
-                       vmax=2.0)
+        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.0,
+                       vmax=3.0)
         ax.set_title(titles[i_ax])
         ax.set_xticks(range(len(num_insts)))
         ax.set_xticklabels(num_insts)
