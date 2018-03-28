@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 import numpy as np
 import scipy.io as sio
+from scipy.stats import zscore
 import run_TGM_LOSO
 import tgm_loso_acc
 
@@ -205,7 +206,7 @@ if __name__ == '__main__':
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
-    mats_to_plot = [np.zscore(frac_sub_tot) + np.zscore(mean_perc_tot), np.zscore(frac_sub_eos) + np.zscore(mean_perc_eos)]
+    mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.75,
