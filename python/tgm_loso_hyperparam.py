@@ -229,6 +229,11 @@ if __name__ == '__main__':
                                                                       args.avgTest),
                  fontsize=24)
 
+    fig = plt.figure()
+    grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+                    axes_pad=0.3, cbar_mode='single', cbar_location='right',
+                    cbar_pad=0.1)
+
     mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
     vmin = np.min([np.min(mat) for mat in mats_to_plot])
     vmax = np.max([np.max(mat) for mat in mats_to_plot])
