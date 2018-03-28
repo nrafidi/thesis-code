@@ -246,6 +246,26 @@ if __name__ == '__main__':
         perc=perc, fig_type='comb-perc-score-comp'
     ), bbox_inches='tight')
 
+    all_combined = z_frac + zscore(mean_perc_tot) +  zscore(frac_sub_eos) + zscore(mean_perc_eos)
+    fig, ax = plt.subplots()
+    h = ax.imshow(all_combined, interpolation='nearest', vmin =-8.0, vmax=8.0)
+    plt.colorbar(h)
+    ax.set_title('Total Combined Percentile Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
+                                                                      args.word,
+                                                                      args.avgTime,
+                                                                      args.avgTest),
+                 fontsize=24)
+    ax.set_xticks(range(len(num_insts)))
+    ax.set_xticklabels(num_insts)
+    ax.set_yticks(range(len(win_lens)))
+    ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+    ax.set_xlabel('Number of Instances')
+    ax.set_ylabel('Window Length (ms)')
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='total-comb-perc-score-comp'
+    ), bbox_inches='tight')
+
     fig = plt.figure()
     grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
