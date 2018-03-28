@@ -217,8 +217,10 @@ if __name__ == '__main__':
     z_frac[np.isnan(z_frac)] = 0.0
 
     mats_to_plot = [z_frac + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
-    vmin = np.min([np.min(mat) for mat in mats_to_plot])
-    vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    # vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    # vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    vmin = -4.0
+    vmax = 4.0
     titles = ['Global', 'Post-Sentence']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
@@ -253,8 +255,10 @@ if __name__ == '__main__':
     z_frac[np.isnan(z_frac)] = 0.0
 
     mats_to_plot = [z_frac + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
-    vmin = np.min([np.min(mat) for mat in mats_to_plot])
-    vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    # vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    # vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    vmin = -4.0
+    vmax = 4.0
     titles = ['Global', 'Post-Sentence']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
