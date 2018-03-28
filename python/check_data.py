@@ -1,8 +1,8 @@
-from syntax_vs_semantics import load_data
-import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from syntax_vs_semantics import load_data
+import numpy as np
 
 
 if __name__ == '__main__':
