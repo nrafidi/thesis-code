@@ -205,7 +205,7 @@ if __name__ == '__main__':
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
-    mats_to_plot = [frac_sub_tot + mean_perc_tot, frac_sub_eos + mean_perc_eos]
+    mats_to_plot = [np.zscore(frac_sub_tot) + np.zscore(mean_perc_tot), np.zscore(frac_sub_eos) + np.zscore(mean_perc_eos)]
     titles = ['Combined Global Score', 'Combined Post-Sentence Score']
     for i_ax, ax in enumerate(grid):
         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.75,
