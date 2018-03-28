@@ -162,19 +162,20 @@ def run_tgm_exp(experiment,
         random.shuffle(labels)
 
     if mode == 'acc':
-        l_ints, cv_membership, tgm_acc = models.lr_tgm_loso(data,
-                                                            labels,
-                                                            win_starts,
-                                                            win_len,
-                                                            sen_ints,
-                                                            penalty=alg[3:],
-                                                            adj=adj,
-                                                            doTimeAvg=doTimeAvg,
-                                                            doTestAvg=doTestAvg)
+        l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso(data,
+                                                                        labels,
+                                                                        win_starts,
+                                                                        win_len,
+                                                                        sen_ints,
+                                                                        penalty=alg[3:],
+                                                                        adj=adj,
+                                                                        doTimeAvg=doTimeAvg,
+                                                                        doTestAvg=doTestAvg)
         np.savez_compressed(fname,
                             l_ints=l_ints,
                             cv_membership=cv_membership,
                             tgm_acc=tgm_acc,
+                            tgm_pred=tgm_pred,
                             win_starts=win_starts,
                             time=time,
                             proc=proc)
