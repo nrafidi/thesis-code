@@ -249,7 +249,10 @@ if __name__ == '__main__':
                     axes_pad=0.3, cbar_mode='single', cbar_location='right',
                     cbar_pad=0.1)
 
-    mats_to_plot = [zscore(frac_sub_tot) + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
+    z_frac = zscore(frac_sub_tot)
+    z_frac[np.isnan(z_frac)] = 0.0
+
+    mats_to_plot = [z_frac + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
     vmin = np.min([np.min(mat) for mat in mats_to_plot])
     vmax = np.max([np.max(mat) for mat in mats_to_plot])
     titles = ['Global', 'Post-Sentence']
