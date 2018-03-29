@@ -203,8 +203,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
-    ax.set_xlim(left=time_step)
-    ax.set_ylim(top=time_step)
+
     ax.set_ylabel('Train Time (s)')
     ax.set_xlabel('Test Time (s)')
     ax.set_title(
@@ -218,6 +217,8 @@ if __name__ == '__main__':
     ax.set_xticklabels(label_time)
     ax.set_yticks(range(0, len(time[win_starts]), time_step))
     ax.set_yticklabels(label_time)
+    ax.set_xlim(left=time_step)
+    ax.set_ylim(top=time_step)
 
     for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
         ax.axvline(x=v, color='k')
