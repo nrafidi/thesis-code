@@ -4,18 +4,18 @@ from subprocess import call, check_output
 import time
 
 
-MODES = ['acc', 'coef']
-EXPERIMENTS = ['PassAct3']
+MODES = ['acc']
+EXPERIMENTS = ['krns2']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
-SEN_TYPES = ['pooled', 'passive', 'active']
-WORDS = ['voice', 'noun1', 'verb']
-WIN_LENS = [12, 25, 50]
+SEN_TYPES = ['pooled']
+WORDS = ['verb', 'noun1', 'voice']
+WIN_LENS = [12, 25, 50, 100, 150]
 OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l1']
 ADJS = [None]
 DO_AVGS = [True]
-NUM_INSTANCESS = [2, 1, 5]
+NUM_INSTANCESS = [1, 2, 5, 10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
@@ -28,10 +28,10 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=96:00:00,mem=2GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=144:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos.sh'
 
     param_grid = itertools.product(MODES,

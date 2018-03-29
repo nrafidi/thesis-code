@@ -34,6 +34,7 @@ if __name__ == '__main__':
                                    batch_exp.SUBJECTS)
     job_id = 0
     successful_jobs = 0
+    skipped_jobs = 0
     for grid in param_grid:
         mode = grid[0]
         exp = grid[1]
@@ -92,26 +93,17 @@ if __name__ == '__main__':
             # print('Job {} Did Not Run'.format(job_str))
             meow = 1
         else:
-            if os.stat(err_str).st_size != 0 and (not was_success):
+            with open(out_str, 'r') as fid:
+                out_info = fid.read()
+            if 'Experiment parameters not valid.' in out_info:
+                skipped_jobs += 1
+            elif os.stat(err_str).st_size != 0 and (not was_success):
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
                     print(err_file)
                     print(grid)
-            # else:
-            #     with open(out_str, 'r') as fid:
-            #         meow = fid.read()
-            #         if 'Experiment parameters not valid.' in meow:
-            #             print(meow)
-            #             is_valid =  grid[5] <= grid[4]
-            #             if grid[6] == 'coef':
-            #                 is_valid = is_valid and (grid[9] == 2)
-            #             if is_valid:
-            #                 print(meow)
-            #         else:
-            #             successful_jobs += 1
-            #             # print(job_id)
 
         job_id += 1
 
-    print('{}/{} jobs succeeded'.format(successful_jobs, job_id))
+    print('{}/{} jobs succeeded'.format(successful_jobs, job_id - skipped_jobs))
