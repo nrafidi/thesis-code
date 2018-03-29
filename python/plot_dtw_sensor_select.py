@@ -86,12 +86,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.hist(scores)
-    ax.set_title('Score Histogram\n{exp} {sub} {dist}\nEOS {tmin}-{tmax} ni {ni}'.format(exp=exp,
-                                                                                         sub=sub,
-                                                                                         dist=args.dist,
-                                                                                         tmin=tmin,
-                                                                                         tmax=tmax,
-                                                                                         ni=num_instances))
+    ax.set_title('Histogram of Sensor Correlations with Model\nNumber of instances: {ni}'.format(ni=num_instances))
     fig.tight_layout()
     plt.savefig(
         '/home/nrafidi/thesis_figs/EOS_score-hist_{exp}_{sub}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(

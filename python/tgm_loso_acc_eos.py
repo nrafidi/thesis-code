@@ -9,6 +9,17 @@ import os
 import run_TGM_LOSO_EOS
 
 
+PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
+                  'PassAct3': 'Final Experiment'}
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
+
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb',
+                  'voice': 'Voice'}
+
+
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
                              'verb': 0.25,
@@ -198,13 +209,9 @@ if __name__ == '__main__':
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
     ax.set_ylabel('Train Time (s)')
     ax.set_xlabel('Test Time (s)')
-    ax.set_title('Average TGM {sen_type} {word}\nNumber of Instances: {ni} Window Size: {win}\n{aT}{aTst}'.format(
-        ni=args.num_instances,
-        win=args.win_len * 0.002,
-        aT=aT,
-        aTst=aTst,
-        sen_type=args.sen_type,
-        word=args.word))
+    ax.set_title('TGM Decoding {word} from {sen_type}'.format(
+        sen_type=PLOT_TITLE_SEN[args.sen_type],
+        word=PLOT_TITLE_WORD[args.word]))
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]

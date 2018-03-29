@@ -11,6 +11,16 @@ import run_TGM_LOSO
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
+PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
+                    'PassAct3': 'Final Experiment'}
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
+
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb',
+                  'voice': 'Voice'}
+
 
 def intersect_accs(exp,
                    sen_type,
@@ -176,7 +186,7 @@ if __name__ == '__main__':
             acc = acc_diags[i_word]
             frac = frac_diags[i_word]
 
-            if args.experiment == 'PassAct3' and word == 'verb' and sen_type == 'active':
+            if word == 'verb' and sen_type == 'active':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
@@ -200,8 +210,8 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
         ax.legend(loc=1)
-        ax.set_title('Mean accuracy over subjects\n{sen_type} {experiment}'.format(sen_type=sen_type,
-                                                                                   experiment=args.experiment))
+        ax.set_title('Mean accuracy over subjects\n{sen_type} {experiment}'.format(sen_type=PLOT_TITLE_SEN[sen_type],
+                                                                                   experiment=PLOT_TITLE_EXP[args.experiment]))
 
         fig.tight_layout()
         plt.savefig(
@@ -226,7 +236,7 @@ if __name__ == '__main__':
             color = colors[i_sen]
             acc = sen_accs[i_sen][i_word]
             frac = sen_fracs[i_sen][i_word]
-            if args.experiment == 'PassAct3' and word == 'verb' and sen_type == 'active':
+            if word == 'verb' and sen_type == 'active':
                 acc = acc[time_step:]
                 frac = frac[time_step:]
 
@@ -250,8 +260,8 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         ax.legend(loc=1)
-        ax.set_title('Mean accuracy over subjects\n{word} {experiment}'.format(word=word,
-                                                                               experiment=args.experiment))
+        ax.set_title('Mean accuracy over subjects\n{word} {experiment}'.format(word=PLOT_TITLE_WORD[word],
+                                                                               experiment=PLOT_TITLE_EXP[args.experiment]))
 
         fig.tight_layout()
         plt.savefig(

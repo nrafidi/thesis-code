@@ -13,6 +13,17 @@ import tgm_loso_acc
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
 
+PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
+                  'PassAct3': 'Final Experiment'}
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
+
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb',
+                  'voice': 'Voice'}
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
@@ -28,6 +39,16 @@ if __name__ == '__main__':
         max_time = 2.0
     else:
         max_time = 3.0
+
+    if args.avgTime == 'T':
+        avg_time_str = 'Time Average'
+    else:
+        avg_time_str = 'No Time Average'
+
+    if args.avgTest == 'T':
+        avg_test_str = 'Test Sample Average'
+    else:
+        avg_test_str = 'No Test Sample Average'
 
     win_lens = [12, 25, 50, 100, 150]
     num_insts = [1, 2, 5, 10]
@@ -195,10 +216,10 @@ if __name__ == '__main__':
                 axs[i][j].set_ylabel('Window Length (ms)')
 
 
-    fig.suptitle('Accuracy and Consistency Scores\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                             args.word,
-                                                                             args.avgTime,
-                                                                             args.avgTest),
+    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=24)
     fig.tight_layout()
     plt.subplots_adjust(top=0.87)
@@ -235,10 +256,10 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Combined Percentile Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                      args.word,
-                                                                      args.avgTime,
-                                                                      args.avgTest),
+    fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=24)
 
     plt.savefig(fig_fname.format(
@@ -250,10 +271,10 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
     plt.colorbar(h)
-    ax.set_title('Total Combined Percentile Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                      args.word,
-                                                                      args.avgTime,
-                                                                      args.avgTest),
+    ax.set_title('Total Combined Percentile Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=18)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
@@ -293,10 +314,10 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Combined Max Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                                 args.word,
-                                                                                 args.avgTime,
-                                                                                 args.avgTest),
+    fig.suptitle('Combined Max Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=24)
 
     plt.savefig(fig_fname.format(
@@ -325,10 +346,10 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Per Subject Global Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                      args.word,
-                                                                      args.avgTime,
-                                                                      args.avgTest),
+    fig.suptitle('Per Subject Global Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=24)
 
     plt.savefig(fig_fname.format(
@@ -358,10 +379,10 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Per Subject Post-Sentence Max\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                              args.word,
-                                                                              args.avgTime,
-                                                                              args.avgTest),
+    fig.suptitle('Per Subject Post-Sentence Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+                                                                             word=PLOT_TITLE_WORD[args.word],
+                                                                             avgTime=avg_time_str,
+                                                                             avgTest=avg_test_str),
                  fontsize=24)
 
     plt.savefig(fig_fname.format(
