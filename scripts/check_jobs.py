@@ -60,7 +60,7 @@ if __name__ == '__main__':
                                             word=word,
                                             id=job_id)
 
-        dir_str = batch_exp.JOB_DIR.format(exp=grid[0])
+        dir_str = batch_exp.JOB_DIR.format(exp=exp)
 
         err_str = batch_exp.ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
