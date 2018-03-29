@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
     mean_acc = np.mean(acc_all, axis=0)
-
+    time_win = time[win_starts]
     time_step = int(250/args.overlap)
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
@@ -148,7 +148,7 @@ if __name__ == '__main__':
         elif args.word == 'verb':
             frac_sub = frac_sub[time_step:]
             mean_acc = mean_acc[time_step:, time_step:]
-            print(time[win_starts])
+            time_win = time_win[time_step:]
             max_line -= 0.5
             start_line -= 0.5
         else:
@@ -179,12 +179,12 @@ if __name__ == '__main__':
                                                                                                                    aTst=aTst,
                                                                                                                    sen_type=args.sen_type,
                                                                                                                    word=args.word))
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
+    ax.set_xticks(range(0, len(time_win), time_step))
+    label_time = time_win
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
     ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    ax.set_yticks(range(0, len(time_win), time_step))
     ax.set_yticklabels(label_time)
     time_adjust = args.win_len
 
@@ -213,12 +213,12 @@ if __name__ == '__main__':
         'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                   word=args.word,
                                                                   experiment=args.experiment))
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
+    ax.set_xticks(range(0, len(time_win), time_step))
+    label_time = time_win
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
     ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time[win_starts]), time_step))
+    ax.set_yticks(range(0, len(time_win), time_step))
     ax.set_yticklabels(label_time)
     ax.set_xlim(left=time_step)
     ax.set_ylim(top=time_step)
@@ -259,8 +259,8 @@ if __name__ == '__main__':
     #     else:
     #         start_line = -1.5 - time_adjust
 
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
+    ax.set_xticks(range(0, len(time_win), time_step))
+    label_time = time_win
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
     ax.set_xticklabels(label_time)
