@@ -7,7 +7,7 @@ import numpy as np
 
 if __name__ == '__main__':
     for sen_type in ['active', 'passive']:
-        for word in ['noun1', 'verb']:
+        for word in ['noun1', 'verb', 'last']:
             data, labels, sen_ints, time, sensor_regions = load_data.load_sentence_data_v2(subject='B',
                                                                                            align_to=word,
                                                                                            voice=sen_type,
@@ -17,7 +17,7 @@ if __name__ == '__main__':
                                                                                            reps_filter=None,
                                                                                            sensor_type=None,
                                                                                            is_region_sorted=False,
-                                                                                           tmin=None,
+                                                                                           tmin=0.0,
                                                                                            tmax=None)
             data_to_plot = np.squeeze(np.mean(data, axis=0))
 
