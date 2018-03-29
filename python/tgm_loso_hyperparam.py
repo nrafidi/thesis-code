@@ -220,7 +220,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=24)
+                 fontsize=18)
     fig.tight_layout()
     plt.subplots_adjust(top=0.87)
 
@@ -260,7 +260,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=24)
+                 fontsize=18)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -275,7 +275,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=18)
+                 fontsize=14)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
     ax.set_yticks(range(len(win_lens)))
@@ -318,7 +318,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=24)
+                 fontsize=18)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -350,7 +350,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=24)
+                 fontsize=18)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -383,7 +383,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=24)
+                 fontsize=18)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
