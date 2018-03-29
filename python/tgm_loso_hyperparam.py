@@ -246,9 +246,9 @@ if __name__ == '__main__':
         perc=perc, fig_type='comb-perc-score-comp'
     ), bbox_inches='tight')
 
-    all_combined = (z_frac + zscore(mean_perc_tot) +  2.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/6.0
+    all_combined = (z_frac + zscore(mean_perc_tot) +  3.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/7.0
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', vmin =-8.0, vmax=8.0)
+    h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
     plt.colorbar(h)
     ax.set_title('Total Combined Percentile Score\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
                                                                       args.word,
