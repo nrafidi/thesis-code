@@ -77,12 +77,12 @@ if __name__ == '__main__':
         print(i_sensor)
         score_fname = SCORE_FNAME.format(exp=exp, sub=sub, radius=radius, dist=args.dist,
                                            ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
-        if os.path.isfile(score_fname):
-            result = np.load(score_fname)
-            scores[i_sensor] = result['sensor_score']
-        else:
-            scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
-            np.savez(score_fname, sensor_score=scores[i_sensor])
+        # if os.path.isfile(score_fname):
+        #     result = np.load(score_fname)
+        #     scores[i_sensor] = result['sensor_score']
+        # else:
+        scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
+        np.savez(score_fname, sensor_score=scores[i_sensor])
 
     fig, ax = plt.subplots()
     ax.hist(scores)
