@@ -246,7 +246,7 @@ if __name__ == '__main__':
         perc=perc, fig_type='comb-perc-score-comp'
     ), bbox_inches='tight')
 
-    all_combined = z_frac + zscore(mean_perc_tot) +  zscore(frac_sub_eos) + zscore(mean_perc_eos)
+    all_combined = (z_frac + zscore(mean_perc_tot) +  2.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/6.0
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-8.0, vmax=8.0)
     plt.colorbar(h)
