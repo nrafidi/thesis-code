@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
     mean_acc = np.mean(acc_all, axis=0)
-    
+
     time_step = int(250/args.overlap)
     if args.sen_type == 'active':
         text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
@@ -146,6 +146,9 @@ if __name__ == '__main__':
         if args.word == 'noun1':
             start_line -= 0.0
         elif args.word == 'verb':
+            frac_sub = frac_sub[time_step:]
+            mean_acc = mean_acc[time_step:, time_step:]
+            print(time[win_starts])
             max_line -= 0.5
             start_line -= 0.5
         else:
