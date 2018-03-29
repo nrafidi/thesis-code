@@ -261,7 +261,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         ax.legend(loc=1)
-        ax.set_title('Mean accuracy over subjects\n{word} Decoding {experiment}'.format(word=PLOT_TITLE_WORD[word],
+        ax.set_title('Mean accuracy over subjects\n{word} Decoding from {experiment}'.format(word=PLOT_TITLE_WORD[word],
                                                                                experiment=PLOT_TITLE_EXP[args.experiment]))
 
         fig.tight_layout()
