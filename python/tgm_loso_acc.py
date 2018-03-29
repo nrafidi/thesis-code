@@ -146,6 +146,8 @@ if __name__ == '__main__':
         if args.word == 'noun1':
             start_line -= 0.0
         elif args.word == 'verb':
+            frac_sub = frac_sub[time_step:]
+            mean_acc = mean_acc[time_step:, time_step:]
             max_line -= 0.5
             start_line -= 0.5
         else:
@@ -203,6 +205,8 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
+    ax.set_xlim(left=time_step)
+    ax.set_ylim(top=time_step)
     ax.set_ylabel('Train Time (s)')
     ax.set_xlabel('Test Time (s)')
     ax.set_title(
@@ -265,6 +269,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Accuracy/Fraction > Chance')
     ax.set_xlabel('Time')
     ax.set_ylim([0.0, 1.0])
+    ax.set_xlim(left=time_step)
     ax.legend(loc=4)
     ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
                                                                                  word=args.word,
