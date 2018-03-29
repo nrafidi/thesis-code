@@ -23,11 +23,11 @@ import time
 EXPERIMENTS = ['PassAct3']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B']
 RADIUS = [1]
-TMINS = [0.0, 0.5]
+TMINS = [0.0]
 TMAXES = [3.0]
 SEN0S = range(32)
 SENSORS = range(306)
-NINSTS = [10]
+NINSTS = [5, 2]
 DISTS = ['cosine']
 
 JOB_NAME = '{sen0}-{radius}-{ninst}-{id}'
@@ -35,12 +35,12 @@ JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
 
-JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
 
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
+    qsub_call = 'qsub  -q pool2 -N {job_name} -l walltime=72:00:00,mem=1GB -v ' \
                 'experiment={exp},subject={sub},radius={radius},sen0={sen0},' \
                 'dist={dist},tmin={tmin},tmax={tmax},sensor={sensor},num_instances={ninst},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
