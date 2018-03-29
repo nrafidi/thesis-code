@@ -18,7 +18,7 @@ if __name__ == '__main__':
                                                                                            sensor_type=None,
                                                                                            is_region_sorted=False,
                                                                                            tmin=0.0,
-                                                                                           tmax=None)
+                                                                                           tmax=3.0)
             data_to_plot = np.squeeze(np.mean(data, axis=0))
 
             fig, ax = plt.subplots()
