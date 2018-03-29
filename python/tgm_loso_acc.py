@@ -146,8 +146,6 @@ if __name__ == '__main__':
         if args.word == 'noun1':
             start_line -= 0.0
         elif args.word == 'verb':
-            frac_sub = frac_sub[time_step:]
-            mean_acc = mean_acc[time_step:, time_step:]
             max_line -= 0.5
             start_line -= 0.5
         else:
