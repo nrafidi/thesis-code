@@ -61,6 +61,7 @@ if __name__ == '__main__':
                 start_ind_y = start_ind + sen1*num_instances
                 end_ind_y = start_ind_y + num_instances 
                 total_rdm[i_sensor, start_ind:end_ind, start_ind_y:end_ind_y] = dtw_part[sen1, :, :]
+                total_rdm[i_sensor, start_ind_y:end_ind_y, start_ind:end_ind] = dtw_part[sen1, :, :]
 
     fig, ax = plt.subplots()
     ax.imshow(comp_rdm, interpolation='nearest')
