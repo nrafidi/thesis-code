@@ -260,7 +260,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=18)
+                 fontsize=16)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -282,6 +282,7 @@ if __name__ == '__main__':
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
+    plt.subplots_adjust(top=0.87)
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
         perc=perc, fig_type='total-comb-perc-score-comp'
@@ -318,7 +319,7 @@ if __name__ == '__main__':
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
-                 fontsize=18)
+                 fontsize=16)
 
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
