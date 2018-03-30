@@ -50,6 +50,20 @@ if __name__ == '__main__':
 
     scores = []
 
+    comp_mat = np.empty((2*num_instances, 2*num_instances))
+    comp_mat[:num_instances, :num_instances] = 0.0
+    comp_mat[num_instances:, num_instances:] = 0.0
+    comp_mat[:num_instances, num_instances:] = 1.0
+    comp_mat[num_instances:, :num_instances] = 1.0
+    fig, ax = plt.subplots()
+    ax.imshow(comp_mat, interpolation='nearest')
+    ax.set_title('Ideal RDM')
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/EOS_model_rdm_ni{ni}.png'.format(
+            ni=num_instances),
+        bbox_inches='tight')
+
     for sub in ['B', 'C']:
         result = np.load(RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, sen1=sen1, radius=radius, dist=args.dist,
                                              ni=num_instances, tmin=tmin, tmax=tmax))
@@ -87,14 +101,9 @@ if __name__ == '__main__':
 
         fig, ax = plt.subplots()
         ax.imshow(best_mat/np.max(best_mat), interpolation='nearest')
-        ax.set_title('Best Sensor score: {score}\n{exp} {sub} {sen0}vs{sen1}\nEOS {tmin}-{tmax} ni {ni}'.format(score=np.max(score_mat),
-                                                                                                                exp=exp,
-                                                                                                                sub=sub,
-                                                                                                                sen0=sen0,
-                                                                                                                sen1=sen1,
-                                                                                                                tmin=tmin,
-                                                                                                                tmax=tmax,
-                                                                                                                ni=num_instances))
+        score_str = '{0:.2f}'.format(np.max(score_mat))
+        ax.set_title('Best Sensor score: {score}\n{ni} Instances'.format(score=score_str,
+                                                                         ni=num_instances))
         fig.tight_layout()
         plt.savefig(
             '/home/nrafidi/thesis_figs/EOS_best-sensor_{exp}_{sub}_{sen0}vs{sen1}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.png'.format(exp=exp,
@@ -110,14 +119,9 @@ if __name__ == '__main__':
 
         fig, ax = plt.subplots()
         ax.imshow(worst_mat/np.max(worst_mat), interpolation='nearest')
-        ax.set_title('Worst Sensor score: {score}\n{exp} {sub} {sen0}vs{sen1}\nEOS {tmin}-{tmax} ni {ni}'.format(
-            score=np.min(score_mat),
-            exp=exp,
-            sub=sub,
-            sen0=sen0,
-            sen1=sen1,
-            tmin=tmin,
-            tmax=tmax,
+        score_str = '{0:.2f}'.format(np.min(score_mat))
+        ax.set_title('Worst Sensor score: {score}\n{ni} Instances'.format(
+            score=score_str,
             ni=num_instances))
 
         fig.tight_layout()
