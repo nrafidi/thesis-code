@@ -581,7 +581,8 @@ def lr_tgm_loso(data,
                 adj='mean_center',
                 doTimeAvg=False,
                 doTestAvg=False,
-                ddof=1):
+                ddof=1,
+                C=None):
     labels = np.array(labels)
     n_tot = data.shape[0]
     n_time = data.shape[2]
@@ -628,14 +629,23 @@ def lr_tgm_loso(data,
                 std_train = np.std(train_data, axis=0, ddof=ddof)
                 train_data -= mu_train[None, :]
                 train_data /= std_train[None, :]
+            if C is None:
+                model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+                                                                  cv=2,
+                                                                  penalty=penalty,
+                                                                  solver='liblinear',
+                                                                  multi_class='ovr',
+                                                                  class_weight='balanced',
+                                                                  refit=True)
+            else:
+                model = sklearn.linear_model.LogisticRegression(
+                    C=C,
+                    penalty=penalty,
+                    solver='liblinear',
+                    multi_class='ovr',
+                    class_weight='balanced',
+                    refit=True)
 
-            model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
-                                                              cv=2,
-                                                              penalty=penalty,
-                                                              solver='liblinear',
-                                                              multi_class='ovr',
-                                                              class_weight='balanced',
-                                                              refit=True)
 
             model.fit(train_data, train_labels)
 
@@ -684,7 +694,8 @@ def lr_tgm_coef(data,
                 penalty='l1',
                 adj='mean_center',
                 doTimeAvg=False,
-                ddof=1):
+                ddof=1,
+                C=None):
     labels = np.array(labels)
     n_time = data.shape[2]
 
@@ -717,12 +728,21 @@ def lr_tgm_coef(data,
             train_data -= mu_train[None, :]
             train_data /= std_train[None, :]
 
-        model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
-                                                          cv=2,
-                                                          penalty=penalty,
-                                                          solver='liblinear',
-                                                          multi_class='ovr',
-                                                          refit=True)
+        if C is None:
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+                                                              cv=2,
+                                                              penalty=penalty,
+                                                              solver='liblinear',
+                                                              multi_class='ovr',
+                                                              refit=True)
+        else:
+            model = sklearn.linear_model.LogisticRegression(
+                C=C,
+                penalty=penalty,
+                solver='liblinear',
+                multi_class='ovr',
+                class_weight='balanced',
+                refit=True)
 
         model.fit(train_data, train_labels)
         print(model.C_)
