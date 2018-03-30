@@ -268,7 +268,7 @@ if __name__ == '__main__':
         perc=perc, fig_type='comb-perc-score-comp'
     ), bbox_inches='tight')
 
-    all_combined = (z_frac + zscore(mean_perc_tot) +  3.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/7.0
+    all_combined = (z_frac + zscore(mean_perc_tot) +  4.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/8.0
 
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
     print('Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
