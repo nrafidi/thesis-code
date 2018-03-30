@@ -271,7 +271,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
     plt.colorbar(h)
-    ax.set_title('Total Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+    fig.suptitle('Total Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
