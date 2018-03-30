@@ -256,6 +256,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
+    fig.subplots_adjust(top=0.8)
     fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
@@ -270,7 +271,9 @@ if __name__ == '__main__':
     all_combined = (z_frac + zscore(mean_perc_tot) +  3.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/7.0
 
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
-    print(optimal)
+    print('Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
+                                                                                                 ni=num_instances[optimal[1]],
+                                                                                                 score=np.max(all_combined)))
 
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
@@ -286,7 +289,7 @@ if __name__ == '__main__':
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    plt.subplots_adjust(top=0.8)
+    fig.tight_layout()
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
         perc=perc, fig_type='total-comb-perc-score-comp'
@@ -319,6 +322,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
+    fig.subplots_adjust(top=0.8)
     fig.suptitle('Combined Max Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
