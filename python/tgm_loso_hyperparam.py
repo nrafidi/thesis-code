@@ -256,7 +256,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+    fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
@@ -271,7 +271,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
     plt.colorbar(h)
-    ax.set_title('Total Combined Percentile Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+    ax.set_title('Total Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
@@ -282,7 +282,7 @@ if __name__ == '__main__':
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    plt.subplots_adjust(top=0.87)
+    plt.subplots_adjust(top=0.8)
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
         perc=perc, fig_type='total-comb-perc-score-comp'
@@ -315,7 +315,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Window Length (ms)')
 
     cbar = grid.cbar_axes[0].colorbar(im)
-    fig.suptitle('Combined Max Score\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
+    fig.suptitle('Combined Max Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[args.sen_type],
                                                                              word=PLOT_TITLE_WORD[args.word],
                                                                              avgTime=avg_time_str,
                                                                              avgTest=avg_test_str),
