@@ -268,6 +268,10 @@ if __name__ == '__main__':
     ), bbox_inches='tight')
 
     all_combined = (z_frac + zscore(mean_perc_tot) +  3.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/7.0
+
+    optimal = np.argmax(all_combined[:, 1:])
+    print(optimal)
+
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin =-4.0, vmax=4.0)
     plt.colorbar(h)
