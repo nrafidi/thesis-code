@@ -54,7 +54,7 @@ if __name__ == '__main__':
                                          ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
             if not os.path.isfile(result_fname):
                 print(result_fname)
-                end_sentence=sen0
+                end_sentence=sen0 - 1
                 break
             result = np.load(result_fname)
             dtw_part = result['dtw_part']
