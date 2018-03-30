@@ -272,7 +272,7 @@ if __name__ == '__main__':
 
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
     print('Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
-                                                                                                 ni=num_instances[optimal[1]],
+                                                                                                 ni=num_insts[optimal[1]],
                                                                                                  score=np.max(all_combined)))
 
     fig, ax = plt.subplots()
