@@ -44,6 +44,7 @@ if __name__ == '__main__':
 
     comp_rdm = np.ones((num_instances*32, num_instances*32), dtype=float)
     total_rdm = np.empty((306, num_instances*32, num_instances*32), dtype='float')
+    end_sentence = 31
     for sen0 in range(32):
         start_ind = sen0*num_instances
         end_ind = start_ind + num_instances
@@ -53,6 +54,7 @@ if __name__ == '__main__':
                                          ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
             if not os.path.isfile(result_fname):
                 print(result_fname)
+                end_sentence=sen0
                 break
             result = np.load(result_fname)
             dtw_part = result['dtw_part']
@@ -73,16 +75,16 @@ if __name__ == '__main__':
         bbox_inches='tight')
 
     scores = np.empty((306,))
-    for i_sensor in range(306):
-        print(i_sensor)
-        score_fname = SCORE_FNAME.format(exp=exp, sub=sub, radius=radius, dist=args.dist,
-                                           ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
-        # if os.path.isfile(score_fname):
-        #     result = np.load(score_fname)
-        #     scores[i_sensor] = result['sensor_score']
-        # else:
-        scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
-        np.savez(score_fname, sensor_score=scores[i_sensor])
+    # for i_sensor in range(306):
+    #     print(i_sensor)
+    #     score_fname = SCORE_FNAME.format(exp=exp, sub=sub, radius=radius, dist=args.dist,
+    #                                        ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
+    #     # if os.path.isfile(score_fname):
+    #     #     result = np.load(score_fname)
+    #     #     scores[i_sensor] = result['sensor_score']
+    #     # else:
+    #     scores[i_sensor], _ = ktau_rdms(total_rdm[i_sensor, :, :], comp_rdm)
+    #     np.savez(score_fname, sensor_score=scores[i_sensor])
 
     fig, ax = plt.subplots()
     ax.hist(scores)
@@ -118,6 +120,7 @@ if __name__ == '__main__':
         bbox_inches='tight')
 
     mean_sensor = np.mean(total_rdm, axis=0)
+    mean_sensor = mean_sensor[:end_sentence*num_instances, :end_sentence*num_instances]
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(mean_sensor), interpolation='nearest', vmin=0.0)
     ax.set_title('Average over Sensors')
