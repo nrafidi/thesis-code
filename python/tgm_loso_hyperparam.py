@@ -51,7 +51,7 @@ if __name__ == '__main__':
         avg_test_str = 'No Test Sample Average'
 
     win_lens = [12, 25, 50, 100, 150]
-    num_insts = [1, 2, 5, 10]
+    num_insts = [2, 5, 10]
 
     perc = args.percentile
 
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
     all_combined = (z_frac + zscore(mean_perc_tot) +  3.0*zscore(frac_sub_eos) + 2.0*zscore(mean_perc_eos))/7.0
 
-    optimal = np.argmax(all_combined[:, 1:])
+    optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
     print(optimal)
 
     fig, ax = plt.subplots()
