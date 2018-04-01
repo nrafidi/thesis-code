@@ -179,7 +179,7 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
     parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
-    parser.add_argument('--word', choices=['noun1', 'noun2', 'verb', 'voice'])
+    parser.add_argument('--word', choices=['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient'])
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
