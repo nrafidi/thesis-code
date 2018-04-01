@@ -5,17 +5,18 @@ import time
 
 
 MODES = ['acc']
-EXPERIMENTS = ['krns2']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['pooled']
-WORDS = ['verb', 'noun1', 'voice']
+WORDS = ['verb', 'noun1', 'voice', 'agent', 'patient']
 WIN_LENS = [12, 25, 50, 100, 150]
 OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l1']
 ADJS = [None]
-DO_AVGS = [True]
-NUM_INSTANCESS = [1, 2, 5, 10]
+DO_TME_AVGS = [True, False]
+DO_TST_AVGS = [True]
+NUM_INSTANCESS = [2, 5, 10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
@@ -40,8 +41,8 @@ if __name__ == '__main__':
                                    IS_PERMS,
                                    ALGS,
                                    ADJS,
-                                   DO_AVGS,
-                                   DO_AVGS,
+                                   DO_TME_AVGS,
+                                   DO_TST_AVGS,
                                    NUM_INSTANCESS,
                                    RANDOM_STATES,
                                    SEN_TYPES,

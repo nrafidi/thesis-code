@@ -21,14 +21,18 @@ VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
 TMAX={'krns2': 1.5,
       'PassAct2': 1.5,
-      'PassAct3': 3.5}
+      'PassAct3': 2.0}
 
 WORD_COLS = {'active': {'noun1': 1,
                         'verb': 2,
-                        'noun2': 4},
+                        'noun2': 4,
+                        'agent': 1,
+                        'patient': 4},
              'passive': {'noun1': 1,
                          'verb': 3,
-                         'noun2': 6}}
+                         'noun2': 6,
+                         'agent': 6,
+                         'patient': 1}}
 
 
 def bool_to_str(bool_var):
