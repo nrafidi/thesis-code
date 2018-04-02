@@ -30,7 +30,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     sen_type = 'pooled'
-    word_list = ['noun1', 'verb', 'agent', 'patient'] #voice
+    word_list = ['noun1', 'verb', 'voice', 'agent', 'patient']
 
     if args.avgTime == 'T':
         avg_time_str = 'Time Average'
