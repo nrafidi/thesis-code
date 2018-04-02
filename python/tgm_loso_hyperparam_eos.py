@@ -19,7 +19,9 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'pooled': 'All Sentences'}
 
 PLOT_TITLE_WORD = {'noun1': 'First Noun',
-                  'verb': 'Verb'}
+                  'verb': 'Verb',
+                   'agent': 'Agent',
+                   'patient': 'Patient'}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
