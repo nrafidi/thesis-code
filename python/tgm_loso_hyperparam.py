@@ -237,13 +237,13 @@ if __name__ == '__main__':
             z_frac[np.isnan(z_frac)] = 0.0
             z_frac_eos = zscore(frac_sub_eos)
             z_frac_eos[np.isnan(z_frac_eos)] = 0.0
-            all_combined = (z_frac_eos + zscore(mean_max_eos))/2.0
+            all_combined = (2.0*z_frac_eos + zscore(mean_max_eos))/3.0
             all_combined_z = zscore(all_combined)
             combo_scores.append(all_combined_z[None, ...])
 
 
             fig, ax = plt.subplots()
-            h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin =-2.0, vmax=2.0)
+            h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin =-3.0, vmax=3.0)
             plt.colorbar(h)
             ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                      word=PLOT_TITLE_WORD[word],
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-6.0, vmax=6.0)
+    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-7.0, vmax=7.0)
     plt.colorbar(h)
     ax.set_title('Total Combined Score\n{avgTime}, {avgTest}'.format(
         avgTime=avg_time_str,
