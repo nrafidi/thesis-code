@@ -19,6 +19,7 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'pooled': 'All Sentences'}
 
 PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                    'noun2': 'Second Noun',
                   'verb': 'Verb',
                    'agent': 'Agent',
                    'patient': 'Patient',
