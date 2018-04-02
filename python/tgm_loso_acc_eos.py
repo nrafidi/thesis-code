@@ -17,7 +17,8 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
 
 PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
-                  'voice': 'Voice'}
+                   'agent': 'Agent',
+                   'patient': 'Patient'}
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
