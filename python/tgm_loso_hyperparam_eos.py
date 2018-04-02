@@ -51,7 +51,7 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
-    for i_word, word in word_list:
+    for i_word, word in enumerate(word_list):
         chance = tgm_loso_acc_eos.CHANCE[sen_type][word]
         frac_sub_eos = []
         mean_max_eos = []
@@ -106,7 +106,7 @@ if __name__ == '__main__':
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
                     size=20, weight='bold')
             ax.set_xlabel('Number of Instances')
-            if i_ax == 0 or i_ax == 2:
+            if i_ax == 0:
                 ax.set_ylabel('Window Length (ms)')
         cbar = grid.cbar_axes[0].colorbar(im)
         fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence, {avgTime}, {avgTest}'.format(
@@ -139,7 +139,6 @@ if __name__ == '__main__':
             combo_grid[i_word].set_xlabel('Number of Instances')
         if i_word == 0 or i_word == 2 or i_word == 4:
             combo_grid[i_word].set_ylabel('Window Length (ms)')
-        i_word += 1
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('Post-Sentence Combined Scores\n{avgTime}, {avgTest}'.format(
