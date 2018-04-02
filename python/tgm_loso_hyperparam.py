@@ -52,6 +52,11 @@ if __name__ == '__main__':
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
     combo_scores = []
+    combo_fig = plt.figure()
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
+                        axes_pad=0.3, cbar_mode='single', cbar_location='right',
+                        cbar_pad=0.1)
+    i_combo = 0
     for sen_type in ['active', 'passive']:
         for word in ['noun1', 'verb']:
             if sen_type == 'active':
@@ -186,49 +191,36 @@ if __name__ == '__main__':
 
             per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-            fig, axs = plt.subplots(2, 2, figsize=(12, 12))
-            h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[0][0].set_title('Global Fraction of Subjects > Chance')
-            fig.colorbar(h00, ax=axs[0][0])#, shrink=0.8)
-            h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[0][1].set_title('Post-Sentence Fraction of Subjects > Chance')
-            fig.colorbar(h01, ax=axs[0][1])#, shrink=0.8)
-            h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[1][0].set_title('Global Max Accuracy')
-            fig.colorbar(h10, ax=axs[1][0])#, shrink=0.8)
-            h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[1][1].set_title('Post-Sentence Max Accuracy')
-            fig.colorbar(h11, ax=axs[1][1])#, shrink=0.8)
-            # h20 = axs[2][0].imshow(mean_perc_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
-            # axs[2][0].set_title('Global {}th Percentile'.format(int(perc*100)))
-            # fig.colorbar(h20, ax=axs[2][0], shrink=0.8)
-            # h21 = axs[2][1].imshow(mean_perc_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
-            # axs[2][1].set_title('Post-Sentence {}th Percentile'.format(int(perc*100)))
-            # fig.colorbar(h21, ax=axs[2][1], shrink=0.8)
+            fig = plt.figure()
+            grid = AxesGrid(fig, 111, nrows_ncols=(2, 2),
+                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
+                            cbar_pad=0.1)
 
-            for i in range(2):
-                for j in range(2):
-                    axs[i][j].set_xticks(range(len(num_insts)))
-                    axs[i][j].set_xticklabels(num_insts)
-                    axs[i][j].set_yticks(range(len(win_lens)))
-                    axs[i][j].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    axs[i][j].text(-0.3, 1.1, string.ascii_uppercase[i+j], transform=axs[i][j].transAxes,
+            mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
+            titles = ['Global Fraction of Subjects > Chance', 'Post-Sentence Fraction of Subjects > Chance',
+                      'Global Max Accuracy', 'Post-Sentence Max Accuracy']
+            for i_ax, ax in enumerate(grid):
+                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.25,
+                                   vmax=1.0)
+                ax.set_title(titles[i_ax])
+                ax.set_xticks(range(len(num_insts)))
+                ax.set_xticklabels(num_insts)
+                ax.set_yticks(range(len(win_lens)))
+                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+                ax.text(-0.3, 1.1, string.ascii_uppercase[i_ax], transform=ax.transAxes,
                                     size=20, weight='bold')
-                    if i == 2:
-                        axs[i][j].set_xlabel('Number of Instances')
-                    if j == 0:
-                        axs[i][j].set_ylabel('Window Length (ms)')
-
-
+                if i_ax > 1:
+                    ax.set_xlabel('Number of Instances')
+                if i_ax == 0 or i_ax == 2:
+                    ax.set_ylabel('Window Length (ms)')
+            cbar = grid.cbar_axes[0].colorbar(im)
             fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                      word=PLOT_TITLE_WORD[word],
                                                                                      avgTime=avg_time_str,
                                                                                      avgTest=avg_test_str),
                          fontsize=18)
-            fig.tight_layout()
-            plt.subplots_adjust(top=0.87)
 
-            plt.savefig(fig_fname.format(
+            fig.savefig(fig_fname.format(
                         exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
                         perc=perc, fig_type='single-mean-score-comp'
                     ), bbox_inches='tight')
@@ -241,9 +233,8 @@ if __name__ == '__main__':
             all_combined_z = zscore(all_combined)
             combo_scores.append(all_combined_z[None, ...])
 
-
             fig, ax = plt.subplots()
-            h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin =-3.0, vmax=3.0)
+            h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
             plt.colorbar(h)
             ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                      word=PLOT_TITLE_WORD[word],
@@ -261,6 +252,33 @@ if __name__ == '__main__':
                 exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
                 perc=perc, fig_type='total-comb-max-score-comp'
             ), bbox_inches='tight')
+
+            im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', vmin=-3.0, vmax=3.0)
+            combo_grid[i_combo].set_title('Decoding {word} from {sen}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                                                                              word=PLOT_TITLE_WORD[word]))
+            combo_grid[i_combo].set_xticks(range(len(num_insts)))
+            combo_grid[i_combo].set_xticklabels(num_insts)
+            combo_grid[i_combo].set_yticks(range(len(win_lens)))
+            combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
+            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                                    size=20, weight='bold')
+            if i_combo > 1:
+                combo_grid[i_combo].set_xlabel('Number of Instances')
+            if i_combo == 0 or i_combo == 2:
+                combo_grid[i_combo].set_ylabel('Window Length (ms)')
+            i_combo += 1
+
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
+        avgTime=avg_time_str,
+        avgTest=avg_test_str),
+                 fontsize=18)
+
+    combo_fig.savefig(fig_fname.format(
+        exp=args.experiment, sen_type='both', word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='word-sen-combo-max-score-comp'
+    ), bbox_inches='tight')
+
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
