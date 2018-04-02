@@ -7,155 +7,179 @@ import numpy as np
 import scipy.io as sio
 import run_TGM_LOSO_EOS
 import tgm_loso_acc_eos
+from scipy.stats import zscore
+from mpl_toolkits.axes_grid1 import AxesGrid
+import string
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
+PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
+                  'PassAct3': 'Final Experiment'}
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
 
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb'}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
-    parser.add_argument('--word', choices = ['noun1', 'verb', 'voice'])
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='F')
     args = parser.parse_args()
 
-    chance = tgm_loso_acc_eos.CHANCE[args.sen_type][args.word]
-    win_lens = [12, 25, 50] #, 100, 150]
-    num_insts = [1, 2, 5]
+    sen_type = 'pooled'
+    word_list = ['noun1', 'verb', 'voice', 'agent', 'patient']
 
-    frac_sub_tot = []
-    mean_acc_tot = []
-    arg_max_tot = []
-    arg_max_eos = []
-    per_sub_max_eos = []
-    for win_len in win_lens:
-        print(win_len)
-        time_adjust = win_len * 0.002
-        frac_sub_win = []
-        mean_acc_win = []
-        arg_max_tot_win = []
-        arg_max_eos_win = []
-        per_sub_max_eos_win = []
-        for num_instances in num_insts:
-            print(num_instances)
-            intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
-                                                                                           args.sen_type,
-                                                                                           args.word,
-                                                                                           win_len=win_len,
-                                                                                           overlap=12,
-                                                                                           adj=args.adj,
-                                                                                           num_instances=num_instances,
-                                                                                           avgTime=args.avgTime,
-                                                                                           avgTest=args.avgTest)
-            time = np.squeeze(time)
-            # print(time_ind)
-            frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
-            mean_acc = np.diag(np.mean(acc_all, axis=0))
+    if args.avgTime == 'T':
+        avg_time_str = 'Time Average'
+    else:
+        avg_time_str = 'No Time Average'
 
-            max_mean_acc = np.max(mean_acc)
-            argmax_mean_acc = np.argmax(mean_acc)
-            # print(argmax_mean_acc)
-            arg_max_eos_win.append(argmax_mean_acc)
+    if args.avgTest == 'T':
+        avg_test_str = 'Test Sample Average'
+    else:
+        avg_test_str = 'No Test Sample Average'
 
-            arg_max_tot_win.append(np.argmax(mean_acc))
+    win_lens = [12, 25, 50, 100, 150]
+    num_insts = [2, 5, 10]
 
-            max_frac_sub = frac_sub[argmax_mean_acc]
+    perc = args.percentile
 
-            frac_sub_win.append(max_frac_sub)
-            mean_acc_win.append(max_mean_acc)
+    fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
+    combo_scores = []
+    combo_fig = plt.figure(figsize=(12, 12))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5)
+    for i_word, word in word_list:
+        chance = tgm_loso_acc_eos.CHANCE[sen_type][word]
+        frac_sub_eos = []
+        mean_max_eos = []
+        for win_len in win_lens:
+            print(win_len)
+            time_adjust = win_len * 0.002
+            frac_sub_win = []
+            mean_max_win = []
+            for num_instances in num_insts:
+                print(num_instances)
+                intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
+                                                                                               args.sen_type,
+                                                                                               args.word,
+                                                                                               win_len=win_len,
+                                                                                               overlap=12,
+                                                                                               adj=args.adj,
+                                                                                               num_instances=num_instances,
+                                                                                               avgTime=args.avgTime,
+                                                                                               avgTest=args.avgTest)
 
-            sub_eos_max = []
-            for i_sub in range(acc_all.shape[0]):
-                diag_acc = np.diag(np.squeeze(acc_all[i_sub, :, :]))
-                argo = np.argmax(diag_acc)
-                sub_eos_max.append(argo)
-            sub_eos_max = np.array(sub_eos_max)
-            # print(sub_eos_max.shape)
-            per_sub_max_eos_win.append(sub_eos_max[None, ...])
-        for meow in per_sub_max_eos_win:
-            print(meow.shape)
-        per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
-        per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
-        frac_sub_win = np.array(frac_sub_win)
-        mean_acc_win = np.array(mean_acc_win)
-        arg_max_eos_win = np.array(arg_max_eos_win)
-        arg_max_tot_win = np.array(arg_max_tot_win)
+                frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
+                mean_acc = np.diag(np.mean(acc_all, axis=0))
 
-        frac_sub_tot.append(frac_sub_win[None, ...])
-        mean_acc_tot.append(mean_acc_win[None, ...])
-        arg_max_tot.append(arg_max_tot_win[None, ...])
-        arg_max_eos.append(arg_max_eos_win[None, ...])
+                mean_max_win.append(np.max(mean_acc))
+                argmax_mean_win = np.argmax(mean_acc)
+                frac_sub_win.append(frac_sub[argmax_mean_win])
 
-    frac_sub_tot = np.concatenate(frac_sub_tot, axis=0)
+            frac_sub_win = np.array(frac_sub_win)
+            mean_max_win = np.array(mean_max_win)
 
-    mean_acc_tot = np.concatenate(mean_acc_tot, axis=0)
+            frac_sub_eos.append(frac_sub_win[None, ...])
+            mean_max_eos.append(mean_max_win[None, ...])
 
-    arg_max_tot = np.concatenate(arg_max_tot, axis=0)
+        frac_sub_eos = np.concatenate(frac_sub_eos, axis=0)
+        mean_max_eos = np.concatenate(mean_max_eos, axis=0)
 
-    arg_max_eos = np.concatenate(arg_max_eos, axis=0)
+        fig = plt.figure(figsize=(12, 12))
+        grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                        cbar_pad=0.5)
 
-    per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
-    # print(mean_acc_tot[1, 2])
-
-    fig, axs = plt.subplots(1, 2)
-    h0 = axs[0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
-    axs[0].set_xticks(range(len(num_insts)))
-    axs[0].set_xticklabels(num_insts)
-    axs[0].set_yticks(range(len(win_lens)))
-    axs[0].set_yticklabels(np.array(win_lens).astype('float')*2)
-    axs[0].set_title('Frac Subjects > Chance')
-    axs[0].set_xlabel('Number of Instances')
-    axs[0].set_ylabel('Window Length (ms)')
-    fig.colorbar(h0, ax=axs[0], shrink=0.5)
-    h1 = axs[1].imshow(mean_acc_tot, interpolation='nearest', vmin=chance, vmax=2.0*chance)
-    axs[1].set_xticks(range(len(num_insts)))
-    axs[1].set_xticklabels(num_insts)
-    axs[1].set_yticks(range(len(win_lens)))
-    axs[1].set_yticklabels(np.array(win_lens).astype('float')*2)
-    axs[1].set_title('Mean Accuracy')
-    axs[1].set_xlabel('Number of Instances')
-    axs[1].set_ylabel('Window Length (ms)')
-    fig.colorbar(h1, ax=axs[1], shrink=0.5)
-    fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                             args.word,
-                                                                             args.avgTime,
-                                                                             args.avgTest))
-    fig.tight_layout()
-
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_win_inst_comp_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
+        mats_to_plot = [frac_sub_eos, mean_max_eos]
+        titles = ['Fraction Subjects > Chance', 'Max Accuracy']
+        for i_ax, ax in enumerate(grid):
+            im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
+                           vmax=1.0)
+            ax.set_title(titles[i_ax])
+            ax.set_xticks(range(len(num_insts)))
+            ax.set_xticklabels(num_insts)
+            ax.set_yticks(range(len(win_lens)))
+            ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+            ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                    size=20, weight='bold')
+            ax.set_xlabel('Number of Instances')
+            if i_ax == 0 or i_ax == 2:
+                ax.set_ylabel('Window Length (ms)')
+        cbar = grid.cbar_axes[0].colorbar(im)
+        fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence, {avgTime}, {avgTest}'.format(
+            word=PLOT_TITLE_WORD[word],
+            avgTime=avg_time_str,
+            avgTest=avg_test_str),
+                     fontsize=18)
+        fig.tight_layout()
+        fig.savefig(fig_fname.format(
+            exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+            perc=perc, fig_type='single-mean-score-comp'
         ), bbox_inches='tight')
 
+        z_frac_eos = zscore(frac_sub_eos)
+        z_frac_eos[np.isnan(z_frac_eos)] = 0.0
+        all_combined = (z_frac_eos + zscore(mean_max_eos)) / 2.0
+        all_combined_z = zscore(all_combined)
+        combo_scores.append(all_combined_z[None, ...])
+
+        im = combo_grid[i_word].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+        combo_grid[i_word].set_title('Decoding {word}\nfrom {sen}'.format(sen=PLOT_TITLE_SEN[sen_type],
+                                                                           word=PLOT_TITLE_WORD[word]))
+        combo_grid[i_word].set_xticks(range(len(num_insts)))
+        combo_grid[i_word].set_xticklabels(num_insts)
+        combo_grid[i_word].set_yticks(range(len(win_lens)))
+        combo_grid[i_word].set_yticklabels(np.array(win_lens).astype('float') * 2)
+        combo_grid[i_word].text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=combo_grid[i_word].transAxes,
+                                 size=20, weight='bold')
+        if i_word > 2:
+            combo_grid[i_word].set_xlabel('Number of Instances')
+        if i_word == 0 or i_word == 2 or i_word == 4:
+            combo_grid[i_word].set_ylabel('Window Length (ms)')
+        i_word += 1
+
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.suptitle('Post-Sentence Combined Scores\n{avgTime}, {avgTest}'.format(
+        avgTime=avg_time_str,
+        avgTest=avg_test_str),
+        fontsize=18)
+
+    combo_fig.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=sen_type, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='word-sen-combo-max-score-comp'
+    ), bbox_inches='tight')
+
+    all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
+    optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h0 = ax.imshow(frac_sub_tot + mean_acc_tot, interpolation='nearest', vmin=chance + 0.5, vmax=2.0)
+    h = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
+    plt.colorbar(h)
+    ax.set_title('Post-Sentence Total Combined Score\n{avgTime}, {avgTest}'.format(
+        avgTime=avg_time_str,
+        avgTest=avg_test_str),
+        fontsize=14)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
     ax.set_yticks(range(len(win_lens)))
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-    ax.set_title('Frac Subjects > Chance + Max EOS Accuracy')
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    fig.colorbar(h0, ax=ax)
-    fig.suptitle('Post Sentence Maximum\n{} {} avgTime {} avgTest {}'.format(args.sen_type,
-                                                                             args.word,
-                                                                             args.avgTime,
-                                                                             args.avgTest))
-    plt.subplots_adjust(top=0.8)
+    fig.tight_layout()
+    plt.savefig(fig_fname.format(
+        exp=args.experiment, sen_type=sen_type, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+        perc=perc, fig_type='total-comb-max-score-comp'
+    ), bbox_inches='tight')
 
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_win_inst_comp-sum_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest
-        ), bbox_inches='tight')
-    print(arg_max_eos)
-    print(arg_max_tot)
-    print(np.squeeze(per_sub_max_eos[:, 0, :]))
-
-
+    print(
+        'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
+                                                                                               ni=num_insts[optimal[1]],
+                                                                                               score=np.max(
+                                                                                                   all_combined)))
 
     plt.show()
-
-
