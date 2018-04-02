@@ -90,6 +90,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time Relative to First Noun Onset (s)')
     ax.set_ylim([0.0, 0.9])
+    ax.set_xlim([0.0, 1.50])
     ax.legend(loc=1)
 
     sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
