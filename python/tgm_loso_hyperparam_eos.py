@@ -45,8 +45,6 @@ if __name__ == '__main__':
     win_lens = [12, 25, 50, 100, 150]
     num_insts = [2, 5, 10]
 
-    perc = args.percentile
-
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
     combo_scores = []
     combo_fig = plt.figure(figsize=(12, 12))
