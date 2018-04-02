@@ -211,7 +211,7 @@ if __name__ == '__main__':
                 ax.text(v + 0.1, 0.7, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time')
+        ax.set_xlabel('Time Relative to First Noun Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
         # if i_sen == len(sen_type_list) - 1:
@@ -231,7 +231,7 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
-    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(30, 10))
+    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(40, 10))
     for i_word, word in enumerate(word_list):
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
@@ -267,7 +267,7 @@ if __name__ == '__main__':
         ax.set_xticklabels(label_time)
         if i_word == 0:
             ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time')
+        ax.set_xlabel('Time Relative to First Noun Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         # if i_word == len(word_list) - 1:
