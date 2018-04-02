@@ -124,7 +124,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
-    parser.add_argument('--word', choices = ['noun1', 'verb', 'voice'])
+    parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
     parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
