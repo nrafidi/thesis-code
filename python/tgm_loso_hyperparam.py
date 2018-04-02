@@ -207,7 +207,7 @@ if __name__ == '__main__':
                 ax.set_xticklabels(num_insts)
                 ax.set_yticks(range(len(win_lens)))
                 ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                ax.text(-0.1, 1.0, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
                                     size=20, weight='bold')
                 if i_ax > 1:
                     ax.set_xlabel('Number of Instances')
@@ -260,7 +260,7 @@ if __name__ == '__main__':
             combo_grid[i_combo].set_xticklabels(num_insts)
             combo_grid[i_combo].set_yticks(range(len(win_lens)))
             combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            combo_grid[i_combo].text(-0.1, 1.0, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+            combo_grid[i_combo].text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                     size=20, weight='bold')
             if i_combo > 1:
                 combo_grid[i_combo].set_xlabel('Number of Instances')
@@ -284,7 +284,7 @@ if __name__ == '__main__':
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-7.0, vmax=7.0)
+    h = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
     plt.colorbar(h)
     ax.set_title('Total Combined Score\n{avgTime}, {avgTest}'.format(
         avgTime=avg_time_str,
