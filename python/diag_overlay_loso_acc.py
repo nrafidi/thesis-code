@@ -204,7 +204,7 @@ if __name__ == '__main__':
         label_time = time[win_starts]
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
-        ax.hline(y=0.25, label='Chance')
+        ax.axhline(y=0.25, label='Chance')
         ax.set_xticklabels(label_time)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
@@ -272,7 +272,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         # if i_word == len(word_list) - 1:
-        ax.hline(y=0.25, label='Chance')
+        ax.axhline(y=0.25, label='Chance')
         ax.legend(loc=1)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
