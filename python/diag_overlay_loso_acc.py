@@ -147,7 +147,7 @@ if __name__ == '__main__':
     sen_fracs = []
     sen_time = []
 
-    sen_fig, sen_axs = plt.subplots((1, len(sen_type_list)))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list))
     for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
         frac_diags = []
@@ -230,7 +230,7 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
-    word_fig, word_axs = plt.subplots((1, len(word_list)))
+    word_fig, word_axs = plt.subplots(1, len(word_list))
     for i_word, word in enumerate(word_list):
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
