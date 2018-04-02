@@ -204,7 +204,7 @@ if __name__ == '__main__':
         label_time = time[win_starts]
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
-        ax.axhline(y=0.25, label='Chance')
+        ax.axhline(y=0.25, color='k', linestyle='dashed', label='Chance')
         ax.set_xticklabels(label_time)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
@@ -218,7 +218,7 @@ if __name__ == '__main__':
         # if i_sen == len(sen_type_list) - 1:
         ax.legend(loc=1)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
-        ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
+        ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=20, weight='bold')
 
     sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
@@ -272,9 +272,9 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         # if i_word == len(word_list) - 1:
-        ax.axhline(y=0.25, label='Chance')
+        ax.axhline(y=0.25, color='k', linestyle='dashed', label='Chance')
         ax.legend(loc=1)
-        ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
+        ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
         ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
 
