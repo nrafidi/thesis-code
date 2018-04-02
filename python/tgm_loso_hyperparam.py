@@ -197,7 +197,7 @@ if __name__ == '__main__':
                             cbar_pad=0.5)
 
             mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
-            titles = ['Global Fraction of Subjects > Chance', 'Post-Sentence Fraction of Subjects > Chance',
+            titles = ['Global Fraction\nSubjects > Chance', 'Post-Sentence Fraction\nSubjects > Chance',
                       'Global Max Accuracy', 'Post-Sentence Max Accuracy']
             for i_ax, ax in enumerate(grid):
                 im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
@@ -207,7 +207,7 @@ if __name__ == '__main__':
                 ax.set_xticklabels(num_insts)
                 ax.set_yticks(range(len(win_lens)))
                 ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                ax.text(-0.3, 1.1, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                ax.text(-0.1, 1.0, string.ascii_uppercase[i_ax], transform=ax.transAxes,
                                     size=20, weight='bold')
                 if i_ax > 1:
                     ax.set_xlabel('Number of Instances')
@@ -260,7 +260,7 @@ if __name__ == '__main__':
             combo_grid[i_combo].set_xticklabels(num_insts)
             combo_grid[i_combo].set_yticks(range(len(win_lens)))
             combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+            combo_grid[i_combo].text(-0.1, 1.0, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                     size=20, weight='bold')
             if i_combo > 1:
                 combo_grid[i_combo].set_xlabel('Number of Instances')
