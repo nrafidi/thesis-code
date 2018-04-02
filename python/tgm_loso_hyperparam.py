@@ -340,7 +340,7 @@ if __name__ == '__main__':
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-4.0, vmax=4.0)
+    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-6.0, vmax=6.0)
     plt.colorbar(h)
     ax.set_title('Total Combined Score\n{avgTime}, {avgTest}'.format(
         avgTime=avg_time_str,
