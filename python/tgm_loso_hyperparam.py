@@ -212,7 +212,7 @@ if __name__ == '__main__':
                     axs[i][j].set_xticklabels(num_insts)
                     axs[i][j].set_yticks(range(len(win_lens)))
                     axs[i][j].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    axs[i][j].text(-0.1, 1.1, string.ascii_uppercase[i+j], transform=axs[i][j].transAxes,
+                    axs[i][j].text(-0.1, 0.9, string.ascii_uppercase[i+j], transform=axs[i][j].transAxes,
                                     size=20, weight='bold')
                     if i == 2:
                         axs[i][j].set_xlabel('Number of Instances')
@@ -233,16 +233,8 @@ if __name__ == '__main__':
                         perc=perc, fig_type='single-mean-score-comp'
                     ), bbox_inches='tight')
 
-            fig = plt.figure()
-            grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
-                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.1)
-
             z_frac = zscore(frac_sub_tot)
             z_frac[np.isnan(z_frac)] = 0.0
-
-            #
-
             z_frac_eos = zscore(frac_sub_eos)
             z_frac_eos[np.isnan(z_frac_eos)] = 0.0
             all_combined = (z_frac_eos + zscore(mean_max_eos))/2.0
