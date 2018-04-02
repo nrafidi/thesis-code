@@ -337,74 +337,74 @@ if __name__ == '__main__':
 
             num_sub = per_sub_max_tot.shape[2]
             half_sub = int(num_sub/2)
-            fig = plt.figure(figsize=(30, 10))
-            grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
-                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.1)
-
-            for i_ax, ax in enumerate(grid):
-                im = ax.imshow(np.squeeze(per_sub_max_tot[:, :, i_ax]), interpolation='nearest', vmin=0.25,
-                               vmax=1.0)
-                ax.set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_ax])
-                ax.set_xticks(range(len(num_insts)))
-                ax.set_xticklabels(num_insts)
-                ax.set_yticks(range(len(win_lens)))
-                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                if i_ax >= half_sub:
-                    ax.set_xlabel('Number of Instances')
-                if i_ax == half_sub or i_ax == 0:
-                    ax.set_ylabel('Window Length (ms)')
-
-            cbar = grid.cbar_axes[0].colorbar(im)
-            fig.suptitle('Per Subject Global Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                     word=PLOT_TITLE_WORD[word],
-                                                                                     avgTime=avg_time_str,
-                                                                                     avgTest=avg_test_str),
-                         fontsize=18)
-
-            plt.savefig(fig_fname.format(
-                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-                perc=perc, fig_type='sub-global-max-comp'
-            ), bbox_inches='tight')
+            # fig = plt.figure(figsize=(30, 10))
+            # grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
+            #                 axes_pad=0.3, cbar_mode='single', cbar_location='right',
+            #                 cbar_pad=0.1)
+            #
+            # for i_ax, ax in enumerate(grid):
+            #     im = ax.imshow(np.squeeze(per_sub_max_tot[:, :, i_ax]), interpolation='nearest', vmin=0.25,
+            #                    vmax=1.0)
+            #     ax.set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_ax])
+            #     ax.set_xticks(range(len(num_insts)))
+            #     ax.set_xticklabels(num_insts)
+            #     ax.set_yticks(range(len(win_lens)))
+            #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+            #     if i_ax >= half_sub:
+            #         ax.set_xlabel('Number of Instances')
+            #     if i_ax == half_sub or i_ax == 0:
+            #         ax.set_ylabel('Window Length (ms)')
+            #
+            # cbar = grid.cbar_axes[0].colorbar(im)
+            # fig.suptitle('Per Subject Global Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+            #                                                                          word=PLOT_TITLE_WORD[word],
+            #                                                                          avgTime=avg_time_str,
+            #                                                                          avgTest=avg_test_str),
+            #              fontsize=18)
+            #
+            # plt.savefig(fig_fname.format(
+            #     exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+            #     perc=perc, fig_type='sub-global-max-comp'
+            # ), bbox_inches='tight')
 
             num_sub = per_sub_max_eos.shape[2]
             half_sub = int(num_sub / 2)
 
-            fig = plt.figure(figsize = (30, 10))
-            grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
-                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.1)
-
-            for i_ax, ax in enumerate(grid):
-                im = ax.imshow(np.squeeze(per_sub_max_eos[:, :, i_ax]), interpolation='nearest', vmin=0.25,
-                                           vmax=1.0)
-                ax.set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_ax])
-                ax.set_xticks(range(len(num_insts)))
-                ax.set_xticklabels(num_insts)
-                ax.set_yticks(range(len(win_lens)))
-                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                if i_ax >= half_sub:
-                    ax.set_xlabel('Number of Instances')
-                if i_ax == half_sub or i_ax == 0:
-                    ax.set_ylabel('Window Length (ms)')
-
-            cbar = grid.cbar_axes[0].colorbar(im)
-            fig.suptitle('Per Subject Post-Sentence Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                     word=PLOT_TITLE_WORD[word],
-                                                                                     avgTime=avg_time_str,
-                                                                                     avgTest=avg_test_str),
-                         fontsize=18)
-
-            plt.savefig(fig_fname.format(
-                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-                perc=perc, fig_type='sub-post-max-comp'
-            ), bbox_inches='tight')
+            # fig = plt.figure(figsize = (30, 10))
+            # grid = AxesGrid(fig, 111, nrows_ncols=(2, half_sub),
+            #                 axes_pad=0.3, cbar_mode='single', cbar_location='right',
+            #                 cbar_pad=0.1)
+            #
+            # for i_ax, ax in enumerate(grid):
+            #     im = ax.imshow(np.squeeze(per_sub_max_eos[:, :, i_ax]), interpolation='nearest', vmin=0.25,
+            #                                vmax=1.0)
+            #     ax.set_title(run_TGM_LOSO.VALID_SUBS[args.experiment][i_ax])
+            #     ax.set_xticks(range(len(num_insts)))
+            #     ax.set_xticklabels(num_insts)
+            #     ax.set_yticks(range(len(win_lens)))
+            #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+            #     if i_ax >= half_sub:
+            #         ax.set_xlabel('Number of Instances')
+            #     if i_ax == half_sub or i_ax == 0:
+            #         ax.set_ylabel('Window Length (ms)')
+            #
+            # cbar = grid.cbar_axes[0].colorbar(im)
+            # fig.suptitle('Per Subject Post-Sentence Max\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+            #                                                                          word=PLOT_TITLE_WORD[word],
+            #                                                                          avgTime=avg_time_str,
+            #                                                                          avgTest=avg_test_str),
+            #              fontsize=18)
+            #
+            # plt.savefig(fig_fname.format(
+            #     exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+            #     perc=perc, fig_type='sub-post-max-comp'
+            # ), bbox_inches='tight')
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-4.0, vmax=4.0)
+    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-5.0, vmax=5.0)
     plt.colorbar(h)
     ax.set_title('Total Combined Percentile Score\n{avgTime}, {avgTest}'.format(
         avgTime=avg_time_str,

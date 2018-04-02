@@ -22,7 +22,7 @@ import time
 
 MODES = ['acc']
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N']
+SUBJECTS = ['F', 'G', 'H', 'I']
 SEN_TYPES = ['active'] #, 'active']
 WORDS = ['verb']
 WIN_LENS = [150, 100, 50, 25, 12]#, 50, 25, 12]
@@ -31,7 +31,7 @@ IS_PERMS = [False]  # True
 ALGS = ['lr-l1']  # GNB
 ADJS = [None]
 DO_AVGS = [True, False]#, True]  # True
-NUM_INSTANCESS = [2, 1, 5, 10]#, 5, 10, 1]
+NUM_INSTANCESS = [2, 5, 10]#, 5, 10, 1]
 REPS_TO_USES = [None]  # 10
 RANDOM_STATES = [1]
 
