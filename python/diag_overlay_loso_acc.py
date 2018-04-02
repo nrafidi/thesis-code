@@ -187,9 +187,9 @@ if __name__ == '__main__':
             acc = acc_diags[i_word]
             frac = frac_diags[i_word]
 
-            if word == 'verb' and sen_type == 'active':
-                acc = acc[time_step:]
-                frac = frac[time_step:]
+            # if word == 'verb' and sen_type == 'active':
+            #     acc = acc[time_step:]
+            #     frac = frac[time_step:]
 
             above_thresh = frac > frac_thresh
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
@@ -237,9 +237,9 @@ if __name__ == '__main__':
             color = colors[i_sen]
             acc = sen_accs[i_sen][i_word]
             frac = sen_fracs[i_sen][i_word]
-            if word == 'verb' and sen_type == 'active':
-                acc = acc[time_step:]
-                frac = frac[time_step:]
+            # if word == 'verb' and sen_type == 'active':
+            #     acc = acc[time_step:]
+            #     frac = frac[time_step:]
 
             above_thresh = frac > frac_thresh
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
