@@ -204,6 +204,7 @@ if __name__ == '__main__':
         label_time = time[win_starts]
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
+        ax.hline(y=0.25)
         ax.set_xticklabels(label_time)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
@@ -224,7 +225,7 @@ if __name__ == '__main__':
     sen_fig.tight_layout()
     plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='both', avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
@@ -271,6 +272,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         # if i_word == len(word_list) - 1:
+        ax.hline(y=0.25)
         ax.legend(loc=1)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
@@ -280,7 +282,7 @@ if __name__ == '__main__':
     word_fig.tight_layout()
     plt.subplots_adjust(top=0.85)
     word_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
