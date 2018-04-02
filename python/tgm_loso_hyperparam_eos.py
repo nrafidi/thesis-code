@@ -50,10 +50,11 @@ if __name__ == '__main__':
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
     combo_fig = plt.figure(figsize=(12, 12))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_word, word in enumerate(word_list):
+        chance = tgm_loso_acc_eos.CHANCE[args.experiment][sen_type][word]
         frac_sub_eos = []
         mean_max_eos = []
         for win_len in win_lens:
@@ -97,7 +98,7 @@ if __name__ == '__main__':
         mats_to_plot = [frac_sub_eos, mean_max_eos]
         titles = ['Fraction Subjects > Chance', 'Max Accuracy']
         for i_ax, ax in enumerate(grid):
-            im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
+            im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=chance,
                            vmax=1.0)
             ax.set_title(titles[i_ax])
             ax.set_xticks(range(len(num_insts)))
