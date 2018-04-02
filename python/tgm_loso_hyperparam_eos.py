@@ -62,8 +62,8 @@ if __name__ == '__main__':
             for num_instances in num_insts:
                 print(num_instances)
                 intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
-                                                                                               args.sen_type,
-                                                                                               args.word,
+                                                                                               sen_type,
+                                                                                               word,
                                                                                                win_len=win_len,
                                                                                                overlap=12,
                                                                                                adj=args.adj,
