@@ -147,7 +147,7 @@ if __name__ == '__main__':
     sen_fracs = []
     sen_time = []
 
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(10, 20))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(20, 10))
     for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
         frac_diags = []
@@ -214,8 +214,8 @@ if __name__ == '__main__':
         ax.set_xlabel('Time')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
-        if i_sen == len(sen_type_list) - 1:
-            ax.legend(loc=1)
+        # if i_sen == len(sen_type_list) - 1:
+        ax.legend(loc=1)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=20, weight='bold')
@@ -231,7 +231,7 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
-    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(10, 30))
+    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(30, 10))
     for i_word, word in enumerate(word_list):
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
@@ -270,8 +270,8 @@ if __name__ == '__main__':
         ax.set_xlabel('Time')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
-        if i_word == len(word_list) - 1:
-            ax.legend(loc=1)
+        # if i_word == len(word_list) - 1:
+        ax.legend(loc=1)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
         ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
