@@ -54,8 +54,8 @@ if __name__ == '__main__':
     combo_scores = []
     combo_fig = plt.figure(figsize=(12, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
-                        axes_pad=0.5, cbar_mode='single', cbar_location='right',
-                        cbar_pad=0.3)
+                        axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                        cbar_pad=0.5)
     i_combo = 0
     for sen_type in ['active', 'passive']:
         for word in ['noun1', 'verb']:
@@ -193,14 +193,14 @@ if __name__ == '__main__':
 
             fig = plt.figure(figsize=(12, 12))
             grid = AxesGrid(fig, 111, nrows_ncols=(2, 2),
-                            axes_pad=0.5, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.3)
+                            axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                            cbar_pad=0.5)
 
             mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
             titles = ['Global Fraction of Subjects > Chance', 'Post-Sentence Fraction of Subjects > Chance',
                       'Global Max Accuracy', 'Post-Sentence Max Accuracy']
             for i_ax, ax in enumerate(grid):
-                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=0.25,
+                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
                                    vmax=1.0)
                 ax.set_title(titles[i_ax])
                 ax.set_xticks(range(len(num_insts)))
@@ -253,14 +253,14 @@ if __name__ == '__main__':
                 perc=perc, fig_type='total-comb-max-score-comp'
             ), bbox_inches='tight')
 
-            im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', vmin=-3.0, vmax=3.0)
+            im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
             combo_grid[i_combo].set_title('Decoding {word}\nfrom {sen}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                               word=PLOT_TITLE_WORD[word]))
             combo_grid[i_combo].set_xticks(range(len(num_insts)))
             combo_grid[i_combo].set_xticklabels(num_insts)
             combo_grid[i_combo].set_yticks(range(len(win_lens)))
             combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                     size=20, weight='bold')
             if i_combo > 1:
                 combo_grid[i_combo].set_xlabel('Number of Instances')
