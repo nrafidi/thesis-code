@@ -138,6 +138,16 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
+    if args.avgTime == 'T':
+        avg_time_str = 'Time Average'
+    else:
+        avg_time_str = 'No Time Average'
+
+    if args.avgTest == 'T':
+        avg_test_str = 'Test Sample Average'
+    else:
+        avg_test_str = 'No Test Sample Average'
+
     intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                       args.sen_type,
                                                                       args.word,
@@ -214,6 +224,42 @@ if __name__ == '__main__':
             overlap=args.overlap,
             num_instances=args.num_instances
         ), bbox_inches='tight')
+
+    fig, ax = plt.subplots()
+    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+    ax.set_ylabel('Train Time (s)')
+    ax.set_xlabel('Test Time (s)')
+    ax.set_title('Average TGM Decoding {word} from {sen_type}\n{avgTime}, {avgTest}\nNumber of Instances: {ni}'.format(
+        sen_type=PLOT_TITLE_SEN[args.sen_type],
+        word=PLOT_TITLE_WORD[args.word],
+        avgTime=avg_time_str,
+        avgTest=avg_test_str,
+        ni=args.num_instances))
+    ax.set_xticks(range(0, len(time_win), time_step))
+    label_time = time_win
+    label_time = label_time[::time_step]
+    label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.set_xticklabels(label_time)
+    ax.set_yticks(range(0, len(time_win), time_step))
+    ax.set_yticklabels(label_time)
+    time_adjust = args.win_len
+
+    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+        ax.axvline(x=v, color='w')
+        if i_v < len(text_to_write):
+            plt.text(v + 0.05 * 2 * time_step, 1.5 * time_step, text_to_write[i_v], color='w')
+    plt.colorbar(h)
+    ax.set_xlim(left=time_step)
+    ax.set_ylim(top=time_step)
+    fig.tight_layout()
+    plt.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm-title_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
+
 
     fig, ax = plt.subplots()
     h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
