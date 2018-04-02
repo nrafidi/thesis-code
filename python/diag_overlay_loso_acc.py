@@ -147,7 +147,7 @@ if __name__ == '__main__':
     sen_fracs = []
     sen_time = []
 
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(10, 20))
     for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
         frac_diags = []
@@ -217,12 +217,12 @@ if __name__ == '__main__':
         if i_sen == len(sen_type_list) - 1:
             ax.legend(loc=1)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
-        ax.text(-0.15, 1.0, string.ascii_uppercase[i_sen], transform=ax.transAxes,
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=20, weight='bold')
 
     sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
     sen_fig.tight_layout()
-    plt.subplots_adjust(top=0.8)
+    plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', avgTime=args.avgTime, avgTest=args.avgTest,
@@ -231,7 +231,7 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
-    word_fig, word_axs = plt.subplots(1, len(word_list))
+    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(10, 30))
     for i_word, word in enumerate(word_list):
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
@@ -272,13 +272,13 @@ if __name__ == '__main__':
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         if i_word == len(word_list) - 1:
             ax.legend(loc=1)
-        ax.text(-0.15, 1.0, string.ascii_uppercase[i_word], transform=ax.transAxes,
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
         ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
 
     word_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
     word_fig.tight_layout()
-    plt.subplots_adjust(top=0.8)
+    plt.subplots_adjust(top=0.85)
     word_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
