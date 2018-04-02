@@ -7,6 +7,7 @@ import numpy as np
 import scipy.io as sio
 import os
 import run_TGM_LOSO
+import string
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -146,7 +147,8 @@ if __name__ == '__main__':
     sen_fracs = []
     sen_time = []
 
-    for sen_type in sen_type_list:
+    sen_fig, sen_axs = plt.subplots((1, len(sen_type_list)))
+    for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
         frac_diags = []
         time = []
@@ -180,8 +182,9 @@ if __name__ == '__main__':
             max_line = 3.51 * 2 * time_step
             start_line = time_step
 
-        fig, ax = plt.subplots()
+
         colors = ['r', 'g', 'b']
+        ax = sen_axs[i_sen]
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
@@ -206,23 +209,28 @@ if __name__ == '__main__':
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
                 plt.text(v + 0.1, 0.7, text_to_write[i_v])
-        ax.set_ylabel('Accuracy')
+        if i_sen == 0:
+            ax.set_ylabel('Accuracy')
         ax.set_xlabel('Time')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
-        ax.legend(loc=1)
-        ax.set_title('Mean accuracy over subjects\n{sen_type}, {experiment}'.format(sen_type=PLOT_TITLE_SEN[sen_type],
-                                                                                   experiment=PLOT_TITLE_EXP[args.experiment]))
+        if i_sen == len(sen_type_list) - 1:
+            ax.legend(loc=1)
+        ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
+                size=20, weight='bold')
 
-        fig.tight_layout()
-        plt.savefig(
-            '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-                exp=args.experiment, sen_type=sen_type, avgTime=args.avgTime, avgTest=args.avgTest,
-                win_len=args.win_len,
-                overlap=args.overlap,
-                num_instances=args.num_instances
-            ), bbox_inches='tight')
+    sen_fig.suptitle('Mean Accuracy over Subjects')
+    sen_fig.tight_layout()
+    sen_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type='both', avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
+    word_fig, word_axs = plt.subplots((1, len(word_list)))
     for i_word, word in enumerate(word_list):
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
@@ -230,9 +238,9 @@ if __name__ == '__main__':
         max_line = [2.51 * 2 * time_step, 3.51 * 2 * time_step]
         start_line = [time_step, time_step]
 
-        fig, ax = plt.subplots()
-        colors = ['r', 'g']
 
+        colors = ['r', 'g']
+        ax = word_axs[i_word]
         for i_sen, sen_type in enumerate(sen_type_list):
             color = colors[i_sen]
             acc = sen_accs[i_sen][i_word]
@@ -256,22 +264,26 @@ if __name__ == '__main__':
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
         ax.set_xticklabels(label_time)
-        ax.set_ylabel('Accuracy')
+        if i_word == 0:
+            ax.set_ylabel('Accuracy')
         ax.set_xlabel('Time')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
-        ax.legend(loc=1)
-        ax.set_title('Mean accuracy over subjects\n{word} Decoding from {experiment}'.format(word=PLOT_TITLE_WORD[word],
-                                                                               experiment=PLOT_TITLE_EXP[args.experiment]))
+        if i_word == len(word_list) - 1:
+            ax.legend(loc=1)
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
+                size=20, weight='bold')
+        ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
 
-        fig.tight_layout()
-        plt.savefig(
-            '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-                exp=args.experiment, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-                win_len=args.win_len,
-                overlap=args.overlap,
-                num_instances=args.num_instances
-            ), bbox_inches='tight')
+    word_fig.suptitle('Mean Accuracy over Subjects')
+    word_fig.tight_layout()
+    word_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
 
     plt.show()
