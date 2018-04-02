@@ -9,6 +9,7 @@ import scipy.io as sio
 from scipy.stats import zscore
 import run_TGM_LOSO
 import tgm_loso_acc
+import string
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -185,11 +186,11 @@ if __name__ == '__main__':
 
             per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-            fig, axs = plt.subplots(3, 2, figsize=(12, 15))
-            h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.5, vmax=1.0)
+            fig, axs = plt.subplots(2, 2, figsize=(12, 12))
+            h00 = axs[0][0].imshow(frac_sub_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
             axs[0][0].set_title('Global Fraction of Subjects > Chance')
             fig.colorbar(h00, ax=axs[0][0], shrink=0.8)
-            h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.5, vmax=1.0)
+            h01 = axs[0][1].imshow(frac_sub_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
             axs[0][1].set_title('Post-Sentence Fraction of Subjects > Chance')
             fig.colorbar(h01, ax=axs[0][1], shrink=0.8)
             h10 = axs[1][0].imshow(mean_max_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
@@ -198,19 +199,21 @@ if __name__ == '__main__':
             h11 = axs[1][1].imshow(mean_max_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
             axs[1][1].set_title('Post-Sentence Max Accuracy')
             fig.colorbar(h11, ax=axs[1][1], shrink=0.8)
-            h20 = axs[2][0].imshow(mean_perc_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[2][0].set_title('Global {}th Percentile'.format(int(perc*100)))
-            fig.colorbar(h20, ax=axs[2][0], shrink=0.8)
-            h21 = axs[2][1].imshow(mean_perc_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
-            axs[2][1].set_title('Post-Sentence {}th Percentile'.format(int(perc*100)))
-            fig.colorbar(h21, ax=axs[2][1], shrink=0.8)
+            # h20 = axs[2][0].imshow(mean_perc_tot, interpolation='nearest', vmin=0.25, vmax=1.0)
+            # axs[2][0].set_title('Global {}th Percentile'.format(int(perc*100)))
+            # fig.colorbar(h20, ax=axs[2][0], shrink=0.8)
+            # h21 = axs[2][1].imshow(mean_perc_eos, interpolation='nearest', vmin=0.25, vmax=1.0)
+            # axs[2][1].set_title('Post-Sentence {}th Percentile'.format(int(perc*100)))
+            # fig.colorbar(h21, ax=axs[2][1], shrink=0.8)
 
-            for i in range(3):
+            for i in range(2):
                 for j in range(2):
                     axs[i][j].set_xticks(range(len(num_insts)))
                     axs[i][j].set_xticklabels(num_insts)
                     axs[i][j].set_yticks(range(len(win_lens)))
                     axs[i][j].set_yticklabels(np.array(win_lens).astype('float') * 2)
+                    axs[i][j].text(-0.1, 1.1, string.ascii_uppercase[i+j], transform=axs[i][j].transAxes,
+                                    size=20, weight='bold')
                     if i == 2:
                         axs[i][j].set_xlabel('Number of Instances')
                     if j == 0:
@@ -238,36 +241,7 @@ if __name__ == '__main__':
             z_frac = zscore(frac_sub_tot)
             z_frac[np.isnan(z_frac)] = 0.0
 
-            mats_to_plot = [z_frac + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
-            # vmin = np.min([np.min(mat) for mat in mats_to_plot])
-            # vmax = np.max([np.max(mat) for mat in mats_to_plot])
-            vmin = -4.0
-            vmax = 4.0
-            titles = ['Global', 'Post-Sentence']
-            for i_ax, ax in enumerate(grid):
-                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
-                               vmax=vmax)
-                ax.set_title(titles[i_ax])
-                ax.set_xticks(range(len(num_insts)))
-                ax.set_xticklabels(num_insts)
-                ax.set_yticks(range(len(win_lens)))
-                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                ax.set_xlabel('Number of Instances')
-                if i_ax == 0:
-                    ax.set_ylabel('Window Length (ms)')
-
-            cbar = grid.cbar_axes[0].colorbar(im)
-            fig.subplots_adjust(top=0.8)
-            fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                     word=PLOT_TITLE_WORD[word],
-                                                                                     avgTime=avg_time_str,
-                                                                                     avgTest=avg_test_str),
-                         fontsize=16)
-
-            plt.savefig(fig_fname.format(
-                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-                perc=perc, fig_type='comb-perc-score-comp'
-            ), bbox_inches='tight')
+            #
 
             z_frac_eos = zscore(frac_sub_eos)
             z_frac_eos[np.isnan(z_frac_eos)] = 0.0
@@ -295,46 +269,6 @@ if __name__ == '__main__':
                 exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
                 perc=perc, fig_type='total-comb-max-score-comp'
             ), bbox_inches='tight')
-
-            fig = plt.figure()
-            grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
-                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.1)
-
-            z_frac = zscore(frac_sub_tot)
-            z_frac[np.isnan(z_frac)] = 0.0
-
-            mats_to_plot = [z_frac + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
-            # vmin = np.min([np.min(mat) for mat in mats_to_plot])
-            # vmax = np.max([np.max(mat) for mat in mats_to_plot])
-            vmin = -4.0
-            vmax = 4.0
-            titles = ['Global', 'Post-Sentence']
-            for i_ax, ax in enumerate(grid):
-                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
-                               vmax=vmax)
-                ax.set_title(titles[i_ax])
-                ax.set_xticks(range(len(num_insts)))
-                ax.set_xticklabels(num_insts)
-                ax.set_yticks(range(len(win_lens)))
-                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                ax.set_xlabel('Number of Instances')
-                if i_ax == 0:
-                    ax.set_ylabel('Window Length (ms)')
-
-            cbar = grid.cbar_axes[0].colorbar(im)
-            fig.subplots_adjust(top=0.8)
-            fig.suptitle('Combined Max Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                     word=PLOT_TITLE_WORD[word],
-                                                                                     avgTime=avg_time_str,
-                                                                                     avgTest=avg_test_str),
-                         fontsize=16)
-
-            plt.savefig(fig_fname.format(
-                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-                perc=perc, fig_type='comb-max-score-comp'
-            ), bbox_inches='tight')
-
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
@@ -365,6 +299,80 @@ if __name__ == '__main__':
 
     plt.show()
     #
+
+
+    # fig = plt.figure()
+    # grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+    #                 axes_pad=0.3, cbar_mode='single', cbar_location='right',
+    #                 cbar_pad=0.1)
+    #
+    # z_frac = zscore(frac_sub_tot)
+    # z_frac[np.isnan(z_frac)] = 0.0
+    #
+    # mats_to_plot = [z_frac + zscore(mean_max_tot), zscore(frac_sub_eos) + zscore(mean_max_eos)]
+    # # vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    # # vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    # vmin = -4.0
+    # vmax = 4.0
+    # titles = ['Global', 'Post-Sentence']
+    # for i_ax, ax in enumerate(grid):
+    #     im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
+    #                    vmax=vmax)
+    #     ax.set_title(titles[i_ax])
+    #     ax.set_xticks(range(len(num_insts)))
+    #     ax.set_xticklabels(num_insts)
+    #     ax.set_yticks(range(len(win_lens)))
+    #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+    #     ax.set_xlabel('Number of Instances')
+    #     if i_ax == 0:
+    #         ax.set_ylabel('Window Length (ms)')
+    #
+    # cbar = grid.cbar_axes[0].colorbar(im)
+    # fig.subplots_adjust(top=0.8)
+    # fig.suptitle(
+    #     'Combined Max Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen=PLOT_TITLE_SEN[sen_type],
+    #                                                                                   word=PLOT_TITLE_WORD[word],
+    #                                                                                   avgTime=avg_time_str,
+    #                                                                                   avgTest=avg_test_str),
+    #     fontsize=16)
+    #
+    # plt.savefig(fig_fname.format(
+    #     exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+    #     perc=perc, fig_type='comb-max-score-comp'
+    # ), bbox_inches='tight')
+
+
+    # mats_to_plot = [z_frac + zscore(mean_perc_tot), zscore(frac_sub_eos) + zscore(mean_perc_eos)]
+    # # vmin = np.min([np.min(mat) for mat in mats_to_plot])
+    # # vmax = np.max([np.max(mat) for mat in mats_to_plot])
+    # vmin = -4.0
+    # vmax = 4.0
+    # titles = ['Global', 'Post-Sentence']
+    # for i_ax, ax in enumerate(grid):
+    #     im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', vmin=vmin,
+    #                    vmax=vmax)
+    #     ax.set_title(titles[i_ax])
+    #     ax.set_xticks(range(len(num_insts)))
+    #     ax.set_xticklabels(num_insts)
+    #     ax.set_yticks(range(len(win_lens)))
+    #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+    #     ax.set_xlabel('Number of Instances')
+    #     if i_ax == 0:
+    #         ax.set_ylabel('Window Length (ms)')
+    #
+    # cbar = grid.cbar_axes[0].colorbar(im)
+    # fig.subplots_adjust(top=0.8)
+    # fig.suptitle('Combined Percentile Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+    #                                                                          word=PLOT_TITLE_WORD[word],
+    #                                                                          avgTime=avg_time_str,
+    #                                                                          avgTest=avg_test_str),
+    #              fontsize=16)
+    #
+    # plt.savefig(fig_fname.format(
+    #     exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+    #     perc=perc, fig_type='comb-perc-score-comp'
+    # ), bbox_inches='tight')
+
     # plt.savefig(
     #     '/home/nrafidi/thesis_figs/{exp}_win_inst_comp_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
     #         exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest
