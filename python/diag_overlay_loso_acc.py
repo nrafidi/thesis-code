@@ -208,7 +208,7 @@ if __name__ == '__main__':
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                plt.text(v + 0.1, 0.7, text_to_write[i_v])
+                ax.text(v + 0.1, 0.7, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Accuracy')
         ax.set_xlabel('Time')
@@ -217,11 +217,12 @@ if __name__ == '__main__':
         if i_sen == len(sen_type_list) - 1:
             ax.legend(loc=1)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
-        ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
+        ax.text(-0.15, 1.0, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=20, weight='bold')
 
-    sen_fig.suptitle('Mean Accuracy over Subjects')
+    sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
     sen_fig.tight_layout()
+    plt.subplots_adjust(top=0.8)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', avgTime=args.avgTime, avgTest=args.avgTest,
@@ -257,7 +258,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
                 ax.axvline(x=v, color='k')
                 if i_v < len(text_to_write[i_sen]):
-                    plt.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
+                    ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
 
         ax.set_xticks(range(0, len(sen_time[-1]), time_step))
         label_time = sen_time[-1]
@@ -271,12 +272,13 @@ if __name__ == '__main__':
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         if i_word == len(word_list) - 1:
             ax.legend(loc=1)
-        ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
+        ax.text(-0.15, 1.0, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=20, weight='bold')
         ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
 
-    word_fig.suptitle('Mean Accuracy over Subjects')
+    word_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
     word_fig.tight_layout()
+    plt.subplots_adjust(top=0.8)
     word_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
