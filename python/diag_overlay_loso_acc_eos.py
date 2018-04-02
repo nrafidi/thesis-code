@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=18)
     sen_fig.tight_layout()
-    # plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=0.9)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type=sen_type, avgTime=args.avgTime, avgTest=args.avgTest,
