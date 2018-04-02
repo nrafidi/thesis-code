@@ -16,7 +16,7 @@ SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megV
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=15)
+    parser.add_argument('--win_len', type=int, default=25)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=5)
