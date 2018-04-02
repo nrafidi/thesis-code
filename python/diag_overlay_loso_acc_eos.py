@@ -90,12 +90,12 @@ if __name__ == '__main__':
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time Relative to First Noun Onset (s)')
     ax.set_ylim([0.0, 0.9])
-    ax.set_xlim([0, len(time[win_starts]) + time_step])
+    ax.set_xlim([0, len(time[win_starts]) + time_step/2])
     ax.legend(loc=1)
 
-    sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
+    sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=18)
     sen_fig.tight_layout()
-    plt.subplots_adjust(top=0.85)
+    # plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type=sen_type, avgTime=args.avgTime, avgTest=args.avgTest,
