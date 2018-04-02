@@ -52,10 +52,10 @@ if __name__ == '__main__':
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
     combo_scores = []
-    combo_fig = plt.figure()
+    combo_fig = plt.figure(figsize=(12, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
-                        axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                        cbar_pad=0.1)
+                        axes_pad=0.5, cbar_mode='single', cbar_location='right',
+                        cbar_pad=0.3)
     i_combo = 0
     for sen_type in ['active', 'passive']:
         for word in ['noun1', 'verb']:
@@ -191,10 +191,10 @@ if __name__ == '__main__':
 
             per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
-            fig = plt.figure()
+            fig = plt.figure(figsize=(12, 12))
             grid = AxesGrid(fig, 111, nrows_ncols=(2, 2),
-                            axes_pad=0.3, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.1)
+                            axes_pad=0.5, cbar_mode='single', cbar_location='right',
+                            cbar_pad=0.3)
 
             mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
             titles = ['Global Fraction of Subjects > Chance', 'Post-Sentence Fraction of Subjects > Chance',
@@ -254,13 +254,13 @@ if __name__ == '__main__':
             ), bbox_inches='tight')
 
             im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', vmin=-3.0, vmax=3.0)
-            combo_grid[i_combo].set_title('Decoding {word} from {sen}'.format(sen = PLOT_TITLE_SEN[sen_type],
+            combo_grid[i_combo].set_title('Decoding {word}\nfrom {sen}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                               word=PLOT_TITLE_WORD[word]))
             combo_grid[i_combo].set_xticks(range(len(num_insts)))
             combo_grid[i_combo].set_xticklabels(num_insts)
             combo_grid[i_combo].set_yticks(range(len(win_lens)))
             combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+            combo_grid[i_combo].text(-0.3, 1.1, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
             if i_combo > 1:
                 combo_grid[i_combo].set_xlabel('Number of Instances')
