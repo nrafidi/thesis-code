@@ -213,7 +213,7 @@ if __name__ == '__main__':
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
     ax.set_ylabel('Train Time (s)')
     ax.set_xlabel('Test Time (s)')
-    ax.set_title('TGM Decoding {word} from {sen_type}'.format(
+    ax.set_title('Average TGM Decoding {word} from {sen_type}'.format(
         sen_type=PLOT_TITLE_SEN[args.sen_type],
         word=PLOT_TITLE_WORD[args.word]))
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
@@ -228,7 +228,7 @@ if __name__ == '__main__':
 
     fig.tight_layout()
     plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_avgtgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_avgtgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,

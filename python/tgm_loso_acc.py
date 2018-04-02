@@ -12,6 +12,18 @@ import run_TGM_LOSO
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
 
+PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
+                  'PassAct3': 'Final Experiment'}
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
+
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb',
+                   'agent': 'Agent',
+                   'patient': 'Patient',
+                   'voice': 'Sentence Voice'}
+
 def intersect_accs(exp,
                    sen_type,
                    word,
@@ -174,12 +186,9 @@ if __name__ == '__main__':
     h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
     ax.set_ylabel('Train Time (s)')
     ax.set_xlabel('Test Time (s)')
-    ax.set_title('Average TGM {sen_type} {word}\nNumber of Instances: {ni} Window Size: {win}\n{aT}{aTst}'.format(ni=args.num_instances,
-                                                                                                                  win=args.win_len*0.002,
-                                                                                                                   aT=aT,
-                                                                                                                   aTst=aTst,
-                                                                                                                   sen_type=args.sen_type,
-                                                                                                                   word=args.word))
+    ax.set_title('Average TGM Decoding {word} from {sen_type}'.format(
+        sen_type=PLOT_TITLE_SEN[args.sen_type],
+        word=PLOT_TITLE_WORD[args.word]))
     ax.set_xticks(range(0, len(time_win), time_step))
     label_time = time_win
     label_time = label_time[::time_step]
@@ -198,7 +207,7 @@ if __name__ == '__main__':
     ax.set_ylim(top=time_step)
     fig.tight_layout()
     plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
