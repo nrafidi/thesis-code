@@ -45,14 +45,13 @@ if __name__ == '__main__':
     win_lens = [12, 25, 50, 100, 150]
     num_insts = [2, 5, 10]
 
-    fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
+    fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
     combo_fig = plt.figure(figsize=(12, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_word, word in enumerate(word_list):
-        chance = tgm_loso_acc_eos.CHANCE[sen_type][word]
         frac_sub_eos = []
         mean_max_eos = []
         for win_len in win_lens:
@@ -116,8 +115,7 @@ if __name__ == '__main__':
                      fontsize=18)
         fig.tight_layout()
         fig.savefig(fig_fname.format(
-            exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
-            perc=perc, fig_type='single-mean-score-comp'
+            exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest, fig_type='single-mean-score-comp'
         ), bbox_inches='tight')
 
         z_frac_eos = zscore(frac_sub_eos)
@@ -148,7 +146,7 @@ if __name__ == '__main__':
 
     combo_fig.savefig(fig_fname.format(
         exp=args.experiment, sen_type=sen_type, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
-        perc=perc, fig_type='word-sen-combo-max-score-comp'
+        fig_type='word-sen-combo-max-score-comp'
     ), bbox_inches='tight')
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
@@ -170,7 +168,7 @@ if __name__ == '__main__':
     fig.tight_layout()
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=sen_type, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
-        perc=perc, fig_type='total-comb-max-score-comp'
+        fig_type='total-comb-max-score-comp'
     ), bbox_inches='tight')
 
     print(
