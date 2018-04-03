@@ -7,7 +7,8 @@ import numpy as np
 import scipy.io as sio
 import os
 import run_TGM_LOSO_EOS
-
+from mpl_toolkits.axes_grid1 import AxesGrid
+import string
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
                   'PassAct3': 'Final Experiment'}
@@ -125,17 +126,15 @@ def intersect_accs(exp,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
-    parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
-    parser.add_argument('--win_len', type=int, default=100)
+    # parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
+    # parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
+    parser.add_argument('--win_len', type=int, default=25)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=2)
-    parser.add_argument('--avgTime', default='F')
-    parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--num_instances', type=int, default=5)
+    parser.add_argument('--avgTime', default='T')
+    parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
-
-    chance = CHANCE[args.experiment][args.sen_type][args.word]
 
     if args.avgTime == 'T':
         aT = 'Time Average '
@@ -146,135 +145,154 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
-    intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
-                                                                      args.sen_type,
-                                                                      args.word,
-                                                                      win_len=args.win_len,
-                                                                      overlap=args.overlap,
-                                                                      adj=args.adj,
-                                                                      num_instances=args.num_instances,
-                                                                      avgTime=args.avgTime,
-                                                                      avgTest=args.avgTest)
+    combo_fig = plt.figure(figsize=(12, 12))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5)
+    sen_type = 'pooled'
+    for i_word, word in enumerate(['agent', 'patient', 'verb', 'voice']):
+        chance = CHANCE[args.experiment][sen_type][word]
+        intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
+                                                                          sen_type,
+                                                                          word,
+                                                                          win_len=args.win_len,
+                                                                          overlap=args.overlap,
+                                                                          adj=args.adj,
+                                                                          num_instances=args.num_instances,
+                                                                          avgTime=args.avgTime,
+                                                                          avgTest=args.avgTest)
 
-    frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
-    mean_acc = np.mean(acc_all, axis=0)
-    
-    time_step = int(250/args.overlap)
-    print(mean_acc.shape)
-    print(np.max(mean_acc))
-    # for sub in range(acc_all.shape[0]):
-    #     fig, ax = plt.subplots()
-    #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
-    #     ax.set_ylabel('Test Time')
-    #     ax.set_xlabel('Train Time')
-    #     ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
-    #                                                                             sen_type=args.sen_type,
-    #                                                                             word=args.word,
-    #                                                                             experiment=args.experiment))
-    #     ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    #     label_time = time[win_starts]
-    #     label_time = label_time[::time_step]
-    #     label_time[np.abs(label_time) < 1e-15] = 0.0
-    #     ax.set_xticklabels(label_time)
-    #     ax.set_yticks(range(0, len(time[win_starts]), time_step))
-    #     ax.set_yticklabels(label_time)
-    #     time_adjust = args.win_len
-    #
-    #     plt.colorbar(h)
+        frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
+        mean_acc = np.mean(acc_all, axis=0)
 
-    fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
-    ax.set_ylabel('Test Time')
-    ax.set_xlabel('Train Time')
-    ax.set_title(
-        'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                  word=args.word,
-                                                                  experiment=args.experiment))
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time[win_starts]), time_step))
-    ax.set_yticklabels(label_time)
+        time_step = int(250/args.overlap)
+        print(mean_acc.shape)
+        print(np.max(mean_acc))
+        # for sub in range(acc_all.shape[0]):
+        #     fig, ax = plt.subplots()
+        #     h = ax.imshow(np.squeeze(acc_all[sub, ...]), interpolation='nearest', aspect='auto', vmin=0, vmax=1.0)
+        #     ax.set_ylabel('Test Time')
+        #     ax.set_xlabel('Train Time')
+        #     ax.set_title('Subject {sub} TGM\n{sen_type} {word} {experiment}'.format(sub=load_data.VALID_SUBS[args.experiment][sub],
+        #                                                                             sen_type=sen_type,
+        #                                                                             word=word,
+        #                                                                             experiment=args.experiment))
+        #     ax.set_xticks(range(0, len(time[win_starts]), time_step))
+        #     label_time = time[win_starts]
+        #     label_time = label_time[::time_step]
+        #     label_time[np.abs(label_time) < 1e-15] = 0.0
+        #     ax.set_xticklabels(label_time)
+        #     ax.set_yticks(range(0, len(time[win_starts]), time_step))
+        #     ax.set_yticklabels(label_time)
+        #     time_adjust = args.win_len
+        #
+        #     plt.colorbar(h)
 
-    plt.colorbar(h)
+        fig, ax = plt.subplots()
+        h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
+        ax.set_ylabel('Test Time')
+        ax.set_xlabel('Train Time')
+        ax.set_title(
+            'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+                                                                      word=word,
+                                                                      experiment=args.experiment))
+        ax.set_xticks(range(0, len(time[win_starts]), time_step))
+        label_time = time[win_starts]
+        label_time = label_time[::time_step]
+        label_time[np.abs(label_time) < 1e-15] = 0.0
+        ax.set_xticklabels(label_time)
+        ax.set_yticks(range(0, len(time[win_starts]), time_step))
+        ax.set_yticklabels(label_time)
 
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
+        plt.colorbar(h)
 
-    fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
-    ax.set_ylabel('Train Time (s)')
-    ax.set_xlabel('Test Time (s)')
-    ax.set_title('Average TGM Decoding {word} from {sen_type}'.format(
-        sen_type=PLOT_TITLE_SEN[args.sen_type],
-        word=PLOT_TITLE_WORD[args.word]))
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time[win_starts]), time_step))
-    ax.set_yticklabels(label_time)
-    ax.axvline(x=0.625*time_step, color='w')
-    plt.colorbar(h)
+        fig.tight_layout()
+        plt.savefig(
+            '/home/nrafidi/thesis_figs/{exp}_eos_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+                win_len=args.win_len,
+                overlap=args.overlap,
+                num_instances=args.num_instances
+            ), bbox_inches='tight')
 
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_avgtgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
+        ax = combo_grid[i_word]
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
+        if i_word == 0 or i_word == 2:
+            ax.set_ylabel('Train Time (s)')
+        if i_word > 1:
+            ax.set_xlabel('Test Time (s)')
+        ax.set_title('{word}'.format(
+            word=PLOT_TITLE_WORD[word]))
+        ax.set_xticks(range(0, len(time[win_starts]), time_step))
+        label_time = time[win_starts]
+        label_time = label_time[::time_step]
+        label_time[np.abs(label_time) < 1e-15] = 0.0
+        ax.set_xticklabels(label_time)
+        ax.set_yticks(range(0, len(time[win_starts]), time_step))
+        ax.set_yticklabels(label_time)
+        ax.axvline(x=0.625*time_step, color='w')
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
+                size=20, weight='bold')
+        # plt.colorbar(h)
+        #
+        # fig.tight_layout()
+        # plt.savefig(
+        #     '/home/nrafidi/thesis_figs/{exp}_eos_avgtgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        #         exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+        #         win_len=args.win_len,
+        #         overlap=args.overlap,
+        #         num_instances=args.num_instances
+        #     ), bbox_inches='tight')
 
-    # fig, ax = plt.subplots()
-    # ax.plot(np.diag(intersection))
-    # ax.set_ylabel('Number of Subjects with > chance acc')
-    # ax.set_xlabel('Time')
-    # ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-    #                                                                              word=args.word,
-    #                                                                              experiment=args.experiment))
+        # fig, ax = plt.subplots()
+        # ax.plot(np.diag(intersection))
+        # ax.set_ylabel('Number of Subjects with > chance acc')
+        # ax.set_xlabel('Time')
+        # ax.set_title('Intersection of acc > chance over subjects\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+        #                                                                              word=word,
+        #                                                                              experiment=args.experiment))
 
-    # fig, ax = plt.subplots()
-    # h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
-    # ax.set_ylabel('Test Time')
-    # ax.set_xlabel('Train Time')
-    # ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-    #                                                                                  word=args.word,
-    #                                                                                  experiment=args.experiment))
-    # plt.colorbar(h)
+        # fig, ax = plt.subplots()
+        # h = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0, vmax=1)
+        # ax.set_ylabel('Test Time')
+        # ax.set_xlabel('Train Time')
+        # ax.set_title('Mean Acc TGM over subjects\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+        #                                                                                  word=word,
+        #                                                                                  experiment=args.experiment))
+        # plt.colorbar(h)
 
-    time_adjust = args.win_len*0.002
-    fig, ax = plt.subplots()
-    ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
-    ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
+        time_adjust = args.win_len*0.002
+        fig, ax = plt.subplots()
+        ax.plot(time[win_starts], np.diag(mean_acc), label='Accuracy')
+        ax.plot(time[win_starts], frac_sub, label='Fraction of Subjects > Chance')
 
-    ax.set_ylabel('Accuracy/Fraction > Chance')
-    ax.set_xlabel('Time')
-    ax.set_ylim([0.0, 1.0])
-    ax.legend(loc=4)
-    ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                 word=args.word,
-                                                                                 experiment=args.experiment))
+        ax.set_ylabel('Accuracy/Fraction > Chance')
+        ax.set_xlabel('Time')
+        ax.set_ylim([0.0, 1.0])
+        ax.legend(loc=4)
+        ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+                                                                                     word=word,
+                                                                                     experiment=args.experiment))
 
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
+        fig.tight_layout()
+        plt.savefig(
+            '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+                exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+                win_len=args.win_len,
+                overlap=args.overlap,
+                num_instances=args.num_instances
+            ), bbox_inches='tight')
 
-
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.suptitle('TGM Averaged Over Subjects',
+                       fontsize=18)
+    combo_fig.savefig(
+            '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+                exp=args.experiment, sen_type='pooled', word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+                win_len=args.win_len,
+                overlap=args.overlap,
+                num_instances=args.num_instances
+            ), bbox_inches='tight')
     plt.show()
 
 
