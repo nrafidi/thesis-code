@@ -88,8 +88,8 @@ def run_tgm_exp(experiment,
                                                                      reps_filter=None,
                                                                      sensor_type=None,
                                                                      is_region_sorted=False,
-                                                                     tmin=0.0,
-                                                                     tmax=TMAX[experiment])
+                                                                     tmin=TMIN[word],
+                                                                     tmax=TMAX[word])
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
