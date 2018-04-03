@@ -151,7 +151,7 @@ if __name__ == '__main__':
         avg_test_str = 'No Test Sample Average'
 
     combo_fig = plt.figure(figsize=(30, 10))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_sen, sen_type in enumerate(['active', 'passive']):
@@ -204,8 +204,10 @@ if __name__ == '__main__':
         
             ax = combo_grid[i_sen + i_word]
             im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
-            ax.set_ylabel('Train Time (s)')
-            ax.set_xlabel('Test Time (s)')
+            if i_word == 0:
+                ax.set_ylabel('Train Time (s)')
+            if i_sen == 1:
+                ax.set_xlabel('Test Time (s)')
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]))
