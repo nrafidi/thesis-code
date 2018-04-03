@@ -216,7 +216,7 @@ if __name__ == '__main__':
             ), bbox_inches='tight')
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2*chance)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.0)
         if i_word == 0 or i_word == 2:
             ax.set_ylabel('Train Time (s)')
         if i_word > 1:
