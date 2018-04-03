@@ -7,6 +7,8 @@ import numpy as np
 import scipy.io as sio
 import os
 import run_TGM_LOSO
+from mpl_toolkits.axes_grid1 import AxesGrid
+import string
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -119,8 +121,8 @@ def intersect_accs(exp,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--sen_type', choices=run_TGM_LOSO.VALID_SEN_TYPE)
-    parser.add_argument('--word', choices = ['noun1', 'verb', 'noun2'])
+    # parser.add_argument('--sen_type', choices=run_TGM_LOSO.VALID_SEN_TYPE)
+    # parser.add_argument('--word', choices = ['noun1', 'verb', 'noun2'])
     parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
@@ -148,201 +150,211 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
-    intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
-                                                                      args.sen_type,
-                                                                      args.word,
-                                                                      win_len=args.win_len,
-                                                                      overlap=args.overlap,
-                                                                      adj=args.adj,
-                                                                      num_instances=args.num_instances,
-                                                                      avgTime=args.avgTime,
-                                                                      avgTest=args.avgTest)
+    combo_fig = plt.figure(figsize=(30, 10))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5)
+    for i_sen, sen_type in enumerate(['active', 'passive']):
+        for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
 
-    frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
-    mean_acc = np.mean(acc_all, axis=0)
-    time_win = time[win_starts]
-    time_step = int(250/args.overlap)
-    if args.sen_type == 'active':
-        text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-        max_line = 2.51 * 2 * time_step
-        start_line = time_step
-        if args.word == 'noun1':
-            start_line -= 0.0
-        elif args.word == 'verb':
-            frac_sub = frac_sub[time_step:]
-            mean_acc = mean_acc[time_step:, time_step:]
-            time_win = time_win[time_step:]
-            intersection = intersection[time_step:, time_step:]
-            max_line -= 0.5
-            start_line -= 0.5
-        else:
-            max_line -= 1.5
-            start_line -= 1.5
-    else:
-        text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-        max_line = 3.51 * 2 * time_step
-        start_line = time_step
-        if args.word == 'noun1':
-            start_line -= 0.0
-        elif args.word == 'verb':
-            max_line -= 1.0
-            start_line -= 1.0
-        else:
-            max_line -= 2.5
-            start_line -= 2.5
-    print(mean_acc.shape)
-    print(np.max(mean_acc))
+            intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
+                                                                              sen_type,
+                                                                              word,
+                                                                              win_len=args.win_len,
+                                                                              overlap=args.overlap,
+                                                                              adj=args.adj,
+                                                                              num_instances=args.num_instances,
+                                                                              avgTime=args.avgTime,
+                                                                              avgTest=args.avgTest)
+        
+            frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
+            mean_acc = np.mean(acc_all, axis=0)
+            time_win = time[win_starts]
+            time_step = int(250/args.overlap)
+            if sen_type == 'active':
+                text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+                max_line = 2.51 * 2 * time_step
+                start_line = time_step
+                if word == 'noun1':
+                    start_line -= 0.0
+                elif word == 'verb':
+                    frac_sub = frac_sub[time_step:]
+                    mean_acc = mean_acc[time_step:, time_step:]
+                    time_win = time_win[time_step:]
+                    intersection = intersection[time_step:, time_step:]
+                    max_line -= 0.5
+                    start_line -= 0.5
+                else:
+                    max_line -= 1.5
+                    start_line -= 1.5
+            else:
+                text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+                max_line = 3.51 * 2 * time_step
+                start_line = time_step
+                if word == 'noun1':
+                    start_line -= 0.0
+                elif word == 'verb':
+                    max_line -= 1.0
+                    start_line -= 1.0
+                else:
+                    max_line -= 2.5
+                    start_line -= 2.5
+            print(mean_acc.shape)
+            print(np.max(mean_acc))
+        
+            ax = combo_grid[i_sen + i_word]
+            im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+            ax.set_ylabel('Train Time (s)')
+            ax.set_xlabel('Test Time (s)')
+            ax.set_title('{word} from {sen_type}'.format(
+                sen_type=PLOT_TITLE_SEN[sen_type],
+                word=PLOT_TITLE_WORD[word]))
+            ax.set_xticks(range(0, len(time_win), time_step))
+            label_time = time_win
+            label_time = label_time[::time_step]
+            label_time[np.abs(label_time) < 1e-15] = 0.0
+            ax.set_xticklabels(label_time)
+            ax.set_yticks(range(0, len(time_win), time_step))
+            ax.set_yticklabels(label_time)
+            time_adjust = args.win_len
+        
+            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+                ax.axvline(x=v, color='w')
+                if i_v < len(text_to_write):
+                    ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
+            ax.set_xlim(left=time_step)
+            ax.set_ylim(top=time_step)
+            ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen + i_word], transform=ax.transAxes,
+                                    size=20, weight='bold')
+        
+            fig, ax = plt.subplots()
+            h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+            ax.set_ylabel('Train Time (s)')
+            ax.set_xlabel('Test Time (s)')
+            ax.set_title('Average TGM Decoding {word} from {sen_type}\n{avgTime}, {avgTest}\nNumber of Instances: {ni}'.format(
+                sen_type=PLOT_TITLE_SEN[sen_type],
+                word=PLOT_TITLE_WORD[word],
+                avgTime=avg_time_str,
+                avgTest=avg_test_str,
+                ni=args.num_instances))
+            ax.set_xticks(range(0, len(time_win), time_step))
+            label_time = time_win
+            label_time = label_time[::time_step]
+            label_time[np.abs(label_time) < 1e-15] = 0.0
+            ax.set_xticklabels(label_time)
+            ax.set_yticks(range(0, len(time_win), time_step))
+            ax.set_yticklabels(label_time)
+            time_adjust = args.win_len
+        
+            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+                ax.axvline(x=v, color='w')
+                if i_v < len(text_to_write):
+                    plt.text(v + 0.05 * 2 * time_step, 1.5 * time_step, text_to_write[i_v], color='w')
+            plt.colorbar(h)
+            ax.set_xlim(left=time_step)
+            ax.set_ylim(top=time_step)
+            fig.tight_layout()
+            plt.savefig(
+                '/home/nrafidi/thesis_figs/{exp}_avg-tgm-title_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+                    exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+                    win_len=args.win_len,
+                    overlap=args.overlap,
+                    num_instances=args.num_instances
+                ), bbox_inches='tight')
+        
+        
+            fig, ax = plt.subplots()
+            h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
+        
+            ax.set_ylabel('Train Time (s)')
+            ax.set_xlabel('Test Time (s)')
+            ax.set_title(
+                'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+                                                                          word=word,
+                                                                          experiment=args.experiment))
+            ax.set_xticks(range(0, len(time_win), time_step))
+            label_time = time_win
+            label_time = label_time[::time_step]
+            label_time[np.abs(label_time) < 1e-15] = 0.0
+            ax.set_xticklabels(label_time)
+            ax.set_yticks(range(0, len(time_win), time_step))
+            ax.set_yticklabels(label_time)
+            ax.set_xlim(left=time_step)
+            ax.set_ylim(top=time_step)
+        
+            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+                ax.axvline(x=v, color='k')
+                if i_v < len(text_to_write):
+                    plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
+            plt.colorbar(h)
+        
+            fig.tight_layout()
+            plt.savefig(
+                '/home/nrafidi/thesis_figs/{exp}_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+                    exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+                    win_len=args.win_len,
+                    overlap=args.overlap,
+                    num_instances=args.num_instances
+                ), bbox_inches='tight')
+        
+            time_adjust = args.win_len*0.002
+            fig, ax = plt.subplots()
+        
+            ax.plot(np.diag(mean_acc), label='Accuracy')
+            ax.plot(frac_sub, label='Fraction of Subjects > Chance')
+            # if sen_type == 'active':
+            #     text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+            #     max_line = 2.0 - time_adjust + 0.01
+            #     if word == 'noun1':
+            #         start_line = -0.5 - time_adjust
+            #     else:
+            #         start_line = -1.0 - time_adjust
+            #
+            # else:
+            #     text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+            #     max_line = 3.0 - time_adjust + 0.01
+            #     if word == 'noun1':
+            #         start_line = -0.5 - time_adjust
+            #     else:
+            #         start_line = -1.5 - time_adjust
+        
+            ax.set_xticks(range(0, len(time_win), time_step))
+            label_time = time_win
+            label_time = label_time[::time_step]
+            label_time[np.abs(label_time) < 1e-15] = 0.0
+            ax.set_xticklabels(label_time)
+            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+                ax.axvline(x=v, color='k')
+                if i_v < len(text_to_write):
+                    plt.text(v + 0.05, 0.8, text_to_write[i_v])
+            ax.set_ylabel('Accuracy/Fraction > Chance')
+            ax.set_xlabel('Time')
+            ax.set_ylim([0.0, 1.0])
+            ax.set_xlim(left=time_step)
+            ax.legend(loc=4)
+            ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=sen_type,
+                                                                                         word=word,
+                                                                                         experiment=args.experiment))
+        
+            fig.tight_layout()
+            plt.savefig(
+                '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+                    exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest,
+                    win_len=args.win_len,
+                    overlap=args.overlap,
+                    num_instances=args.num_instances
+                ), bbox_inches='tight')
 
-    fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
-    ax.set_ylabel('Train Time (s)')
-    ax.set_xlabel('Test Time (s)')
-    ax.set_title('Average TGM Decoding {word} from {sen_type}'.format(
-        sen_type=PLOT_TITLE_SEN[args.sen_type],
-        word=PLOT_TITLE_WORD[args.word]))
-    ax.set_xticks(range(0, len(time_win), time_step))
-    label_time = time_win
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time_win), time_step))
-    ax.set_yticklabels(label_time)
-    time_adjust = args.win_len
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.suptitle('TGM Averaged Over Subjects',
+        fontsize=18)
 
-    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-        ax.axvline(x=v, color='w')
-        if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
-    plt.colorbar(h)
-    ax.set_xlim(left=time_step)
-    ax.set_ylim(top=time_step)
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
-
-    fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
-    ax.set_ylabel('Train Time (s)')
-    ax.set_xlabel('Test Time (s)')
-    ax.set_title('Average TGM Decoding {word} from {sen_type}\n{avgTime}, {avgTest}\nNumber of Instances: {ni}'.format(
-        sen_type=PLOT_TITLE_SEN[args.sen_type],
-        word=PLOT_TITLE_WORD[args.word],
-        avgTime=avg_time_str,
-        avgTest=avg_test_str,
-        ni=args.num_instances))
-    ax.set_xticks(range(0, len(time_win), time_step))
-    label_time = time_win
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time_win), time_step))
-    ax.set_yticklabels(label_time)
-    time_adjust = args.win_len
-
-    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-        ax.axvline(x=v, color='w')
-        if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 2 * time_step, 1.5 * time_step, text_to_write[i_v], color='w')
-    plt.colorbar(h)
-    ax.set_xlim(left=time_step)
-    ax.set_ylim(top=time_step)
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm-title_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
-
-
-    fig, ax = plt.subplots()
-    h = ax.imshow(np.squeeze(intersection), interpolation='nearest', aspect='auto', vmin=0, vmax=acc_all.shape[0])
-
-    ax.set_ylabel('Train Time (s)')
-    ax.set_xlabel('Test Time (s)')
-    ax.set_title(
-        'Intersection TGM\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                  word=args.word,
-                                                                  experiment=args.experiment))
-    ax.set_xticks(range(0, len(time_win), time_step))
-    label_time = time_win
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    ax.set_yticks(range(0, len(time_win), time_step))
-    ax.set_yticklabels(label_time)
-    ax.set_xlim(left=time_step)
-    ax.set_ylim(top=time_step)
-
-    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-        ax.axvline(x=v, color='k')
-        if i_v < len(text_to_write):
-            plt.text(v + 0.05 * 2*time_step, time_step, text_to_write[i_v], color='k')
-    plt.colorbar(h)
-
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_intersection_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
-
-    time_adjust = args.win_len*0.002
-    fig, ax = plt.subplots()
-
-    ax.plot(np.diag(mean_acc), label='Accuracy')
-    ax.plot(frac_sub, label='Fraction of Subjects > Chance')
-    # if args.sen_type == 'active':
-    #     text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-    #     max_line = 2.0 - time_adjust + 0.01
-    #     if args.word == 'noun1':
-    #         start_line = -0.5 - time_adjust
-    #     else:
-    #         start_line = -1.0 - time_adjust
-    #
-    # else:
-    #     text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-    #     max_line = 3.0 - time_adjust + 0.01
-    #     if args.word == 'noun1':
-    #         start_line = -0.5 - time_adjust
-    #     else:
-    #         start_line = -1.5 - time_adjust
-
-    ax.set_xticks(range(0, len(time_win), time_step))
-    label_time = time_win
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.set_xticklabels(label_time)
-    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-        ax.axvline(x=v, color='k')
-        if i_v < len(text_to_write):
-            plt.text(v + 0.05, 0.8, text_to_write[i_v])
-    ax.set_ylabel('Accuracy/Fraction > Chance')
-    ax.set_xlabel('Time')
-    ax.set_ylim([0.0, 1.0])
-    ax.set_xlim(left=time_step)
-    ax.legend(loc=4)
-    ax.set_title('Mean Acc over subjects and Frac > Chance\n{sen_type} {word} {experiment}'.format(sen_type=args.sen_type,
-                                                                                 word=args.word,
-                                                                                 experiment=args.experiment))
-
-    fig.tight_layout()
-    plt.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=args.sen_type, word=args.word, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances
-        ), bbox_inches='tight')
-
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+                    exp=args.experiment, sen_type='both', word='all', avgTime=args.avgTime, avgTest=args.avgTest,
+                    win_len=args.win_len,
+                    overlap=args.overlap,
+                    num_instances=args.num_instances
+                ), bbox_inches='tight')
 
     plt.show()
 
