@@ -154,6 +154,7 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
+    i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
         for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
 
@@ -202,7 +203,7 @@ if __name__ == '__main__':
             print(mean_acc.shape)
             print(np.max(mean_acc))
         
-            ax = combo_grid[i_sen + i_word]
+            ax = combo_grid[i_combo]
             im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
             if i_word == 0:
                 ax.set_ylabel('Train Time (s)')
@@ -223,11 +224,12 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
+                    ax.text(v + 0.1 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
             ax.set_xlim(left=time_step)
             ax.set_ylim(top=time_step)
-            ax.text(-0.15, 1.05, string.ascii_uppercase[i_sen + i_word], transform=ax.transAxes,
+            ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
+            i_combo += 1
         
             fig, ax = plt.subplots()
             h = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
