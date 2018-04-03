@@ -224,7 +224,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.1 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
+                    ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.set_xlim(left=time_step)
             ax.set_ylim(top=time_step)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
