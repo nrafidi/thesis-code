@@ -151,7 +151,7 @@ if __name__ == '__main__':
         avg_test_str = 'No Test Sample Average'
 
     combo_fig = plt.figure(figsize=(30, 10))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(3, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_sen, sen_type in enumerate(['active', 'passive']):
