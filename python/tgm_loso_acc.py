@@ -179,10 +179,10 @@ if __name__ == '__main__':
                 if word == 'noun1':
                     start_line -= 0.0
                 elif word == 'verb':
-                    frac_sub = frac_sub[time_step:]
-                    mean_acc = mean_acc[time_step:, time_step:]
-                    time_win = time_win[time_step:]
-                    intersection = intersection[time_step:, time_step:]
+                    # frac_sub = frac_sub[time_step:]
+                    # mean_acc = mean_acc[time_step:, time_step:]
+                    # time_win = time_win[time_step:]
+                    # intersection = intersection[time_step:, time_step:]
                     max_line -= 0.5
                     start_line -= 0.5
                 else:
@@ -211,7 +211,7 @@ if __name__ == '__main__':
                 ax.set_xlabel('Test Time (s)')
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
-                word=PLOT_TITLE_WORD[word]))
+                word=PLOT_TITLE_WORD[word]), fontsize=14)
             ax.set_xticks(range(0, len(time_win), time_step))
             label_time = time_win
             label_time = label_time[::time_step]
@@ -224,7 +224,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.1 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w')
+                    ax.text(v + 0.1 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.set_xlim(left=time_step)
             ax.set_ylim(top=time_step)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
