@@ -306,7 +306,10 @@ if __name__ == '__main__':
                 ax.set_xlabel('Number of Instances')
             if i_avg_combo == 0 or i_avg_combo == 2:
                 ax.set_ylabel('Window Length (ms)')
+            ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg_combo], transform=ax.transAxes,
+                    size=20, weight='bold')
             i_avg_combo += 1
+
 
             print(
             'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
