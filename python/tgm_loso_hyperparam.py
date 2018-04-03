@@ -80,6 +80,7 @@ if __name__ == '__main__':
                     per_sub_max_eos = []
                     per_sub_max_tot = []
                     per_sub_perc_eos = []
+                    per_sub_perc_tot = []
                     for win_len in win_lens:
                         time_adjust = win_len * 0.002
 
