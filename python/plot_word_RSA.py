@@ -24,7 +24,8 @@ GEN = {'boy': 'male',
        'woman': 'female'}
 
 PLOT_TITLE = {'det': 'Determiner',
-              'noun2': 'Second Noun'}
+              'noun2': 'Second Noun',
+              'eos': 'Post Sentence'}
 
 TEXT_PAD_X = -0.08
 TEXT_PAD_Y = 1.025
@@ -107,17 +108,11 @@ if __name__ == '__main__':
     dist = args.dist
     doTimeAvg = run_Word_RSA.str_to_bool(args.doTimeAvg)
 
-
-
-
-    # voice_scores = []
-    # age_scores = []
-    # gen_scores = []
-    score_fig = plt.figure(figsize=(12, 9))
-    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 2),
+    score_fig = plt.figure(figsize=(18, 9))
+    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 3),
                         axes_pad=0.4, cbar_pad=0.4)
-    for i_word, word in enumerate(['noun2', 'det']):
-        if word == 'noun2':
+    for i_word, word in enumerate(['noun2', 'det', 'eos']):
+        if word != 'det':
             subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                               word,
                                                                               win_len,
@@ -140,20 +135,22 @@ if __name__ == '__main__':
             voice_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), voice_rdm)
             age_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), age_rdm)
             gen_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), gen_rdm)
-        # voice_scores.append(voice_scores_win[None, ...])
-        # age_scores.append(age_scores_win[None, ...])
-        # gen_scores.append(gen_scores_win[None, ...])
-        ax = score_grid[1 - i_word]
+
+        if i_word < 2:
+            axis_ind = 1 - i_word
+        else:
+            axis_ind = i_word
+        ax = score_grid[axis_ind]
         ax.plot(time, voice_scores_win, label='Voice')
         ax.plot(time, age_scores_win, label='Age')
         ax.plot(time, gen_scores_win, label='Gen')
         ax.legend(loc=1)
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
-        if i_word == 1:
+        if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.7])
-        ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[1 - i_word], transform=ax.transAxes,
+        ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
         print(word)
