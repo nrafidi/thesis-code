@@ -9,7 +9,7 @@ from scipy.stats import spearmanr, kendalltau
 import run_Word_RSA
 from mpl_toolkits.axes_grid1 import AxesGrid
 
-SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{sub}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}.pdf'
+SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}.pdf'
 
 AGE = {'boy': 'young',
        'girl': 'young',
@@ -42,11 +42,49 @@ def make_model_rdm(labels):
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
+def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
+    top_dir = run_Word_RSA.TOP_DIR.format(exp=experiment)
+    subject_rdms = []
+    for i_subject, subject in enumerate(['A', 'B', 'C', 'E', 'F', 'G']):
+        save_dir = run_Word_RSA.SAVE_DIR.format(top_dir=top_dir, sub=subject)
+        fname = run_Word_RSA.SAVE_FILE.format(dir=save_dir,
+                                              sub=subject,
+                                              word=word,
+                                              win_len=win_len,
+                                              ov=overlap,
+                                              dist=dist,
+                                              avgTm=avgTm)
+        result = np.load(fname + '.npz')
+        new_labels = result['labels']
+        new_voice_labels = result['voice_labels']
+        if i_subject == 0:
+            labels = new_labels
+            voice_labels = new_voice_labels
+
+        assert np.all(np.array(new_labels) == np.array(labels))
+        assert np.all(np.array(new_voice_labels) == np.array(voice_labels))
+
+        subject_rdms.append(result['RDM'][None, ...])
+        time = result['time'][result['win_starts']]
+    if word == 'det':
+        time += 0.5
+    if word == 'noun2':
+        age_labels = [AGE[lab] for lab in labels]
+        gen_labels = [GEN[lab] for lab in labels]
+        age_rdm = make_model_rdm(age_labels)
+        gen_rdm = make_model_rdm(gen_labels)
+    else:
+        age_rdm = []
+        gen_rdm = []
+
+    voice_rdm = make_model_rdm(voice_labels)
+    return np.concatenate(subject_rdms, axis=0), voice_rdm, age_rdm, gen_rdm, time
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--subject')
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
@@ -61,36 +99,20 @@ if __name__ == '__main__':
     dist = args.dist
     doTimeAvg = run_Word_RSA.str_to_bool(args.doTimeAvg)
 
-    top_dir = run_Word_RSA.TOP_DIR.format(exp=experiment)
-    save_dir = run_Word_RSA.SAVE_DIR.format(top_dir=top_dir, sub=subject)
+
 
 
     # voice_scores = []
     # age_scores = []
     # gen_scores = []
     for word in ['noun2', 'det']:
-        fname = run_Word_RSA.SAVE_FILE.format(dir=save_dir,
-                                            sub=subject,
-                                              word=word,
-                                             win_len=win_len,
-                                            ov=overlap,
-                                            dist=dist,
-                                            avgTm=run_Word_RSA.bool_to_str(doTimeAvg))
-        result = np.load(fname + '.npz')
-        labels = result['labels']
-        voice_labels = result['voice_labels']
-        rdm = result['RDM']
-        time = result['time'][result['win_starts']]
-        if word == 'det':
-            time += 0.5
-        if word == 'noun2':
-            age_labels = [AGE[lab] for lab in labels]
-            gen_labels = [GEN[lab] for lab in labels]
-            age_rdm = make_model_rdm(age_labels)
-            gen_rdm = make_model_rdm(gen_labels)
-        
-        voice_rdm = make_model_rdm(voice_labels)
-
+        subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
+                                                                          word,
+                                                                          win_len,
+                                                                          overlap,
+                                                                          dist,
+                                                                          run_Word_RSA.bool_to_str(doTimeAvg))
+        rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
         voice_scores_win = np.empty((num_time,))
         age_scores_win = np.empty((num_time,))
@@ -113,7 +135,6 @@ if __name__ == '__main__':
         ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.6])
         fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
-                                    sub=subject,
                                     word=word,
                                     win_len=win_len,
                                     ov=overlap,
@@ -150,7 +171,6 @@ if __name__ == '__main__':
                      fontsize=18)
 
         voice_fig.savefig(SAVE_FIG.format(fig_type='voice-rdm',
-                                            sub=subject,
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -176,7 +196,6 @@ if __name__ == '__main__':
                      fontsize=18)
 
         age_fig.savefig(SAVE_FIG.format(fig_type='age-rdm',
-                                          sub=subject,
                                           word=word,
                                           win_len=win_len,
                                           ov=overlap,
@@ -202,7 +221,6 @@ if __name__ == '__main__':
                      fontsize=18)
 
         gen_fig.savefig(SAVE_FIG.format(fig_type='gen-rdm',
-                                          sub=subject,
                                           word=word,
                                           win_len=win_len,
                                           ov=overlap,
