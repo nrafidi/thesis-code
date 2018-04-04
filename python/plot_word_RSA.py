@@ -138,7 +138,7 @@ if __name__ == '__main__':
         voice_grid[1].text(-0.15, 1.05, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = voice_grid.cbar_axes[0].colorbar(im)
-        fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
+        voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
                                                                           score=best_voice_score),
                      fontsize=18)
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
         age_grid[1].text(-0.15, 1.05, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
-        fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
+        age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
                                                                           score=best_age_score),
                      fontsize=18)
 
@@ -188,7 +188,7 @@ if __name__ == '__main__':
         gen_grid[1].text(-0.15, 1.05, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
-        fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
+        gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
                                                                           score=best_gen_score),
                      fontsize=18)
 
