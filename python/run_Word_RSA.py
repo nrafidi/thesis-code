@@ -138,7 +138,7 @@ def run_tgm_exp(experiment,
             meow = pdist(data_to_use, metric=dist)
             nan_els = np.unravel_index(np.where(np.isnan(meow)), curr_RDM.shape)
             print(nan_els)
-            print my_cosine(data_to_use[nan_els[0][0], :], data_to_use[nan_els[1][0], :])
+            print my_cosine(data_to_use[nan_els[0][0][0], :], data_to_use[nan_els[1][0][0], :])
         RDM.append(curr_RDM[None, ...])
 
     RDM = np.concatenate(RDM, axis=0)
