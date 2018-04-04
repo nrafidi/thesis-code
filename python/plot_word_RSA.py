@@ -149,7 +149,7 @@ if __name__ == '__main__':
         if i_word == 1:
             ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.7])
-        ax.text(-0.125, 1.05, string.ascii_uppercase[1 - i_word], transform=ax.transAxes,
+        ax.text(-0.11, 1.0, string.ascii_uppercase[1 - i_word], transform=ax.transAxes,
                            size=20, weight='bold')
 
         print(word)
