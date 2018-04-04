@@ -76,9 +76,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
 
         subject_rdms.append(result['RDM'][None, ...])
         time = result['time'][result['win_starts']]
-    if word == 'det':
-        time += 0.5
-    if word == 'noun2':
+    if word != 'det':
         age_labels = [AGE[lab] for lab in labels]
         gen_labels = [GEN[lab] for lab in labels]
         age_rdm = make_model_rdm(age_labels, dist)
@@ -113,7 +111,6 @@ if __name__ == '__main__':
                         axes_pad=0.4, cbar_pad=0.4)
     for i_word, word in enumerate(['noun2', 'det', 'eos']):
         if word != 'det':
-            print(word)
             subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                               word,
                                                                               win_len,
