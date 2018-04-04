@@ -44,6 +44,8 @@ def str_to_none(str_thing):
 
 
 def my_cosine(vec1, vec2):
+    vec1_orig = vec1
+    vec2_orig = vec2
     norm1 = np.linalg.norm(vec1)
     norm2 = np.linalg.norm(vec2)
     vec1 /= np.linalg.norm(vec1)
@@ -51,7 +53,9 @@ def my_cosine(vec1, vec2):
     if np.isnan(np.dot(vec1, vec2)):
         print('norms:')
         print(norm1)
+        print(np.min(vec1_orig))
         print(norm2)
+        print(np.min(vec2_orig))
     return 1.0 - np.dot(vec1, vec2)
 
 
