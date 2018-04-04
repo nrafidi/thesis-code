@@ -150,6 +150,9 @@ if __name__ == '__main__':
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
+
+        time += win_len*0.002
+
         voice_scores_win = np.empty((num_time,))
         age_scores_win = np.empty((num_time,))
         gen_scores_win = np.empty((num_time,))
