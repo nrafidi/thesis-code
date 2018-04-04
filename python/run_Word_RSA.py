@@ -126,7 +126,11 @@ def run_tgm_exp(experiment,
             data_to_use = np.mean(data_to_use, axis=2)
         else:
             data_to_use = np.reshape(data_to_use, (data_to_use.shape[0], -1))
+        print(data_to_use.shape)
         curr_RDM = squareform(pdist(data_to_use, metric=dist))
+        meow = pdist(data_to_use, metric=dist)
+        nan_els = np.unravel_index(np.where(np.isnan(meow)), curr_RDM.shape)
+        print(nan_els)
         RDM.append(curr_RDM[None, ...])
 
     RDM = np.concatenate(RDM, axis=0)
