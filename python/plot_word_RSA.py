@@ -113,6 +113,7 @@ if __name__ == '__main__':
                         axes_pad=0.4, cbar_pad=0.4)
     for i_word, word in enumerate(['noun2', 'det', 'eos']):
         if word != 'det':
+            print(word)
             subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                               word,
                                                                               win_len,
