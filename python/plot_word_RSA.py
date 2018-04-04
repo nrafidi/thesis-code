@@ -45,7 +45,7 @@ def make_model_rdm(labels):
 def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     top_dir = run_Word_RSA.TOP_DIR.format(exp=experiment)
     subject_rdms = []
-    for i_subject, subject in enumerate(['A', 'B', 'C', 'E', 'F', 'G']):
+    for i_subject, subject in enumerate(run_Word_RSA.VALID_SUBS[experiment]):
         save_dir = run_Word_RSA.SAVE_DIR.format(top_dir=top_dir, sub=subject)
         fname = run_Word_RSA.SAVE_FILE.format(dir=save_dir,
                                               sub=subject,
