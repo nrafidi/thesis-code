@@ -14,7 +14,7 @@ SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{sub}_{word}_win{win_len}_o
 AGE = {'boy': 'young',
        'girl': 'young',
        'man': 'old',
-       'woman': 'old'
+       'woman': 'old',
 }
 
 GEN = {'boy': 'male',
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     # voice_scores = []
     # age_scores = []
     # gen_scores = []
-    for word in ['det', 'noun2']:
+    for word in ['noun2', 'det']:
         fname = run_Word_RSA.SAVE_FILE.format(dir=save_dir,
                                             sub=subject,
                                               word=word,
@@ -81,13 +81,13 @@ if __name__ == '__main__':
         voice_labels = result['voice_labels']
         rdm = result['RDM']
         time = result['time'][result['win_starts']]
-        
-        age_labels = [AGE[lab] for lab in labels]
-        gen_labels = [GEN[lab] for lab in labels]
+        if word == 'noun2':
+            age_labels = [AGE[lab] for lab in labels]
+            gen_labels = [GEN[lab] for lab in labels]
+            age_rdm = make_model_rdm(age_labels)
+            gen_rdm = make_model_rdm(gen_labels)
         
         voice_rdm = make_model_rdm(voice_labels)
-        age_rdm = make_model_rdm(age_labels)
-        gen_rdm = make_model_rdm(gen_labels)
 
         num_time = rdm.shape[0]
         voice_scores_win = np.empty((num_time,))
@@ -199,3 +199,4 @@ if __name__ == '__main__':
                                           ov=overlap,
                                           dist=dist,
                                           avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+    plt.show()
