@@ -111,7 +111,7 @@ if __name__ == '__main__':
     score_fig = plt.figure(figsize=(14, 7))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.4, cbar_pad=0.4)
-    for i_word, word in ['noun2', 'det']:
+    for i_word, word in enumerate(['noun2', 'det']):
         if word == 'noun2':
             subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                               word,
