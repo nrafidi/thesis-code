@@ -172,7 +172,8 @@ if __name__ == '__main__':
         ax.plot(time, gen_scores_win, label='Gen')
         ax.plot(time, word_scores_win, label='Word')
         ax.plot(time, word_scores_win, label='Edit Distance')
-        ax.legend(loc=1)
+        if axis_ind == 2:
+            ax.legend(loc=1)
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
         if axis_ind == 0:

@@ -6,8 +6,8 @@ import time
 
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['eos']
-WIN_LENS = [3, 6, 12, 25, 50]
+WORDS = ['det', 'noun2', 'eos']
+WIN_LENS = [75, 100, 125, 150]
 OVERLAPS = [3]
 DISTS = ['cosine', 'euclidean']
 DO_TME_AVGS = [True, False]
