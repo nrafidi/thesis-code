@@ -105,7 +105,7 @@ if __name__ == '__main__':
         ax.plot(time, voice_scores_win, label='Voice')
         ax.plot(time, age_scores_win, label='Age')
         ax.plot(time, gen_scores_win, label='Gen')
-        ax.legend(loc=1)
+        ax.legend(loc=2)
         ax.set_title('{word} Kendall Tau Scores'.format(word=word), fontsize=18)
         ax.set_xlabel('Time (s)')
         ax.set_ylabel('Kendall Tau Correlation')
