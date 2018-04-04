@@ -111,6 +111,7 @@ if __name__ == '__main__':
         ax.set_title('{word} Kendall Tau Scores'.format(word=word), fontsize=18)
         ax.set_xlabel('Time (s)')
         ax.set_ylabel('Kendall Tau Correlation')
+        ax.set_ylim([0.0, 0.6])
         fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
                                     sub=subject,
                                     word=word,
@@ -139,7 +140,7 @@ if __name__ == '__main__':
         voice_grid[0].text(-0.15, 1.0, 'A', transform=voice_grid[0].transAxes,
                                             size=20, weight='bold')
         im = voice_grid[1].imshow(np.squeeze(rdm[best_voice_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
-        print(np.squeeze(rdm[best_voice_win, ...]))
+        # print(np.squeeze(rdm[best_voice_win, ...]))
         voice_grid[1].set_title('MEG', fontsize=14)
         voice_grid[1].text(-0.15, 1.0, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
@@ -165,7 +166,7 @@ if __name__ == '__main__':
         age_grid[0].text(-0.15, 1.0, 'A', transform=age_grid[0].transAxes,
                            size=20, weight='bold')
         im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
-        print(np.squeeze(rdm[best_age_win, ...]))
+        # print(np.squeeze(rdm[best_age_win, ...]))
         age_grid[1].set_title('MEG', fontsize=14)
         age_grid[1].text(-0.15, 1.0, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
@@ -191,7 +192,7 @@ if __name__ == '__main__':
         gen_grid[0].text(-0.15, 1.0, 'A', transform=gen_grid[0].transAxes,
                            size=20, weight='bold')
         im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
-        print(np.squeeze(rdm[best_gen_win, ...]))
+        # print(np.squeeze(rdm[best_gen_win, ...]))
         gen_grid[1].set_title('MEG', fontsize=14)
         gen_grid[1].text(-0.15, 1.0, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
