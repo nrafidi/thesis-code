@@ -107,6 +107,8 @@ def run_tgm_exp(experiment,
                                                                      tmin=TMIN[word],
                                                                      tmax=TMAX[word])
     all_data *= 1e12
+    print(np.min(all_data))
+    print(np.any(np.isnan(all_data)))
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     voice_labels = []
