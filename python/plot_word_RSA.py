@@ -148,6 +148,7 @@ if __name__ == '__main__':
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.7])
+        ax.set_xlim([np. min(time), np.max(time)])
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
