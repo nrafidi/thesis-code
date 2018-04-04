@@ -107,8 +107,9 @@ def run_tgm_exp(experiment,
                                                                      tmin=TMIN[word],
                                                                      tmax=TMAX[word])
     all_data *= 1e12
-    print(np.min(all_data))
+    print(np.min(np.abs(all_data)))
     print(np.any(np.isnan(all_data)))
+    print(np.any(np.isinf(all_data)))
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     voice_labels = []
@@ -144,7 +145,7 @@ def run_tgm_exp(experiment,
             data_to_use = np.mean(data_to_use, axis=2)
         else:
             data_to_use = np.reshape(data_to_use, (data_to_use.shape[0], -1))
-
+        print(np.any(np.isinf(data_to_use)))
         curr_RDM = squareform(pdist(data_to_use, metric=dist))
         if np.any(np.isnan(curr_RDM)):
             meow = pdist(data_to_use, metric=my_cosine)
