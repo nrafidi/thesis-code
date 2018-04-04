@@ -49,6 +49,7 @@ def my_cosine(vec1, vec2):
     vec1 /= np.linalg.norm(vec1)
     vec2 /= np.linalg.norm(vec2)
     if np.isnan(np.dot(vec1, vec2)):
+        print('norms:')
         print(norm1)
         print(norm2)
     return 1.0 - np.dot(vec1, vec2)
@@ -138,7 +139,7 @@ def run_tgm_exp(experiment,
         else:
             data_to_use = np.reshape(data_to_use, (data_to_use.shape[0], -1))
 
-        curr_RDM = squareform(pdist(data_to_use, metric=my_cosine))
+        curr_RDM = squareform(pdist(data_to_use, metric=dist))
         if np.any(np.isnan(curr_RDM)):
             meow = pdist(data_to_use, metric=my_cosine)
             nan_els = np.unravel_index(np.where(np.isnan(meow)), curr_RDM.shape)
