@@ -86,7 +86,8 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
         gen_rdm = []
 
     voice_rdm = make_model_rdm(voice_labels, dist)
-    return np.concatenate(subject_rdms, axis=0), voice_rdm, age_rdm, gen_rdm, time
+    word_rdm = make_model_rdm(labels, dist)
+    return np.concatenate(subject_rdms, axis=0), word_rdm, voice_rdm, age_rdm, gen_rdm, time
 
 
 
@@ -111,28 +112,30 @@ if __name__ == '__main__':
                         axes_pad=0.4, cbar_pad=0.4)
     for i_word, word in enumerate(['noun2', 'det', 'eos']):
         if word != 'det':
-            subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
-                                                                              word,
-                                                                              win_len,
-                                                                              overlap,
-                                                                              dist,
-                                                                              run_Word_RSA.bool_to_str(doTimeAvg))
+            subject_rdms, word_rdm, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
+                                                                                      word,
+                                                                                      win_len,
+                                                                                      overlap,
+                                                                                      dist,
+                                                                                      run_Word_RSA.bool_to_str(doTimeAvg))
         else:
-            subject_rdms, _, _, _, time = load_all_rdms(experiment,
-                                                        word,
-                                                        win_len,
-                                                        overlap,
-                                                        dist,
-                                                        run_Word_RSA.bool_to_str(doTimeAvg))
+            subject_rdms, word_rdm, _, _, _, time = load_all_rdms(experiment,
+                                                                    word,
+                                                                    win_len,
+                                                                    overlap,
+                                                                    dist,
+                                                                    run_Word_RSA.bool_to_str(doTimeAvg))
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
         voice_scores_win = np.empty((num_time,))
         age_scores_win = np.empty((num_time,))
         gen_scores_win = np.empty((num_time,))
+        word_scores_win = np.empty((num_time,))
         for i_win in range(num_time):
             voice_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), voice_rdm)
             age_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), age_rdm)
             gen_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), gen_rdm)
+            word_scores_win[i_win], _ = ktau_rdms(np.squeeze(rdm[i_win, :, :]), word_rdm)
 
         if i_word < 2:
             axis_ind = 1 - i_word
@@ -142,6 +145,7 @@ if __name__ == '__main__':
         ax.plot(time, voice_scores_win, label='Voice')
         ax.plot(time, age_scores_win, label='Age')
         ax.plot(time, gen_scores_win, label='Gen')
+        ax.plot(time, word_scores_win, label='Word')
         ax.legend(loc=1)
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
@@ -162,6 +166,9 @@ if __name__ == '__main__':
         best_gen_win = np.argmax(gen_scores_win)
         print('Best Gen Correlation occurs at {}'.format(time[best_gen_win]))
         best_gen_score = gen_scores_win[best_gen_win]
+        best_word_win = np.argmax(word_scores_win)
+        print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
+        best_word_score = word_scores_win[best_word_win]
 
         voice_fig = plt.figure(figsize=(14, 7))
         voice_grid = AxesGrid(voice_fig, 111, nrows_ncols=(1, 2),
@@ -177,7 +184,7 @@ if __name__ == '__main__':
         voice_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = voice_grid.cbar_axes[0].colorbar(im)
-        voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
+        voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
                                                                           score=best_voice_score),
                      fontsize=18)
 
@@ -202,7 +209,7 @@ if __name__ == '__main__':
         age_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
-        age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
+        age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
                                                                           score=best_age_score),
                      fontsize=18)
 
@@ -227,7 +234,7 @@ if __name__ == '__main__':
         gen_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
-        gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
+        gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
                                                                           score=best_gen_score),
                      fontsize=18)
 
@@ -237,6 +244,31 @@ if __name__ == '__main__':
                                           ov=overlap,
                                           dist=dist,
                                           avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+
+        word_fig = plt.figure(figsize=(14, 7))
+        word_grid = AxesGrid(word_fig, 111, nrows_ncols=(1, 2),
+                            axes_pad=0.4, cbar_mode='single', cbar_location='right',
+                            cbar_pad=0.4)
+        word_grid[0].imshow(word_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        word_grid[0].set_title('Model', fontsize=14)
+        word_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=word_grid[0].transAxes,
+                         size=20, weight='bold')
+        im = word_grid[1].imshow(np.squeeze(rdm[best_word_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # print(np.squeeze(rdm[best_word_win, ...]))
+        word_grid[1].set_title('MEG', fontsize=14)
+        word_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=word_grid[1].transAxes,
+                         size=20, weight='bold')
+        cbar = word_grid.cbar_axes[0].colorbar(im)
+        word_fig.suptitle('Word ID {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
+                                                                               score=best_word_score),
+                         fontsize=18)
+
+        word_fig.savefig(SAVE_FIG.format(fig_type='word-rdm',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
     score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
     score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
