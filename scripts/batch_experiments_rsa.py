@@ -6,7 +6,7 @@ import time
 
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['det', 'noun2']
+WORDS = ['eos']
 WIN_LENS = [3, 6, 12, 25, 50]
 OVERLAPS = [3]
 DISTS = ['cosine', 'euclidean']

@@ -18,12 +18,14 @@ VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
 TMIN={'det': -0.5,
-      'noun2': 0.0}
+      'noun2': 0.0,
+      'eos': 0.5}
 TMAX={'det': 0.0,
-      'noun2': 0.5}
+      'noun2': 0.5,
+      'eos': 1.0}
 
-WORD_COLS = {'active': {'det': 3, 'noun2': 4},
-             'passive': {'det': 5, 'noun2': 6}}
+WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'eos': 4},
+             'passive': {'det': 5, 'noun2': 6, 'eos': 6}}
 
 
 def bool_to_str(bool_var):
@@ -177,7 +179,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
-    parser.add_argument('--word', choices=['det', 'noun2'])
+    parser.add_argument('--word', choices=['det', 'noun2', 'eos'])
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
