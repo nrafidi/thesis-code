@@ -174,7 +174,7 @@ if __name__ == '__main__':
         im = voice_grid[1].imshow(np.squeeze(rdm[best_voice_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_voice_win, ...]))
         voice_grid[1].set_title('MEG', fontsize=14)
-        voice_grid[1].text(-0.1, 1.0, 'B', transform=voice_grid[1].transAxes,
+        voice_grid[1].text(-0.09, 1.0, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = voice_grid.cbar_axes[0].colorbar(im)
         voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -199,7 +199,7 @@ if __name__ == '__main__':
         im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_age_win, ...]))
         age_grid[1].set_title('MEG', fontsize=14)
-        age_grid[1].text(-0.1, 1.0, 'B', transform=age_grid[1].transAxes,
+        age_grid[1].text(-0.09, 1.0, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
         age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -224,7 +224,7 @@ if __name__ == '__main__':
         im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_gen_win, ...]))
         gen_grid[1].set_title('MEG', fontsize=14)
-        gen_grid[1].text(-0.1, 1.0, 'B', transform=gen_grid[1].transAxes,
+        gen_grid[1].text(-0.09, 1.0, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
         gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
