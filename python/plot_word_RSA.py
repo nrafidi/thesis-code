@@ -26,6 +26,10 @@ GEN = {'boy': 'male',
 PLOT_TITLE = {'det': 'Determiner',
               'noun2': 'Second Noun'}
 
+TEXT_PAD_X = -0.08
+TEXT_PAD_Y = 1.025
+
+VMAX = {'cosine': 1, 'euclidean': 900}
 
 def ktau_rdms(rdm1, rdm2):
     # from Mariya Toneva
@@ -149,7 +153,7 @@ if __name__ == '__main__':
         if i_word == 1:
             ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.7])
-        ax.text(-0.11, 1.0, string.ascii_uppercase[1 - i_word], transform=ax.transAxes,
+        ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[1 - i_word], transform=ax.transAxes,
                            size=20, weight='bold')
 
         print(word)
@@ -167,14 +171,14 @@ if __name__ == '__main__':
         voice_grid = AxesGrid(voice_fig, 111, nrows_ncols=(1, 2),
                                   axes_pad=0.4, cbar_mode='single', cbar_location='right',
                                   cbar_pad=0.4)
-        voice_grid[0].imshow(voice_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        voice_grid[0].imshow(voice_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         voice_grid[0].set_title('Model', fontsize=14)
-        voice_grid[0].text(-0.1, 1.0, 'A', transform=voice_grid[0].transAxes,
+        voice_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=voice_grid[0].transAxes,
                                             size=20, weight='bold')
-        im = voice_grid[1].imshow(np.squeeze(rdm[best_voice_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
+        im = voice_grid[1].imshow(np.squeeze(rdm[best_voice_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         # print(np.squeeze(rdm[best_voice_win, ...]))
         voice_grid[1].set_title('MEG', fontsize=14)
-        voice_grid[1].text(-0.09, 1.0, 'B', transform=voice_grid[1].transAxes,
+        voice_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = voice_grid.cbar_axes[0].colorbar(im)
         voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -192,14 +196,14 @@ if __name__ == '__main__':
         age_grid = AxesGrid(age_fig, 111, nrows_ncols=(1, 2),
                               axes_pad=0.4, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.4)
-        age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         age_grid[0].set_title('Model', fontsize=14)
-        age_grid[0].text(-0.1, 1.0, 'A', transform=age_grid[0].transAxes,
+        age_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=age_grid[0].transAxes,
                            size=20, weight='bold')
-        im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
+        im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         # print(np.squeeze(rdm[best_age_win, ...]))
         age_grid[1].set_title('MEG', fontsize=14)
-        age_grid[1].text(-0.09, 1.0, 'B', transform=age_grid[1].transAxes,
+        age_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
         age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -217,14 +221,14 @@ if __name__ == '__main__':
         gen_grid = AxesGrid(gen_fig, 111, nrows_ncols=(1, 2),
                               axes_pad=0.4, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.4)
-        gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         gen_grid[0].set_title('Model', fontsize=14)
-        gen_grid[0].text(-0.1, 1.0, 'A', transform=gen_grid[0].transAxes,
+        gen_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=gen_grid[0].transAxes,
                            size=20, weight='bold')
-        im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
+        im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
         # print(np.squeeze(rdm[best_gen_win, ...]))
         gen_grid[1].set_title('MEG', fontsize=14)
-        gen_grid[1].text(-0.09, 1.0, 'B', transform=gen_grid[1].transAxes,
+        gen_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
         gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
