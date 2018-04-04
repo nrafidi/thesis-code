@@ -46,6 +46,7 @@ def make_model_rdm(labels):
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
+
 def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     top_dir = run_Word_RSA.TOP_DIR.format(exp=experiment)
     subject_rdms = []
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     # voice_scores = []
     # age_scores = []
     # gen_scores = []
-    score_fig = plt.figure(figsize=(14, 7))
+    score_fig = plt.figure(figsize=(12, 12))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.4, cbar_pad=0.4)
     for i_word, word in enumerate(['noun2', 'det']):
@@ -142,13 +143,13 @@ if __name__ == '__main__':
         ax.plot(time, voice_scores_win, label='Voice')
         ax.plot(time, age_scores_win, label='Age')
         ax.plot(time, gen_scores_win, label='Gen')
-        ax.legend(loc=2)
+        ax.legend(loc=1)
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
         if i_word == 0:
             ax.set_ylabel('Kendall Tau Correlation')
         ax.set_ylim([0.0, 0.7])
-        ax.text(-0.1, 1.0, string.ascii_uppercase[i_word], transform=ax.transAxes,
+        ax.text(-0.125, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                            size=20, weight='bold')
 
         print(word)
@@ -193,12 +194,12 @@ if __name__ == '__main__':
                               cbar_pad=0.4)
         age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         age_grid[0].set_title('Model', fontsize=14)
-        age_grid[0].text(-0.1, 1.0, 'A', transform=age_grid[0].transAxes,
+        age_grid[0].text(-0.125, 1.05, 'A', transform=age_grid[0].transAxes,
                            size=20, weight='bold')
         im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_age_win, ...]))
         age_grid[1].set_title('MEG', fontsize=14)
-        age_grid[1].text(-0.1, 1.0, 'B', transform=age_grid[1].transAxes,
+        age_grid[1].text(-0.125, 1.05, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
         age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -218,12 +219,12 @@ if __name__ == '__main__':
                               cbar_pad=0.4)
         gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         gen_grid[0].set_title('Model', fontsize=14)
-        gen_grid[0].text(-0.1, 1.0, 'A', transform=gen_grid[0].transAxes,
+        gen_grid[0].text(-0.125, 1.05, 'A', transform=gen_grid[0].transAxes,
                            size=20, weight='bold')
         im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_gen_win, ...]))
         gen_grid[1].set_title('MEG', fontsize=14)
-        gen_grid[1].text(-0.1, 1.0, 'B', transform=gen_grid[1].transAxes,
+        gen_grid[1].text(-0.125, 1.05, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
         gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
