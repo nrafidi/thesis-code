@@ -107,13 +107,16 @@ def run_tgm_exp(experiment,
                                                                      tmin=TMIN[word],
                                                                      tmax=TMAX[word])
     all_data *= 1e12
+    print(np.min(all_data))
     print(np.min(np.abs(all_data)))
     print(np.any(np.isnan(all_data)))
     print(np.any(np.isinf(all_data)))
+    print(all_data.shape)
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     voice_labels = []
-    data = np.empty((all_data.shape[0]/2, all_data.shape[1], all_data.shape[2]))
+    data = np.ones((all_data.shape[0]/2, all_data.shape[1], all_data.shape[2]))
+    print(data.shape)
     i_data = 0
     for i_sen_int, sen_int in enumerate(sen_ints):
         word_list = stimuli_voice[sen_int]['stimulus'].split()
@@ -122,6 +125,7 @@ def run_tgm_exp(experiment,
             data[i_data, :, :] = all_data[i_sen_int, :, :]
             labels.append(word_list[WORD_COLS[curr_voice][word]])
             voice_labels.append(curr_voice)
+        i_data += 1
     print(labels)
     print(voice_labels)
     tmin = time.min()
