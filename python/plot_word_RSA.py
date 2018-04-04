@@ -33,7 +33,7 @@ def ktau_rdms(rdm1, rdm2):
 
 def make_model_rdm(labels):
     rdm = np.empty((len(labels), len(labels)))
-    for i_lab, lab in labels:
+    for i_lab, lab in enumerate(labels):
         for j_lab in range(i_lab, len(labels)):
             if lab == labels[j_lab]:
                 rdm[i_lab, j_lab] = 0
