@@ -105,12 +105,20 @@ if __name__ == '__main__':
     # age_scores = []
     # gen_scores = []
     for word in ['noun2', 'det']:
-        subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
-                                                                          word,
-                                                                          win_len,
-                                                                          overlap,
-                                                                          dist,
-                                                                          run_Word_RSA.bool_to_str(doTimeAvg))
+        if word == 'noun2':
+            subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
+                                                                              word,
+                                                                              win_len,
+                                                                              overlap,
+                                                                              dist,
+                                                                              run_Word_RSA.bool_to_str(doTimeAvg))
+        else:
+            subject_rdms, _, _, _, time = load_all_rdms(experiment,
+                                                        word,
+                                                        win_len,
+                                                        overlap,
+                                                        dist,
+                                                        run_Word_RSA.bool_to_str(doTimeAvg))
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
         voice_scores_win = np.empty((num_time,))
