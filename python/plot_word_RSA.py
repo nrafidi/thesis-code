@@ -119,7 +119,7 @@ if __name__ == '__main__':
                                                                                       dist,
                                                                                       run_Word_RSA.bool_to_str(doTimeAvg))
         else:
-            subject_rdms, word_rdm, _, _, _, time = load_all_rdms(experiment,
+            subject_rdms, _, _, _, _, time = load_all_rdms(experiment,
                                                                     word,
                                                                     win_len,
                                                                     overlap,
