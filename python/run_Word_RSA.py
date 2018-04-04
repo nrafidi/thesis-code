@@ -125,7 +125,7 @@ def run_tgm_exp(experiment,
             data[i_data, :, :] = all_data[i_sen_int, :, :]
             labels.append(word_list[WORD_COLS[curr_voice][word]])
             voice_labels.append(curr_voice)
-        i_data += 1
+            i_data += 1
     print(labels)
     print(voice_labels)
     tmin = time.min()
