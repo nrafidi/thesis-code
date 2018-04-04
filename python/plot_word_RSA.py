@@ -8,6 +8,7 @@ import os
 from scipy.stats import spearmanr, kendalltau
 import run_Word_RSA
 from mpl_toolkits.axes_grid1 import AxesGrid
+import string
 
 SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}.pdf'
 
@@ -21,6 +22,9 @@ GEN = {'boy': 'male',
        'girl': 'female',
        'man': 'male',
        'woman': 'female'}
+
+PLOT_TITLE = {'det': 'Determiner',
+              'noun2': 'Second Noun'}
 
 
 def ktau_rdms(rdm1, rdm2):
@@ -104,7 +108,10 @@ if __name__ == '__main__':
     # voice_scores = []
     # age_scores = []
     # gen_scores = []
-    for word in ['noun2', 'det']:
+    score_fig = plt.figure(figsize=(14, 7))
+    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.4, cbar_pad=0.4)
+    for i_word, word in ['noun2', 'det']:
         if word == 'noun2':
             subject_rdms, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                               word,
@@ -131,22 +138,18 @@ if __name__ == '__main__':
         # voice_scores.append(voice_scores_win[None, ...])
         # age_scores.append(age_scores_win[None, ...])
         # gen_scores.append(gen_scores_win[None, ...])
-
-        fig, ax = plt.subplots()
+        ax = score_grid[i_word]
         ax.plot(time, voice_scores_win, label='Voice')
         ax.plot(time, age_scores_win, label='Age')
         ax.plot(time, gen_scores_win, label='Gen')
         ax.legend(loc=2)
-        ax.set_title('{word} Kendall Tau Scores'.format(word=word), fontsize=18)
+        ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
-        ax.set_ylabel('Kendall Tau Correlation')
-        ax.set_ylim([0.0, 0.6])
-        fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
-                                    word=word,
-                                    win_len=win_len,
-                                    ov=overlap,
-                                    dist=dist,
-                                    avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+        if i_word == 0:
+            ax.set_ylabel('Kendall Tau Correlation')
+        ax.set_ylim([0.0, 0.7])
+        ax.text(-0.1, 1.0, string.ascii_uppercase[i_word], transform=ax.transAxes,
+                           size=20, weight='bold')
 
         print(word)
         best_voice_win = np.argmax(voice_scores_win)
@@ -165,12 +168,12 @@ if __name__ == '__main__':
                                   cbar_pad=0.4)
         voice_grid[0].imshow(voice_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         voice_grid[0].set_title('Model', fontsize=14)
-        voice_grid[0].text(-0.15, 1.0, 'A', transform=voice_grid[0].transAxes,
+        voice_grid[0].text(-0.1, 1.0, 'A', transform=voice_grid[0].transAxes,
                                             size=20, weight='bold')
         im = voice_grid[1].imshow(np.squeeze(rdm[best_voice_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_voice_win, ...]))
         voice_grid[1].set_title('MEG', fontsize=14)
-        voice_grid[1].text(-0.15, 1.0, 'B', transform=voice_grid[1].transAxes,
+        voice_grid[1].text(-0.1, 1.0, 'B', transform=voice_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = voice_grid.cbar_axes[0].colorbar(im)
         voice_fig.suptitle('Voice {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -190,12 +193,12 @@ if __name__ == '__main__':
                               cbar_pad=0.4)
         age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         age_grid[0].set_title('Model', fontsize=14)
-        age_grid[0].text(-0.15, 1.0, 'A', transform=age_grid[0].transAxes,
+        age_grid[0].text(-0.1, 1.0, 'A', transform=age_grid[0].transAxes,
                            size=20, weight='bold')
         im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_age_win, ...]))
         age_grid[1].set_title('MEG', fontsize=14)
-        age_grid[1].text(-0.15, 1.0, 'B', transform=age_grid[1].transAxes,
+        age_grid[1].text(-0.1, 1.0, 'B', transform=age_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = age_grid.cbar_axes[0].colorbar(im)
         age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -215,12 +218,12 @@ if __name__ == '__main__':
                               cbar_pad=0.4)
         gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         gen_grid[0].set_title('Model', fontsize=14)
-        gen_grid[0].text(-0.15, 1.0, 'A', transform=gen_grid[0].transAxes,
+        gen_grid[0].text(-0.1, 1.0, 'A', transform=gen_grid[0].transAxes,
                            size=20, weight='bold')
         im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=1.0)
         # print(np.squeeze(rdm[best_gen_win, ...]))
         gen_grid[1].set_title('MEG', fontsize=14)
-        gen_grid[1].text(-0.15, 1.0, 'B', transform=gen_grid[1].transAxes,
+        gen_grid[1].text(-0.1, 1.0, 'B', transform=gen_grid[1].transAxes,
                            size=20, weight='bold')
         cbar = gen_grid.cbar_axes[0].colorbar(im)
         gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=word,
@@ -233,4 +236,13 @@ if __name__ == '__main__':
                                           ov=overlap,
                                           dist=dist,
                                           avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+
+    score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
+    score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
+                                        word='both',
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+
     plt.show()
