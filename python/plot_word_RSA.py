@@ -29,7 +29,7 @@ PLOT_TITLE = {'det': 'Determiner',
 TEXT_PAD_X = -0.08
 TEXT_PAD_Y = 1.025
 
-VMAX = {'cosine': 1.0, 'euclidean': 40.0}
+VMAX = {'cosine': 1.0, 'euclidean': 25.0}
 
 def ktau_rdms(rdm1, rdm2):
     # from Mariya Toneva
