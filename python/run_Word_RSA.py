@@ -44,11 +44,13 @@ def str_to_none(str_thing):
 
 
 def my_cosine(vec1, vec2):
+    norm1 = np.linalg.norm(vec1)
+    norm2 = np.linalg.norm(vec2)
     vec1 /= np.linalg.norm(vec1)
     vec2 /= np.linalg.norm(vec2)
     if np.isnan(np.dot(vec1, vec2)):
-        print(np.min(vec1))
-        print(np.min(vec2))
+        print(norm1)
+        print(norm2)
     return 1.0 - np.dot(vec1, vec2)
 
 
