@@ -29,7 +29,7 @@ PLOT_TITLE = {'det': 'Determiner',
 TEXT_PAD_X = -0.08
 TEXT_PAD_Y = 1.025
 
-VMAX = {'cosine': 1, 'euclidean': 900}
+VMAX = {'cosine': 1.0, 'euclidean': 100.0}
 
 def ktau_rdms(rdm1, rdm2):
     # from Mariya Toneva
@@ -39,14 +39,14 @@ def ktau_rdms(rdm1, rdm2):
     return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
 
-def make_model_rdm(labels):
+def make_model_rdm(labels, dist):
     rdm = np.empty((len(labels), len(labels)))
     for i_lab, lab in enumerate(labels):
         for j_lab in range(i_lab, len(labels)):
             if lab == labels[j_lab]:
-                rdm[i_lab, j_lab] = 0
+                rdm[i_lab, j_lab] = 0.0
             else:
-                rdm[i_lab, j_lab] = 1
+                rdm[i_lab, j_lab] = VMAX[dist]
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
@@ -80,13 +80,13 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     if word == 'noun2':
         age_labels = [AGE[lab] for lab in labels]
         gen_labels = [GEN[lab] for lab in labels]
-        age_rdm = make_model_rdm(age_labels)
-        gen_rdm = make_model_rdm(gen_labels)
+        age_rdm = make_model_rdm(age_labels, dist)
+        gen_rdm = make_model_rdm(gen_labels, dist)
     else:
         age_rdm = []
         gen_rdm = []
 
-    voice_rdm = make_model_rdm(voice_labels)
+    voice_rdm = make_model_rdm(voice_labels, dist)
     return np.concatenate(subject_rdms, axis=0), voice_rdm, age_rdm, gen_rdm, time
 
 
