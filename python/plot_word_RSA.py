@@ -81,6 +81,8 @@ if __name__ == '__main__':
         voice_labels = result['voice_labels']
         rdm = result['RDM']
         time = result['time'][result['win_starts']]
+        if word == 'det':
+            time += 0.5
         if word == 'noun2':
             age_labels = [AGE[lab] for lab in labels]
             gen_labels = [GEN[lab] for lab in labels]
