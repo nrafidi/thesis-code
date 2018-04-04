@@ -93,7 +93,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     experiment = args.experiment
-    subject = args.subject
     win_len = args.win_len
     overlap = args.overlap
     dist = args.dist
