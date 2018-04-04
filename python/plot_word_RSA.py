@@ -79,7 +79,7 @@ if __name__ == '__main__':
         result = np.load(fname + '.npz')
         labels = result['labels']
         voice_labels = result['voice_labels']
-        rdm = np.clip(result['RDM'])
+        rdm = np.clip(result['RDM'], 0.0, 1.0)
         time = result['time'][result['win_starts']]
         if word == 'det':
             time += 0.5
