@@ -288,7 +288,8 @@ if __name__ == '__main__':
                                             win_len=win_len,
                                             ov=overlap,
                                             dist=dist,
-                                            avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                            avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                          num_draws=num_draws), bbox_inches='tight')
 
         age_fig = plt.figure(figsize=(14, 7))
         age_grid = AxesGrid(age_fig, 111, nrows_ncols=(1, 2),
@@ -365,7 +366,8 @@ if __name__ == '__main__':
                                         win_len=win_len,
                                         ov=overlap,
                                         dist=dist,
-                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                         num_draws=num_draws), bbox_inches='tight')
 
         string_fig = plt.figure(figsize=(14, 7))
         string_grid = AxesGrid(string_fig, 111, nrows_ncols=(1, 2),
