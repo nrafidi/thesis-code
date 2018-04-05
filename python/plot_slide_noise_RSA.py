@@ -211,18 +211,18 @@ if __name__ == '__main__':
         voice_scores = score_rdms(voice_rdm, test_rdms)
         mean_voice = np.squeeze(np.mean(voice_scores, axis=0))
         std_voice = np.squeeze(np.std(voice_scores, axis=0))
-        age_scores = score_rdms(age_rdm, test_rdms)
-        mean_age = np.squeeze(np.mean(age_scores, axis=0))
-        std_age = np.squeeze(np.std(age_scores, axis=0))
-        gen_scores = score_rdms(gen_rdm, test_rdms)
-        mean_gen = np.squeeze(np.mean(gen_scores, axis=0))
-        std_gen = np.squeeze(np.std(gen_scores, axis=0))
+        # age_scores = score_rdms(age_rdm, test_rdms)
+        # mean_age = np.squeeze(np.mean(age_scores, axis=0))
+        # std_age = np.squeeze(np.std(age_scores, axis=0))
+        # gen_scores = score_rdms(gen_rdm, test_rdms)
+        # mean_gen = np.squeeze(np.mean(gen_scores, axis=0))
+        # std_gen = np.squeeze(np.std(gen_scores, axis=0))
         word_scores = score_rdms(word_rdm, test_rdms)
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
-        string_scores = score_rdms(string_rdm, test_rdms)
-        mean_string = np.squeeze(np.mean(string_scores, axis=0))
-        std_string = np.squeeze(np.std(string_scores, axis=0))
+        # string_scores = score_rdms(string_rdm, test_rdms)
+        # mean_string = np.squeeze(np.mean(string_scores, axis=0))
+        # std_string = np.squeeze(np.std(string_scores, axis=0))
 
         if i_word < 2 and not plotFullSen:
             axis_ind = 1 - i_word
@@ -235,16 +235,16 @@ if __name__ == '__main__':
         ax.plot(time, mean_word, label='Word ID', color=colors[1])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
                         facecolor=colors[1], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_string, label='String Edit Distance', color=colors[2])
-        ax.fill_between(time, mean_string - std_string, mean_string + std_string,
-                        facecolor=colors[2], alpha=0.5, edgecolor='w')
-        if not plotFullSen:
-            ax.plot(time, mean_age, label='Age', color=colors[3])
-            ax.fill_between(time, mean_age - std_age, mean_age + std_age,
-                            facecolor=colors[3], alpha=0.5, edgecolor='w')
-            ax.plot(time, mean_gen, label='Gender', color=colors[4])
-            ax.fill_between(time, mean_gen - std_gen, mean_gen + std_gen,
-                            facecolor=colors[4], alpha=0.5, edgecolor='w')
+        # ax.plot(time, mean_string, label='String Edit Distance', color=colors[2])
+        # ax.fill_between(time, mean_string - std_string, mean_string + std_string,
+        #                 facecolor=colors[2], alpha=0.5, edgecolor='w')
+        # if not plotFullSen:
+        #     ax.plot(time, mean_age, label='Age', color=colors[3])
+        #     ax.fill_between(time, mean_age - std_age, mean_age + std_age,
+        #                     facecolor=colors[3], alpha=0.5, edgecolor='w')
+        #     ax.plot(time, mean_gen, label='Gender', color=colors[4])
+        #     ax.fill_between(time, mean_gen - std_gen, mean_gen + std_gen,
+        #                     facecolor=colors[4], alpha=0.5, edgecolor='w')
 
         ax.plot(time, mean_noise, label='Noise Ceiling', linestyle='--', color='0.5')
         ax.fill_between(time, mean_noise - std_noise, mean_noise + std_noise,
@@ -263,22 +263,22 @@ if __name__ == '__main__':
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
-        print(word)
-        best_voice_win = np.argmax(mean_voice)
-        print('Best Voice Correlation occurs at {}'.format(time[best_voice_win]))
-        best_voice_score = mean_voice[best_voice_win]
-        best_age_win = np.argmax(mean_age)
-        print('Best Age Correlation occurs at {}'.format(time[best_age_win]))
-        best_age_score = mean_age[best_age_win]
-        best_gen_win = np.argmax(mean_gen)
-        print('Best Gen Correlation occurs at {}'.format(time[best_gen_win]))
-        best_gen_score = mean_gen[best_gen_win]
-        best_word_win = np.argmax(mean_word)
-        print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
-        best_word_score = mean_word[best_word_win]
-        best_string_win = np.argmax(mean_string)
-        print('Best Edit Distance Correlation occurs at {}'.format(time[best_string_win]))
-        best_string_score = mean_string[best_string_win]
+        # print(word)
+        # best_voice_win = np.argmax(mean_voice)
+        # print('Best Voice Correlation occurs at {}'.format(time[best_voice_win]))
+        # best_voice_score = mean_voice[best_voice_win]
+        # best_age_win = np.argmax(mean_age)
+        # print('Best Age Correlation occurs at {}'.format(time[best_age_win]))
+        # best_age_score = mean_age[best_age_win]
+        # best_gen_win = np.argmax(mean_gen)
+        # print('Best Gen Correlation occurs at {}'.format(time[best_gen_win]))
+        # best_gen_score = mean_gen[best_gen_win]
+        # best_word_win = np.argmax(mean_word)
+        # print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
+        # best_word_score = mean_word[best_word_win]
+        # best_string_win = np.argmax(mean_string)
+        # print('Best Edit Distance Correlation occurs at {}'.format(time[best_string_win]))
+        # best_string_score = mean_string[best_string_win]
 
         voice_fig = plt.figure(figsize=(14, 7))
         voice_grid = AxesGrid(voice_fig, 111, nrows_ncols=(1, 2),
@@ -305,55 +305,55 @@ if __name__ == '__main__':
                                             dist=dist,
                                             avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
-        age_fig = plt.figure(figsize=(14, 7))
-        age_grid = AxesGrid(age_fig, 111, nrows_ncols=(1, 2),
-                              axes_pad=0.4, cbar_mode='single', cbar_location='right',
-                              cbar_pad=0.4)
-        age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
-        age_grid[0].set_title('Model', fontsize=14)
-        age_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=age_grid[0].transAxes,
-                           size=20, weight='bold')
-        im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
-        # print(np.squeeze(rdm[best_age_win, ...]))
-        age_grid[1].set_title('MEG', fontsize=14)
-        age_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=age_grid[1].transAxes,
-                           size=20, weight='bold')
-        cbar = age_grid.cbar_axes[0].colorbar(im)
-        age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
-                                                                          score=best_age_score),
-                     fontsize=18)
-
-        age_fig.savefig(SAVE_FIG.format(fig_type='age-rdm',
-                                          word=word,
-                                          win_len=win_len,
-                                          ov=overlap,
-                                          dist=dist,
-                                          avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
-
-        gen_fig = plt.figure(figsize=(14, 7))
-        gen_grid = AxesGrid(gen_fig, 111, nrows_ncols=(1, 2),
-                              axes_pad=0.4, cbar_mode='single', cbar_location='right',
-                              cbar_pad=0.4)
-        gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
-        gen_grid[0].set_title('Model', fontsize=14)
-        gen_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=gen_grid[0].transAxes,
-                           size=20, weight='bold')
-        im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
-        # print(np.squeeze(rdm[best_gen_win, ...]))
-        gen_grid[1].set_title('MEG', fontsize=14)
-        gen_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=gen_grid[1].transAxes,
-                           size=20, weight='bold')
-        cbar = gen_grid.cbar_axes[0].colorbar(im)
-        gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
-                                                                          score=best_gen_score),
-                     fontsize=18)
-
-        gen_fig.savefig(SAVE_FIG.format(fig_type='gen-rdm',
-                                          word=word,
-                                          win_len=win_len,
-                                          ov=overlap,
-                                          dist=dist,
-                                          avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+        # age_fig = plt.figure(figsize=(14, 7))
+        # age_grid = AxesGrid(age_fig, 111, nrows_ncols=(1, 2),
+        #                       axes_pad=0.4, cbar_mode='single', cbar_location='right',
+        #                       cbar_pad=0.4)
+        # age_grid[0].imshow(age_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # age_grid[0].set_title('Model', fontsize=14)
+        # age_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=age_grid[0].transAxes,
+        #                    size=20, weight='bold')
+        # im = age_grid[1].imshow(np.squeeze(rdm[best_age_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # # print(np.squeeze(rdm[best_age_win, ...]))
+        # age_grid[1].set_title('MEG', fontsize=14)
+        # age_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=age_grid[1].transAxes,
+        #                    size=20, weight='bold')
+        # cbar = age_grid.cbar_axes[0].colorbar(im)
+        # age_fig.suptitle('Age {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
+        #                                                                   score=best_age_score),
+        #              fontsize=18)
+        #
+        # age_fig.savefig(SAVE_FIG.format(fig_type='age-rdm',
+        #                                   word=word,
+        #                                   win_len=win_len,
+        #                                   ov=overlap,
+        #                                   dist=dist,
+        #                                   avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+        #
+        # gen_fig = plt.figure(figsize=(14, 7))
+        # gen_grid = AxesGrid(gen_fig, 111, nrows_ncols=(1, 2),
+        #                       axes_pad=0.4, cbar_mode='single', cbar_location='right',
+        #                       cbar_pad=0.4)
+        # gen_grid[0].imshow(gen_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # gen_grid[0].set_title('Model', fontsize=14)
+        # gen_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=gen_grid[0].transAxes,
+        #                    size=20, weight='bold')
+        # im = gen_grid[1].imshow(np.squeeze(rdm[best_gen_win, ...]), interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # # print(np.squeeze(rdm[best_gen_win, ...]))
+        # gen_grid[1].set_title('MEG', fontsize=14)
+        # gen_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=gen_grid[1].transAxes,
+        #                    size=20, weight='bold')
+        # cbar = gen_grid.cbar_axes[0].colorbar(im)
+        # gen_fig.suptitle('Gender {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
+        #                                                                   score=best_gen_score),
+        #              fontsize=18)
+        #
+        # gen_fig.savefig(SAVE_FIG.format(fig_type='gen-rdm',
+        #                                   word=word,
+        #                                   win_len=win_len,
+        #                                   ov=overlap,
+        #                                   dist=dist,
+        #                                   avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
         word_fig = plt.figure(figsize=(14, 7))
         word_grid = AxesGrid(word_fig, 111, nrows_ncols=(1, 2),
@@ -380,31 +380,31 @@ if __name__ == '__main__':
                                         dist=dist,
                                         avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
-        string_fig = plt.figure(figsize=(14, 7))
-        string_grid = AxesGrid(string_fig, 111, nrows_ncols=(1, 2),
-                             axes_pad=0.4, cbar_mode='single', cbar_location='right',
-                             cbar_pad=0.4)
-        string_grid[0].imshow(string_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
-        string_grid[0].set_title('Model', fontsize=14)
-        string_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=string_grid[0].transAxes,
-                          size=20, weight='bold')
-        im = string_grid[1].imshow(np.squeeze(rdm[best_string_win, ...]), interpolation='nearest', vmin=0.0,
-                                 vmax=VMAX[dist])
-        # print(np.squeeze(rdm[best_string_win, ...]))
-        string_grid[1].set_title('MEG', fontsize=14)
-        string_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=string_grid[1].transAxes,
-                          size=20, weight='bold')
-        cbar = string_grid.cbar_axes[0].colorbar(im)
-        string_fig.suptitle('Edit Distance {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
-                                                                                 score=best_string_score),
-                          fontsize=18)
-
-        string_fig.savefig(SAVE_FIG.format(fig_type='string-rdm',
-                                         word=word,
-                                         win_len=win_len,
-                                         ov=overlap,
-                                         dist=dist,
-                                         avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+        # string_fig = plt.figure(figsize=(14, 7))
+        # string_grid = AxesGrid(string_fig, 111, nrows_ncols=(1, 2),
+        #                      axes_pad=0.4, cbar_mode='single', cbar_location='right',
+        #                      cbar_pad=0.4)
+        # string_grid[0].imshow(string_rdm, interpolation='nearest', vmin=0.0, vmax=VMAX[dist])
+        # string_grid[0].set_title('Model', fontsize=14)
+        # string_grid[0].text(TEXT_PAD_X, TEXT_PAD_Y, 'A', transform=string_grid[0].transAxes,
+        #                   size=20, weight='bold')
+        # im = string_grid[1].imshow(np.squeeze(rdm[best_string_win, ...]), interpolation='nearest', vmin=0.0,
+        #                          vmax=VMAX[dist])
+        # # print(np.squeeze(rdm[best_string_win, ...]))
+        # string_grid[1].set_title('MEG', fontsize=14)
+        # string_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=string_grid[1].transAxes,
+        #                   size=20, weight='bold')
+        # cbar = string_grid.cbar_axes[0].colorbar(im)
+        # string_fig.suptitle('Edit Distance {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
+        #                                                                          score=best_string_score),
+        #                   fontsize=18)
+        #
+        # string_fig.savefig(SAVE_FIG.format(fig_type='string-rdm',
+        #                                  word=word,
+        #                                  win_len=win_len,
+        #                                  ov=overlap,
+        #                                  dist=dist,
+        #                                  avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
     score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
     score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
