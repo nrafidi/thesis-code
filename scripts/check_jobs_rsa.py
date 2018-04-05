@@ -22,7 +22,8 @@ if __name__ == '__main__':
                                    batch_exp.DO_TME_AVGS,
                                    batch_exp.WORDS,
                                    batch_exp.WIN_LENS,
-                                   batch_exp.SUBJECTS)
+                                   batch_exp.SUBJECTS,
+                                   batch_exp.DRAWS)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
@@ -34,6 +35,7 @@ if __name__ == '__main__':
         word = grid[4]
         win_len = grid[5]
         sub = grid[6]
+        draw = grid[7]
 
         job_str = batch_exp.JOB_NAME.format(dist=dist,
                                               sub=sub,
@@ -54,6 +56,7 @@ if __name__ == '__main__':
                                  word=word,
                                  win_len=win_len,
                                  ov=overlap,
+                                 draw=draw,
                                  dist=dist,
                                  avgTm=bool_to_str(tm_avg))
 

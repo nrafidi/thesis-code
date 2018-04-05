@@ -6,9 +6,10 @@ import time
 
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['eos-full']
-WIN_LENS = [50, 75, 100, 125, 150]
+WORDS = ['det', 'det-full', 'noun2', 'last-full', 'eos', 'eos-full']
+WIN_LENS = [50, 75]
 OVERLAPS = [3]
+DRAWS = range(126)
 DISTS = ['cosine', 'euclidean']
 DO_TME_AVGS = [True, False]
 
@@ -17,14 +18,14 @@ JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
 
-JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
 
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=144:00:00,mem=2GB -v ' \
+    qsub_call = 'qsub  -q pool2 -N {job_name} -v ' \
                 'experiment={exp},subject={sub},word={word},win_len={win_len},overlap={overlap},' \
-                'dist={dist},doTimeAvg={tm_avg},force=False, ' \
+                'dist={dist},doTimeAvg={tm_avg},draw={draw},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_rsa.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -33,7 +34,8 @@ if __name__ == '__main__':
                                    DO_TME_AVGS,
                                    WORDS,
                                    WIN_LENS,
-                                   SUBJECTS)
+                                   SUBJECTS,
+                                   DRAWS)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
@@ -43,6 +45,7 @@ if __name__ == '__main__':
         word = grid[4]
         win_len = grid[5]
         sub = grid[6]
+        draw = grid[7]
 
         job_str = JOB_NAME.format(dist=dist,
                                   sub=sub,
@@ -59,6 +62,7 @@ if __name__ == '__main__':
         call_str = qsub_call.format(job_name=job_str,
                                     exp=exp,
                                     sub=sub,
+                                    draw=draw,
                                     dist=dist,
                                     word=word,
                                     win_len=win_len,
@@ -70,5 +74,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 300:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 400:
             time.sleep(30)
