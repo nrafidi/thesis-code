@@ -146,6 +146,7 @@ def noise_ceiling_krieg(subject_rdms):
 
 def my_noise_ceiling(subject_rdms, num_draws):
     num_subjects = subject_rdms.shape[0]
+    print(num_subjects)
     num_time = subject_rdms.shape[1]
     noise_scores = np.empty((num_draws, num_time))
     subject_list = range(num_subjects)
