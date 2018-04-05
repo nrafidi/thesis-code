@@ -144,7 +144,7 @@ if __name__ == '__main__':
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 4),
                         axes_pad=0.4, cbar_pad=0.4)
     colors = ['r', 'g', 'b', 'm', 'c']
-    for i_word, word in enumerate(['noun2', 'det', 'eos', 'eos-full']):
+    for i_word, word in enumerate(['noun2', 'det', 'eos-full', 'eos']):
         if word != 'det':
             subject_rdms, word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
@@ -183,12 +183,12 @@ if __name__ == '__main__':
         ax = score_grid[axis_ind]
         ax.plot(time, voice_scores_win, label='Voice', color=colors[0])
         ax.plot(time, word_scores_win, label='Word', color=colors[1])
-        ax.plot(time, word_scores_win, label='Edit Distance', color=colors[2])
+        ax.plot(time, string_scores_win, label='Edit Distance', color=colors[2])
         if word != 'eos-full':
             ax.plot(time, age_scores_win, label='Age', color=colors[3])
             ax.plot(time, gen_scores_win, label='Gen', color=colors[4])
 
-        if axis_ind == 2:
+        if axis_ind == 3:
             ax.legend(loc=1)
 
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
