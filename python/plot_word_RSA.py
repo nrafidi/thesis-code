@@ -134,10 +134,11 @@ def noise_ceiling(subject_rdms):
         sub_inds = np.arange(num_subjects) != i_sub
         sub_less_avg = np.squeeze(np.mean(subject_rdms[sub_inds, ...], axis=0))
         for i_time in range(num_time):
+            full_rdm = np.squeeze(avg_rdm[i_time, :, :])
             less_rdm = np.squeeze(sub_less_avg[i_time, :, :])
             rdm = np.squeeze(time_rdm[i_time, :, :])
             noise_scores[0, i_time, i_sub], _ = ktau_rdms(rdm, less_rdm)
-            noise_scores[1, i_time, i_sub], _ = ktau_rdms(rdm, avg_rdm)
+            noise_scores[1, i_time, i_sub], _ = ktau_rdms(rdm, full_rdm)
     return np.squeeze(np.mean(noise_scores, axis=2))
 
 
