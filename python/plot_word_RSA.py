@@ -152,8 +152,8 @@ def my_noise_ceiling(subject_rdms, num_draws):
     for i_draw in range(num_draws):
         sample_1 = np.random.choice(subject_list, num_subjects/2)
         sample_2 = [sub for sub in subject_list if sub not in sample_1]
-        sample_1_avg = np.mean(subject_rdms[sample_1, :, :, :], axis=1)
-        sample_2_avg = np.mean(subject_rdms[sample_2, :, :, :], axis=1)
+        sample_1_avg = np.mean(subject_rdms[sample_1, :, :, :], axis=0)
+        sample_2_avg = np.mean(subject_rdms[sample_2, :, :, :], axis=0)
         for i_time in range(num_time):
             noise_scores[i_draw, i_time], _ = ktau_rdms(np.squeeze(sample_1_avg[i_time, ...]),
                                                         np.squeeze(sample_2_avg[i_time, ...]))
