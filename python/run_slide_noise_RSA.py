@@ -147,7 +147,7 @@ def run_rsa_exp(experiment,
     rep_draws = list(itertools.combinations(range(num_reps), num_reps/2))
     val_reps = list(rep_draws[draw])
     val_data, val_labels, val_voice_labels, val_time = load_agg_data(subject, word, experiment, voice, proc, val_reps)
-    test_reps = list(rep_draws[len(rep_draws) - draw])
+    test_reps = list(rep_draws[len(rep_draws) - draw - 1])
     test_data, test_labels, test_voice_labels, test_time = load_agg_data(subject, word, experiment, voice, proc, test_reps)
 
     assert np.all(np.array(val_labels) == np.array(test_labels))
