@@ -6,12 +6,12 @@ import time
 
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['det', 'det-full', 'noun2', 'last-full', 'eos', 'eos-full']
-WIN_LENS = [50, 75]
+WORDS = ['det', 'noun2', 'eos', 'last-full', 'eos-full']
+WIN_LENS = [50]
 OVERLAPS = [3]
 DRAWS = range(126)
 DISTS = ['cosine', 'euclidean']
-DO_TME_AVGS = [True, False]
+DO_TME_AVGS = [True]
 
 JOB_NAME = '{dist}-{sub}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
