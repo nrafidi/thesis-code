@@ -141,7 +141,7 @@ if __name__ == '__main__':
     doTimeAvg = run_Word_RSA.str_to_bool(args.doTimeAvg)
 
     score_fig = plt.figure(figsize=(18, 9))
-    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 3),
+    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 4),
                         axes_pad=0.4, cbar_pad=0.4)
     for i_word, word in enumerate(['noun2', 'det', 'eos', 'eos-full']):
         if word != 'det':
