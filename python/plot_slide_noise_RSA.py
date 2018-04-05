@@ -100,8 +100,8 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
             test_rdms.append(result['test_rdm'][None, ...])
         val_rdm = np.concatenate(val_rdms, axis=0)
         test_rdm = np.concatenate(test_rdms, axis=0)
-    subject_val_rdms.append(val_rdm[None, ...])
-    subject_test_rdms.append(test_rdm[None, ...])
+        subject_val_rdms.append(val_rdm[None, ...])
+        subject_test_rdms.append(test_rdm[None, ...])
     if word != 'det':
         age_labels = [AGE[lab] for lab in labels]
         gen_labels = [GEN[lab] for lab in labels]
