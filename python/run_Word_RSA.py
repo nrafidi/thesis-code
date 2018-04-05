@@ -19,13 +19,15 @@ VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
 TMIN={'det': -0.5,
       'noun2': 0.0,
-      'eos': 0.5}
+      'eos': 0.5,
+      'eos-full': 0.5}
 TMAX={'det': 0.0,
       'noun2': 0.5,
-      'eos': 1.0}
+      'eos': 1.0,
+      'eos-full': 1.0}
 
-WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'eos': 4},
-             'passive': {'det': 5, 'noun2': 6, 'eos': 6}}
+WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'eos': 4, 'eos-full': 4},
+             'passive': {'det': 5, 'noun2': 6, 'eos': 6, 'eos-full': 6}}
 
 
 def bool_to_str(bool_var):
@@ -109,21 +111,21 @@ def run_tgm_exp(experiment,
                                                                      tmin=TMIN[word],
                                                                      tmax=TMAX[word])
     all_data *= 1e12
-    print(np.min(all_data))
-    print(np.min(np.abs(all_data)))
-    print(np.any(np.isnan(all_data)))
-    print(np.any(np.isinf(all_data)))
-    print(all_data.shape)
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     voice_labels = []
-    data = np.ones((all_data.shape[0]/2, all_data.shape[1], all_data.shape[2]))
-    print(data.shape)
+    if word == 'eos-full':
+        data = np.ones((all_data.shape[0]/2, all_data.shape[1], all_data.shape[2]))
+    else:
+        data = all_data
     i_data = 0
     for i_sen_int, sen_int in enumerate(sen_ints):
         word_list = stimuli_voice[sen_int]['stimulus'].split()
         curr_voice = stimuli_voice[sen_int]['voice']
-        if len(word_list) > 5:
+        if word == 'eos-full':
+            labels.append(word_list[WORD_COLS[curr_voice][word]])
+            voice_labels.append(curr_voice)
+        elif len(word_list) > 5:
             data[i_data, :, :] = all_data[i_sen_int, :, :]
             labels.append(word_list[WORD_COLS[curr_voice][word]])
             voice_labels.append(curr_voice)
@@ -179,7 +181,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
-    parser.add_argument('--word', choices=['det', 'noun2', 'eos'])
+    parser.add_argument('--word', choices=['det', 'noun2', 'eos', 'eos-full'])
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
