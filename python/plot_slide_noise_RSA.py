@@ -215,11 +215,12 @@ if __name__ == '__main__':
                                         full_str=full_str
                                         )
         if os.path.isfile(noise_file) and not force:
-            noise_ceiling = score_rdms(val_rdms, test_rdms)
-            np.savez_compressed(noise_file, noise_ceiling=noise_ceiling)
-        else:
             result = np.load(noise_file)
             noise_ceiling = result['noise_ceiling']
+        else:
+            noise_ceiling = score_rdms(val_rdms, test_rdms)
+            np.savez_compressed(noise_file, noise_ceiling=noise_ceiling)
+
         mean_noise = np.squeeze(np.mean(noise_ceiling, axis=0))
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
 
@@ -255,11 +256,11 @@ if __name__ == '__main__':
                                         full_str=full_str
                                         )
         if os.path.isfile(voice_file) and not force:
-            voice_scores = score_rdms(voice_rdm, test_rdms)
-            np.savez_compressed(voice_file, voice_scores=voice_scores)
-        else:
             result = np.load(voice_file)
             voice_scores = result['voice_scores']
+        else:
+            voice_scores = score_rdms(voice_rdm, test_rdms)
+            np.savez_compressed(voice_file, voice_scores=voice_scores)
         mean_voice = np.squeeze(np.mean(voice_scores, axis=0))
         std_voice = np.squeeze(np.std(voice_scores, axis=0))
         # age_scores = score_rdms(age_rdm, test_rdms)
@@ -278,11 +279,11 @@ if __name__ == '__main__':
                                         full_str=full_str
                                         )
         if os.path.isfile(word_file) and not force:
-            word_scores = score_rdms(word_rdm, test_rdms)
-            np.savez_compressed(word_file, word_scores=word_scores)
-        else:
             result = np.load(word_file)
             word_scores = result['word_scores']
+        else:
+            word_scores = score_rdms(word_rdm, test_rdms)
+            np.savez_compressed(word_file, word_scores=word_scores)
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
 
@@ -296,11 +297,11 @@ if __name__ == '__main__':
                                         full_str=full_str
                                         )
         if os.path.isfile(string_file) and not force:
-            string_scores = score_rdms(string_rdm, test_rdms)
-            np.savez_compressed(string_file, string_scores=string_scores)
-        else:
             result = np.load(string_file)
             string_scores = result['string_scores']
+        else:
+            string_scores = score_rdms(string_rdm, test_rdms)
+            np.savez_compressed(string_file, string_scores=string_scores)
         mean_string = np.squeeze(np.mean(string_scores, axis=0))
         std_string = np.squeeze(np.std(string_scores, axis=0))
 
