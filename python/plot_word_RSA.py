@@ -124,6 +124,24 @@ def edit_distance(string1, string2):
     return tbl[m-1,n-1]
 
 
+def noise_ceiling(subject_rdms):
+    num_subjects = subject_rdms.shape[0]
+    num_time = subject_rdms.shape[1]
+    avg_rdm = np.squeeze(np.mean(subject_rdms, axis=0))
+    noise_scores = np.empty((2, num_time, num_subjects))
+    for i_sub in range(num_subjects):
+        time_rdm = np.squeeze(subject_rdms[i_sub, ...])
+        sub_inds = np.arange(num_subjects) != i_sub
+        sub_less_avg = np.squeeze(np.mean(subject_rdms[sub_inds, ...]))
+        for i_time in range(num_time):
+            less_rdm = np.squeeze(sub_less_avg[i_time, ...])
+            rdm = np.squeeze(time_rdm[i_time, ...])
+            noise_scores[0, i_time, i_sub] = ktau_rdms(rdm, less_rdm)
+            noise_scores[1, i_time, i_sub] = ktau_rdms(rdm, avg_rdm)
+    return np.squeeze(np.mean(noise_scores, axis=2))
+
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
@@ -159,6 +177,7 @@ if __name__ == '__main__':
                                                                 overlap,
                                                                 dist,
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
+        noise_scores = noise_ceiling(subject_rdms)
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
 
@@ -187,6 +206,8 @@ if __name__ == '__main__':
         if word != 'eos-full':
             ax.plot(time, age_scores_win, label='Age', color=colors[3])
             ax.plot(time, gen_scores_win, label='Gen', color=colors[4])
+        ax.plot(time, noise_scores[0, :], label='Noise Ceiling LB', linestyle='--', color='0.5')
+        ax.plot(time, noise_scores[1, :], label='Noise Ceiling UB', linestyle='-.', color='0.5')
 
         if axis_ind == 3:
             ax.legend(loc=1)
