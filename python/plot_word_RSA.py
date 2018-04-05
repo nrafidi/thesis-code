@@ -10,7 +10,7 @@ import run_Word_RSA
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
 
-SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}.pdf'
+SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_nd{num_draws}.pdf'
 
 AGE = {'boy': 'young',
        'girl': 'young',
@@ -160,7 +160,8 @@ def my_noise_ceiling(subject_rdms, num_draws):
                                                         np.squeeze(sample_2_avg[i_time, ...]))
     lower_bound = np.min(noise_scores, axis=0)
     upper_bound = np.max(noise_scores, axis=0)
-    return lower_bound, upper_bound
+    med = np.median(noise_scores, axis=0)
+    return lower_bound, med, upper_bound
 
 
 
@@ -201,7 +202,7 @@ if __name__ == '__main__':
                                                                 overlap,
                                                                 dist,
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
-        lower_bound, upper_bound = my_noise_ceiling(subject_rdms, num_draws)
+        lower_bound, med, upper_bound = my_noise_ceiling(subject_rdms, num_draws)
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
 
@@ -230,8 +231,9 @@ if __name__ == '__main__':
         if word != 'eos-full':
             ax.plot(time, age_scores_win, label='Age', color=colors[3])
             ax.plot(time, gen_scores_win, label='Gen', color=colors[4])
-        ax.plot(time, lower_bound, label='Noise Ceiling LB', linestyle='--', color='0.5')
         ax.plot(time, upper_bound, label='Noise Ceiling UB', linestyle='-.', color='0.5')
+        ax.plot(time, med, label='Noise Ceiling Med', linestyle='-', color='0.5')
+        ax.plot(time, lower_bound, label='Noise Ceiling LB', linestyle='--', color='0.5')
 
         if axis_ind == 3:
             ax.legend(loc=1)
@@ -311,7 +313,8 @@ if __name__ == '__main__':
                                           win_len=win_len,
                                           ov=overlap,
                                           dist=dist,
-                                          avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                          avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                        num_draws=num_draws), bbox_inches='tight')
 
         gen_fig = plt.figure(figsize=(14, 7))
         gen_grid = AxesGrid(gen_fig, 111, nrows_ncols=(1, 2),
@@ -336,7 +339,8 @@ if __name__ == '__main__':
                                           win_len=win_len,
                                           ov=overlap,
                                           dist=dist,
-                                          avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                          avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                        num_draws=num_draws), bbox_inches='tight')
 
         word_fig = plt.figure(figsize=(14, 7))
         word_grid = AxesGrid(word_fig, 111, nrows_ncols=(1, 2),
@@ -387,7 +391,8 @@ if __name__ == '__main__':
                                          win_len=win_len,
                                          ov=overlap,
                                          dist=dist,
-                                         avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                         avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                        num_draws=num_draws), bbox_inches='tight')
 
     score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
     score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
@@ -395,6 +400,7 @@ if __name__ == '__main__':
                                         win_len=win_len,
                                         ov=overlap,
                                         dist=dist,
-                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
+                                        avgTm=run_Word_RSA.bool_to_str(doTimeAvg),
+                                        num_draws=num_draws), bbox_inches='tight')
 
     plt.show()
