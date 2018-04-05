@@ -114,7 +114,7 @@ def run_tgm_exp(experiment,
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     voice_labels = []
-    if word == 'eos-full':
+    if word != 'eos-full':
         data = np.ones((all_data.shape[0]/2, all_data.shape[1], all_data.shape[2]))
     else:
         data = all_data
