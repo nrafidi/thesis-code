@@ -264,18 +264,18 @@ if __name__ == '__main__':
                            size=20, weight='bold')
 
         # print(word)
-        # best_voice_win = np.argmax(mean_voice)
-        # print('Best Voice Correlation occurs at {}'.format(time[best_voice_win]))
-        # best_voice_score = mean_voice[best_voice_win]
+        best_voice_win = np.argmax(mean_voice)
+        print('Best Voice Correlation occurs at {}'.format(time[best_voice_win]))
+        best_voice_score = mean_voice[best_voice_win]
         # best_age_win = np.argmax(mean_age)
         # print('Best Age Correlation occurs at {}'.format(time[best_age_win]))
         # best_age_score = mean_age[best_age_win]
         # best_gen_win = np.argmax(mean_gen)
         # print('Best Gen Correlation occurs at {}'.format(time[best_gen_win]))
         # best_gen_score = mean_gen[best_gen_win]
-        # best_word_win = np.argmax(mean_word)
-        # print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
-        # best_word_score = mean_word[best_word_win]
+        best_word_win = np.argmax(mean_word)
+        print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
+        best_word_score = mean_word[best_word_win]
         # best_string_win = np.argmax(mean_string)
         # print('Best Edit Distance Correlation occurs at {}'.format(time[best_string_win]))
         # best_string_score = mean_string[best_string_win]
