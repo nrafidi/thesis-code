@@ -207,13 +207,14 @@ if __name__ == '__main__':
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
 
         num_sub_test = 10
-        sub_noise_scores = np.empty((num_sub_test, test_rdms.shape[0], test_rdms.shape[1]))
+
         fig, ax = plt.subplots()
         for i_sub in range(num_sub_test):
-            sub_noise_scores[i_sub, :, :] = score_rdms(np.squeeze(sub_val_rdms[i_sub, ...]),
+            sub_noise_score = score_rdms(np.squeeze(sub_val_rdms[i_sub, ...]),
                                                        np.squeeze(sub_test_rdms[i_sub, ...]))
-            mean_sub_score = np.squeeze(np.mean(sub_noise_scores[i_sub, ...], axis=1))
-            std_sub_score = np.squeeze(np.std(sub_noise_scores[i_sub, ...], axis=1))
+            mean_sub_score = np.squeeze(np.mean(sub_noise_score, axis=0))
+            print(mean_sub_score.shape)
+            std_sub_score = np.squeeze(np.std(sub_noise_score, axis=0))
             ax.plot(time, mean_sub_score)
             ax.fill_between(time, mean_sub_score - std_sub_score, mean_sub_score + std_sub_score, alpha = 0.2)
         plt.show()
