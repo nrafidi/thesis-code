@@ -143,6 +143,7 @@ if __name__ == '__main__':
     score_fig = plt.figure(figsize=(18, 9))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 4),
                         axes_pad=0.4, cbar_pad=0.4)
+    colors = ['r', 'g', 'b', 'm', 'c']
     for i_word, word in enumerate(['noun2', 'det', 'eos', 'eos-full']):
         if word != 'det':
             subject_rdms, word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
@@ -180,18 +181,21 @@ if __name__ == '__main__':
         else:
             axis_ind = i_word
         ax = score_grid[axis_ind]
-        ax.plot(time, voice_scores_win, label='Voice')
+        ax.plot(time, voice_scores_win, label='Voice', color=colors[0])
+        ax.plot(time, word_scores_win, label='Word', color=colors[1])
+        ax.plot(time, word_scores_win, label='Edit Distance', color=colors[2])
         if word != 'eos-full':
-            ax.plot(time, age_scores_win, label='Age')
-            ax.plot(time, gen_scores_win, label='Gen')
-        ax.plot(time, word_scores_win, label='Word')
-        ax.plot(time, word_scores_win, label='Edit Distance')
-        if axis_ind == 3:
+            ax.plot(time, age_scores_win, label='Age', color=colors[3])
+            ax.plot(time, gen_scores_win, label='Gen', color=colors[4])
+
+        if axis_ind == 2:
             ax.legend(loc=1)
+
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation')
+
         ax.set_ylim([0.0, 0.7])
         ax.set_xlim([np. min(time), np.max(time)])
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
