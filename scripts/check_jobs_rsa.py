@@ -4,7 +4,7 @@ import batch_experiments_rsa as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_RSA/'
 SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}RSA_{sub}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}'
+SAVE_FILE = '{dir}RSA_{sub}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{draw}'
 
 
 
