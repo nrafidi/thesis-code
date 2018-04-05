@@ -181,11 +181,12 @@ if __name__ == '__main__':
             axis_ind = i_word
         ax = score_grid[axis_ind]
         ax.plot(time, voice_scores_win, label='Voice')
-        ax.plot(time, age_scores_win, label='Age')
-        ax.plot(time, gen_scores_win, label='Gen')
+        if word != 'eos-full':
+            ax.plot(time, age_scores_win, label='Age')
+            ax.plot(time, gen_scores_win, label='Gen')
         ax.plot(time, word_scores_win, label='Word')
         ax.plot(time, word_scores_win, label='Edit Distance')
-        if axis_ind == 2:
+        if axis_ind == 3:
             ax.legend(loc=1)
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         ax.set_xlabel('Time (s)')
