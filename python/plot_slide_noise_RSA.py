@@ -178,7 +178,7 @@ if __name__ == '__main__':
         word_list = ['noun2', 'det', 'eos']
 
     score_fig = plt.figure(figsize=(18, 9))
-    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 4),
+    score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
                         axes_pad=0.4, cbar_pad=0.4)
     colors = ['r', 'g', 'b', 'm', 'c']
     for i_word, word in enumerate(word_list):
