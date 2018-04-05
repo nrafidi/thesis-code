@@ -487,6 +487,7 @@ if __name__ == '__main__':
                                          win_len=win_len,
                                          ov=overlap,
                                          dist=dist,
+                                           full_str=full_str,
                                          avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
     score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
