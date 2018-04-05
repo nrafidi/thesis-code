@@ -16,16 +16,26 @@ AGE = {'boy': 'young',
        'girl': 'young',
        'man': 'old',
        'woman': 'old',
+       'kicked': 'none',
+       'helped': 'none',
+       'punched': 'none',
+       'approached': 'none'
 }
 
 GEN = {'boy': 'male',
        'girl': 'female',
        'man': 'male',
-       'woman': 'female'}
+       'woman': 'female',
+       'kicked': 'none',
+       'helped': 'none',
+       'punched': 'none',
+       'approached': 'none'
+       }
 
 PLOT_TITLE = {'det': 'Determiner',
               'noun2': 'Second Noun',
-              'eos': 'Post Sentence'}
+              'eos': 'Post Sentence',
+              'eos-full': 'Post Sentence\nAll Sentence Lengths'}
 
 TEXT_PAD_X = -0.08
 TEXT_PAD_Y = 1.025
@@ -133,7 +143,7 @@ if __name__ == '__main__':
     score_fig = plt.figure(figsize=(18, 9))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 3),
                         axes_pad=0.4, cbar_pad=0.4)
-    for i_word, word in enumerate(['noun2', 'det', 'eos']):
+    for i_word, word in enumerate(['noun2', 'det', 'eos', 'eos-full']):
         if word != 'det':
             subject_rdms, word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
