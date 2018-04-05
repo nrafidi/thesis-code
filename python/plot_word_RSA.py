@@ -124,7 +124,7 @@ def edit_distance(string1, string2):
     return tbl[m-1,n-1]
 
 
-def noise_ceiling(subject_rdms):
+def noise_ceiling_krieg(subject_rdms):
     num_subjects = subject_rdms.shape[0]
     num_time = subject_rdms.shape[1]
     avg_rdm = np.squeeze(np.mean(subject_rdms, axis=0))
@@ -141,6 +141,24 @@ def noise_ceiling(subject_rdms):
             noise_scores[1, i_time, i_sub], _ = ktau_rdms(rdm, full_rdm)
     lower_bound = np.min(noise_scores[0, :, :], axis=2)
     upper_bound = np.max(noise_scores[1, :, :], axis=2)
+    return lower_bound, upper_bound
+
+
+def my_noise_ceiling(subject_rdms, num_draws):
+    num_subjects = subject_rdms.shape[0]
+    num_time = subject_rdms.shape[1]
+    noise_scores = np.empty((num_draws, num_time))
+    subject_list = range(num_subjects)
+    for i_draw in range(num_draws):
+        sample_1 = np.random.choice(subject_list, num_subjects/2)
+        sample_2 = [sub for sub in subject_list if sub not in sample_1]
+        sample_1_avg = np.mean(subject_rdms[sample_1, :, :, :], axis=1)
+        sample_2_avg = np.mean(subject_rdms[sample_2, :, :, :], axis=1)
+        for i_time in range(num_time):
+            noise_scores[i_draw, i_time], _ = ktau_rdms(np.squeeze(sample_1_avg[i_time, ...]),
+                                                        np.squeeze(sample_2_avg[i_time, ...]))
+    lower_bound = np.min(noise_scores, axis=0)
+    upper_bound = np.max(noise_scores, axis=0)
     return lower_bound, upper_bound
 
 
@@ -180,7 +198,7 @@ if __name__ == '__main__':
                                                                 overlap,
                                                                 dist,
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
-        lower_bound, upper_bound = noise_ceiling(subject_rdms)
+        lower_bound, upper_bound = my_noise_ceiling(subject_rdms, 10)
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
 
