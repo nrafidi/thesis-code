@@ -18,20 +18,18 @@ VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
 TMIN={'det': -0.5,
-      'det-full': -0.5,
       'noun2': 0.0,
       'last-full': 0.0,
       'eos': 0.5,
       'eos-full': 0.5}
 TMAX={'det': 0.0,
-      'det-full': 0.0,
       'noun2': 0.5,
       'last-full': 0.5,
       'eos': 1.0,
       'eos-full': 1.0}
 
-WORD_COLS = {'active': {'det': 3, 'det-full': -3, 'noun2': 4, 'last-full': -2, 'eos': 4, 'eos-full': -2},
-             'passive': {'det': 5, 'det-full': -3, 'noun2': 6, 'last-full': -2, 'eos': 6, 'eos-full': -2}}
+WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'last-full': -2, 'eos': 4, 'eos-full': -2},
+             'passive': {'det': 5, 'noun2': 6, 'last-full': -2, 'eos': 6, 'eos-full': -2}}
 
 
 def bool_to_str(bool_var):
@@ -77,11 +75,8 @@ def load_agg_data(subject, word, experiment, voice, proc, rep_set):
     for i_sen_int, sen_int in enumerate(sen_ints):
         word_list = stimuli_voice[sen_int]['stimulus'].split()
         curr_voice = stimuli_voice[sen_int]['voice']
-        if 'full' in word and len(word_list) > 5:
+        if 'full' in word:
             labels.append(word_list[WORD_COLS[curr_voice][word]])
-            voice_labels.append(curr_voice)
-        elif 'full' in word:
-            labels.append(word_list[WORD_COLS[curr_voice][word] + 1])
             voice_labels.append(curr_voice)
         elif len(word_list) > 5:
             data[i_data, :, :] = all_data[i_sen_int, :, :]
