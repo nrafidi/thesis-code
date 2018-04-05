@@ -139,7 +139,9 @@ def noise_ceiling(subject_rdms):
             rdm = np.squeeze(time_rdm[i_time, :, :])
             noise_scores[0, i_time, i_sub], _ = ktau_rdms(rdm, less_rdm)
             noise_scores[1, i_time, i_sub], _ = ktau_rdms(rdm, full_rdm)
-    return np.squeeze(np.mean(noise_scores, axis=2))
+    lower_bound = np.min(noise_scores[0, :, :], axis=2)
+    upper_bound = np.max(noise_scores[1, :, :], axis=2)
+    return lower_bound, upper_bound
 
 
 
@@ -178,7 +180,7 @@ if __name__ == '__main__':
                                                                 overlap,
                                                                 dist,
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
-        noise_scores = noise_ceiling(subject_rdms)
+        lower_bound, upper_bound = noise_ceiling(subject_rdms)
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
 
@@ -207,8 +209,8 @@ if __name__ == '__main__':
         if word != 'eos-full':
             ax.plot(time, age_scores_win, label='Age', color=colors[3])
             ax.plot(time, gen_scores_win, label='Gen', color=colors[4])
-        ax.plot(time, noise_scores[0, :], label='Noise Ceiling LB', linestyle='--', color='0.5')
-        ax.plot(time, noise_scores[1, :], label='Noise Ceiling UB', linestyle='-.', color='0.5')
+        ax.plot(time, lower_bound, label='Noise Ceiling LB', linestyle='--', color='0.5')
+        ax.plot(time, upper_bound, label='Noise Ceiling UB', linestyle='-.', color='0.5')
 
         if axis_ind == 3:
             ax.legend(loc=1)
