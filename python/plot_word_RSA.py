@@ -165,11 +165,12 @@ def my_noise_ceiling(subject_rdms, num_draws):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment')
+    parser.add_argument('--experiment', default='PassAct3')
     parser.add_argument('--win_len', type=int)
-    parser.add_argument('--overlap', type=int)
+    parser.add_argument('--overlap', type=int, default=3)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
-    parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
+    parser.add_argument('--doTimeAvg', default='True', choices=['True', 'False'])
+    parser.add_argument('--num_draws', type=int, default=100)
 
     args = parser.parse_args()
 
@@ -178,6 +179,7 @@ if __name__ == '__main__':
     overlap = args.overlap
     dist = args.dist
     doTimeAvg = run_Word_RSA.str_to_bool(args.doTimeAvg)
+    num_draws = args.num_draws
 
     score_fig = plt.figure(figsize=(18, 9))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, 4),
@@ -198,7 +200,7 @@ if __name__ == '__main__':
                                                                 overlap,
                                                                 dist,
                                                                 run_Word_RSA.bool_to_str(doTimeAvg))
-        lower_bound, upper_bound = my_noise_ceiling(subject_rdms, 10)
+        lower_bound, upper_bound = my_noise_ceiling(subject_rdms, num_draws)
         rdm = np.squeeze(np.mean(subject_rdms, axis=0))
         num_time = rdm.shape[0]
 
