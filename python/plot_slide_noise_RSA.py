@@ -206,7 +206,7 @@ if __name__ == '__main__':
         mean_noise = np.squeeze(np.mean(noise_ceiling, axis=0))
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
 
-        num_sub_test = 10
+        num_sub_test = 5
 
         fig, ax = plt.subplots()
         for i_sub in range(num_sub_test):
@@ -217,7 +217,8 @@ if __name__ == '__main__':
             std_sub_score = np.squeeze(np.std(sub_noise_score, axis=0))
             ax.plot(time, mean_sub_score)
             ax.fill_between(time, mean_sub_score - std_sub_score, mean_sub_score + std_sub_score, alpha = 0.2)
-        plt.show()
+        ax.set_title('{} Subject Noise Ceilings'.format(num_sub_test))
+        # plt.show()
 
 
 
