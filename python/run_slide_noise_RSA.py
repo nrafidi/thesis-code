@@ -77,8 +77,11 @@ def load_agg_data(subject, word, experiment, voice, proc, rep_set):
     for i_sen_int, sen_int in enumerate(sen_ints):
         word_list = stimuli_voice[sen_int]['stimulus'].split()
         curr_voice = stimuli_voice[sen_int]['voice']
-        if 'full' in word:
+        if 'full' in word and len(word_list) > 5:
             labels.append(word_list[WORD_COLS[curr_voice][word]])
+            voice_labels.append(curr_voice)
+        elif 'full' in word:
+            labels.append(word_list[WORD_COLS[curr_voice][word] + 1])
             voice_labels.append(curr_voice)
         elif len(word_list) > 5:
             data[i_data, :, :] = all_data[i_sen_int, :, :]
