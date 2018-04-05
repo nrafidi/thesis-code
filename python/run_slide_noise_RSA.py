@@ -58,9 +58,9 @@ def load_agg_data(subject, word, experiment, voice, proc, rep_set):
                                                                      experiment=experiment,
                                                                      proc=proc,
                                                                      num_instances=1,
-                                                                     reps_filter=lambda rep_list: [
+                                                                     reps_filter=lambda nr: [
                                                                          rep in rep_set
-                                                                         for rep in rep_list],
+                                                                         for rep in range(nr)],
                                                                      sensor_type=None,
                                                                      is_region_sorted=False,
                                                                      tmin=TMIN[word],
