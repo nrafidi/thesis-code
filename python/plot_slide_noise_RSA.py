@@ -11,6 +11,7 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 import string
 
 SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.pdf'
+SAVE_SCORES = '/share/volume0/nrafidi/RSA_scores/{exp}/RSA_{score_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.npz'
 
 AGE = {'boy': 'young',
        'girl': 'young',
@@ -161,7 +162,8 @@ if __name__ == '__main__':
     parser.add_argument('--overlap', type=int, default=3)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='True', choices=['True', 'False'])
-    parser.add_argument('--plotFullSen', default='False')
+    parser.add_argument('--plotFullSen', action='store_true')
+    parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
 
@@ -170,7 +172,8 @@ if __name__ == '__main__':
     overlap = args.overlap
     dist = args.dist
     doTimeAvg = run_slide_noise_RSA.str_to_bool(args.doTimeAvg)
-    plotFullSen = run_slide_noise_RSA.str_to_bool(args.plotFullSen)
+    plotFullSen = args.plotFullSen
+    force = args.force
 
     if plotFullSen:
         word_list = ['last-full', 'eos-full']
@@ -202,7 +205,21 @@ if __name__ == '__main__':
         test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
         rdm = np.squeeze(np.mean(test_rdms, axis=0))
 
-        noise_ceiling = score_rdms(val_rdms, test_rdms)
+        noise_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='noise',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                        full_str=full_str
+                                        )
+        if os.path.isfile(noise_file) and not force:
+            noise_ceiling = score_rdms(val_rdms, test_rdms)
+            np.savez_compressed(noise_file, noise_ceiling=noise_ceiling)
+        else:
+            result = np.load(noise_file)
+            noise_ceiling = result['noise_ceiling']
         mean_noise = np.squeeze(np.mean(noise_ceiling, axis=0))
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
 
@@ -228,7 +245,21 @@ if __name__ == '__main__':
 
         time += win_len*0.002
 
-        voice_scores = score_rdms(voice_rdm, test_rdms)
+        voice_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='voice',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                        full_str=full_str
+                                        )
+        if os.path.isfile(voice_file) and not force:
+            voice_scores = score_rdms(voice_rdm, test_rdms)
+            np.savez_compressed(voice_file, voice_scores=voice_scores)
+        else:
+            result = np.load(voice_file)
+            voice_scores = result['voice_scores']
         mean_voice = np.squeeze(np.mean(voice_scores, axis=0))
         std_voice = np.squeeze(np.std(voice_scores, axis=0))
         # age_scores = score_rdms(age_rdm, test_rdms)
@@ -237,10 +268,39 @@ if __name__ == '__main__':
         # gen_scores = score_rdms(gen_rdm, test_rdms)
         # mean_gen = np.squeeze(np.mean(gen_scores, axis=0))
         # std_gen = np.squeeze(np.std(gen_scores, axis=0))
-        word_scores = score_rdms(word_rdm, test_rdms)
+        word_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='word',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                        full_str=full_str
+                                        )
+        if os.path.isfile(word_file) and not force:
+            word_scores = score_rdms(word_rdm, test_rdms)
+            np.savez_compressed(word_file, word_scores=word_scores)
+        else:
+            result = np.load(word_file)
+            word_scores = result['word_scores']
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
-        string_scores = score_rdms(string_rdm, test_rdms)
+
+        string_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='string',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                        full_str=full_str
+                                        )
+        if os.path.isfile(string_file) and not force:
+            string_scores = score_rdms(string_rdm, test_rdms)
+            np.savez_compressed(string_file, string_scores=string_scores)
+        else:
+            result = np.load(string_file)
+            string_scores = result['string_scores']
         mean_string = np.squeeze(np.mean(string_scores, axis=0))
         std_string = np.squeeze(np.std(string_scores, axis=0))
 
