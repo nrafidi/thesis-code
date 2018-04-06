@@ -32,8 +32,8 @@ TMAX={'det': 0.0,
       'eos': 1.0,
       'eos-full': 1.0}
 
-WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'last-full': -2, 'eos': 4, 'eos-full': -2},
-             'passive': {'det': 5, 'noun2': 6, 'last-full': -2, 'eos': 6, 'eos-full': -2}}
+WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'third-last-full': -4, 'second-last-full': -3, 'last-full': -2, 'eos': 4, 'eos-full': -2},
+             'passive': {'det': 5, 'noun2': 6, 'third-last-full': -4, 'second-last-full': -3, 'last-full': -2, 'eos': 6, 'eos-full': -2}}
 
 
 def bool_to_str(bool_var):
