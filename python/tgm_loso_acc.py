@@ -183,7 +183,7 @@ if __name__ == '__main__':
                 if word == 'noun1':
                     start_line -= 0.0
                 elif word == 'verb':
-                    end_point = num_time - 63
+                    end_point = num_time - 83
                     frac_sub = frac_sub[time_step:(time_step+end_point)]
                     mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
                     time_win = time_win[time_step:(time_step+end_point)]
