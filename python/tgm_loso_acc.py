@@ -46,7 +46,7 @@ def intersect_accs(exp,
 
     if num_instances == 1:
         avgTest = 'F'
-    if exp == 'krns2': # and not (sen_type == 'active' and word == 'verb'):
+    if exp == 'krns2' and not (sen_type == 'active' and word == 'verb'):
         rep = 10
     else:
         rep = None
@@ -179,10 +179,10 @@ if __name__ == '__main__':
                 if word == 'noun1':
                     start_line -= 0.0
                 elif word == 'verb':
-                    # frac_sub = frac_sub[time_step:]
-                    # mean_acc = mean_acc[time_step:, time_step:]
-                    # time_win = time_win[time_step:]
-                    # intersection = intersection[time_step:, time_step:]
+                    frac_sub = frac_sub[time_step:]
+                    mean_acc = mean_acc[time_step:, time_step:]
+                    time_win = time_win[time_step:]
+                    intersection = intersection[time_step:, time_step:]
                     max_line -= 0.5
                     start_line -= 0.5
                 else:
