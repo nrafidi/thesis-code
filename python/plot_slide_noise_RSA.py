@@ -113,8 +113,11 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
         gen_rdm = []
 
     voice_rdm = make_model_rdm(voice_labels, dist)
+    print(labels)
     word_rdm = make_model_rdm(labels, dist)
+    print(word_rdm[:10, :10])
     string_rdm = make_model_rdm(labels, 'edit')
+    print(string_rdm[:10, :10])
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time
 
 
@@ -224,18 +227,18 @@ if __name__ == '__main__':
         mean_noise = np.squeeze(np.mean(noise_ceiling, axis=0))
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
 
-        num_sub_test = 5
-
-        fig, ax = plt.subplots()
-        for i_sub in range(num_sub_test):
-            sub_noise_score = score_rdms(np.squeeze(sub_val_rdms[i_sub, ...]),
-                                                       np.squeeze(sub_test_rdms[i_sub, ...]))
-            mean_sub_score = np.squeeze(np.mean(sub_noise_score, axis=0))
-            print(mean_sub_score.shape)
-            std_sub_score = np.squeeze(np.std(sub_noise_score, axis=0))
-            ax.plot(time, mean_sub_score)
-            ax.fill_between(time, mean_sub_score - std_sub_score, mean_sub_score + std_sub_score, alpha = 0.2)
-        ax.set_title('{} Subject Noise Ceilings'.format(num_sub_test))
+        # num_sub_test = 5
+        #
+        # fig, ax = plt.subplots()
+        # for i_sub in range(num_sub_test):
+        #     sub_noise_score = score_rdms(np.squeeze(sub_val_rdms[i_sub, ...]),
+        #                                                np.squeeze(sub_test_rdms[i_sub, ...]))
+        #     mean_sub_score = np.squeeze(np.mean(sub_noise_score, axis=0))
+        #     print(mean_sub_score.shape)
+        #     std_sub_score = np.squeeze(np.std(sub_noise_score, axis=0))
+        #     ax.plot(time, mean_sub_score)
+        #     ax.fill_between(time, mean_sub_score - std_sub_score, mean_sub_score + std_sub_score, alpha = 0.2)
+        # ax.set_title('{} Subject Noise Ceilings'.format(num_sub_test))
         # plt.show()
 
 
