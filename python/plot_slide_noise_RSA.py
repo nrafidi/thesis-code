@@ -41,6 +41,7 @@ GEN = {'boy': 'male',
 
 PLOT_TITLE = {'det': 'Determiner',
               'noun2': 'Second Noun',
+              'third-last': 'Third-to-Last Word',
               'third-last-full': 'Third-to-Last Word',
               'second-last-full': 'Second-to-Last Word',
               'last-full': 'Last Word',
