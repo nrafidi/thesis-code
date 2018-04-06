@@ -320,8 +320,10 @@ if __name__ == '__main__':
         mean_string = np.squeeze(np.mean(string_scores, axis=0))
         std_string = np.squeeze(np.std(string_scores, axis=0))
 
-        if i_word < 2 and not plotFullSen:
-            axis_ind = 1 - i_word
+        if word == 'det':
+            axis_ind = 1
+        elif word == 'noun2':
+            axis_ind = 2
         else:
             axis_ind = i_word
         ax = score_grid[axis_ind]
