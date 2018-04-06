@@ -80,7 +80,8 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode=mode)
-
+        if job_id == 393 or job_id == 541 or job_id == 643 or job_id ==775 or job_id == 781:
+            print(grid)
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
             was_success = True
@@ -104,9 +105,9 @@ if __name__ == '__main__':
             if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
-                    print('Job {} Failed'.format(job_str))
-                    print(err_file)
-                    print(grid)
+                    # print('Job {} Failed'.format(job_str))
+                    # print(err_file)
+                    # print(grid)
 
 
         job_id += 1
