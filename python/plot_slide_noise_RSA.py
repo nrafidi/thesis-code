@@ -35,6 +35,8 @@ GEN = {'boy': 'male',
 
 PLOT_TITLE = {'det': 'Determiner',
               'noun2': 'Second Noun',
+              'third-last-full': 'Third-to-Last Word',
+              'second-last-full': 'Second-to-Last Word',
               'last-full': 'Last Word',
               'eos': 'Post Sentence',
               'eos-full': 'Post Sentence All'}
@@ -113,11 +115,11 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
         gen_rdm = []
 
     voice_rdm = make_model_rdm(voice_labels, dist)
-    print(labels)
+    # print(labels)
     word_rdm = make_model_rdm(labels, dist)
-    print(word_rdm[:10, :10])
+    # print(word_rdm[:10, :10])
     string_rdm = make_model_rdm(labels, 'edit')
-    print(string_rdm[:10, :10])
+    # print(string_rdm[:10, :10])
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time
 
 
@@ -179,7 +181,7 @@ if __name__ == '__main__':
     force = args.force
 
     if plotFullSen:
-        word_list = ['last-full', 'eos-full']
+        word_list = ['third-last-full', 'second-last-full', 'last-full', 'eos-full']
         full_str = 'all'
     else:
         word_list = ['noun2', 'det', 'eos']

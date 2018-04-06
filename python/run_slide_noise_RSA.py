@@ -19,11 +19,15 @@ VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
 TMIN={'det': -0.5,
       'noun2': 0.0,
+      'third-last-full': -1.0,
+      'second-last-full': -0.5,
       'last-full': 0.0,
       'eos': 0.5,
       'eos-full': 0.5}
 TMAX={'det': 0.0,
       'noun2': 0.5,
+      'third-last-full': -0.5,
+      'second-last-full': 0.0,
       'last-full': 0.5,
       'eos': 1.0,
       'eos-full': 1.0}
