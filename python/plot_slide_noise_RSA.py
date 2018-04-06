@@ -20,7 +20,8 @@ AGE = {'boy': 'young',
        'kicked': 'none',
        'helped': 'none',
        'punched': 'none',
-       'approached': 'none'
+       'approached': 'none',
+       'the': 'none'
 }
 
 GEN = {'boy': 'male',
@@ -30,7 +31,8 @@ GEN = {'boy': 'male',
        'kicked': 'none',
        'helped': 'none',
        'punched': 'none',
-       'approached': 'none'
+       'approached': 'none',
+        'the': 'none'
        }
 
 PLOT_TITLE = {'det': 'Determiner',
