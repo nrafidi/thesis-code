@@ -64,13 +64,15 @@ def make_model_rdm(labels, dist):
     rdm = np.empty((len(labels), len(labels)))
     for i_lab, lab in enumerate(labels):
         for j_lab in range(i_lab, len(labels)):
-            if dist != 'edit':
+            if dist == 'edit':
+                rdm[i_lab, j_lab] = edit_distance(lab, labels[j_lab])
+            elif dist == 'len':
+                rdm[i_lab, j_lab] = np.abs(len(lab) - len(labels[j_lab]))
+            else:
                 if lab == labels[j_lab]:
                     rdm[i_lab, j_lab] = 0.0
                 else:
                     rdm[i_lab, j_lab] = VMAX[dist]
-            else:
-                rdm[i_lab, j_lab] = edit_distance(lab, labels[j_lab])
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
@@ -124,7 +126,8 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     # print(labels)
     word_rdm = make_model_rdm(labels, dist)
     # print(word_rdm[:10, :10])
-    string_rdm = make_model_rdm(labels, 'edit')
+    # string_rdm = make_model_rdm(labels, 'edit')
+    string_rdm = make_model_rdm(labels, 'len')
     # print(string_rdm[:10, :10])
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, time
 
@@ -299,7 +302,7 @@ if __name__ == '__main__':
         std_word = np.squeeze(np.std(word_scores, axis=0))
 
         string_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='string',
+                                        score_type='string-len',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -327,7 +330,7 @@ if __name__ == '__main__':
         ax.plot(time, mean_word, label='Word ID', color=colors[1])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
                         facecolor=colors[1], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_string, label='String Edit Distance', color=colors[2])
+        ax.plot(time, mean_string, label='String Length Difference', color=colors[2])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
                         facecolor=colors[2], alpha=0.5, edgecolor='w')
         # if not plotFullSen:
@@ -369,7 +372,7 @@ if __name__ == '__main__':
         print('Best Word Correlation occurs at {}'.format(time[best_word_win]))
         best_word_score = mean_word[best_word_win]
         best_string_win = np.argmax(mean_string)
-        print('Best Edit Distance Correlation occurs at {}'.format(time[best_string_win]))
+        print('Best Length Difference Correlation occurs at {}'.format(time[best_string_win]))
         best_string_score = mean_string[best_string_win]
 
         voice_fig = plt.figure(figsize=(14, 7))
@@ -489,7 +492,7 @@ if __name__ == '__main__':
         string_grid[1].text(TEXT_PAD_X, TEXT_PAD_Y, 'B', transform=string_grid[1].transAxes,
                           size=20, weight='bold')
         cbar = string_grid.cbar_axes[0].colorbar(im)
-        string_fig.suptitle('Edit Distance {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
+        string_fig.suptitle('String Length Difference {word} RDM Comparison\nScore: {score}'.format(word=PLOT_TITLE[word],
                                                                                  score=best_string_score),
                           fontsize=18)
 
