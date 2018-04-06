@@ -183,10 +183,10 @@ if __name__ == '__main__':
                 if word == 'noun1':
                     start_line -= 0.0
                 elif word == 'verb':
-                    frac_sub = frac_sub[time_step:]
-                    mean_acc = mean_acc[time_step:, time_step:]
-                    time_win = time_win[time_step:]
-                    intersection = intersection[time_step:, time_step:]
+                    frac_sub = frac_sub[time_step:(time_step+208)]
+                    mean_acc = mean_acc[time_step:(time_step+208), time_step:(time_step+208)]
+                    time_win = time_win[time_step:(time_step+208)]
+                    intersection = intersection[time_step:(time_step+208), time_step:(time_step+208)]
                     max_line -= 0.5
                     start_line -= 0.5
                 else:
