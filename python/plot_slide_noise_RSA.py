@@ -194,7 +194,7 @@ if __name__ == '__main__':
         word_list = ['third-last-full', 'second-last-full', 'last-full', 'eos-full']
         full_str = 'all'
     else:
-        word_list = ['noun2', 'det', 'eos']
+        word_list = ['third-last', 'noun2', 'det', 'eos']
         full_str = 'long'
 
     score_fig = plt.figure(figsize=(21, 9))
