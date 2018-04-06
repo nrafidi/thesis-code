@@ -171,6 +171,10 @@ if __name__ == '__main__':
             frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.mean(acc_all, axis=0)
             time_win = time[win_starts]
+            num_time = len(time_win)
+            print(sen_type)
+            print(word)
+            print(num_time)
             time_step = int(250/args.overlap)
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
