@@ -6,11 +6,11 @@ import time
 
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['second-last-full', 'third-last-full']
+WORDS = ['third-last']
 WIN_LENS = [50]
 OVERLAPS = [3]
 DRAWS = range(126)
-DISTS = ['cosine', 'euclidean']
+DISTS = ['cosine']
 DO_TME_AVGS = [True]
 
 JOB_NAME = '{dist}-{sub}-{word}-{id}'

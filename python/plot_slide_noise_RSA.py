@@ -196,7 +196,7 @@ if __name__ == '__main__':
         word_list = ['noun2', 'det', 'eos']
         full_str = 'long'
 
-    score_fig = plt.figure(figsize=(18, 9))
+    score_fig = plt.figure(figsize=(21, 9))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
                         axes_pad=0.4, cbar_pad=0.4)
     colors = ['r', 'g', 'b', 'm', 'c']
