@@ -678,7 +678,7 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                print(model.n_iter_)
+                # print(model.n_iter_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
                 # print(tgm_acc[i_split, wi, wj])
