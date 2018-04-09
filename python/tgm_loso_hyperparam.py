@@ -108,7 +108,7 @@ if __name__ == '__main__':
                             time = np.squeeze(time)
                             time_win = time[win_starts]
                             num_time = len(time_win)
-                            time_step = int(250 / args.overlap)
+                            time_step = int(250.0 / 12.0)
                             frac_sub = np.diag(intersection).astype('float') / float(acc_all.shape[0])
                             mean_acc = np.diag(np.mean(acc_all, axis=0))
                             if word == 'verb' and sen_type == 'active':
