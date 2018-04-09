@@ -80,7 +80,7 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode=mode)
-        if job_id == 393 or job_id == 541 or job_id == 643 or job_id ==775 or job_id == 781:
+        if job_id in [781, 794, 807, 820, 833, 1139, 1145, 1158]:
             print(grid)
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
