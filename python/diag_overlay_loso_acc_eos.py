@@ -85,7 +85,7 @@ if __name__ == '__main__':
     label_time[np.abs(label_time) < 1e-15] = 0.0
     ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy, words')
     ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance accuracy, voice')
-    ax.axhline(y=1.0/16.0, color='k', linestyle='dot', label='chance accuracy, proposition')
+    ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance accuracy, proposition')
     ax.set_xticklabels(label_time)
     ax.axvline(x=max_line, color='k')
     ax.set_ylabel('Accuracy')
