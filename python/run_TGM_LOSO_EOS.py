@@ -18,7 +18,7 @@ VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
-VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'senid', 'propid']
+VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'propid']
 
 TMAX={'krns2': 1.5,
       'PassAct2': 1.5,
@@ -119,9 +119,7 @@ def run_tgm_exp(experiment,
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
     print(stimuli_voice)
-    if word == 'senid':
-        labels = sen_ints
-    elif word == 'propid':
+    if word == 'propid':
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
         content_words = []

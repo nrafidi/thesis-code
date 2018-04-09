@@ -21,7 +21,6 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'agent': 'Agent',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
-                   'senid': 'Sentence ID',
                    'propid': 'Proposition ID'}
 
 
@@ -31,7 +30,6 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
                              'voice': 0.5,
                               'agent': 0.25,
                               'patient': 0.25,
-                              'senid': 1.0/32.0,
                               'propid': 1.0/16.0},
                   'active': {'noun1': 0.25,
                              'verb': 0.25,
@@ -43,7 +41,6 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
           'PassAct3': {'pooled': {'noun1': 0.25,
                              'verb': 0.25,
                              'voice': 0.5,
-                              'senid': 1.0/32.0,
                               'propid': 1.0/24.0},
                   'active': {'noun1': 0.25,
                              'verb': 0.25,
@@ -156,7 +153,7 @@ if __name__ == '__main__':
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     sen_type = 'pooled'
-    for i_word, word in enumerate(['agent', 'patient', 'verb', 'voice', 'senid', 'propid']):
+    for i_word, word in enumerate(['agent', 'patient', 'verb', 'voice', 'propid']):
         chance = CHANCE[args.experiment][sen_type][word]
         intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                           sen_type,
@@ -222,7 +219,7 @@ if __name__ == '__main__':
             ), bbox_inches='tight')
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.0)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
         if i_word == 0 or i_word == 2:
             ax.set_ylabel('Train Time (s)')
         if i_word > 1:
