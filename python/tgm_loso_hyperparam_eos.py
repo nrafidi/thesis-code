@@ -28,8 +28,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--avgTime', default='F')
-    parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--avgTime', default='T')
+    parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
     sen_type = 'pooled'
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
-    win_lens = [12, 25, 50, 100, 150]
+    win_lens = [12, 25, 50]
     num_insts = [2, 5, 10]
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}.pdf'
