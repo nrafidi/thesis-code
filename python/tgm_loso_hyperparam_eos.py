@@ -117,7 +117,7 @@ if __name__ == '__main__':
             avgTime=avg_time_str,
             avgTest=avg_test_str),
                      fontsize=18)
-        fig.tight_layout()
+        # fig.tight_layout()
         fig.savefig(fig_fname.format(
             exp=args.experiment, sen_type=sen_type, word=word, avgTime=args.avgTime, avgTest=args.avgTest, fig_type='single-mean-score-comp'
         ), bbox_inches='tight')
@@ -169,7 +169,7 @@ if __name__ == '__main__':
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
     ax.set_xlabel('Number of Instances')
     ax.set_ylabel('Window Length (ms)')
-    fig.tight_layout()
+    # fig.tight_layout()
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type=sen_type, word='all', avgTime=args.avgTime, avgTest=args.avgTest,
         fig_type='total-comb-max-score-comp'
