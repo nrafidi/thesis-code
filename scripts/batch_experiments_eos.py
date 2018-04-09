@@ -5,8 +5,8 @@ import time
 
 
 MODES = ['acc']
-EXPERIMENTS = ['krns2', 'PassAct3']
-SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
+EXPERIMENTS = ['krns2']#, 'PassAct3']
+SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] #['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
 SEN_TYPES = ['pooled']
 WORDS = ['verb', 'noun1', 'voice', 'agent', 'patient']
 WIN_LENS = [12, 25, 50]
