@@ -114,7 +114,7 @@ if __name__ == '__main__':
                             if word == 'verb' and sen_type == 'active':
                                 end_point = num_time - 83
                                 frac_sub = frac_sub[time_step:(time_step + end_point)]
-                                mean_acc = mean_acc[time_step:(time_step + end_point), time_step:(time_step + end_point)]
+                                mean_acc = mean_acc[time_step:(time_step + end_point)]
                                 time_win = time_win[time_step:(time_step + end_point)]
                                 intersection = intersection[time_step:(time_step + end_point),
                                                time_step:(time_step + end_point)]
