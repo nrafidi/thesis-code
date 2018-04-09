@@ -18,6 +18,7 @@ VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
+VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'senid', 'propid']
 
 TMAX={'krns2': 1.5,
       'PassAct2': 1.5,
@@ -117,14 +118,29 @@ def run_tgm_exp(experiment,
                                                                  tmax=TMAX[experiment])
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
-    labels = []
-    for i_sen_int, sen_int in enumerate(sen_ints):
-        word_list = stimuli_voice[sen_int]['stimulus'].split()
-        curr_voice = stimuli_voice[sen_int]['voice']
-        if word != 'voice':
-            labels.append(word_list[WORD_COLS[curr_voice][word]])
-        else:
-            labels.append(curr_voice)
+    print(stimuli_voice)
+    if word == 'senid':
+        labels = sen_ints
+    elif word == 'propid':
+        all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
+        all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
+        content_words = []
+        for i_word_list, word_list in enumerate(all_words):
+            curr_voice = all_voices[i_word_list]
+            content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
+                                  word_list[WORD_COLS[curr_voice]['patient']]])
+        uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
+        print(uni_content)
+    else:
+        labels = []
+        for i_sen_int, sen_int in enumerate(sen_ints):
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            curr_voice = stimuli_voice[sen_int]['voice']
+            if word == 'voice':
+                labels.append(curr_voice)
+            else:
+                labels.append(word_list[WORD_COLS[curr_voice][word]])
+
     print(labels)
     tmin = time.min()
     tmax = time.max()
@@ -180,7 +196,7 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
     parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
-    parser.add_argument('--word', choices=['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient'])
+    parser.add_argument('--word', choices=VALID_WORDS)
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
