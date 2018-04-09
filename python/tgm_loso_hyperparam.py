@@ -104,12 +104,27 @@ if __name__ == '__main__':
                                                                                                            num_instances=num_instances,
                                                                                                            avgTime=avgTime,
                                                                                                            avgTest=avgTest)
+
                             time = np.squeeze(time)
-                            time_ind = np.where(time[win_starts] >= (max_time - time_adjust))
+                            time_win = time[win_starts]
+                            num_time = len(time_win)
+                            time_step = int(250 / args.overlap)
+                            frac_sub = np.diag(intersection).astype('float') / float(acc_all.shape[0])
+                            mean_acc = np.diag(np.mean(acc_all, axis=0))
+                            if word == 'verb' and sen_type == 'active':
+                                end_point = num_time - 83
+                                frac_sub = frac_sub[time_step:(time_step + end_point)]
+                                mean_acc = mean_acc[time_step:(time_step + end_point), time_step:(time_step + end_point)]
+                                time_win = time_win[time_step:(time_step + end_point)]
+                                intersection = intersection[time_step:(time_step + end_point),
+                                               time_step:(time_step + end_point)]
+
+
+
+                            time_ind = np.where(time_win >= (max_time - time_adjust))
                             time_ind = time_ind[0]
 
-                            frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
-                            mean_acc = np.diag(np.mean(acc_all, axis=0))
+
 
                             percentile_tot = int(perc * len(mean_acc))
                             # print(percentile_tot)
