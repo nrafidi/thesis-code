@@ -175,6 +175,8 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
         if 'full' in word:
             len_labels = [LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
             syn_rdm = make_syntax_rdm(len_labels, voice_labels, dist)
+        else:
+            syn_rdm = []
     else:
         age_rdm = []
         gen_rdm = []
@@ -449,9 +451,7 @@ if __name__ == '__main__':
         else:
             axis_ind = i_word
         ax = score_grid[axis_ind]
-        # ax.plot(time, mean_voice, label='Voice', color=colors[0])
-        # ax.fill_between(time, mean_voice - std_voice, mean_voice + std_voice,
-        #                 facecolor=colors[0], alpha=0.5, edgecolor='w')
+
         ax.plot(time, mean_word, label='Word ID', color=colors[0])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
                         facecolor=colors[0], alpha=0.5, edgecolor='w')
@@ -468,6 +468,11 @@ if __name__ == '__main__':
             ax.plot(time, mean_syn, label='Syntax', color=colors[3])
             ax.fill_between(time, mean_syn - std_syn, mean_syn + std_syn,
                             facecolor=colors[3], alpha=0.5, edgecolor='w')
+        else:
+            ax.plot(time, mean_voice, label='Voice', color=colors[2])
+            ax.fill_between(time, mean_voice - std_voice, mean_voice + std_voice,
+                            facecolor=colors[2], alpha=0.5, edgecolor='w')
+
 
         ax.plot(time, mean_noise, label='Noise LB', linestyle='--', color='0.5')
         ax.fill_between(time, mean_noise - std_noise, mean_noise + std_noise,
