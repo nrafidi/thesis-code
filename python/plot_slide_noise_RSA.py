@@ -472,7 +472,7 @@ if __name__ == '__main__':
         ax.plot(time, mean_noise, label='Noise LB', linestyle='--', color='0.5')
         ax.fill_between(time, mean_noise - std_noise, mean_noise + std_noise,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_noise_ub, label='Noise UB', linestyle='--', color='0.5')
+        ax.plot(time, mean_noise_ub, label='Noise UB', linestyle=':', color='0.5')
         ax.fill_between(time, mean_noise_ub - std_noise_ub, mean_noise_ub + std_noise_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
 
