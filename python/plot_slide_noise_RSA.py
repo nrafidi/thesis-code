@@ -259,7 +259,7 @@ if __name__ == '__main__':
     score_fig = plt.figure(figsize=(21, 9))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
                         axes_pad=0.4, cbar_pad=0.4)
-    colors = ['r', 'g', 'b', 'm', 'c', 'tab:purple']
+    colors = ['r', 'g', 'b', 'm', 'c', 'y']
     for i_word, word in enumerate(word_list):
         if word != 'det':
             sub_val_rdms, sub_test_rdms, word_rdm, string_rdm, voice_rdm, age_rdm, gen_rdm, pos_rdm, syn_rdm, time = load_all_rdms(experiment,
