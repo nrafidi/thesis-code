@@ -279,11 +279,11 @@ if __name__ == '__main__':
         test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
         rdm = np.squeeze(np.mean(test_rdms, axis=0))
 
-        remainders = val_rdms - test_rdms
+        remainders = np.mean(val_rdms - test_rdms, axis=0)
         remainders = remainders.flatten()
 
         fig, ax = plt.subplots()
-        ax.hist(remainders, bins=50)
+        ax.hist(remainders)
 
         k2, p = normaltest(remainders)
         print('P value is : {}'.format(p))
