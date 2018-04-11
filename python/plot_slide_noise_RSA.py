@@ -457,9 +457,9 @@ if __name__ == '__main__':
             ax.legend(loc=1)
 
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
-        ax.set_xlabel('Time (s)')
+        # ax.set_xlabel('Time (s)')
         if axis_ind == 0:
-            ax.set_ylabel('Kendall Tau Correlation')
+            ax.set_ylabel('Kendall Tau Correlation', fontsize=14)
 
         ax.set_ylim([0.0, 0.7])
         ax.set_xlim([np. min(time), np.max(time)])
@@ -615,6 +615,8 @@ if __name__ == '__main__':
         #                                  avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
     score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
+
+    score_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
     score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
                                         word='both',
                                         win_len=win_len,
