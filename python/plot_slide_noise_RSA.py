@@ -277,6 +277,7 @@ if __name__ == '__main__':
                                                                                     run_slide_noise_RSA.bool_to_str(doTimeAvg))
         val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
         test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
+        of_rdms = (val_rdms + test_rdms)/2.0
         rdm = np.squeeze(np.mean(test_rdms, axis=0))
 
         remainders = np.mean(val_rdms - test_rdms, axis=0)
@@ -304,8 +305,27 @@ if __name__ == '__main__':
             noise_ceiling = score_rdms(val_rdms, test_rdms)
             np.savez_compressed(noise_file, noise_ceiling=noise_ceiling)
 
+        noise_ub_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='noise-ub',
+                                        word=word,
+                                        win_len=win_len,
+                                        ov=overlap,
+                                        dist=dist,
+                                        avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                        full_str=full_str
+                                        )
+        if os.path.isfile(noise_ub_file) and not force:
+            result = np.load(noise_ub_file)
+            noise_ub_ceiling = result['noise_ub_ceiling']
+        else:
+            noise_ub_ceiling = score_rdms(val_rdms, of_rdms)
+            np.savez_compressed(noise_ub_file, noise_ub_ceiling=noise_ub_ceiling)
+
         mean_noise = np.squeeze(np.mean(noise_ceiling, axis=0))
         std_noise = np.squeeze(np.std(noise_ceiling, axis=0))
+
+        mean_noise_ub = np.squeeze(np.mean(noise_ub_ceiling, axis=0))
+        std_noise_ub = np.squeeze(np.std(noise_ub_ceiling, axis=0))
 
         num_time = test_rdms.shape[1]
 
@@ -449,8 +469,11 @@ if __name__ == '__main__':
             ax.fill_between(time, mean_syn - std_syn, mean_syn + std_syn,
                             facecolor=colors[3], alpha=0.5, edgecolor='w')
 
-        ax.plot(time, mean_noise, label='Noise Ceiling', linestyle='--', color='0.5')
+        ax.plot(time, mean_noise, label='Noise LB', linestyle='--', color='0.5')
         ax.fill_between(time, mean_noise - std_noise, mean_noise + std_noise,
+                        facecolor='0.5', alpha=0.5, edgecolor='w')
+        ax.plot(time, mean_noise_ub, label='Noise UB', linestyle='--', color='0.5')
+        ax.fill_between(time, mean_noise_ub - std_noise_ub, mean_noise_ub + std_noise_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
 
         if axis_ind == len(word_list) - 1:
