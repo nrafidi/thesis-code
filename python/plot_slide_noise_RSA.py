@@ -426,6 +426,25 @@ if __name__ == '__main__':
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
 
+        word_ub_file = SAVE_SCORES.format(exp=experiment,
+                                       score_type='word-ub',
+                                       word=word,
+                                       win_len=win_len,
+                                       ov=overlap,
+                                       dist=dist,
+                                       avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+                                       full_str=full_str
+                                       )
+        if os.path.isfile(word_ub_file) and not force:
+            result = np.load(word_ub_file)
+            word_ub_scores = result['word_ub_scores']
+        else:
+            word_ub_scores = score_rdms(word_rdm, of_rdms)
+            np.savez_compressed(word_ub_file, word_ub_scores=word_ub_scores)
+        mean_word_ub = np.squeeze(np.mean(word_ub_scores, axis=0))
+        std_word_ub = np.squeeze(np.std(word_ub_scores, axis=0))
+
+
         string_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='string-len',
                                         word=word,
@@ -454,6 +473,9 @@ if __name__ == '__main__':
 
         ax.plot(time, mean_word, label='Word ID', color=colors[0])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
+                        facecolor=colors[0], alpha=0.5, edgecolor='w')
+        ax.plot(time, mean_word, label='Word ID UB', linestyle='--', color=colors[0])
+        ax.fill_between(time, mean_word_ub - std_word_ub, mean_word_ub + std_word_ub,
                         facecolor=colors[0], alpha=0.5, edgecolor='w')
         ax.plot(time, mean_string, label='Word Length', color=colors[1])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
