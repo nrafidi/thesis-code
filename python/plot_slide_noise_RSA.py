@@ -283,8 +283,8 @@ if __name__ == '__main__':
         remainders = np.mean(val_rdms - test_rdms, axis=0)
         remainders = remainders.flatten()
 
-        fig, ax = plt.subplots()
-        ax.hist(remainders)
+        # fig, ax = plt.subplots()
+        # ax.hist(remainders)
 
         k2, p = normaltest(remainders)
         print('P value is : {}'.format(p))
@@ -477,14 +477,14 @@ if __name__ == '__main__':
                         facecolor='0.5', alpha=0.5, edgecolor='w')
 
         if axis_ind == len(word_list) - 1:
-            ax.legend(loc=1)
+            ax.legend(loc=1, ncol=2)
 
         ax.set_title('{word}'.format(word=PLOT_TITLE[word]), fontsize=14)
         # ax.set_xlabel('Time (s)')
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation', fontsize=14)
 
-        ax.set_ylim([-0.1, 0.90])
+        ax.set_ylim([-0.1, 1.0])
         ax.set_xlim([np. min(time), np.max(time)])
         # ax.set_xticks(range(0, len(time), 5))
         ax.set_xticks(time[::20])
