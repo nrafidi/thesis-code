@@ -334,7 +334,7 @@ if __name__ == '__main__':
         time += win_len*0.002
 
         voice_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='voice',
+                                        score_type='voice-ub',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -346,14 +346,14 @@ if __name__ == '__main__':
             result = np.load(voice_file)
             voice_scores = result['voice_scores']
         else:
-            voice_scores = score_rdms(voice_rdm, test_rdms)
+            voice_scores = score_rdms(voice_rdm, of_rdms)
             np.savez_compressed(voice_file, voice_scores=voice_scores)
         mean_voice = np.squeeze(np.mean(voice_scores, axis=0))
         std_voice = np.squeeze(np.std(voice_scores, axis=0))
 
         if plotFullSen:
             gen_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='gen',
+                                            score_type='gen-ub',
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -365,13 +365,13 @@ if __name__ == '__main__':
                 result = np.load(gen_file)
                 gen_scores = result['gen_scores']
             else:
-                gen_scores = score_rdms(gen_rdm, test_rdms)
+                gen_scores = score_rdms(gen_rdm, of_rdms)
                 np.savez_compressed(gen_file, gen_scores=gen_scores)
             mean_gen = np.squeeze(np.mean(gen_scores, axis=0))
             std_gen = np.squeeze(np.std(gen_scores, axis=0))
 
             pos_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='pos',
+                                            score_type='pos-ub',
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -383,13 +383,13 @@ if __name__ == '__main__':
                 result = np.load(pos_file)
                 pos_scores = result['pos_scores']
             else:
-                pos_scores = score_rdms(pos_rdm, test_rdms)
+                pos_scores = score_rdms(pos_rdm, of_rdms)
                 np.savez_compressed(pos_file, pos_scores=pos_scores)
             mean_pos = np.squeeze(np.mean(pos_scores, axis=0))
             std_pos = np.squeeze(np.std(pos_scores, axis=0))
 
             syn_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='syn',
+                                            score_type='syn-ub',
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -401,7 +401,7 @@ if __name__ == '__main__':
                 result = np.load(syn_file)
                 syn_scores = result['syn_scores']
             else:
-                syn_scores = score_rdms(syn_rdm, test_rdms)
+                syn_scores = score_rdms(syn_rdm, of_rdms)
                 np.savez_compressed(syn_file, syn_scores=syn_scores)
             mean_syn = np.squeeze(np.mean(syn_scores, axis=0))
             std_syn = np.squeeze(np.std(syn_scores, axis=0))
@@ -409,7 +409,7 @@ if __name__ == '__main__':
         
         
         word_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='word',
+                                        score_type='word-ub',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -421,32 +421,32 @@ if __name__ == '__main__':
             result = np.load(word_file)
             word_scores = result['word_scores']
         else:
-            word_scores = score_rdms(word_rdm, test_rdms)
+            word_scores = score_rdms(word_rdm, of_rdms)
             np.savez_compressed(word_file, word_scores=word_scores)
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
 
-        word_ub_file = SAVE_SCORES.format(exp=experiment,
-                                       score_type='word-ub',
-                                       word=word,
-                                       win_len=win_len,
-                                       ov=overlap,
-                                       dist=dist,
-                                       avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
-                                       full_str=full_str
-                                       )
-        if os.path.isfile(word_ub_file) and not force:
-            result = np.load(word_ub_file)
-            word_ub_scores = result['word_ub_scores']
-        else:
-            word_ub_scores = score_rdms(word_rdm, of_rdms)
-            np.savez_compressed(word_ub_file, word_ub_scores=word_ub_scores)
-        mean_word_ub = np.squeeze(np.mean(word_ub_scores, axis=0))
-        std_word_ub = np.squeeze(np.std(word_ub_scores, axis=0))
+        # word_ub_file = SAVE_SCORES.format(exp=experiment,
+        #                                score_type='word-ub',
+        #                                word=word,
+        #                                win_len=win_len,
+        #                                ov=overlap,
+        #                                dist=dist,
+        #                                avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
+        #                                full_str=full_str
+        #                                )
+        # if os.path.isfile(word_ub_file) and not force:
+        #     result = np.load(word_ub_file)
+        #     word_ub_scores = result['word_ub_scores']
+        # else:
+        #     word_ub_scores = score_rdms(word_rdm, of_rdms)
+        #     np.savez_compressed(word_ub_file, word_ub_scores=word_ub_scores)
+        # mean_word_ub = np.squeeze(np.mean(word_ub_scores, axis=0))
+        # std_word_ub = np.squeeze(np.std(word_ub_scores, axis=0))
 
 
         string_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='string-len',
+                                        score_type='string-len-ub',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -458,7 +458,7 @@ if __name__ == '__main__':
             result = np.load(string_file)
             string_scores = result['string_scores']
         else:
-            string_scores = score_rdms(string_rdm, test_rdms)
+            string_scores = score_rdms(string_rdm, of_rdms)
             np.savez_compressed(string_file, string_scores=string_scores)
         mean_string = np.squeeze(np.mean(string_scores, axis=0))
         std_string = np.squeeze(np.std(string_scores, axis=0))
@@ -474,9 +474,9 @@ if __name__ == '__main__':
         ax.plot(time, mean_word, label='Word ID', color=colors[0])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
                         facecolor=colors[0], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_word, label='Word ID UB', linestyle='--', color=colors[0])
-        ax.fill_between(time, mean_word_ub - std_word_ub, mean_word_ub + std_word_ub,
-                        facecolor=colors[0], alpha=0.5, edgecolor='w')
+        # ax.plot(time, mean_word, label='Word ID UB', linestyle='--', color=colors[0])
+        # ax.fill_between(time, mean_word_ub - std_word_ub, mean_word_ub + std_word_ub,
+        #                 facecolor=colors[0], alpha=0.5, edgecolor='w')
         ax.plot(time, mean_string, label='Word Length', color=colors[1])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
                         facecolor=colors[1], alpha=0.5, edgecolor='w')
