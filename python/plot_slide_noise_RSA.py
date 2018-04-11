@@ -326,7 +326,7 @@ if __name__ == '__main__':
         mean_voice = np.squeeze(np.mean(voice_scores, axis=0))
         std_voice = np.squeeze(np.std(voice_scores, axis=0))
 
-        if not plotFullSen:
+        if plotFullSen:
             gen_file = SAVE_SCORES.format(exp=experiment,
                                             score_type='gen',
                                             word=word,
@@ -435,7 +435,7 @@ if __name__ == '__main__':
         ax.plot(time, mean_string, label='String Length Difference', color=colors[2])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
                         facecolor=colors[2], alpha=0.5, edgecolor='w')
-        if not plotFullSen:
+        if plotFullSen:
             ax.plot(time, mean_gen, label='Gender', color=colors[3])
             ax.fill_between(time, mean_gen - std_gen, mean_gen + std_gen,
                             facecolor=colors[3], alpha=0.5, edgecolor='w')
