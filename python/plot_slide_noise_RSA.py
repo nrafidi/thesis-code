@@ -268,15 +268,6 @@ if __name__ == '__main__':
                                                                                                                                   overlap,
                                                                                                                                   dist,
                                                                                                                                   run_slide_noise_RSA.bool_to_str(doTimeAvg))
-            fig, ax = plt.subplots()
-            ax.imshow(pos_rdm, interpolation='nearest')
-            ax.set_title('POS ' + word)
-            fig, ax = plt.subplots()
-            ax.imshow(syn_rdm, interpolation='nearest')
-            ax.set_title('Syntax ' + word)
-            fig, ax = plt.subplots()
-            ax.imshow(string_rdm, interpolation='nearest')
-            ax.set_title('String ' + word)
         else:
             sub_val_rdms, sub_test_rdms, _, _, _, _, _, _, _, time = load_all_rdms(experiment,
                                                                                     word,
@@ -287,6 +278,13 @@ if __name__ == '__main__':
         val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
         test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
         rdm = np.squeeze(np.mean(test_rdms, axis=0))
+
+        remainders = val_rdms - test_rdms
+        remainders = remainders.flatten()
+
+        fig, ax = plt.subplots()
+        ax.hist(remainders)
+
 
         noise_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='noise',
