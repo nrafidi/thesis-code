@@ -283,7 +283,7 @@ if __name__ == '__main__':
         remainders = remainders.flatten()
 
         fig, ax = plt.subplots()
-        ax.hist(remainders, bins=1000)
+        ax.hist(remainders, bins=50)
 
 
         noise_file = SAVE_SCORES.format(exp=experiment,
