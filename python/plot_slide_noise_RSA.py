@@ -463,8 +463,8 @@ if __name__ == '__main__':
 
         ax.set_ylim([0.0, 0.7])
         ax.set_xlim([np. min(time), np.max(time)])
-        ax.set_xticks(range(0, len(time), 5))
-        ax.set_xticklabels(time[::5])
+        # ax.set_xticks(range(0, len(time), 5))
+        # ax.set_xticklabels(time[::5])
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
