@@ -256,9 +256,9 @@ if __name__ == '__main__':
         word_list = ['third-last', 'noun2', 'det', 'eos']
         full_str = 'long'
 
-    score_fig = plt.figure(figsize=(25, 10))
+    score_fig = plt.figure(figsize=(25, 8))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
-                        axes_pad=0.4, cbar_pad=0.4)
+                        axes_pad=0.5)
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
     for i_word, word in enumerate(word_list):
         if word != 'det':
@@ -274,6 +274,9 @@ if __name__ == '__main__':
             fig, ax = plt.subplots()
             ax.imshow(syn_rdm, interpolation='nearest')
             ax.set_title('Syntax ' + word)
+            fig, ax = plt.subplots()
+            ax.imshow(string_rdm, interpolation='nearest')
+            ax.set_title('String ' + word)
         else:
             sub_val_rdms, sub_test_rdms, _, _, _, _, _, _, _, time = load_all_rdms(experiment,
                                                                                     word,
@@ -432,7 +435,7 @@ if __name__ == '__main__':
         ax.plot(time, mean_word, label='Word ID', color=colors[0])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
                         facecolor=colors[0], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_string, label='String Length Difference', color=colors[1])
+        ax.plot(time, mean_string, label='Word Length', color=colors[1])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
                         facecolor=colors[1], alpha=0.5, edgecolor='w')
         if plotFullSen:
