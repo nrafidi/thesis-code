@@ -283,7 +283,7 @@ if __name__ == '__main__':
         remainders = remainders.flatten()
 
         fig, ax = plt.subplots()
-        ax.hist(remainders)
+        ax.hist(remainders, bins=50)
 
 
         noise_file = SAVE_SCORES.format(exp=experiment,
@@ -459,7 +459,7 @@ if __name__ == '__main__':
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation', fontsize=14)
 
-        ax.set_ylim([0.0, 0.7])
+        ax.set_ylim([-0.15, 0.75])
         ax.set_xlim([np. min(time), np.max(time)])
         # ax.set_xticks(range(0, len(time), 5))
         ax.set_xticks(time[::20])
