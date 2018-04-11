@@ -256,9 +256,9 @@ if __name__ == '__main__':
         word_list = ['third-last', 'noun2', 'det', 'eos']
         full_str = 'long'
 
-    score_fig = plt.figure(figsize=(25, 8))
+    score_fig = plt.figure(figsize=(25, 5))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
-                        axes_pad=0.5)
+                        axes_pad=0.4)
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
     for i_word, word in enumerate(word_list):
         if word != 'det':
@@ -461,8 +461,10 @@ if __name__ == '__main__':
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation')
 
-        ax.set_ylim([0.0, 0.8])
+        ax.set_ylim([0.0, 0.7])
         ax.set_xlim([np. min(time), np.max(time)])
+        ax.set_xticks(range(0, len(time), 2))
+        ax.set_xticklabels(time[::2])
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
