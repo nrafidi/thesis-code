@@ -270,10 +270,10 @@ if __name__ == '__main__':
                                                                                                                                   run_slide_noise_RSA.bool_to_str(doTimeAvg))
             fig, ax = plt.subplots()
             ax.imshow(pos_rdm, interpolation='nearest')
-            ax.set_title('POS')
+            ax.set_title('POS ' + word)
             fig, ax = plt.subplots()
             ax.imshow(syn_rdm, interpolation='nearest')
-            ax.set_title('Syntax')
+            ax.set_title('Syntax ' + word)
         else:
             sub_val_rdms, sub_test_rdms, _, _, _, _, _, _, _, time = load_all_rdms(experiment,
                                                                                     word,
@@ -426,25 +426,25 @@ if __name__ == '__main__':
         else:
             axis_ind = i_word
         ax = score_grid[axis_ind]
-        ax.plot(time, mean_voice, label='Voice', color=colors[0])
-        ax.fill_between(time, mean_voice - std_voice, mean_voice + std_voice,
-                        facecolor=colors[0], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_word, label='Word ID', color=colors[1])
+        # ax.plot(time, mean_voice, label='Voice', color=colors[0])
+        # ax.fill_between(time, mean_voice - std_voice, mean_voice + std_voice,
+        #                 facecolor=colors[0], alpha=0.5, edgecolor='w')
+        ax.plot(time, mean_word, label='Word ID', color=colors[0])
         ax.fill_between(time, mean_word - std_word, mean_word + std_word,
-                        facecolor=colors[1], alpha=0.5, edgecolor='w')
-        ax.plot(time, mean_string, label='String Length Difference', color=colors[2])
+                        facecolor=colors[0], alpha=0.5, edgecolor='w')
+        ax.plot(time, mean_string, label='String Length Difference', color=colors[1])
         ax.fill_between(time, mean_string - std_string, mean_string + std_string,
-                        facecolor=colors[2], alpha=0.5, edgecolor='w')
+                        facecolor=colors[1], alpha=0.5, edgecolor='w')
         if plotFullSen:
-            ax.plot(time, mean_gen, label='Gender', color=colors[3])
-            ax.fill_between(time, mean_gen - std_gen, mean_gen + std_gen,
-                            facecolor=colors[3], alpha=0.5, edgecolor='w')
-            ax.plot(time, mean_pos, label='POS', color=colors[4])
+            # ax.plot(time, mean_gen, label='Gender', color=colors[3])
+            # ax.fill_between(time, mean_gen - std_gen, mean_gen + std_gen,
+            #                 facecolor=colors[3], alpha=0.5, edgecolor='w')
+            ax.plot(time, mean_pos, label='POS', color=colors[2])
             ax.fill_between(time, mean_pos - std_pos, mean_pos + std_pos,
-                            facecolor=colors[4], alpha=0.5, edgecolor='w')
-            ax.plot(time, mean_syn, label='Syntax', color=colors[5])
+                            facecolor=colors[2], alpha=0.5, edgecolor='w')
+            ax.plot(time, mean_syn, label='Syntax', color=colors[3])
             ax.fill_between(time, mean_syn - std_syn, mean_syn + std_syn,
-                            facecolor=colors[5], alpha=0.5, edgecolor='w')
+                            facecolor=colors[3], alpha=0.5, edgecolor='w')
 
         ax.plot(time, mean_noise, label='Noise Ceiling', linestyle='--', color='0.5')
         ax.fill_between(time, mean_noise - std_noise, mean_noise + std_noise,
