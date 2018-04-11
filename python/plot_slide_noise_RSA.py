@@ -256,7 +256,7 @@ if __name__ == '__main__':
         word_list = ['third-last', 'noun2', 'det', 'eos']
         full_str = 'long'
 
-    score_fig = plt.figure(figsize=(25, 10))
+    score_fig = plt.figure(figsize=(25, 5))
     score_grid = AxesGrid(score_fig, 111, nrows_ncols=(1, len(word_list)),
                         axes_pad=0.4)
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
@@ -464,7 +464,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 0.7])
         ax.set_xlim([np. min(time), np.max(time)])
         # ax.set_xticks(range(0, len(time), 5))
-        # ax.set_xticklabels(time[::5])
+        ax.set_xticks(time[::5])
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[axis_ind], transform=ax.transAxes,
                            size=20, weight='bold')
 
