@@ -3,7 +3,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
-from scipy.spatial.distance import euclidean, cosine
+from scipy.stats.mstats import normaltest
 import os
 from scipy.stats import spearmanr, kendalltau
 import run_slide_noise_RSA
@@ -285,6 +285,8 @@ if __name__ == '__main__':
         fig, ax = plt.subplots()
         ax.hist(remainders, bins=50)
 
+        k2, p = normaltest(remainders)
+        print('P value is : {}'.format(p))
 
         noise_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='noise',
