@@ -484,7 +484,7 @@ if __name__ == '__main__':
         if axis_ind == 0:
             ax.set_ylabel('Kendall Tau Correlation', fontsize=14)
 
-        ax.set_ylim([-0.1, 0.75])
+        ax.set_ylim([-0.1, 0.90])
         ax.set_xlim([np. min(time), np.max(time)])
         # ax.set_xticks(range(0, len(time), 5))
         ax.set_xticks(time[::20])
