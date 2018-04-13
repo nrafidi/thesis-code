@@ -20,18 +20,19 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
-MODES = ['acc']
-EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
-SUBJECTS = ['F', 'G', 'H', 'I']
-SEN_TYPES = ['active'] #, 'active']
-WORDS = ['verb']
-WIN_LENS = [150, 100, 50, 25, 12]#, 50, 25, 12]
+MODES = ['acc', 'coef']
+EXPERIMENTS = ['PassAct3']
+SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
+SEN_TYPES = ['active', 'passive'] #, 'active']
+WORDS = ['noun1', 'verb', 'noun2']
+WIN_LENS = [12]#, 50, 25, 12]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
 ALGS = ['lr-l1']  # GNB
 ADJS = [None]
-DO_AVGS = [True, False]#, True]  # True
-NUM_INSTANCESS = [2, 5, 10]#, 5, 10, 1]
+DO_TIME_AVGS = [False]
+DO_TEST_AVGS = [True]#, True]  # True
+NUM_INSTANCESS = [2]
 REPS_TO_USES = [None]  # 10
 RANDOM_STATES = [1]
 
@@ -57,8 +58,8 @@ if __name__ == '__main__':
                                    IS_PERMS,
                                    ALGS,
                                    ADJS,
-                                   DO_AVGS,
-                                   DO_AVGS,
+                                   DO_TIME_AVGS,
+                                   DO_TEST_AVGS,
                                    NUM_INSTANCESS,
                                    REPS_TO_USES,
                                    RANDOM_STATES,
@@ -119,5 +120,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 50:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
             time.sleep(30)
