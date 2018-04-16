@@ -9,6 +9,7 @@ from scipy.stats import spearmanr, kendalltau
 import run_slide_noise_RSA
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from sklearn.linear_model import LinearRegression
 
 SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.pdf'
 SAVE_SCORES = '/share/volume0/nrafidi/RSA_scores/{exp}/RSA_{score_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.npz'
@@ -92,6 +93,27 @@ def ktau_rdms(rdm1, rdm2):
     upper_tri_inds = np.triu_indices(rdm1.shape[0], diagonal_offset)
     rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[upper_tri_inds],rdm2[upper_tri_inds])
     return rdm_kendall_tau, rdm_kendall_tau_pvalue
+
+
+def partial_ktau_rdms(rdmX, rdmY, rdmZ):
+    # Partial correlation between X and Y, conditioned on Z
+    model_XZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+    model_YZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+
+    model_XZ.fit(rdmZ, rdmX)
+    model_YZ.fit(rdmZ, rdmY)
+
+    residual_X = rdmX - model_XZ.predict(rdmZ)
+    residual_Y = rdmY - model_YZ.predict(rdmZ)
+
+    fig, axs = plt.subplots(nrows=1, ncols=2)
+    axs[0].imshow(residual_X, interpolation='nearest')
+    axs[1].imshow(residual_Y, interpolation='nearest')
+    plt.show()
+
+    rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
+    return rdm_k_tau, rdm_k_tau_p
+
 
 
 def make_model_rdm(labels, dist):
@@ -215,7 +237,7 @@ def edit_distance(string1, string2):
 
 
 # assuming draw x time x stim x stim
-def score_rdms(val_rdms, test_rdms):
+def score_rdms(val_rdms, test_rdms, cond_rdms=None):
     num_draws = test_rdms.shape[0]
     num_time = test_rdms.shape[1]
     scores = np.empty((num_draws, num_time))
@@ -225,8 +247,17 @@ def score_rdms(val_rdms, test_rdms):
                 val = np.squeeze(val_rdms[i_draw, i_time, ...])
             else:
                 val = val_rdms
-            scores[i_draw, i_time], _ = ktau_rdms(val,
-                                                  np.squeeze(test_rdms[i_draw, i_time, ...]))
+            if cond_rdms is None:
+                scores[i_draw, i_time], _ = ktau_rdms(val,
+                                                      np.squeeze(test_rdms[i_draw, i_time, ...]))
+            elif len(cond_rdms.shape) == 4:
+                scores[i_draw, i_time], _ = partial_ktau_rdms(val,
+                                                      np.squeeze(test_rdms[i_draw, i_time, ...]),
+                                                              np.squeeze(cond_rdms[i_draw, i_time, ...]))
+            else:
+                scores[i_draw, i_time], _ = partial_ktau_rdms(val,
+                                                              np.squeeze(test_rdms[i_draw, i_time, ...]),
+                                                              cond_rdms)
     return scores
 
 
@@ -409,7 +440,7 @@ if __name__ == '__main__':
         
         
         word_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='word-ub',
+                                        score_type='word-ub-cond-len',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -421,7 +452,7 @@ if __name__ == '__main__':
             result = np.load(word_file)
             word_scores = result['word_scores']
         else:
-            word_scores = score_rdms(word_rdm, of_rdms)
+            word_scores = score_rdms(word_rdm, of_rdms, string_rdm)
             np.savez_compressed(word_file, word_scores=word_scores)
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
