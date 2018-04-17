@@ -88,7 +88,7 @@ COND_TITLE = {'len': 'String Length',
               'None': 'Nothing'}
 
 TEXT_PAD_X = -0.125
-TEXT_PAD_Y = 1.05
+TEXT_PAD_Y = 1.02
 
 VMAX = {'cosine': 1.0, 'euclidean': 25.0}
 
