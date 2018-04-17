@@ -87,8 +87,8 @@ COND_TITLE = {'len': 'String Length',
               'word': 'Word ID',
               'None': 'Nothing'}
 
-TEXT_PAD_X = -0.11
-TEXT_PAD_Y = 1.0
+TEXT_PAD_X = -0.125
+TEXT_PAD_Y = 1.05
 
 VMAX = {'cosine': 1.0, 'euclidean': 25.0}
 
@@ -708,7 +708,7 @@ if __name__ == '__main__':
     score_fig.suptitle('Partial Kendall Tau Scores over Time: Conditioned on {}'.format(COND_TITLE[cond]), fontsize=18)
 
     score_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
-    score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
+    score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-{}'.format(cond),
                                         word='both',
                                         win_len=win_len,
                                         ov=overlap,
