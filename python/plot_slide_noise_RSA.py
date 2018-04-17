@@ -402,7 +402,7 @@ if __name__ == '__main__':
             std_gen = np.squeeze(np.std(gen_scores, axis=0))
 
             pos_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='pos-ub-cond-len',
+                                            score_type='pos-ub-cond-word',
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -414,7 +414,7 @@ if __name__ == '__main__':
                 result = np.load(pos_file)
                 pos_scores = result['pos_scores']
             else:
-                pos_scores = score_rdms(pos_rdm, of_rdms, string_rdm)
+                pos_scores = score_rdms(pos_rdm, of_rdms, word_rdm)
                 np.savez_compressed(pos_file, pos_scores=pos_scores)
             mean_pos = np.squeeze(np.mean(pos_scores, axis=0))
             std_pos = np.squeeze(np.std(pos_scores, axis=0))
