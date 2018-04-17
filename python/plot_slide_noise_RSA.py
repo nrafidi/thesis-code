@@ -335,6 +335,19 @@ if __name__ == '__main__':
             rdm_Z_word = None
             rdm_Z_syn = None
             rdm_Z_string = None
+        print(word)
+        pos_word, _ = ktau_rdms(pos_rdm, word_rdm)
+        print('\tPOS correlation with Word ID: %.2f' % pos_word)
+        pos_syn, _ = ktau_rdms(pos_rdm, syn_rdm)
+        print('\tPOS correlation with Syntax: %.2f' % pos_syn)
+        pos_string, _ = ktau_rdms(pos_rdm, string_rdm)
+        print('\tPOS correlation with Word Length: %.2f' % pos_string)
+        word_syn, _ = ktau_rdms(word_rdm, syn_rdm)
+        print('\tWord ID correlation with Syntax: %.2f' % word_syn)
+        word_string, _ = ktau_rdms(word_rdm, string_rdm)
+        print('\tWord ID correlation with Word Length: %.2f' % word_string)
+        syn_string, _ = ktau_rdms(syn_rdm, string_rdm)
+        print('\tWord Length correlation with Syntax: %.2f' % syn_string)
 
         val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
         test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
