@@ -82,8 +82,13 @@ PLOT_TITLE = {'det': 'Determiner',
               'eos': 'Post Sentence',
               'eos-full': 'Post Sentence All'}
 
-TEXT_PAD_X = -0.1
-TEXT_PAD_Y = 1.0225
+COND_TITLE = {'len': 'String Length',
+              'pos': 'Part-of-Speech',
+              'word': 'Word ID',
+              'None': 'Nothing'}
+
+TEXT_PAD_X = -0.11
+TEXT_PAD_Y = 1.0
 
 VMAX = {'cosine': 1.0, 'euclidean': 25.0}
 
@@ -700,7 +705,7 @@ if __name__ == '__main__':
         #                                    full_str=full_str,
         #                                  avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
-    score_fig.suptitle('Kendall Tau Scores over Time', fontsize=18)
+    score_fig.suptitle('Partial Kendall Tau Scores over Time: Conditioned on {}'.format(COND_TITLE[cond]), fontsize=18)
 
     score_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
     score_fig.savefig(SAVE_FIG.format(fig_type='score-overlay',
