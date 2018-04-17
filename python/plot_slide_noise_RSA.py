@@ -82,7 +82,7 @@ PLOT_TITLE = {'det': 'Determiner',
               'eos': 'Post Sentence',
               'eos-full': 'Post Sentence All'}
 
-COND_TITLE = {'len': 'String Length',
+COND_TITLE = {'len': 'Word Length',
               'pos': 'Part-of-Speech',
               'word': 'Word ID',
               'None': 'Nothing'}
