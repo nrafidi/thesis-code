@@ -330,6 +330,11 @@ if __name__ == '__main__':
             rdm_Z_word = None
             rdm_Z_syn = word_rdm
             rdm_Z_string = word_rdm
+        elif cond == 'syn':
+            rdm_Z_pos = syn_rdm
+            rdm_Z_word = syn_rdm
+            rdm_Z_syn = None
+            rdm_Z_string = syn_rdm
         else:
             rdm_Z_pos = None
             rdm_Z_word = None
