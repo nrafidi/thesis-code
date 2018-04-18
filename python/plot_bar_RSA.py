@@ -212,8 +212,9 @@ if __name__ == '__main__':
         model_scores = np.squeeze(mean_scores[:, :, i_model + 2])
         fig, ax = plt.subplots()
         for j_cond in range(len(cond_list)):
-            ax.bar(ind + j_cond*width, model_scores[:, j_cond], width,
-                   color=colors[j_cond], label=COND_TITLE[cond_list[j_cond]])
+            if j_cond != i_model + 1:
+                ax.bar(ind + j_cond*width, model_scores[:, j_cond], width,
+                       color=colors[j_cond], label=COND_TITLE[cond_list[j_cond]])
 
         # add some text for labels, title and axes ticks
         for i in ind:
