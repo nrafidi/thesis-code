@@ -85,6 +85,7 @@ PLOT_TITLE = {'det': 'Determiner',
 COND_TITLE = {'len': 'Word Length',
               'pos': 'Part-of-Speech',
               'word': 'Word ID',
+              'syn': 'Syntax',
               'None': 'Nothing'}
 
 TEXT_PAD_X = -0.125
