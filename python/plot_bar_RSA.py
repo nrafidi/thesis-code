@@ -75,9 +75,9 @@ LENGTH = {'active': {'third-last-full': {'verb': 'long',
 
 PLOT_TITLE = {'det': 'Determiner',
               'noun2': 'Second Noun',
-              'third-last': 'Third-to-Last Word',
-              'third-last-full': 'Third-to-Last Word',
-              'second-last-full': 'Second-to-Last Word',
+              'third-last': 'Third-Last Word',
+              'third-last-full': 'Third-Last Word',
+              'second-last-full': 'Second-Last Word',
               'last-full': 'Last Word',
               'eos': 'Post Sentence',
               'eos-full': 'Post Sentence All'}
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     doTimeAvg = run_slide_noise_RSA.str_to_bool(args.doTimeAvg)
     force = args.force
 
-    cond_list = ['None', 'pos', 'word', 'syn', 'len']
+    cond_list = ['None', 'pos', 'syn', 'word', 'len']
     word_list = ['third-last-full', 'second-last-full', 'last-full', 'eos-full']
     full_str = 'all'
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
