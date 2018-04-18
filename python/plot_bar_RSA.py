@@ -11,7 +11,7 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 import string
 from sklearn.linear_model import LinearRegression
 
-SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_bar_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.pdf'
+SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_bar_{model}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.pdf'
 SAVE_SCORES = '/share/volume0/nrafidi/RSA_scores/{exp}/RSA_{score_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}_{full_str}_split.npz'
 
 AGE = {'boy': 'young',
@@ -225,7 +225,13 @@ if __name__ == '__main__':
         ax.set_ylim([-0.1, 1.0])
         ax.set_title(MODEL_TITLES[i_model])
         ax.set_xticks(ind + float(len(cond_list)*width) / 2.0)
-        ax.set_xticklabels(word_list)
+        ax.set_xticklabels([PLOT_TITLE[word] for word in word_list])
         ax.legend()
+        fig.savefig(SAVE_FIG.format(model=cond_list[i_model + 1],
+                                      win_len=win_len,
+                                      ov=overlap,
+                                      dist=dist,
+                                      full_str=full_str,
+                                      avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg)), bbox_inches='tight')
 
     plt.show()
