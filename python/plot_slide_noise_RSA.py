@@ -275,7 +275,7 @@ if __name__ == '__main__':
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='True', choices=['True', 'False'])
     parser.add_argument('--plotFullSen', action='store_true')
-    parser.add_argument('--cond', default='len', choices=['len', 'pos', 'word', 'None'])
+    parser.add_argument('--cond', default='len', choices=['len', 'pos', 'word', 'syn', 'None'])
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
