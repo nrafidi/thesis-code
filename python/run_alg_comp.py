@@ -170,14 +170,17 @@ def run_tgm_exp(experiment,
                                                                       doTestAvg=doTestAvg)
     elif 'svm' in alg:
         l_ints, cv_membership, tgm_acc, tgm_pred = models.svc_tgm_loso(data,
-                                                                      labels,
-                                                                      win_starts,
-                                                                      win_len,
-                                                                      sen_ints,
-                                                                      penalty=alg[4:],
-                                                                      adj=adj,
-                                                                      doTimeAvg=doTimeAvg,
-                                                                      doTestAvg=doTestAvg)
+                 labels,
+                 win_starts,
+                 win_len,
+                 sen_ints,
+                 sub_rs=1,
+                 penalty=alg[4:],
+                 adj=adj,
+                 doTimeAvg=doTimeAvg,
+                 doTestAvg=doTestAvg,
+                 ddof=1,
+                 C=None)
     else:
         if adj == 'zscore':
             doZscore=True
