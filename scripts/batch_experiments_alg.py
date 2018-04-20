@@ -3,9 +3,9 @@ import os.path
 from subprocess import call, check_output
 import time
 
-EXPERIMENTS = ['PassAct3']
-SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-WORDS = ['verb', 'voice']
+EXPERIMENTS = ['krns2']
+SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+WORDS = ['voice']
 WIN_LENS = [2, 12, 25, 50, 100]
 OVERLAPS = [2]
 IS_PERMS = [False]
