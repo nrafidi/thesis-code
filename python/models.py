@@ -1,11 +1,10 @@
 import numpy as np
 import sklearn.linear_model
+import sklearn.svm
 from sklearn.model_selection import KFold
 from sklearn.metrics import explained_variance_score
 from numpy.random import rand
-import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
-import matplotlib.pyplot as plt
+
 
 WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
@@ -726,6 +725,141 @@ def nb_tgm_coef(data,
                          np.zeros(mu_full[0].shape))
 
     return mu_win, std_win, mu_diff_win
+
+
+def svc_tgm_loso(data,
+                 labels,
+                 win_starts,
+                 win_len,
+                 sen_ints,
+                 sub_rs,
+                 penalty='l1',
+                 adj='mean_center',
+                 doTimeAvg=False,
+                 doTestAvg=False,
+                 ddof=1,
+                 C=None):
+    labels = np.array(labels)
+    n_tot = data.shape[0]
+    n_time = data.shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    print('In models.py:')
+    print(l_ints)
+    uni_sen_ints = np.unique(sen_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    cv_membership = []
+    tgm_acc = np.empty((len(uni_sen_ints), n_w, n_w))
+    tgm_pred = np.empty((len(uni_sen_ints), n_w, n_w), dtype='object')
+    i_split = 0
+    for lint in uni_sen_ints:
+        in_test = sen_ints == lint
+        in_train = np.logical_not(in_test)
+        print(i_split)
+        sub_kf = KFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
+        cv_membership.append(in_test)
+
+        train_data_full = data[in_train, ...]
+        train_labels = np.ravel(l_ints[in_train])
+
+        test_data_full = data[in_test, ...]
+        test_labels = np.ravel(l_ints[in_test])
+
+        for wi in xrange(n_w):
+            train_time = test_windows[wi]
+            train_data = train_data_full[:, :, train_time]
+            if doTimeAvg:
+                train_data = np.mean(train_data, axis=2)
+            else:
+                train_data = np.reshape(train_data, (np.sum(in_train), -1))
+
+            if adj == 'mean_center':
+                mu_train = np.mean(train_data, axis=0)
+                train_data -= mu_train[None, :]
+            elif adj == 'zscore':
+                mu_train = np.mean(train_data, axis=0)
+                std_train = np.std(train_data, axis=0, ddof=ddof)
+                train_data -= mu_train[None, :]
+                train_data /= std_train[None, :]
+            if C is None:
+                Cs = C_OPTIONS[penalty]
+                C_accs = np.empty((len(Cs), len(in_train)))
+                i_split = 0
+                for in_sub_train, in_sub_test in sub_kf.split(train_data, train_labels):
+                    sub_train_data = train_data[in_sub_train, ...]
+                    sub_test_data = train_data[in_sub_test, ...]
+                    sub_test_ints = train_labels[in_sub_test]
+                    sub_train_in_l = [train_labels[li][in_sub_train] for li in xrange(n_l)]
+
+                    if adj == 'zscore':
+                        mu_full_all = np.mean(sub_train_data, axis=0)
+                        std_full_all = np.std(sub_train_data, axis=0, ddof=ddof)
+                        sub_train_data -= mu_full_all[None, ...]
+                        sub_train_data /= std_full_all[None, ...]
+                        sub_test_data -= mu_full_all[None, ...]
+                        sub_test_data /= std_full_all[None, ...]
+                    for i_c, c in enumerate(Cs):
+                        model = sklearn.svm.LinearSVC(penalty=penalty,
+                                                      loss='hinge',
+                                                      C=c,
+                                                      solver='liblinear',
+                                                      multi_class='ovr',
+                                                      class_weight='balanced',
+                                                      refit=True)
+            else:
+                model = sklearn.linear_model.LogisticRegression(
+                    C=C,
+                    penalty=penalty,
+                    solver='liblinear',
+                    multi_class='ovr',
+                    class_weight='balanced',
+                    refit=True)
+
+
+            model.fit(train_data, train_labels)
+
+            for wj in xrange(n_w):
+                test_time = test_windows[wj]
+                test_data = test_data_full[:, :, test_time]
+                if doTimeAvg:
+                    test_data = np.mean(test_data, axis=2)
+                else:
+                    test_data = np.reshape(test_data, (np.sum(in_test), -1))
+
+                if doTestAvg:
+                    uni_test_labels = np.unique(test_labels)
+                    new_test_data = []
+                    for label in uni_test_labels:
+                        is_label = test_labels == label
+                        dat = np.mean(test_data[is_label, :], axis=0)
+                        new_test_data.append(np.reshape(dat, (1, -1)))
+                    test_data = np.concatenate(new_test_data, axis=0)
+                    if len(test_data.shape) == 1:
+                        test_data = np.reshape(test_data, (1, -1))
+                else:
+                    uni_test_labels = test_labels
+
+
+                if adj == 'mean_center':
+                    test_data -= mu_train[None, :]
+                elif adj == 'zscore':
+                    test_data -= mu_train[None, :]
+                    test_data /= std_train[None, :]
+
+
+                print(model.C_)
+                tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
+                tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
+                # print(tgm_acc[i_split, wi, wj])
+        i_split += 1
+
+    return l_ints, cv_membership, tgm_acc, tgm_pred
 
 
 def lr_tgm_loso(data,
