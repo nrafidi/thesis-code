@@ -13,6 +13,8 @@ ENET_RATIOS = [.1, .5, .7, .9, .95, .99, 1]
 C_OPTIONS = {'l1': [1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
              'l2': [1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18]}
 
+DUAL = {'l1': False, 'l2': True}
+
 def flatten_list(list_of_lists):
     lst = []
     for item in list_of_lists:
@@ -807,6 +809,7 @@ def svc_tgm_loso(data,
                     for i_c, c in enumerate(Cs):
                         model = sklearn.svm.LinearSVC(penalty=penalty,
                                                       loss='squared_hinge',
+                                                      dual=DUAL[penalty],
                                                       C=c,
                                                       multi_class='ovr',
                                                       class_weight='balanced')
@@ -817,13 +820,15 @@ def svc_tgm_loso(data,
                 print(best_C)
 
                 model = sklearn.svm.LinearSVC(penalty=penalty,
-                                              loss='hinge',
+                                              loss='squared_hinge',
+                                              dual=DUAL[penalty],
                                               C=best_C,
                                               multi_class='ovr',
                                               class_weight='balanced')
             else:
                 model = sklearn.svm.LinearSVC(penalty=penalty,
-                                              loss='hinge',
+                                              loss='squared_hinge',
+                                              dual=DUAL[penalty],
                                               C=C,
                                               multi_class='ovr',
                                               class_weight='balanced')
