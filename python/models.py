@@ -309,10 +309,10 @@ def nb_tgm_loso(data,
 
     uni_sen_ints = np.unique(sen_ints)
 
-    preds = np.empty((kf.get_n_splits(), n_w, n_w), dtype=np.object)
-    cv_membership = np.empty((kf.get_n_splits(),), dtype=np.object)
-    feature_masks = np.empty((kf.get_n_splits(), n_w), dtype=np.object)
-    num_feat_selected = np.empty((kf.get_n_splits(), n_w))
+    preds = np.empty((len(uni_sen_ints), n_w, n_w), dtype=np.object)
+    cv_membership = np.empty((len(uni_sen_ints),), dtype=np.object)
+    feature_masks = np.empty((len(uni_sen_ints), n_w), dtype=np.object)
+    num_feat_selected = np.empty((len(uni_sen_ints), n_w))
     # Top-level CV
     i_top_split = 0
     for lint in uni_sen_ints:
