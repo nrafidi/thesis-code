@@ -762,7 +762,7 @@ def svc_tgm_loso(data,
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
         print(i_split)
-        sub_kf = KFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
+        sub_kf = KFold(n_splits=np.sum(in_train), shuffle=True, random_state=sub_rs)
         cv_membership.append(in_test)
 
         train_data_full = data[in_train, ...]
@@ -789,13 +789,13 @@ def svc_tgm_loso(data,
                 train_data /= std_train[None, :]
             if C is None:
                 Cs = C_OPTIONS[penalty]
-                C_accs = np.empty((len(Cs), len(in_train)))
-                i_split = 0
+                C_accs = np.empty((len(Cs), np.sum(in_train)))
+                i_sub_split = 0
                 for in_sub_train, in_sub_test in sub_kf.split(train_data, train_labels):
                     sub_train_data = train_data[in_sub_train, ...]
                     sub_test_data = train_data[in_sub_test, ...]
-                    sub_test_ints = train_labels[in_sub_test]
-                    sub_train_in_l = [train_labels[li][in_sub_train] for li in xrange(n_l)]
+                    sub_test_labels = train_labels[in_sub_test]
+                    sub_train_labels = train_labels[in_sub_train]
 
                     if adj == 'zscore':
                         mu_full_all = np.mean(sub_train_data, axis=0)
@@ -808,19 +808,24 @@ def svc_tgm_loso(data,
                         model = sklearn.svm.LinearSVC(penalty=penalty,
                                                       loss='hinge',
                                                       C=c,
-                                                      solver='liblinear',
                                                       multi_class='ovr',
-                                                      class_weight='balanced',
-                                                      refit=True)
-            else:
-                model = sklearn.linear_model.LogisticRegression(
-                    C=C,
-                    penalty=penalty,
-                    solver='liblinear',
-                    multi_class='ovr',
-                    class_weight='balanced',
-                    refit=True)
+                                                      class_weight='balanced')
+                        model.fit(sub_train_data, sub_train_labels)
+                        C_accs[i_c, i_sub_split] = model.score(sub_test_data, sub_test_labels)
+                    i_sub_split += 1
+                best_C = Cs[np.argmax(np.mean(C_accs, axis=1))]
 
+                model = sklearn.svm.LinearSVC(penalty=penalty,
+                                              loss='hinge',
+                                              C=best_C,
+                                              multi_class='ovr',
+                                              class_weight='balanced')
+            else:
+                model = sklearn.svm.LinearSVC(penalty=penalty,
+                                              loss='hinge',
+                                              C=C,
+                                              multi_class='ovr',
+                                              class_weight='balanced')
 
             model.fit(train_data, train_labels)
 
@@ -853,9 +858,8 @@ def svc_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                print(model.C_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
-                tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
+                tgm_pred[i_split, wi, wj] = model.predict(test_data)
                 # print(tgm_acc[i_split, wi, wj])
         i_split += 1
 
