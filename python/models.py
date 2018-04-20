@@ -11,6 +11,8 @@ WIN_LEN_OPTIONS = [12, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
 NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000, 1000)]
 ALPHAS_RIDGE = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0, 100.0, 1000.0, 1e4, 1e5, 1e6]
 ENET_RATIOS = [.1, .5, .7, .9, .95, .99, 1]
+C_OPTIONS = {'l1': [1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+             'l2': [1e8, 1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20, 1e21, 1e22]}
 
 def flatten_list(list_of_lists):
     lst = []
@@ -786,7 +788,7 @@ def lr_tgm_loso(data,
                 train_data -= mu_train[None, :]
                 train_data /= std_train[None, :]
             if C is None:
-                model = sklearn.linear_model.LogisticRegressionCV(Cs=[1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
+                model = sklearn.linear_model.LogisticRegressionCV(Cs=C_OPTIONS[penalty],
                                                                   cv=2,
                                                                   penalty=penalty,
                                                                   solver='liblinear',
@@ -834,7 +836,7 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                # print(model.n_iter_)
+                print(model.C_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
                 # print(tgm_acc[i_split, wi, wj])
