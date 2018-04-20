@@ -806,7 +806,7 @@ def svc_tgm_loso(data,
                         sub_test_data /= std_full_all[None, ...]
                     for i_c, c in enumerate(Cs):
                         model = sklearn.svm.LinearSVC(penalty=penalty,
-                                                      loss='square_hinge',
+                                                      loss='squared_hinge',
                                                       C=c,
                                                       multi_class='ovr',
                                                       class_weight='balanced')
