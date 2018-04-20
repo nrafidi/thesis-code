@@ -319,7 +319,7 @@ def nb_tgm_loso(data,
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
         print(i_top_split)
-        sub_kf = KFold(n_splits=len(in_train), shuffle=True, random_state=sub_rs)
+        sub_kf = KFold(n_splits=np.sum(in_train), shuffle=True, random_state=sub_rs)
         cv_membership[i_top_split] = in_test
         # Iterate over full time grid
         for wi in xrange(n_w):
