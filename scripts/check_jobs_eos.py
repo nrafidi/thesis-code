@@ -105,8 +105,8 @@ if __name__ == '__main__':
             if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
-                    # print('Job {} Failed'.format(job_str))
-                    # print(err_file)
+                    print('Job {} Failed'.format(job_str))
+                    print(err_file)
                     # print(grid)
 
 
