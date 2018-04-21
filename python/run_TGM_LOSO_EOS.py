@@ -118,7 +118,7 @@ def run_tgm_exp(experiment,
                                                                  tmax=TMAX[experiment])
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
-    print(stimuli_voice)
+    # print(stimuli_voice)
     if word == 'propid':
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
@@ -128,7 +128,7 @@ def run_tgm_exp(experiment,
             content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                                   word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
-        print(uni_content)
+        # print(uni_content)
     else:
         labels = []
         for i_sen_int, sen_int in enumerate(sen_ints):
@@ -139,7 +139,7 @@ def run_tgm_exp(experiment,
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
 
-    print(labels)
+    # print(labels)
     tmin = time.min()
     tmax = time.max()
 
