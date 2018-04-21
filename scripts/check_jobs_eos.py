@@ -106,7 +106,10 @@ if __name__ == '__main__':
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
-                    print(err_file)
+                    if 'exceeded limit' in err_file:
+                        print('Too long')
+                    else:
+                        print err_file
                     # print(grid)
 
 
