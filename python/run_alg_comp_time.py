@@ -104,12 +104,13 @@ if __name__ == '__main__':
         print(alg)
         t = timeit.Timer(stmt='run_tgm_exp(data, labels, sen_ints, win_len, "{alg}")'.format(alg=alg),
                          setup='from __main__ import run_tgm_exp, data, labels, sen_ints, win_len')
-        times = t.repeat(repeat=1, number=1)
-        print(type(times))
-        print(times)
-        all_times.append(times)
+        times = t.repeat(repeat=10, number=1)
+        times = np.array(times)
+        all_times.append(times[None, ...])
         min_time = np.min(times)
         min_times.append(min_time)
         print(alg + ': %.2f' % min_time)
 
-
+    all_times = np.concatenate(all_times, axis=0)
+    min_times = np.array(min_times)
+    np.savez('/share/volume0/nrafidi/alg_times.npz', all_times=all_times, min_times=min_times, algs=VALID_ALGS)
