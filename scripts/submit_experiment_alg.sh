@@ -29,4 +29,4 @@ cd /home/nrafidi/thesis-code/python
 echo $force
 python run_alg_comp.py --experiment $experiment  --subject $subject  --word $word --win_len $win_len --overlap $overlap \
 --isPerm $isPerm --adj $adj --alg $alg --doTimeAvg $doTimeAvg --doTestAvg $doTestAvg \
---num_instances $num_instances --perm_random_state $perm_random_state --force $force \
+--num_instances $num_instances --perm_random_state $perm_random_state --force $force

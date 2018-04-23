@@ -86,7 +86,7 @@ if __name__ == '__main__':
                                     rs=rs,
                                     errfile=err_str,
                                     outfile=out_str)
-        # print(call_str)
+        print(call_str)
         call(call_str, shell=True)
         job_id += 1
 
