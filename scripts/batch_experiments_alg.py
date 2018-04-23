@@ -35,7 +35,6 @@ if __name__ == '__main__':
     param_grid = itertools.product(EXPERIMENTS,
                                    OVERLAPS,
                                    IS_PERMS,
-                                   ALGS,
                                    ADJS,
                                    DO_TME_AVGS,
                                    DO_TST_AVGS,
@@ -43,20 +42,21 @@ if __name__ == '__main__':
                                    RANDOM_STATES,
                                    WORDS,
                                    WIN_LENS,
+                                   ALGS,
                                    SUBJECTS)
     job_id = 0
     for grid in param_grid:
         exp = grid[0]
         overlap = grid[1]
         isPerm = grid[2]
-        alg = grid[3]
-        adj = grid[4]
-        tm_avg = grid[5]
-        tst_avg = grid[6]
-        ni = grid[7]
-        rs = grid[8]
-        word = grid[9]
-        win_len = grid[10]
+        adj = grid[3]
+        tm_avg = grid[4]
+        tst_avg = grid[5]
+        ni = grid[6]
+        rs = grid[7]
+        word = grid[8]
+        win_len = grid[9]
+        alg = grid[10]
         sub = grid[11]
 
         job_str = JOB_NAME.format(exp=exp,
