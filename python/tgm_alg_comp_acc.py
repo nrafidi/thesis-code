@@ -63,6 +63,7 @@ def intersect_accs(exp,
                                                      inst=num_instances,
                                                      rsP=1) + '.npz'
         if not os.path.isfile(result_fname):
+            print(result_fname)
             continue
         try:
             result = np.load(result_fname)
@@ -105,8 +106,8 @@ if __name__ == '__main__':
     alg_list = run_alg_comp.VALID_ALGS
     win_list = [2, 12, 25, 50, 100]
     inst_list = [1, 2, 5, 10]
-    avgTime_list = ['F', 'T']
-    avgTest_list = ['F', 'T']
+    avgTime_list = ['T', 'F']
+    avgTest_list = ['T', 'F']
 
 
     fig, ax = plt.subplots()
