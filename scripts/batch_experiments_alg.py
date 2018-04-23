@@ -9,7 +9,7 @@ WORDS = ['voice']
 WIN_LENS = [2, 12, 25, 50, 100]
 OVERLAPS = [2]
 IS_PERMS = [False]
-ALGS = ['lr-l1', 'lr-l2', 'svm-l1', 'svm-l2', 'gnb'],
+ALGS = ['lr-l1', 'lr-l2', 'svm-l1', 'svm-l2', 'gnb']
 ADJS = [None]
 DO_TME_AVGS = [True, False]
 DO_TST_AVGS = [True, False]
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=144:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False ' \
                 '-e {errfile} -o {outfile} submit_experiment_alg.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
