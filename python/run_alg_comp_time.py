@@ -101,10 +101,12 @@ if __name__ == '__main__':
     all_times = []
     min_times = []
     for alg in VALID_ALGS:
-
-        t = timeit.Timer(stmt='run_tgm_exp(data, labels, sen_ints, win_len, {alg})'.format(alg=alg),
+        print(alg)
+        t = timeit.Timer(stmt='run_tgm_exp(data, labels, sen_ints, win_len, "{alg}")'.format(alg=alg),
                          setup='from __main__ import run_tgm_exp, data, labels, sen_ints, win_len')
         times = t.repeat(repeat=1, number=1)
+        print(type(times))
+        print(times)
         all_times.append(times)
         min_time = np.min(times)
         min_times.append(min_time)
