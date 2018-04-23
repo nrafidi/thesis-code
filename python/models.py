@@ -40,7 +40,7 @@ def lin_reg(brain_data,
     cv_membership = []
     i_split = 0
     for in_train, in_test in kf.split(data, l_ints):
-        print(i_split)
+        # # print(i_split)
         i_split += 1
         cv_membership.append(in_test)
 
@@ -115,9 +115,9 @@ def lin_reg(brain_data,
         preds.append(model.predict(test_vectors))
 
     preds = np.concatenate(preds, axis=0)
-    print(preds.shape)
+    # # print(preds.shape)
     test_data_all = np.concatenate(test_data_all, axis=0)
-    print(test_data_all.shape)
+    # # print(test_data_all.shape)
 
     scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
@@ -154,7 +154,7 @@ def lin_reg_loso(brain_data,
     for lint in uni_l_ints:
         in_test = l_ints == lint
         in_train = np.logical_not(in_test)
-        print(i_split)
+        # # print(i_split)
         i_split += 1
         cv_membership.append(in_test)
 
@@ -224,9 +224,9 @@ def lin_reg_loso(brain_data,
         preds.append(model.predict(test_vectors))
 
     preds = np.concatenate(preds, axis=0)
-    print(preds.shape)
+    # # print(preds.shape)
     test_data_all = np.concatenate(test_data_all, axis=0)
-    print(test_data_all.shape)
+    # # print(test_data_all.shape)
 
     scores = explained_variance_score(test_data_all, preds, multioutput='raw_values')
 
@@ -320,7 +320,7 @@ def nb_tgm_loso(data,
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
-        print(i_top_split)
+        # # print(i_top_split)
         sub_kf = KFold(n_splits=np.sum(in_train), shuffle=True, random_state=sub_rs)
         cv_membership[i_top_split] = in_test
         # Iterate over full time grid
@@ -328,7 +328,7 @@ def nb_tgm_loso(data,
             train_time = test_windows[wi]
             train_data = data[in_train, :, :]
             train_data = train_data[:, :, train_time]
-            print(train_data.shape)
+            # # print(train_data.shape)
             if doAvg:
                 train_data = np.mean(train_data, axis=2)
             if doZscore:
@@ -363,8 +363,8 @@ def nb_tgm_loso(data,
                         sub_train_data /= std_full_all[None, ...]
                         sub_test_data -= mu_full_all[None, ...]
                         sub_test_data /= std_full_all[None, ...]
-                    # print('{}/{}'.format(wi, n_w))
-                    # print(sub_train_in_l)
+                    # # print('{}/{}'.format(wi, n_w))
+                    # # print(sub_train_in_l)
                     A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l, ddof)
                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
@@ -420,14 +420,14 @@ def nb_tgm_loso(data,
                     std_full_all = np.std(train_data, axis=0, ddof=ddof)
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
-                print(test_data.shape)
-                print('A')
-                print(A_top.shape)
-                print('B')
-                print(B_top.shape)
+                # # print(test_data.shape)
+                # # print('A')
+                # # print(A_top.shape)
+                # # print('B')
+                # # print(B_top.shape)
                 meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
-                print('meow')
-                print(meow.shape)
+                # # print('meow')
+                # # print(meow.shape)
                 if doAvg:
                     pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
                                        axis=2) - B_top
@@ -477,7 +477,7 @@ def nb_tgm(data,
             train_time = test_windows[wi]
             train_data = data[in_train, :, :]
             train_data = train_data[:, :, train_time]
-            print(train_data.shape)
+            # # print(train_data.shape)
             if doAvg:
                 train_data = np.mean(train_data, axis=2)
             if doZscore:
@@ -512,8 +512,8 @@ def nb_tgm(data,
                         sub_train_data /= std_full_all[None, ...]
                         sub_test_data -= mu_full_all[None, ...]
                         sub_test_data /= std_full_all[None, ...]
-                    # print('{}/{}'.format(wi, n_w))
-                    # print(sub_train_in_l)
+                    # # print('{}/{}'.format(wi, n_w))
+                    # # print(sub_train_in_l)
                     A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l, ddof)
                     mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
                                      ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
@@ -569,14 +569,14 @@ def nb_tgm(data,
                     std_full_all = np.std(train_data, axis=0, ddof=ddof)
                     test_data -= mu_full_all[None, ...]
                     test_data /= std_full_all[None, ...]
-                print(test_data.shape)
-                print('A')
-                print(A_top.shape)
-                print('B')
-                print(B_top.shape)
+                # print(test_data.shape)
+                # print('A')
+                # print(A_top.shape)
+                # print('B')
+                # print(B_top.shape)
                 meow = np.multiply(test_data[:, None, ...], A_top[None, ...])
-                print('meow')
-                print(meow.shape)
+                # print('meow')
+                # print(meow.shape)
                 if doAvg:
                     pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
                                        axis=2) - B_top
@@ -596,8 +596,8 @@ def nb_tgm_uni(data,
                doAvg=False,
                doZscore=False,
                ddof=1):
-    print('uni')
-    print(data.shape)
+    # print('uni')
+    # print(data.shape)
     labels = np.array(labels)
     n_tot = data.shape[0]
     n_time = data.shape[2]
@@ -610,7 +610,7 @@ def nb_tgm_uni(data,
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
     n_w = len(test_windows)
-    print(n_w)
+    # print(n_w)
 
     preds = np.empty((kf.get_n_splits(), n_w, n_w), dtype=np.object)
     cv_membership = np.empty((kf.get_n_splits(),), dtype=np.object)
@@ -639,13 +639,13 @@ def nb_tgm_uni(data,
 
             # mask = np.ones(A_top.shape[1:], dtype=np.bool)
             # A_top = np.multiply(mask[None, ...], A_top)
-            # print(B_top.shape)
+            # # print(B_top.shape)
             # if doAvg:
             #     B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
             # else:
             #     B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
-            # print(B_top.shape)
-            # print(B_top)
+            # # print(B_top.shape)
+            # # print(B_top)
 
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
@@ -662,11 +662,11 @@ def nb_tgm_uni(data,
                     pred_top = np.squeeze(
                         np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, :, None])
                 else:
-                    # print(A_top.shape)
-                    # print(B_top.shape)
-                    # print(test_data.shape)
+                    # # print(A_top.shape)
+                    # # print(B_top.shape)
+                    # # print(test_data.shape)
                     pred_top = np.multiply(test_data[:, None, ...], A_top[None, ...]) - B_top[None, ...] #[None, :, None, None])
-                # print(pred_top.shape)
+                # # print(pred_top.shape)
                 preds[i_top_split, wi, wj] = pred_top
         i_top_split += 1
     return preds, l_ints, cv_membership
@@ -749,8 +749,8 @@ def svc_tgm_loso(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
-    print('In models.py:')
-    print(l_ints)
+    # print('In models.py:')
+    # print(l_ints)
     uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
@@ -763,7 +763,7 @@ def svc_tgm_loso(data,
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
-        print(i_split)
+        # # print(i_split)
         sub_kf = KFold(n_splits=np.sum(in_train), shuffle=True, random_state=sub_rs)
         cv_membership.append(in_test)
 
@@ -817,7 +817,7 @@ def svc_tgm_loso(data,
                         C_accs[i_c, i_sub_split] = model.score(sub_test_data, sub_test_labels)
                     i_sub_split += 1
                 best_C = Cs[np.argmax(np.mean(C_accs, axis=1))]
-                print(best_C)
+                # # print(best_C)
 
                 model = sklearn.svm.LinearSVC(penalty=penalty,
                                               loss='squared_hinge',
@@ -866,7 +866,7 @@ def svc_tgm_loso(data,
 
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 tgm_pred[i_split, wi, wj] = model.predict(test_data)
-                # print(tgm_acc[i_split, wi, wj])
+                # # print(tgm_acc[i_split, wi, wj])
         i_split += 1
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
@@ -891,8 +891,8 @@ def lr_tgm_loso(data,
     n_l = len(l_set)
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
-    print('In models.py:')
-    print(l_ints)
+    # # print('In models.py:')
+    # # print(l_ints)
     uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
@@ -905,7 +905,7 @@ def lr_tgm_loso(data,
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
-        print(i_split)
+        # # print(i_split)
 
         cv_membership.append(in_test)
 
@@ -980,10 +980,10 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                print(model.C_)
+                # # print(model.C_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
-                # print(tgm_acc[i_split, wi, wj])
+                # # print(tgm_acc[i_split, wi, wj])
         i_split += 1
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
@@ -1047,9 +1047,9 @@ def lr_tgm_coef(data,
                 refit=True)
 
         model.fit(train_data, train_labels)
-        print(model.C_)
-        print(model.coef_)
-        print(model.scores_)
+        # # print(model.C_)
+        # # print(model.coef_)
+        # # print(model.scores_)
         Cs[wi] = model.C_
         coef[wi] = model.coef_
 
@@ -1207,7 +1207,7 @@ if __name__ == '__main__':
                                                    reg='ridge',
                                                    adj='zscore',
                                                    ddof=1)
-    print(scores.shape)
+    # print(scores.shape)
     # scores = np.reshape(scores, (306, 2000))
     # fig, ax = plt.subplots()
     # ax.imshow(scores, interpolation='nearest', aspect='auto')
