@@ -25,4 +25,8 @@ source /home/python27/envs/p27default/bin/activate
 #                'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False ' \
 #                '-e {errfile} -o {outfile} submit_experiment.sh'
 
-python /home/nrafidi/thesis-code/python/run_alg_comp_time.py
+cd /home/nrafidi/thesis-code/python
+echo $force
+python run_alg_comp.py --experiment $experiment  --subject $subject  --word $word --win_len $win_len --overlap $overlap \
+--isPerm $isPerm --adj $adj --alg $alg --doTimeAvg $doTimeAvg --doTestAvg $doTestAvg \
+--num_instances $num_instances --perm_random_state $perm_random_state --force $force \
