@@ -817,7 +817,7 @@ def svc_tgm_loso(data,
                         C_accs[i_c, i_sub_split] = model.score(sub_test_data, sub_test_labels)
                     i_sub_split += 1
                 best_C = Cs[np.argmax(np.mean(C_accs, axis=1))]
-                print(best_C)
+                # print(best_C)
 
                 model = sklearn.svm.LinearSVC(penalty=penalty,
                                               loss='squared_hinge',
