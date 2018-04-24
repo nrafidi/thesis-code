@@ -124,6 +124,7 @@ if __name__ == '__main__':
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
         if np.all(intersection):
+            print(acc_all.shape)
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
