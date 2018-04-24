@@ -198,7 +198,7 @@ def run_tgm_exp(experiment,
                 ddof=1)
         tgm_acc = tgm_from_preds_GNB(tgm_pred, l_ints, cv_membership)
 
-    print('Max Acc: %.2f' % np.max(tgm_acc))
+    print('Max Acc: %.2f' % np.max(np.mean(tgm_acc, axis=0)))
     np.savez_compressed(fname,
                         l_ints=l_ints,
                         cv_membership=cv_membership,

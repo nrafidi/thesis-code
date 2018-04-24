@@ -11,7 +11,7 @@ NUM_FEAT_OPTIONS = [range(25, 500, 25), range(500, 2000, 100), range(2000, 40000
 ALPHAS_RIDGE = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10.0, 100.0, 1000.0, 1e4, 1e5, 1e6]
 ENET_RATIOS = [.1, .5, .7, .9, .95, .99, 1]
 C_OPTIONS = {'l1': [1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20],
-             'l2': [1e-1, 1e0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18]}
+             'l2': [1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19, 1e20]}
 
 DUAL = {'l1': False, 'l2': True}
 
@@ -951,6 +951,8 @@ def lr_tgm_loso(data,
 
             model.fit(train_data, train_labels)
 
+            if penalty == 'l2':
+                print(model.C_)
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
                 test_data = test_data_full[:, :, test_time]
@@ -980,7 +982,6 @@ def lr_tgm_loso(data,
                     test_data /= std_train[None, :]
 
 
-                # # print(model.C_)
                 tgm_acc[i_split, wi, wj] = model.score(test_data, uni_test_labels)
                 tgm_pred[i_split, wi, wj] = model.predict_log_proba(test_data)
                 # # print(tgm_acc[i_split, wi, wj])
