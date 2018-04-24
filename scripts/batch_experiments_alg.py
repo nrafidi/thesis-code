@@ -59,7 +59,7 @@ if __name__ == '__main__':
         alg = grid[10]
         sub = grid[11]
 
-        if alg != 'lr-l2':
+        if alg != 'lr-l1':
             force = True
         else:
             force = False
