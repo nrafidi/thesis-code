@@ -72,8 +72,10 @@ def intersect_accs(exp,
         except:
             print(result_fname)
             continue
-        print(fold_acc.shape)
-        acc = np.mean(fold_acc, axis=0)
+        if alg == 'gnb':
+            acc = fold_acc
+        else:
+            acc = np.mean(fold_acc, axis=0)
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.5
