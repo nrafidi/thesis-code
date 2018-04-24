@@ -159,8 +159,12 @@ if __name__ == '__main__':
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
                 print(np.max(acc_all))
                 print(np.min(acc_all))
-                diag_time = time[win_starts] + win_list[0] * 0.002 - 0.5
-                ax.plot(diag_time, diag_acc, color=colors[i_win], label='%.2f' % float(win)*0.002)
+                print(win)
+                win_in_ms = win * 0.002
+                print(win_in_ms)
+                diag_time = time[win_starts] + win_in_ms - 0.5
+                label_str = '%.2f' % win_in_ms
+                ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
         ax.axhline(0.5, color='k', label='Chance')
         ax.set_xlabel('Time relative to Sentence Offset (s)')
         ax.set_ylabel('Classification Accuracy')
