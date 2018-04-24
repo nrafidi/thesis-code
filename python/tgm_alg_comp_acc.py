@@ -126,7 +126,8 @@ if __name__ == '__main__':
                                                                  avgTest=avgTest_list[0])
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
-            print(np.max(diag_acc))
+            print(np.max(acc_all))
+            print(np.min(acc_all))
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
     ax.axhline(0.5, color='k', label='Chance')
