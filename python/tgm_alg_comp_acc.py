@@ -136,7 +136,7 @@ if __name__ == '__main__':
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence')
 
-    win_fig = plt.figure(figsize=(20, 10))
+    win_fig = plt.figure(figsize=(15, 10))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
     for i_avg, avgTime in enumerate(avgTime_list):
@@ -160,10 +160,10 @@ if __name__ == '__main__':
                 print(np.max(acc_all))
                 print(np.min(acc_all))
                 print(win)
-                win_in_ms = win * 0.002
-                print(win_in_ms)
-                diag_time = time[win_starts] + win_in_ms - 0.5
-                label_str = '%.2f' % win_in_ms
+                win_in_s = win * 0.002
+                print(win_in_s)
+                diag_time = time[win_starts] + win_in_s - 0.5
+                label_str = '%.3f s' % win_in_s
                 ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
         ax.axhline(0.5, color='k', label='Chance')
         ax.set_xlabel('Time relative to Sentence Offset (s)')
@@ -172,7 +172,7 @@ if __name__ == '__main__':
         ax.set_title(avg_time_str)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=20, weight='bold')
-    win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence')
+    win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=25)
 
 
     plt.show()
