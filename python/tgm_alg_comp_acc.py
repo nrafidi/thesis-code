@@ -136,7 +136,7 @@ if __name__ == '__main__':
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence')
 
-    win_fig = plt.figure(figsize=(12, 10))
+    win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
     for i_avg, avgTime in enumerate(avgTime_list):
