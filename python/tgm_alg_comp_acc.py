@@ -69,11 +69,11 @@ def intersect_accs(exp,
             result = np.load(result_fname)
             time = np.squeeze(result['time'])
             win_starts = result['win_starts']
+            fold_acc = result['tgm_acc']
         except:
             print(result_fname)
             continue
 
-        fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
 
         time_by_sub.append(time[None, ...])
