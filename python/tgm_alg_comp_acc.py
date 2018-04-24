@@ -112,7 +112,7 @@ if __name__ == '__main__':
     avgTest_list = ['T', 'F']
 
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10,10))
     colors = ['r', 'b', 'g', 'c', 'm']
     for i_alg, alg in enumerate(alg_list):
         intersection, acc_all, time, win_starts = intersect_accs(exp,
@@ -136,12 +136,44 @@ if __name__ == '__main__':
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence')
 
+    win_fig = plt.figure(figsize=(20, 10))
+    win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7)
+    for i_avg, avgTime in enumerate(avgTime_list):
+        if avgTime == 'T':
+            avg_time_str = 'Time Average'
+        else:
+            avg_time_str = 'No Time Average'
+        ax = win_grid[i_avg]
+        for i_win, win in enumerate(win_list):
+            intersection, acc_all, time, win_starts = intersect_accs(exp,
+                                                                     word,
+                                                                     alg_list[0],
+                                                                     win_len=win,
+                                                                     overlap=overlap,
+                                                                     adj=adj,
+                                                                     num_instances=inst_list[0],
+                                                                     avgTime=avgTime,
+                                                                     avgTest=avgTest_list[0])
+            if len(intersection) > 0:
+                diag_acc = np.diag(np.mean(acc_all, axis=0))
+                print(np.max(acc_all))
+                print(np.min(acc_all))
+                diag_time = time[win_starts] + win_list[0] * 0.002 - 0.5
+                ax.plot(diag_time, diag_acc, color=colors[i_win], label='%.2f' % win*0.002)
+        ax.axhline(0.5, color='k', label='Chance')
+        ax.set_xlabel('Time relative to Sentence Offset (s)')
+        ax.set_ylabel('Classification Accuracy')
+        ax.legend()
+        ax.set_title(avg_time_str)
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                                size=20, weight='bold')
+    win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence')
+
+
     plt.show()
 
-    # if args.avgTime == 'T':
-    #     avg_time_str = 'Time Average'
-    # else:
-    #     avg_time_str = 'No Time Average'
+
     #
     # if args.avgTest == 'T':
     #     avg_test_str = 'Test Sample Average'
@@ -230,8 +262,7 @@ if __name__ == '__main__':
     #                 ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
     #         ax.set_xlim(left=time_step)
     #         ax.set_ylim(top=time_step)
-    #         ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
-    #                                 size=20, weight='bold')
+
     #         i_combo += 1
     #
     #         fig, ax = plt.subplots()
