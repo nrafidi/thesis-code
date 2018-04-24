@@ -80,6 +80,8 @@ def intersect_accs(exp,
         acc_thresh = acc > 0.5
         acc_by_sub.append(acc[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
+    if len(acc_by_sub) == 0:
+        return [], [], [], []
     acc_all = np.concatenate(acc_by_sub, axis=0)
     intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
     time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
@@ -121,9 +123,10 @@ if __name__ == '__main__':
                                                                  num_instances=inst_list[0],
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
-        diag_acc = np.diag(np.mean(acc_all, axis=0))
-        diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
-        ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
+        if intersection:
+            diag_acc = np.diag(np.mean(acc_all, axis=0))
+            diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
+            ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
     ax.axhline(0.5, color='k', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)')
     ax.set_ylabel('Classification Accuracy')
