@@ -134,7 +134,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Time relative to Sentence Offset (s)')
     ax.set_ylabel('Classification Accuracy')
     ax.legend()
-    ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence')
+    ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=25)
 
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
