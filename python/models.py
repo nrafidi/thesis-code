@@ -936,6 +936,7 @@ def lr_tgm_loso(data,
                                                                   cv=2,
                                                                   penalty=penalty,
                                                                   solver='liblinear',
+                                                                  dual=DUAL[penalty],
                                                                   multi_class='ovr',
                                                                   class_weight='balanced',
                                                                   refit=True)
