@@ -63,7 +63,6 @@ def intersect_accs(exp,
                                                      inst=num_instances,
                                                      rsP=1) + '.npz'
         if not os.path.isfile(result_fname):
-            print(result_fname)
             continue
         try:
             result = np.load(result_fname)
