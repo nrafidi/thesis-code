@@ -114,6 +114,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots(figsize=(10,10))
     colors = ['r', 'b', 'g', 'c', 'm']
+    max_acc = np.empty((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
@@ -126,8 +127,7 @@ if __name__ == '__main__':
                                                                  avgTest=avgTest_list[0])
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
-            print(np.max(acc_all))
-            print(np.min(acc_all))
+            max_acc[i_alg] = np.max(diag_acc)
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
     ax.axhline(0.5, color='k', label='Chance')
@@ -135,6 +135,14 @@ if __name__ == '__main__':
     ax.set_ylabel('Classification Accuracy')
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+
+    bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
+    ind = np.arange(len(alg_list))
+    width = 0.3
+    bar_ax.bar(ind, max_acc, width)
+    bar_ax.set_xticks(ind + width/ 2.0)
+    bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
+    bar_ax.set_title('Algorithm Max Accuracy Comparison')
 
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
