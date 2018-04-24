@@ -29,7 +29,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=144:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force={force} ' \
                 '-e {errfile} -o {outfile} submit_experiment_alg.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -59,6 +59,11 @@ if __name__ == '__main__':
         alg = grid[10]
         sub = grid[11]
 
+        if alg == 'lr-l2':
+            force = True
+        else:
+            force = False
+
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
                                   word=word,
@@ -84,6 +89,7 @@ if __name__ == '__main__':
                                     tst_avg=tst_avg,
                                     inst=ni,
                                     rs=rs,
+                                    force=force,
                                     errfile=err_str,
                                     outfile=out_str)
         print(call_str)
