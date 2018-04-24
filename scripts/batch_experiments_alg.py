@@ -59,10 +59,11 @@ if __name__ == '__main__':
         alg = grid[10]
         sub = grid[11]
 
-        if alg != 'lr-l1':
-            force = True
-        else:
-            force = False
+        force = False
+        # if alg != 'lr-l1':
+        #     force = True
+        # else:
+        #     force = False
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
