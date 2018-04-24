@@ -136,7 +136,7 @@ if __name__ == '__main__':
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence')
 
-    win_fig = plt.figure(figsize=(15, 10))
+    win_fig = plt.figure(figsize=(12, 10))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
     for i_avg, avgTime in enumerate(avgTime_list):
@@ -157,11 +157,11 @@ if __name__ == '__main__':
                                                                      avgTest=avgTest_list[0])
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
-                print(np.max(acc_all))
-                print(np.min(acc_all))
-                print(win)
+                # print(np.max(acc_all))
+                # print(np.min(acc_all))
+                # print(win)
                 win_in_s = win * 0.002
-                print(win_in_s)
+                # print(win_in_s)
                 diag_time = time[win_starts] + win_in_s - 0.5
                 label_str = '%.3f s' % win_in_s
                 ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
