@@ -160,7 +160,7 @@ if __name__ == '__main__':
                 print(np.max(acc_all))
                 print(np.min(acc_all))
                 diag_time = time[win_starts] + win_list[0] * 0.002 - 0.5
-                ax.plot(diag_time, diag_acc, color=colors[i_win], label='%.2f' % win*0.002)
+                ax.plot(diag_time, diag_acc, color=colors[i_win], label='%.2f' % float(win)*0.002)
         ax.axhline(0.5, color='k', label='Chance')
         ax.set_xlabel('Time relative to Sentence Offset (s)')
         ax.set_ylabel('Classification Accuracy')
