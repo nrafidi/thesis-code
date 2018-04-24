@@ -72,9 +72,8 @@ def intersect_accs(exp,
         except:
             print(result_fname)
             continue
-
+        print(fold_acc.shape)
         acc = np.mean(fold_acc, axis=0)
-
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.5
@@ -124,7 +123,6 @@ if __name__ == '__main__':
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
         if len(intersection) > 0:
-            print(acc_all.shape)
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             print(np.max(diag_acc))
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
