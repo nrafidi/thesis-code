@@ -952,8 +952,8 @@ def lr_tgm_loso(data,
 
             model.fit(train_data, train_labels)
 
-            # if penalty == 'l2':
-            #     print(model.C_)
+            if penalty == 'l2':
+                print(model.C_)
             for wj in xrange(n_w):
                 test_time = test_windows[wj]
                 test_data = test_data_full[:, :, test_time]
