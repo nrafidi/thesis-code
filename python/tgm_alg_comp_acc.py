@@ -170,9 +170,44 @@ if __name__ == '__main__':
         ax.set_ylabel('Classification Accuracy')
         ax.legend()
         ax.set_title(avg_time_str)
+        ax.set_xlim([0.0, 0.5])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=20, weight='bold')
     win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+
+    inst_fig = plt.figure(figsize=(20, 8))
+    inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7)
+    for i_avg, avgTest in enumerate(avgTest_list):
+        if avgTest == 'T':
+            avg_test_str = 'Test Sample Average'
+        else:
+            avg_test_str = 'No Test Sample Average'
+        ax = inst_grid[i_avg]
+        for i_inst, inst in enumerate(inst_list):
+            intersection, acc_all, time, win_starts = intersect_accs(exp,
+                                                                     word,
+                                                                     alg_list[0],
+                                                                     win_len=win_list[0],
+                                                                     overlap=overlap,
+                                                                     adj=adj,
+                                                                     num_instances=inst,
+                                                                     avgTime=avgTime_list[0],
+                                                                     avgTest=avgTest)
+            if len(intersection) > 0:
+                diag_acc = np.diag(np.mean(acc_all, axis=0))
+                win_in_s = win_list[0] * 0.002
+                diag_time = time[win_starts] + win_in_s - 0.5
+                ax.plot(diag_time, diag_acc, color=colors[i_inst], label='{}'.format(inst))
+        ax.axhline(0.5, color='k', label='Chance')
+        ax.set_xlabel('Time relative to Sentence Offset (s)')
+        ax.set_ylabel('Classification Accuracy')
+        ax.legend()
+        ax.set_title(avg_test_str)
+        ax.set_xlim([0.0, 0.5])
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                size=20, weight='bold')
+    inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=25)
 
 
     plt.show()
