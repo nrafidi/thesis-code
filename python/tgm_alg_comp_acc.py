@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots(figsize=(10,10))
     colors = ['b', 'c', 'm', 'r', 'g']
-    max_acc = np.empty((len(alg_list),))
-    max_std = np.empty((len(alg_list),))
+    max_acc = np.zeros((len(alg_list),))
+    max_std = np.zeros((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
-    max_acc = np.empty((len(win_list),2))
-    max_std = np.empty((len(win_list),2))
+    max_acc = np.zeros((len(win_list),2))
+    max_std = np.zeros((len(win_list),2))
     win_labels = []
     avg_labels = []
     for i_avg, avgTime in enumerate(avgTime_list):
@@ -223,8 +223,8 @@ if __name__ == '__main__':
     inst_fig = plt.figure(figsize=(20, 8))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
-    max_acc = np.empty((len(inst_list), 2))
-    max_std = np.empty((len(inst_list), 2))
+    max_acc = np.zeros((len(inst_list), 2))
+    max_std = np.zeros((len(inst_list), 2))
     avg_labels = []
     for i_avg, avgTest in enumerate(avgTest_list):
         if avgTest == 'T':
