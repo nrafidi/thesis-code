@@ -129,11 +129,11 @@ if __name__ == '__main__':
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_std = np.diag(np.std(acc_all, axis=0))
-            # num_sub = np.sqrt(float(acc_all.shape[0]))
+            num_sub = np.sqrt(float(acc_all.shape[0]))
             max_time = np.argmax(diag_acc)
             max_acc[i_alg] = diag_acc[max_time]
             max_std[i_alg] = diag_std[max_time]
-            # diag_std = np.divide(diag_std, num_sub)
+            diag_std = np.divide(diag_std, num_sub)
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             diag_time = diag_time[::2]
             diag_acc = diag_acc[::2]
