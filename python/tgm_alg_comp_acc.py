@@ -134,6 +134,7 @@ if __name__ == '__main__':
             max_std[i_alg] = diag_std[max_time]
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
+            ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg], edgecolor='w', alpha='0.5')
     ax.axhline(0.5, color='k', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)')
     ax.set_ylabel('Classification Accuracy')
@@ -143,7 +144,7 @@ if __name__ == '__main__':
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
     width = 0.3
-    bar_ax.bar(ind, max_acc, width, yerr=max_std)
+    bar_ax.bar(ind, max_acc, width, yerr=max_std, ecolor='r')
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
