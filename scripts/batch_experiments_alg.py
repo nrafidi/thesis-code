@@ -13,7 +13,7 @@ ALGS = ['lr-l1'] #, 'lr-l2', 'svm-l1', 'svm-l2', 'gnb']
 ADJS = [None]
 DO_TME_AVGS = [True, False]
 DO_TST_AVGS = [True, False]
-NUM_INSTANCESS = [1, 5, 10]
+NUM_INSTANCESS = [1, 2, 5, 10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{word}-{id}'
@@ -58,12 +58,10 @@ if __name__ == '__main__':
         win_len = grid[9]
         alg = grid[10]
         sub = grid[11]
-
         force = False
-        # if alg != 'lr-l1':
-        #     force = True
-        # else:
-        #     force = False
+
+        if win_len != 2 and ni != 1:
+            continue
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,

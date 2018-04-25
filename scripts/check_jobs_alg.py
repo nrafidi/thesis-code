@@ -82,25 +82,30 @@ if __name__ == '__main__':
         else:
             was_success = False
 
-        if not os.path.isfile(err_str) or not os.path.isfile(out_str):
-            # print('Job {} Did Not Run'.format(job_str))
-            meow = 1
+        if win_len != 2 and ni != 1:
+            skipped_jobs += 1
+            if was_success:
+                successful_jobs -= 1
         else:
-            with open(out_str, 'r') as fid:
-                meow = fid.read()
-                if 'Skipping' in meow and 'already' not in meow:
-                    skipped = True
-                    if was_success:
-                        successful_jobs -= 1
-                    skipped_jobs += 1
-                else:
-                    skipped=False
-            if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
-                with open(err_str, 'r') as fid:
-                    err_file = fid.read()
-                    # print('Job {} Failed'.format(job_str))
-                    # print(err_file)
-                    # print(grid)
+            if not os.path.isfile(err_str) or not os.path.isfile(out_str):
+                # print('Job {} Did Not Run'.format(job_str))
+                meow = 1
+            else:
+                with open(out_str, 'r') as fid:
+                    meow = fid.read()
+                    if 'Skipping' in meow and 'already' not in meow:
+                        skipped = True
+                        if was_success:
+                            successful_jobs -= 1
+                        skipped_jobs += 1
+                    else:
+                        skipped=False
+                if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
+                    with open(err_str, 'r') as fid:
+                        err_file = fid.read()
+                        # print('Job {} Failed'.format(job_str))
+                        # print(err_file)
+                        # print(grid)
 
 
         job_id += 1
