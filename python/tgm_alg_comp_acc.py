@@ -126,7 +126,7 @@ if __name__ == '__main__':
                                                                  num_instances=inst_list[0],
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
-        print(acc_all.shape)
+        # print(acc_all.shape)
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_std = np.diag(np.std(acc_all, axis=0))
@@ -181,7 +181,7 @@ if __name__ == '__main__':
                                                                      avgTime=avgTime,
                                                                      avgTest=avgTest_list[0])
             if type(acc_all) != list:
-                print(acc_all.shape)
+                print('{} {}'.format(avgTime, win))
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
                 diag_std = np.diag(np.std(acc_all, axis=0))
@@ -244,7 +244,7 @@ if __name__ == '__main__':
                                                                      avgTime=avgTime_list[0],
                                                                      avgTest=avgTest)
             if type(acc_all) != list:
-                print(acc_all.shape)
+                print('{} {}'.format(avgTest, inst))
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
                 diag_std = np.diag(np.std(acc_all, axis=0))
@@ -267,7 +267,7 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=20, weight='bold')
     inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=25)
-
+    print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(inst_list))
     width = 0.3
