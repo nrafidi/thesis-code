@@ -264,8 +264,9 @@ if __name__ == '__main__':
     inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=25)
 
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
-    ind = np.arange(len(win_list))
+    ind = np.arange(len(inst_list))
     width = 0.3
+    print(max_acc.shape)
     bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
     bar_ax.set_xticks(ind + width / 2.0)
