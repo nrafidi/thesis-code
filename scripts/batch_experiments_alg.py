@@ -62,6 +62,8 @@ if __name__ == '__main__':
 
         if win_len != 2 and ni != 1:
             continue
+        if not tm_avg and not tst_avg:
+            continue
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
