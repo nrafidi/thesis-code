@@ -126,6 +126,7 @@ if __name__ == '__main__':
                                                                  num_instances=inst_list[0],
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
+        print(acc_all.shape)
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_std = np.diag(np.std(acc_all, axis=0))
@@ -179,6 +180,7 @@ if __name__ == '__main__':
                                                                      num_instances=inst_list[0],
                                                                      avgTime=avgTime,
                                                                      avgTest=avgTest_list[0])
+            print(acc_all.shape)
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
                 diag_std = np.diag(np.std(acc_all, axis=0))
@@ -240,6 +242,7 @@ if __name__ == '__main__':
                                                                      num_instances=inst,
                                                                      avgTime=avgTime_list[0],
                                                                      avgTest=avgTest)
+            print(acc_all.shape)
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
                 diag_std = np.diag(np.std(acc_all, axis=0))
