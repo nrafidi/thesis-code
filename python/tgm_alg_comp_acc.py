@@ -135,9 +135,9 @@ if __name__ == '__main__':
             max_std[i_alg] = diag_std[max_time]
             diag_std = np.divide(diag_std, num_sub)
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
-            diag_time = diag_time[::2]
-            diag_acc = diag_acc[::2]
-            diag_std = diag_std[::2]
+            # diag_time = diag_time[::2]
+            # diag_acc = diag_acc[::2]
+            # diag_std = diag_std[::2]
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg], edgecolor='w', alpha=0.3)
     ax.axhline(0.5, color='k', label='Chance')
@@ -152,16 +152,22 @@ if __name__ == '__main__':
     bar_ax.bar(ind, max_acc, width, yerr=max_std, ecolor='r')
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
+    bar_ax.set_ylim([0.5, 1.0])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
 
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
+    max_acc = np.empty((len(alg_list),2))
+    max_std = np.empty((len(alg_list),2))
+    win_labels = []
+    avg_labels = []
     for i_avg, avgTime in enumerate(avgTime_list):
         if avgTime == 'T':
             avg_time_str = 'Time Average'
         else:
             avg_time_str = 'No Time Average'
+        avg_labels.append(avg_time_str)
         ax = win_grid[i_avg]
         for i_win, win in enumerate(win_list):
             intersection, acc_all, time, win_starts = intersect_accs(exp,
@@ -175,14 +181,20 @@ if __name__ == '__main__':
                                                                      avgTest=avgTest_list[0])
             if len(intersection) > 0:
                 diag_acc = np.diag(np.mean(acc_all, axis=0))
-                # print(np.max(acc_all))
-                # print(np.min(acc_all))
-                # print(win)
+                diag_std = np.diag(np.std(acc_all, axis=0))
+                num_sub = np.sqrt(float(acc_all.shape[0]))
+                max_time = np.argmax(diag_acc)
+                max_acc[i_win, i_avg] = diag_acc[max_time]
+                max_std[i_win, i_avg] = diag_std[max_time]
+                diag_std = np.divide(diag_std, num_sub)
                 win_in_s = win * 0.002
-                # print(win_in_s)
                 diag_time = time[win_starts] + win_in_s - 0.5
                 label_str = '%.3f s' % win_in_s
+                if i_avg == 0:
+                    win_labels.append(label_str)
                 ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
+                ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg],
+                                edgecolor='w', alpha=0.3)
         ax.axhline(0.5, color='k', label='Chance')
         ax.set_xlabel('Time relative to Sentence Offset (s)')
         ax.set_ylabel('Classification Accuracy')
@@ -192,6 +204,18 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=20, weight='bold')
     win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+
+    bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
+    ind = np.arange(len(win_list))
+    width = 0.3
+    bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
+    bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
+    bar_ax.set_xticks(ind + width / 2.0)
+    bar_ax.set_xticklabels(win_labels)
+    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.legend()
+    bar_ax.set_title('Window Size Max Accuracy Comparison')
+
 
     inst_fig = plt.figure(figsize=(20, 8))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
