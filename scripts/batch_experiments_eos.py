@@ -16,7 +16,7 @@ ALGS = ['lr-l1']
 ADJS = [None]
 DO_TME_AVGS = [True, False]
 DO_TST_AVGS = [True, False]
-NUM_INSTANCESS = [2, 5, 10]
+NUM_INSTANCESS = [5, 10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
