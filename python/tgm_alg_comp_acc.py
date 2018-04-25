@@ -129,10 +129,11 @@ if __name__ == '__main__':
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_std = np.diag(np.std(acc_all, axis=0))
+            num_sub = float(acc_all.shape[0])
             max_time = np.argmax(diag_acc)
             max_acc[i_alg] = diag_acc[max_time]
             max_std[i_alg] = diag_std[max_time]
-            diag_std /= np.sqrt(acc_all.shape[0])
+            diag_std /= np.sqrt(num_sub)
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg], edgecolor='w', alpha=0.3)
