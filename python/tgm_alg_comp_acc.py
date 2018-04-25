@@ -115,6 +115,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots(figsize=(10,10))
     colors = ['r', 'b', 'g', 'c', 'm']
     max_acc = np.empty((len(alg_list),))
+    max_std = np.empty((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
@@ -127,7 +128,10 @@ if __name__ == '__main__':
                                                                  avgTest=avgTest_list[0])
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
-            max_acc[i_alg] = np.max(diag_acc)
+            diag_std = np.diag(np.std(acc_all, axis=0))
+            max_time = np.argmax(diag_acc)
+            max_acc[i_alg] = diag_acc[max_time]
+            max_std[i_alg] = diag_std[max_time]
             diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
     ax.axhline(0.5, color='k', label='Chance')
@@ -139,7 +143,7 @@ if __name__ == '__main__':
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
     width = 0.3
-    bar_ax.bar(ind, max_acc, width)
+    bar_ax.bar(ind, max_acc, width, yerr=max_std)
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
