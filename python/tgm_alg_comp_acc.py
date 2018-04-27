@@ -95,13 +95,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', default='lr-l1', choices=run_alg_comp.VALID_ALGS)
     parser.add_argument('--overlap', type=int, default=2)
-    parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
+    # parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
     args = parser.parse_args()
 
     exp = 'krns2'
     word = 'voice'
     overlap = args.overlap
-    adj = args.adj
     global_alg = args.alg
 
 
@@ -117,6 +116,10 @@ if __name__ == '__main__':
     max_acc = np.zeros((len(alg_list),))
     max_std = np.zeros((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
+        if 'l2' in alg:
+            adj='zscore'
+        else:
+            adj=None
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
                                                                  alg,
@@ -156,6 +159,8 @@ if __name__ == '__main__':
     bar_ax.set_ylim([0.5, 0.8])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
 
+
+    adj = None
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
