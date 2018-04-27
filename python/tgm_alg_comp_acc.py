@@ -156,7 +156,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind, max_acc, width, yerr=max_std, ecolor='r')
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
-    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_ylim([0.5, 0.9])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
 
 
@@ -220,7 +220,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(win_labels)
-    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_ylim([0.5, 0.9])
     bar_ax.legend()
     bar_ax.set_title('Window Size Max Accuracy Comparison')
 
@@ -280,7 +280,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(inst_list)
-    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_ylim([0.5, 0.9])
     bar_ax.legend()
     bar_ax.set_title('Repetition Averaging Max Accuracy Comparison')
 
