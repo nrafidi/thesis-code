@@ -1,6 +1,6 @@
 import itertools
 import os.path
-import batch_experiments_alg as batch_exp
+import batch_experiments_alg_l2 as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_alg_comp/'
 SAVE_DIR = '{top_dir}/{sub}/'
