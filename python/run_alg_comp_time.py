@@ -22,11 +22,14 @@ def run_tgm_exp(data,
                 sen_ints,
                 win_len,
                 alg,
-                adj=None,
                 doTimeAvg=False,
                 doTestAvg=False):
     import models
 
+    if 'l2' in alg:
+        adj='zscore'
+    else:
+        adj=None
 
     if 'lr' in alg:
         l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso(data,
