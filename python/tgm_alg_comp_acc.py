@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     result = np.load('/share/volume0/nrafidi/alg_times.npz')
     alg_times = result['min_times']
-    alg_names = result['algs']
+    alg_names = result['algs'].tolist()
     alg_times_ordered = []
     for a in alg_list:
         alg_times_ordered.append(alg_times[alg_names.index(a)])
