@@ -20,19 +20,19 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
-MODES = ['acc', 'coef']
-EXPERIMENTS = ['PassAct3']
-SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
+MODES = ['acc'] #, 'coef']
+EXPERIMENTS = ['krns2'] #, 'PassAct3']
+SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] #['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
 SEN_TYPES = ['active', 'passive'] #, 'active']
 WORDS = ['noun1', 'verb', 'noun2']
-WIN_LENS = [12]#, 50, 25, 12]
+WIN_LENS = [12, 25, 50, 100, 150]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
-ALGS = ['lr-l1']  # GNB
-ADJS = [None]
-DO_TIME_AVGS = [False]
-DO_TEST_AVGS = [True]#, True]  # True
-NUM_INSTANCESS = [2]
+ALGS = ['lr-l2']  # GNB
+ADJS = ['zscore']
+DO_TIME_AVGS = [True, False]
+DO_TEST_AVGS = [True, False]#, True]  # True
+NUM_INSTANCESS = [1, 2, 5, 10]
 REPS_TO_USES = [None]  # 10
 RANDOM_STATES = [1]
 
