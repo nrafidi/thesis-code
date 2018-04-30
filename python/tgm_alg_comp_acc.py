@@ -135,12 +135,12 @@ if __name__ == '__main__':
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
                                                                  alg,
-                                                                 win_len=global_win,
+                                                                 win_len=2,
                                                                  overlap=overlap,
                                                                  adj=adj_alg,
-                                                                 num_instances=global_inst,
-                                                                 avgTime=global_avgTime,
-                                                                 avgTest=global_avgTest)
+                                                                 num_instances=1,
+                                                                 avgTime='T',
+                                                                 avgTest='T')
         # print(acc_all.shape)
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
