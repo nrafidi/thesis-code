@@ -150,7 +150,7 @@ if __name__ == '__main__':
             if cond == 'all':
                 pos_str = 'pos-ub-cond{}'
             else:
-                'pos-ub-cond-{}'
+                pos_str = 'pos-ub-cond-{}'
             pos_file = SAVE_SCORES.format(exp=experiment,
                                             score_type=pos_str.format(cond),
                                             word=word,
