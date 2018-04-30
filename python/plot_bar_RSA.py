@@ -222,7 +222,7 @@ if __name__ == '__main__':
 
         # add some text for labels, title and axes ticks
         for i in ind:
-            ax.fill_between([i, i + 0.8], [mean_scores[i, 0, 0], mean_scores[i, 0, 0]],
+            ax.fill_between([i, i + 1.6], [mean_scores[i, 0, 0], mean_scores[i, 0, 0]],
                             [mean_scores[i, 0, 1], mean_scores[i, 0, 1]],
                             facecolor='0.5', alpha=0.5, edgecolor='w')
         ax.set_ylabel('Mean Correlation with Neural Data')
