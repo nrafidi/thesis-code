@@ -108,6 +108,8 @@ if __name__ == '__main__':
                     print('Job {} Failed'.format(job_str))
                     if 'exceeded limit' in err_file:
                         print('Too long')
+                    elif 'ValueError: Class label 4 not present.' in err_file:
+                        print('Class label 4 missing')
                     else:
                         print err_file
                     # print(grid)
