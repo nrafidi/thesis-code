@@ -169,7 +169,7 @@ if __name__ == '__main__':
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_ylim([0.5, 0.9])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
-    fig.fig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
+    fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
 
     # adj = None
     win_fig = plt.figure(figsize=(20, 8))
