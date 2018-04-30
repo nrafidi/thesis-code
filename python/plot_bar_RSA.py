@@ -209,7 +209,7 @@ if __name__ == '__main__':
             mean_scores[i_word, j_cond, 5] = np.mean(result['string_scores'])
 
     ind = np.arange(len(word_list))  # the x locations for the groups
-    width = 0.8/float(len(cond_list))  # the width of the bars
+    width = 0.8/4.0  # the width of the bars
 
 
     for i_cond, cond in enumerate(cond_list):
