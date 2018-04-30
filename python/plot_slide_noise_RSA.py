@@ -86,7 +86,8 @@ COND_TITLE = {'len': 'Word Length',
               'pos': 'Part-of-Speech',
               'word': 'Word ID',
               'syn': 'Syntax',
-              'None': 'Nothing'}
+              'None': 'Nothing',
+              'all': 'All other Models'}
 
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02

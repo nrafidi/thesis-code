@@ -86,7 +86,8 @@ COND_TITLE = {'len': 'Word Length',
               'pos': 'Part-of-Speech',
               'word': 'Word ID',
               'syn': 'Syntax',
-              'None': 'Nothing'}
+              'None': 'Nothing',
+              'all': 'All other Models'}
 
 MODEL_TITLES = ['Part of Speech', 'Syntax', 'Word ID', 'Word Length']
 
