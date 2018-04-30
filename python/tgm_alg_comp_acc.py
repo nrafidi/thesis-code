@@ -72,6 +72,7 @@ def intersect_accs(exp,
         except:
             print(result_fname)
             continue
+        print(result_fname)
         if alg == 'gnb':
             acc = fold_acc
         else:
