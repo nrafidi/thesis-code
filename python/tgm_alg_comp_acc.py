@@ -158,6 +158,8 @@ if __name__ == '__main__':
     ax.set_ylabel('Classification Accuracy')
     ax.legend()
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+    fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.pdf')
+
 
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
@@ -167,7 +169,7 @@ if __name__ == '__main__':
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_ylim([0.5, 0.9])
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
-
+    fig.fig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
 
     # adj = None
     win_fig = plt.figure(figsize=(20, 8))
@@ -221,6 +223,7 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=20, weight='bold')
     win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+    win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.pdf')
 
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(win_list))
@@ -232,7 +235,7 @@ if __name__ == '__main__':
     bar_ax.set_ylim([0.5, 0.9])
     bar_ax.legend()
     bar_ax.set_title('Window Size Max Accuracy Comparison')
-
+    bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.pdf')
 
     inst_fig = plt.figure(figsize=(20, 8))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
@@ -281,6 +284,7 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=20, weight='bold')
     inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+    inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.pdf')
     print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(inst_list))
@@ -292,6 +296,7 @@ if __name__ == '__main__':
     bar_ax.set_ylim([0.5, 0.9])
     bar_ax.legend()
     bar_ax.set_title('Repetition Averaging Max Accuracy Comparison')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.pdf')
 
     plt.show()
 
