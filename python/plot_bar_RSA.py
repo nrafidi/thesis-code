@@ -147,9 +147,12 @@ if __name__ == '__main__':
             result = np.load(noise_ub_file)
             mean_scores[i_word, j_cond, 1] = np.mean(result['noise_ub_ceiling'])
 
-
+            if cond == 'all':
+                pos_str = 'pos-ub-cond{}'
+            else:
+                'pos-ub-cond-{}'
             pos_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='pos-ub-cond{}'.format(cond),
+                                            score_type=pos_str.format(cond),
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
