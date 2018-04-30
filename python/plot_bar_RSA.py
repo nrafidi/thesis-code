@@ -89,7 +89,7 @@ COND_TITLE = {'len': 'Word Length',
               'None': 'Nothing',
               'all': 'All other Models'}
 
-MODEL_TITLES = ['All Models', 'Part of Speech', 'Syntax', 'Word ID', 'Word Length']
+MODEL_TITLES = ['Part of Speech', 'Syntax', 'Word ID', 'Word Length']
 
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02
@@ -113,12 +113,12 @@ if __name__ == '__main__':
     doTimeAvg = run_slide_noise_RSA.str_to_bool(args.doTimeAvg)
     force = args.force
 
-    cond_list = ['all', 'None', 'pos', 'syn', 'word', 'len']
+    cond_list = ['all'] #, 'None', 'pos', 'syn', 'word', 'len']
     word_list = ['third-last-full', 'second-last-full', 'last-full', 'eos-full']
     full_str = 'all'
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
 
-    mean_scores = np.empty((len(word_list), len(cond_list), len(cond_list) + 1))
+    mean_scores = np.empty((len(word_list), len(cond_list), 6))
     for i_word, word in enumerate(word_list):
         for j_cond, cond in enumerate(cond_list):
             noise_file = SAVE_SCORES.format(exp=experiment,
@@ -212,13 +212,13 @@ if __name__ == '__main__':
     width = 0.8/float(len(cond_list))  # the width of the bars
 
 
-    for i_model in range(len(cond_list) - 1):
-        model_scores = np.squeeze(mean_scores[:, :, i_model + 2])
+    for i_cond, cond in enumerate(cond_list):
+        model_scores = np.squeeze(mean_scores[:, i_cond, 2:])
         fig, ax = plt.subplots()
-        for j_cond in range(len(cond_list)):
-            if j_cond != i_model + 1:
-                ax.bar(ind + j_cond*width, model_scores[:, j_cond], width,
-                       color=colors[j_cond], label=COND_TITLE[cond_list[j_cond]])
+        for i_model in range(4):
+        #     if j_cond != i_model + 1:
+            ax.bar(ind + i_model*width, model_scores[:, i_model], width,
+               color=colors[i_model], label=MODEL_TITLES[i_model])
 
         # add some text for labels, title and axes ticks
         for i in ind:
@@ -227,11 +227,11 @@ if __name__ == '__main__':
                             facecolor='0.5', alpha=0.5, edgecolor='w')
         ax.set_ylabel('Mean Correlation with Neural Data')
         ax.set_ylim([-0.1, 1.0])
-        ax.set_title(MODEL_TITLES[i_model])
+        ax.set_title('Correlation Conditioned on {}'.format(COND_TITLE[cond]))
         ax.set_xticks(ind + float(len(cond_list)*width) / 2.0)
         ax.set_xticklabels([PLOT_TITLE[word] for word in word_list])
         ax.legend()
-        fig.savefig(SAVE_FIG.format(model=cond_list[i_model + 1],
+        fig.savefig(SAVE_FIG.format(model=cond,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
