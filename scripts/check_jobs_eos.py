@@ -105,16 +105,11 @@ if __name__ == '__main__':
             if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
-                    if 'exceeded limit' in err_file:
+                    too_long = 'exceeded limit' in err_file
+                    zsl = 'ValueError: Class label' in err_file
+                    if not too_long and not zsl and job_id <= 600:
                         print('Job {} Failed'.format(job_str))
-                        print('Too long')
-                    elif 'ValueError: Class label 4 not present.' in err_file:
-                        print('Job {} Failed'.format(job_str))
-                        print('Class label 4 missing')
-                    else:
-                        if job_id <= 544:
-                            print('Job {} Failed'.format(job_str))
-                            print err_file
+                        print err_file
                     # print(grid)
 
 
