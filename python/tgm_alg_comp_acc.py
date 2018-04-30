@@ -95,13 +95,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', default='lr-l1', choices=run_alg_comp.VALID_ALGS)
     parser.add_argument('--overlap', type=int, default=2)
-    # parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
+    parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     args = parser.parse_args()
 
     exp = 'krns2'
     word = 'voice'
     overlap = args.overlap
     global_alg = args.alg
+    adj = args.adj
 
 
     alg_list = run_alg_comp.VALID_ALGS
@@ -117,15 +118,15 @@ if __name__ == '__main__':
     max_std = np.zeros((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
         if 'l2' in alg:
-            adj='zscore'
+            adj_alg='zscore'
         else:
-            adj=None
+            adj_alg=None
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
                                                                  alg,
                                                                  win_len=win_list[0],
                                                                  overlap=overlap,
-                                                                 adj=adj,
+                                                                 adj=adj_alg,
                                                                  num_instances=inst_list[0],
                                                                  avgTime=avgTime_list[0],
                                                                  avgTest=avgTest_list[0])
