@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
 
             pos_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='pos-ub-cond-{}'.format(cond),
+                                            score_type='pos-ub-cond{}'.format(cond),
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
