@@ -222,13 +222,13 @@ if __name__ == '__main__':
 
         # add some text for labels, title and axes ticks
         for i in ind:
-            ax.fill_between([i, i + 1.6], [mean_scores[i, 0, 0], mean_scores[i, 0, 0]],
+            ax.fill_between([i, i + 0.8], [mean_scores[i, 0, 0], mean_scores[i, 0, 0]],
                             [mean_scores[i, 0, 1], mean_scores[i, 0, 1]],
                             facecolor='0.5', alpha=0.5, edgecolor='w')
         ax.set_ylabel('Mean Correlation with Neural Data')
         ax.set_ylim([-0.1, 1.0])
         ax.set_title('Correlation Conditioned on {}'.format(COND_TITLE[cond]))
-        ax.set_xticks(ind + float(len(cond_list)*width) / 2.0)
+        ax.set_xticks(ind + 0.4)
         ax.set_xticklabels([PLOT_TITLE[word] for word in word_list])
         ax.legend()
         fig.savefig(SAVE_FIG.format(model=cond,
