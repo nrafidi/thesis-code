@@ -89,7 +89,7 @@ COND_TITLE = {'len': 'Word Length',
               'None': 'Nothing',
               'all': 'All other Models'}
 
-MODEL_TITLES = ['Part of Speech', 'Syntax', 'Word ID', 'Word Length']
+MODEL_TITLES = ['All Models', 'Part of Speech', 'Syntax', 'Word ID', 'Word Length']
 
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02
