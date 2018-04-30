@@ -175,10 +175,12 @@ if __name__ == '__main__':
     width = 0.3
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
     bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
+    bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
-    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_ylim([0.0, 1.0])
     bar_ax.set_title('Algorithm Comparison', fontsize=25)
+    bar_ax.legend()
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
 
     # adj = None
