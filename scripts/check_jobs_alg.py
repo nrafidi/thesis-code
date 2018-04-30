@@ -46,7 +46,8 @@ if __name__ == '__main__':
         win_len = grid[10]
         sub = grid[11]
 
-
+        if job_id == 184:
+            print(grid)
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
                                             word=word,
