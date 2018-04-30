@@ -72,7 +72,7 @@ def intersect_accs(exp,
         except:
             print(result_fname)
             continue
-        print(result_fname)
+        # print(result_fname)
         if alg == 'gnb':
             acc = fold_acc
         else:
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     bar_ax.set_title('Algorithm Max Accuracy Comparison')
 
 
-    adj = None
+    # adj = None
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7)
