@@ -111,7 +111,8 @@ if __name__ == '__main__':
                     elif 'ValueError: Class label 4 not present.' in err_file:
                         print('Class label 4 missing')
                     else:
-                        print err_file
+                        if job_id <= 544:
+                            print err_file
                     # print(grid)
 
 
