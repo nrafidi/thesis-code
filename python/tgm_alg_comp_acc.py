@@ -93,8 +93,18 @@ def intersect_accs(exp,
 
 
 if __name__ == '__main__':
+    alg_list = run_alg_comp.VALID_ALGS
+    win_list = [2, 12, 25, 50, 100]
+    inst_list = [1, 2, 5, 10]
+    avgTime_list = ['T', 'F']
+    avgTest_list = ['T', 'F']
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', default='lr-l2', choices=run_alg_comp.VALID_ALGS)
+    parser.add_argument('--win_len', type=int, default=50, choices=win_list)
+    parser.add_argument('--num_instances', type=int, default=2, choices=inst_list)
+    parser.add_argument('--avgTime', default='F', choices=avgTime_list)
+    parser.add_argument('--avgTest', default='T', choices=avgTest_list)
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     args = parser.parse_args()
@@ -103,14 +113,14 @@ if __name__ == '__main__':
     word = 'voice'
     overlap = args.overlap
     global_alg = args.alg
+    global_win = args.win_len
+    global_inst = args.num_instances
+    global_avgTime = args.avgTime
+    global_avgTest = args.avgTest
     adj = args.adj
 
 
-    alg_list = run_alg_comp.VALID_ALGS
-    win_list = [2, 12, 25, 50, 100]
-    inst_list = [1, 2, 5, 10]
-    avgTime_list = ['T', 'F']
-    avgTest_list = ['T', 'F']
+
 
 
     fig, ax = plt.subplots(figsize=(10,10))
@@ -125,12 +135,12 @@ if __name__ == '__main__':
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
                                                                  alg,
-                                                                 win_len=win_list[0],
+                                                                 win_len=global_win,
                                                                  overlap=overlap,
                                                                  adj=adj_alg,
-                                                                 num_instances=inst_list[0],
-                                                                 avgTime=avgTime_list[0],
-                                                                 avgTest=avgTest_list[0])
+                                                                 num_instances=global_inst,
+                                                                 avgTime=global_avgTime,
+                                                                 avgTest=global_avgTest)
         # print(acc_all.shape)
         if len(intersection) > 0:
             diag_acc = np.diag(np.mean(acc_all, axis=0))
@@ -140,10 +150,7 @@ if __name__ == '__main__':
             max_acc[i_alg] = diag_acc[max_time]
             max_std[i_alg] = diag_std[max_time]
             diag_std = np.divide(diag_std, num_sub)
-            diag_time = time[win_starts] + win_list[0]*0.002 - 0.5
-            # diag_time = diag_time[::2]
-            # diag_acc = diag_acc[::2]
-            # diag_std = diag_std[::2]
+            diag_time = time[win_starts] + global_win*0.002 - 0.5
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg], edgecolor='w', alpha=0.3)
     ax.axhline(0.5, color='k', label='Chance')
@@ -184,9 +191,9 @@ if __name__ == '__main__':
                                                                      win_len=win,
                                                                      overlap=overlap,
                                                                      adj=adj,
-                                                                     num_instances=inst_list[0],
+                                                                     num_instances=global_inst,
                                                                      avgTime=avgTime,
-                                                                     avgTest=avgTest_list[0])
+                                                                     avgTest=global_avgTest)
             if type(acc_all) != list:
                 print('{} {}'.format(avgTime, win))
             if len(intersection) > 0:
@@ -244,11 +251,11 @@ if __name__ == '__main__':
             intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                      word,
                                                                      global_alg,
-                                                                     win_len=win_list[0],
+                                                                     win_len=global_win,
                                                                      overlap=overlap,
                                                                      adj=adj,
                                                                      num_instances=inst,
-                                                                     avgTime=avgTime_list[0],
+                                                                     avgTime=global_avgTime,
                                                                      avgTest=avgTest)
             if type(acc_all) != list:
                 print('{} {}'.format(avgTest, inst))
@@ -260,7 +267,7 @@ if __name__ == '__main__':
                 max_acc[i_inst, i_avg] = diag_acc[max_time]
                 max_std[i_inst, i_avg] = diag_std[max_time]
                 diag_std = np.divide(diag_std, num_sub)
-                win_in_s = win_list[0] * 0.002
+                win_in_s = global_win * 0.002
                 diag_time = time[win_starts] + win_in_s - 0.5
                 ax.plot(diag_time, diag_acc, color=colors[i_inst], label='{}'.format(inst))
                 ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_inst],
