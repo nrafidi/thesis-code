@@ -161,14 +161,24 @@ if __name__ == '__main__':
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.pdf')
 
 
+    result = np.load('/share/volume0/nrafidi/alg_times.npz')
+    alg_times = result['min_times']
+    alg_names = result['algs']
+    alg_times_ordered = []
+    for a in alg_list:
+        alg_times_ordered.append(alg_times[alg_names.index(a)])
+    alg_times_ordered = np.array(alg_times_ordered)
+    alg_times_ordered /= np.max(alg_times_ordered)
+
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
     width = 0.3
-    bar_ax.bar(ind, max_acc, width, yerr=max_std, ecolor='r')
+    bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
+    bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
-    bar_ax.set_ylim([0.5, 0.9])
-    bar_ax.set_title('Algorithm Max Accuracy Comparison')
+    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_title('Algorithm Comparison', fontsize=25)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
 
     # adj = None
@@ -232,7 +242,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(win_labels)
-    bar_ax.set_ylim([0.5, 0.9])
+    bar_ax.set_ylim([0.5, 1.0])
     bar_ax.legend()
     bar_ax.set_title('Window Size Max Accuracy Comparison')
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.pdf')
@@ -293,7 +303,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(inst_list)
-    bar_ax.set_ylim([0.5, 0.9])
+    bar_ax.set_ylim([0.5, 1.0])
     bar_ax.legend()
     bar_ax.set_title('Repetition Averaging Max Accuracy Comparison')
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.pdf')
