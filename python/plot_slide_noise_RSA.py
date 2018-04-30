@@ -118,7 +118,7 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
     # plt.show()
 
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
-    return rdm_k_tau, rdm_k_tau_p
+    return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
 
 
 
@@ -253,17 +253,22 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
                 val = np.squeeze(val_rdms[i_draw, i_time, ...])
             else:
                 val = val_rdms
+            if len(test_rdms.shape) == 4:
+                test = np.squeeze(test_rdms[i_draw, i_time, ...])
+            else:
+                test = test_rdms
             if cond_rdms is None:
                 scores[i_draw, i_time], _ = ktau_rdms(val,
                                                       np.squeeze(test_rdms[i_draw, i_time, ...]))
-            elif len(cond_rdms.shape) == 4:
-                scores[i_draw, i_time], _ = partial_ktau_rdms(val,
-                                                      np.squeeze(test_rdms[i_draw, i_time, ...]),
-                                                              np.squeeze(cond_rdms[i_draw, i_time, ...]))
             else:
-                scores[i_draw, i_time], _ = partial_ktau_rdms(val,
-                                                              np.squeeze(test_rdms[i_draw, i_time, ...]),
-                                                              cond_rdms)
+                rdmX = val
+                rdmY = test
+                for cond_rdm in cond_rdms:
+                    if len(cond_rdm.shape) == 4:
+                        rdmZ = np.squeeze(cond_rdm[i_draw, i_time, ...])
+                    else:
+                        rdmZ = cond_rdm
+                    scores[i_draw, i_time], _, rdmX, rdmY = partial_ktau_rdms(rdmX, rdmY, rdmZ)
     return scores
 
 
@@ -276,7 +281,7 @@ if __name__ == '__main__':
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='True', choices=['True', 'False'])
     parser.add_argument('--plotFullSen', action='store_true')
-    parser.add_argument('--cond', default='len', choices=['len', 'pos', 'word', 'syn', 'None'])
+    parser.add_argument('--cond', default='all', choices=['all', 'len', 'pos', 'word', 'syn', 'None'])
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
@@ -316,31 +321,37 @@ if __name__ == '__main__':
                                                                                     overlap,
                                                                                     dist,
                                                                                     run_slide_noise_RSA.bool_to_str(doTimeAvg))
-        if cond == 'len':
-            rdm_Z_pos = string_rdm
-            rdm_Z_word = string_rdm
-            rdm_Z_syn = string_rdm
-            rdm_Z_string = None
+
+        if cond == 'all':
+            cond_rdms_pos = [string_rdm, word_rdm, syn_rdm]
+            cond_rdms_word = [string_rdm, pos_rdm, syn_rdm]
+            cond_rdms_syn = [string_rdm, word_rdm, pos_rdm]
+            cond_rdms_string = [pos_rdm, word_rdm, syn_rdm]
+        elif cond == 'len':
+            cond_rdms_pos = [string_rdm]
+            cond_rdms_word = [string_rdm]
+            cond_rdms_syn = [string_rdm]
+            cond_rdms_string = None
         elif cond == 'pos':
-            rdm_Z_pos = None
-            rdm_Z_word = pos_rdm
-            rdm_Z_syn = pos_rdm
-            rdm_Z_string = pos_rdm
-        elif cond == 'word':
-            rdm_Z_pos = word_rdm
-            rdm_Z_word = None
-            rdm_Z_syn = word_rdm
-            rdm_Z_string = word_rdm
+            cond_rdms_pos = None
+            cond_rdms_word = [pos_rdm]
+            cond_rdms_syn = [pos_rdm]
+            cond_rdms_string = [pos_rdm,]
         elif cond == 'syn':
-            rdm_Z_pos = syn_rdm
-            rdm_Z_word = syn_rdm
-            rdm_Z_syn = None
-            rdm_Z_string = syn_rdm
+            cond_rdms_pos = [syn_rdm]
+            cond_rdms_word = [syn_rdm]
+            cond_rdms_syn = None
+            cond_rdms_string = [syn_rdm]
+        elif cond == 'word':
+            cond_rdms_pos = [word_rdm]
+            cond_rdms_word = None
+            cond_rdms_syn = [word_rdm]
+            cond_rdms_string = [word_rdm]
         else:
-            rdm_Z_pos = None
-            rdm_Z_word = None
-            rdm_Z_syn = None
-            rdm_Z_string = None
+            cond_rdms_pos = None
+            cond_rdms_word = None
+            cond_rdms_syn = None
+            cond_rdms_string = None
         print(word)
         pos_word, _ = ktau_rdms(pos_rdm, word_rdm)
         print('\tPOS correlation with Word ID: %.2f' % pos_word)
@@ -449,7 +460,7 @@ if __name__ == '__main__':
             std_gen = np.squeeze(np.std(gen_scores, axis=0))
 
             pos_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='pos-ub-cond-{}'.format(cond),
+                                            score_type='pos-ub-cond{}'.format(cond),
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -461,7 +472,7 @@ if __name__ == '__main__':
                 result = np.load(pos_file)
                 pos_scores = result['pos_scores']
             else:
-                pos_scores = score_rdms(pos_rdm, of_rdms, rdm_Z_pos)
+                pos_scores = score_rdms(pos_rdm, of_rdms, cond_rdms_pos)
                 np.savez_compressed(pos_file, pos_scores=pos_scores)
             mean_pos = np.squeeze(np.mean(pos_scores, axis=0))
             std_pos = np.squeeze(np.std(pos_scores, axis=0))
@@ -479,7 +490,7 @@ if __name__ == '__main__':
                 result = np.load(syn_file)
                 syn_scores = result['syn_scores']
             else:
-                syn_scores = score_rdms(syn_rdm, of_rdms, rdm_Z_syn)
+                syn_scores = score_rdms(syn_rdm, of_rdms, cond_rdms_syn)
                 np.savez_compressed(syn_file, syn_scores=syn_scores)
             mean_syn = np.squeeze(np.mean(syn_scores, axis=0))
             std_syn = np.squeeze(np.std(syn_scores, axis=0))
@@ -499,7 +510,7 @@ if __name__ == '__main__':
             result = np.load(word_file)
             word_scores = result['word_scores']
         else:
-            word_scores = score_rdms(word_rdm, of_rdms, rdm_Z_word)
+            word_scores = score_rdms(word_rdm, of_rdms, cond_rdms_word)
             np.savez_compressed(word_file, word_scores=word_scores)
         mean_word = np.squeeze(np.mean(word_scores, axis=0))
         std_word = np.squeeze(np.std(word_scores, axis=0))
@@ -518,7 +529,7 @@ if __name__ == '__main__':
             result = np.load(string_file)
             string_scores = result['string_scores']
         else:
-            string_scores = score_rdms(string_rdm, of_rdms, rdm_Z_string)
+            string_scores = score_rdms(string_rdm, of_rdms, cond_rdms_string)
             np.savez_compressed(string_file, string_scores=string_scores)
         mean_string = np.squeeze(np.mean(string_scores, axis=0))
         std_string = np.squeeze(np.std(string_scores, axis=0))
