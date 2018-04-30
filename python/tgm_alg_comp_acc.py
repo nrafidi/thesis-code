@@ -94,7 +94,7 @@ def intersect_accs(exp,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--alg', default='lr-l1', choices=run_alg_comp.VALID_ALGS)
+    parser.add_argument('--alg', default='lr-l2', choices=run_alg_comp.VALID_ALGS)
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     args = parser.parse_args()
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         for i_win, win in enumerate(win_list):
             intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                      word,
-                                                                     alg_list[0],
+                                                                     global_alg,
                                                                      win_len=win,
                                                                      overlap=overlap,
                                                                      adj=adj,
@@ -243,7 +243,7 @@ if __name__ == '__main__':
         for i_inst, inst in enumerate(inst_list):
             intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                      word,
-                                                                     alg_list[0],
+                                                                     global_alg,
                                                                      win_len=win_list[0],
                                                                      overlap=overlap,
                                                                      adj=adj,
