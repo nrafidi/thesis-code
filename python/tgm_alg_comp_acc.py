@@ -101,9 +101,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', default='lr-l2', choices=run_alg_comp.VALID_ALGS)
-    parser.add_argument('--win_len', type=int, default=50, choices=win_list)
-    parser.add_argument('--num_instances', type=int, default=2, choices=inst_list)
-    parser.add_argument('--avgTime', default='F', choices=avgTime_list)
+    parser.add_argument('--win_len', type=int, default=2, choices=win_list)
+    parser.add_argument('--num_instances', type=int, default=1, choices=inst_list)
+    parser.add_argument('--avgTime', default='T', choices=avgTime_list)
     parser.add_argument('--avgTest', default='T', choices=avgTest_list)
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
