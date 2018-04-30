@@ -469,6 +469,7 @@ if __name__ == '__main__':
                                             avgTm=run_slide_noise_RSA.bool_to_str(doTimeAvg),
                                             full_str=full_str
                                             )
+            print(pos_file)
             if os.path.isfile(pos_file) and not force:
                 result = np.load(pos_file)
                 pos_scores = result['pos_scores']
