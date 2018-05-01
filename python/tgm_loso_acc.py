@@ -45,7 +45,7 @@ def intersect_accs(exp,
         max_time = 3.0
     time_adjust = win_len * 0.002
 
-    if num_instances == 1:
+    if num_instances == 1 and alg == 'lr-l1':
         avgTest = 'F'
     if exp == 'krns2' and not (sen_type == 'active' and word == 'verb') and alg == 'lr-l1':
         rep = 10
