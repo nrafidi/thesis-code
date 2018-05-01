@@ -22,7 +22,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
                    'agent': 'Agent',
                    'patient': 'Patient',
-                   'propid': 'Proposition ID'}
+                   'propid': 'Proposition ID',
+                   'voice': 'Sentence Voice'}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
