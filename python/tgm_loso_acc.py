@@ -188,11 +188,11 @@ if __name__ == '__main__':
                 if args.alg == 'lr-l2':
                     print('meow')
                     if word == 'verb':
-                        max_line += 1.5
-                        start_line += 1.5
+                        max_line += 3.0
+                        start_line += 3.0
                     elif word == 'noun2':
-                        max_line += 1.5
-                        start_line += 1.5
+                        max_line += 4.5
+                        start_line += 4.5
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
