@@ -18,7 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--win_len', type=int, default=25)
     parser.add_argument('--overlap', type=int, default=12)
-    parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
+    parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
+    parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=5)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
@@ -53,6 +54,7 @@ if __name__ == '__main__':
                                                                                                     word,
                                                                                                     win_len=args.win_len,
                                                                                                     overlap=args.overlap,
+                                                                                                    alg=args.alg,
                                                                                                     adj=args.adj,
                                                                                                     num_instances=args.num_instances,
                                                                                                     avgTime=args.avgTime,
@@ -98,8 +100,8 @@ if __name__ == '__main__':
     sen_fig.tight_layout()
     plt.subplots_adjust(top=0.9)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type=sen_type, avgTime=args.avgTime, avgTest=args.avgTest,
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
             num_instances=args.num_instances
