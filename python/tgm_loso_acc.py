@@ -188,11 +188,11 @@ if __name__ == '__main__':
                 if args.alg == 'lr-l2':
                     print('meow')
                     if word == 'verb':
-                        max_line += 0.5
-                        start_line += 0.5
+                        max_line += 1.5
+                        start_line += 1.5
                     elif word == 'noun2':
-                        max_line += 1.0
-                        start_line += 1.0
+                        max_line += 1.5
+                        start_line += 1.5
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
@@ -239,8 +239,9 @@ if __name__ == '__main__':
             ax.set_yticks(range(0, len(time_win), time_step*2))
             ax.set_yticklabels(label_time)
             time_adjust = args.win_len
-        
-            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+
+            print(start_line)
+            for i_v, v in enumerate(range(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
                     ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
