@@ -188,11 +188,11 @@ if __name__ == '__main__':
                 if args.alg == 'lr-l2':
                     print('meow')
                     if word == 'verb':
-                        max_line += 3.0
-                        start_line += 3.0
+                        max_line += time_step
+                        start_line += time_step
                     elif word == 'noun2':
-                        max_line += 4.5
-                        start_line += 4.5
+                        max_line += 3*time_step
+                        start_line += 3*time_step
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
@@ -211,14 +211,15 @@ if __name__ == '__main__':
                 text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
                 max_line = 3.51 * 2 * time_step
                 start_line = time_step
-                if word == 'noun1':
-                    start_line -= 0.0
-                elif word == 'verb':
-                    max_line -= 1.0
-                    start_line -= 1.0
-                else:
-                    max_line -= 2.5
-                    start_line -= 2.5
+                if args.alg == 'lr-l1':
+                    if word == 'noun1':
+                        start_line -= 0.0
+                    elif word == 'verb':
+                        max_line -= 1.0
+                        start_line -= 1.0
+                    else:
+                        max_line -= 2.5
+                        start_line -= 2.5
             print(mean_acc.shape)
             print(np.max(mean_acc))
         
