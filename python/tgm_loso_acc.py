@@ -186,12 +186,15 @@ if __name__ == '__main__':
                 start_line = time_step
                 if word == 'noun1':
                     start_line -= 0.0
-                elif word == 'verb':
+                elif word == 'verb' and args.alg == 'lr-l1':
                     end_point = num_time - 83
                     frac_sub = frac_sub[time_step:(time_step+end_point)]
                     mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
                     time_win = time_win[time_step:(time_step+end_point)]
                     intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
+                    max_line -= 0.5
+                    start_line -= 0.5
+                elif word == 'verb':
                     max_line -= 0.5
                     start_line -= 0.5
                 else:
