@@ -180,26 +180,36 @@ if __name__ == '__main__':
             print(word)
             print(num_time)
             time_step = int(250/args.overlap)
+
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-                max_line = 2.51 * 2 * time_step
-                start_line = time_step
-                if word == 'noun1':
-                    start_line -= 0.0
-                elif word == 'verb' and args.alg == 'lr-l1':
-                    end_point = num_time - 83
-                    frac_sub = frac_sub[time_step:(time_step+end_point)]
-                    mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                    time_win = time_win[time_step:(time_step+end_point)]
-                    intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                    max_line -= 0.5
-                    start_line -= 0.5
-                elif word == 'verb':
-                    max_line -= 0.5
-                    start_line -= 0.5
+                if args.alg == 'lr-l2':
+                    max_line = 2.51 * 2 * time_step
+                    start_line = time_step
+                    # if word == 'noun1':
+                    #     start_line -= 0.0
+                    # elif word == 'verb':
+                    #     max_line -= 0.5
+                    #     start_line -= 0.5
+                    # else:
+                    #     max_line -= 1.5
+                    #     start_line -= 1.5
                 else:
-                    max_line -= 1.5
-                    start_line -= 1.5
+                    max_line = 2.51 * 2 * time_step
+                    start_line = time_step
+                    if word == 'noun1':
+                        start_line -= 0.0
+                    elif word == 'verb':
+                        end_point = num_time - 83
+                        frac_sub = frac_sub[time_step:(time_step+end_point)]
+                        mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
+                        time_win = time_win[time_step:(time_step+end_point)]
+                        intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
+                        max_line -= 0.5
+                        start_line -= 0.5
+                    else:
+                        max_line -= 1.5
+                        start_line -= 1.5
             else:
                 text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
                 max_line = 3.51 * 2 * time_step
@@ -224,12 +234,12 @@ if __name__ == '__main__':
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
-            ax.set_xticks(range(0, len(time_win), time_step))
+            ax.set_xticks(range(0, len(time_win), 250))
             label_time = time_win
-            label_time = label_time[::time_step]
+            label_time = label_time[::250]
             label_time[np.abs(label_time) < 1e-15] = 0.0
             ax.set_xticklabels(label_time)
-            ax.set_yticks(range(0, len(time_win), time_step))
+            ax.set_yticks(range(0, len(time_win), 250))
             ax.set_yticklabels(label_time)
             time_adjust = args.win_len
         
