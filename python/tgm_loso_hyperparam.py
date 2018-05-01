@@ -27,7 +27,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
+    parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
+    parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     # parser.add_argument('--avgTime', default='F')
     # parser.add_argument('--avgTest', default='F')
     parser.add_argument('--percentile', type=float, default=0.1)
@@ -38,7 +39,7 @@ if __name__ == '__main__':
 
     perc = args.percentile
 
-    fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
+    fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
 
     avg_combo_fig = plt.figure(figsize=(12, 12))
     avg_combo_grid = AxesGrid(avg_combo_fig, 111, nrows_ncols=(2, 2),
@@ -100,6 +101,7 @@ if __name__ == '__main__':
                                                                                                            word,
                                                                                                            win_len=win_len,
                                                                                                            overlap=12,
+                                                                                                           alg=args.alg,
                                                                                                            adj=args.adj,
                                                                                                            num_instances=num_instances,
                                                                                                            avgTime=avgTime,
@@ -243,7 +245,7 @@ if __name__ == '__main__':
                                  fontsize=18)
 
                     fig.savefig(fig_fname.format(
-                                exp=args.experiment, sen_type=sen_type, word=word, avgTime=avgTime, avgTest=avgTest,
+                                exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
                                 perc=perc, fig_type='single-mean-score-comp'
                             ), bbox_inches='tight')
 
@@ -271,7 +273,7 @@ if __name__ == '__main__':
                     ax.set_ylabel('Window Length (ms)')
                     fig.tight_layout()
                     plt.savefig(fig_fname.format(
-                        exp=args.experiment, sen_type=sen_type, word=word, avgTime=avgTime, avgTest=avgTest,
+                        exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
                         perc=perc, fig_type='total-comb-max-score-comp'
                     ), bbox_inches='tight')
 
@@ -297,7 +299,7 @@ if __name__ == '__main__':
                          fontsize=18)
 
             combo_fig.savefig(fig_fname.format(
-                exp=args.experiment, sen_type='both', word='all', avgTime=avgTime, avgTest=avgTest,
+                exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime, avgTest=avgTest,
                 perc=perc, fig_type='word-sen-combo-max-score-comp'
             ), bbox_inches='tight')
 
@@ -334,7 +336,7 @@ if __name__ == '__main__':
     avg_combo_fig.suptitle('Total Combined Scores',
         fontsize=18)
     avg_combo_fig.savefig(fig_fname.format(
-        exp=args.experiment, sen_type='both', word='all', avgTime='TF', avgTest='TF',
+        exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime='TF', avgTest='TF',
         perc=perc, fig_type='total-comb-max-score-comp-avg'
     ), bbox_inches='tight')
 
