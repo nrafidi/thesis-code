@@ -183,11 +183,10 @@ if __name__ == '__main__':
 
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+                max_line = 2.51 * 2 * time_step
+                start_line = time_step
                 if args.alg == 'lr-l2':
-                    max_line = 2.51 * 2 * time_step
-                    start_line = time_step
-                    # if word == 'noun1':
-                    #     start_line -= 0.0
+                    print('meow')
                     if word == 'verb':
                         max_line += 0.5
                         start_line += 0.5
@@ -195,8 +194,6 @@ if __name__ == '__main__':
                         max_line += 1.0
                         start_line += 1.0
                 else:
-                    max_line = 2.51 * 2 * time_step
-                    start_line = time_step
                     if word == 'noun1':
                         start_line -= 0.0
                     elif word == 'verb':
