@@ -113,7 +113,7 @@ if __name__ == '__main__':
     doTimeAvg = run_slide_noise_RSA.str_to_bool(args.doTimeAvg)
     force = args.force
 
-    cond_list = ['all'] #, 'None', 'pos', 'syn', 'word', 'len']
+    cond_list = ['None'] #, 'None', 'pos', 'syn', 'word', 'len']
     word_list = ['third-last-full', 'second-last-full', 'last-full', 'eos-full']
     full_str = 'all'
     colors = ['r', 'g', 'b', 'm', 'c', 'y']
