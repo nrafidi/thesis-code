@@ -193,9 +193,13 @@ if __name__ == '__main__':
             acc = acc_diags[i_word]
             frac = frac_diags[i_word]
 
-            # if word == 'verb' and sen_type == 'active':
-            #     acc = acc[time_step:]
-            #     frac = frac[time_step:]
+            if sen_type == 'active' and args.alg == 'lr-l2':
+                if word == 'verb':
+                    acc = acc[time_step:]
+                    frac = frac[time_step:]
+                elif word == 'noun2':
+                    acc = acc[2*time_step:]
+                    frac = frac[2*time_step:]
 
             above_thresh = frac > frac_thresh
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
