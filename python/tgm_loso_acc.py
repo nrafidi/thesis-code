@@ -191,8 +191,8 @@ if __name__ == '__main__':
                         max_line += time_step
                         start_line += time_step
                     elif word == 'noun2':
-                        max_line += 3*time_step
-                        start_line += 3*time_step
+                        max_line += 2*time_step
+                        start_line += 2*time_step
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
