@@ -188,12 +188,12 @@ if __name__ == '__main__':
                     start_line = time_step
                     # if word == 'noun1':
                     #     start_line -= 0.0
-                    # elif word == 'verb':
-                    #     max_line -= 0.5
-                    #     start_line -= 0.5
-                    # else:
-                    #     max_line -= 1.5
-                    #     start_line -= 1.5
+                    if word == 'verb':
+                        max_line += 0.5
+                        start_line += 0.5
+                    elif word == 'noun2':
+                        max_line += 1.0
+                        start_line += 1.0
                 else:
                     max_line = 2.51 * 2 * time_step
                     start_line = time_step
@@ -234,12 +234,12 @@ if __name__ == '__main__':
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
-            ax.set_xticks(range(0, len(time_win), 250))
+            ax.set_xticks(range(0, len(time_win), time_step*2))
             label_time = time_win
-            label_time = label_time[::250]
+            label_time = label_time[::time_step*2]
             label_time[np.abs(label_time) < 1e-15] = 0.0
             ax.set_xticklabels(label_time)
-            ax.set_yticks(range(0, len(time_win), 250))
+            ax.set_yticks(range(0, len(time_win), time_step*2))
             ax.set_yticklabels(label_time)
             time_adjust = args.win_len
         
