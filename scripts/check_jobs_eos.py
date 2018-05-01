@@ -50,8 +50,8 @@ if __name__ == '__main__':
         win_len = grid[12]
         sub = grid[13]
 
-        if job_id == 544:
-            print(grid)
+        # if job_id == 544:
+        #     print(grid)
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                     skipped_jobs += 1
                 else:
                     skipped=False
-            if os.stat(err_str).st_size != 0 and (not was_success) and not skipped and job_id < 544:
+            if os.stat(err_str).st_size != 0 and (not was_success) and not skipped and job_id < 736:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     too_long = 'exceeded limit' in err_file
@@ -112,6 +112,8 @@ if __name__ == '__main__':
                     if not too_long and not zsl:
                         print('Job {} Failed'.format(job_str))
                         print err_file
+                    elif zsl:
+                        skipped_jobs += 1
                     # print(grid)
 
 

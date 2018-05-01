@@ -97,7 +97,7 @@ if __name__ == '__main__':
                 out_info = fid.read()
             if 'Experiment parameters not valid.' in out_info:
                 skipped_jobs += 1
-            elif os.stat(err_str).st_size != 0 and (not was_success) and job_id < 30:
+            elif os.stat(err_str).st_size != 0 and (not was_success) and job_id < 625:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
