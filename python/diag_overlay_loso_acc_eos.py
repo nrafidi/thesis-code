@@ -35,7 +35,7 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = 'pooled'
-    word_list = ['verb', 'agent', 'patient', 'voice', 'propid']
+    word_list = ['verb', 'noun1', 'voice', 'agent', 'patient', 'propid']
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
@@ -85,6 +85,7 @@ if __name__ == '__main__':
     label_time = time[win_starts]
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
+    ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance accuracy, noun1')
     ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy, words')
     ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance accuracy, voice')
     ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance accuracy, proposition')
