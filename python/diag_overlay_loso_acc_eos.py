@@ -35,7 +35,7 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = 'pooled'
-    word_list = ['verb', 'noun1', 'voice', 'agent', 'patient', 'propid']
+    word_list = ['voice', 'verb', 'agent', 'patient', 'noun1'] #, 'propid']
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     num_sub = float(len(run_TGM_LOSO_EOS.VALID_SUBS[args.experiment]))
     frac_thresh = (0.5*num_sub + 1.0)/num_sub
 
-    sen_fig, ax = plt.subplots(figsize=(10, 10))
+    sen_fig, ax = plt.subplots(figsize=(18, 10))
     acc_diags = []
     frac_diags = []
     time = []
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
 
     max_line = 0.3 * 2 * time_step
-    colors = ['r', 'g', 'b', 'm', 'k']
+    colors = ['r', 'g', 'b', 'm', 'c', 'k']
 
     for i_word, word in enumerate(word_list):
         color = colors[i_word]
@@ -79,27 +79,27 @@ if __name__ == '__main__':
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
         for i_pt, pt in enumerate(above_thresh):
             if pt:
-                ax.scatter(i_pt, acc[i_pt] + 0.05, color=color, marker='*')
+                ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
 
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance accuracy, noun1')
-    ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy, words')
-    ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance accuracy, voice')
-    ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance accuracy, proposition')
+    ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance, noun1')
+    ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance, words')
+    ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice')
+    ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance, proposition')
     ax.set_xticklabels(label_time)
     ax.axvline(x=max_line, color='k')
     ax.set_ylabel('Accuracy')
     ax.set_xlabel('Time Relative to First Noun Onset (s)')
     ax.set_ylim([0.0, 0.9])
     ax.set_xlim([0, len(time[win_starts]) + time_step/2])
-    ax.legend(loc=1)
+    ax.legend(bbox_to_anchor=(0.85, 1.0), loc=2, borderaxespad=0.)
 
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=18)
-    sen_fig.tight_layout()
-    plt.subplots_adjust(top=0.9)
+#    sen_fig.tight_layout()
+#    plt.subplots_adjust(top=0.9)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
