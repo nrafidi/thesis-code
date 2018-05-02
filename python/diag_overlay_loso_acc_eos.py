@@ -35,7 +35,7 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = 'pooled'
-    word_list = ['voice', 'verb', 'agent', 'patient', 'noun1'] #, 'propid']
+    word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
