@@ -262,7 +262,7 @@ if __name__ == '__main__':
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
             for i_pt, pt in enumerate(above_thresh):
                 if pt:
-                    ax.scatter(i_pt, 0.7 - i_sen*0.1 + 0.6, color=color, marker='*')
+                    ax.scatter(i_pt, 0.7 - i_sen*0.1 + 0.06, color=color, marker='*')
             for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
                 ax.axvline(x=v, color='k')
                 if i_v < len(text_to_write[i_sen]):
