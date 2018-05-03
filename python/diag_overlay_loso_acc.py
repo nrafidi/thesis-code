@@ -266,9 +266,10 @@ if __name__ == '__main__':
                     ax.scatter(plot_pt, 0.8, color=color, marker='*')
 
         ax.set_xticks(range(0, len(time[win_starts]), time_step))
-        label_time = time[win_starts]
-        label_time = label_time[::time_step]
-        label_time[np.abs(label_time) < 1e-15] = 0.0
+        # label_time = time[win_starts]
+        # label_time = label_time[::time_step]
+        # label_time[np.abs(label_time) < 1e-15] = 0.0
+        label_time = np.arange(0.0, 0.5*len(time[win_starts])/time_step)
         ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
         ax.set_xticklabels(label_time)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
