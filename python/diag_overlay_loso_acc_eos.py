@@ -10,7 +10,7 @@ from scipy.stats import wilcoxon
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=False):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=True):
     # Benjamini-Hochberg-Yekutieli
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
@@ -125,8 +125,10 @@ if __name__ == '__main__':
             pvals[i_pt] = 0.5**num_above_chance
             # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
         pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+        print(pval_thresh)
+        print(np.min(pvals))
         for i_pt in range(num_time):
-            if pvals[i_pt] < pval_thresh:
+            if pvals[i_pt] <= pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
 
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
