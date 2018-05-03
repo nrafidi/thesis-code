@@ -10,6 +10,40 @@ from scipy.stats import wilcoxon
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=False):
+    # Benjamini-Hochberg-Yekutieli
+    # originally from Mariya Toneva
+    if len(uncorrected_pvalues.shape) == 1:
+        uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
+
+    # get ranks of all p-values in ascending order
+    sorting_inds = np.argsort(uncorrected_pvalues, axis=1)
+    ranks = sorting_inds + 1  # add 1 to make the ranks start at 1 instead of 0
+
+    # calculate critical values under arbitrary dependence
+    if assume_independence:
+        dependency_constant = 1.0
+    else:
+        dependency_constant = np.sum(1.0 / ranks)
+    critical_values = ranks * alpha / float(uncorrected_pvalues.shape[1] * dependency_constant)
+
+    # find largest pvalue that is <= than its critical value
+    sorted_pvalues = np.empty(uncorrected_pvalues.shape)
+    sorted_critical_values = np.empty(critical_values.shape)
+    for i in range(uncorrected_pvalues.shape[0]):
+        sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
+        sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
+    bh_thresh = np.zeros((sorted_pvalues.shape[0],))
+    for j in range(sorted_pvalues.shape[0]):
+        for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
+            if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
+                bh_thresh[j] = sorted_pvalues[j, i]
+                print('threshold for row {} is: {}; critical value: {} (i: {})'.format(
+                    j, bh_thresh[j], sorted_critical_values[j, i], i))
+                break
+    return bh_thresh
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
@@ -75,11 +109,7 @@ if __name__ == '__main__':
             win_starts = word_win_starts
 
     sub_word_diags = np.concatenate(sub_word_diags, axis=0)
-    print(sub_word_diags.shape)
     num_time = len(win_starts)
-    print(num_time)
-    pval_thresh = 0.05 #/float(num_time)  # bonferroni for now
-    print(pval_thresh)
     max_line = 0.3 * 2 * time_step
     colors = ['r', 'g', 'b', 'm', 'c', 'k']
 
@@ -89,10 +119,12 @@ if __name__ == '__main__':
         frac = frac_diags[i_word]
 
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
+        pvals = np.empty((num_time,))
         for i_pt in range(num_time):
-            _, p = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-            if p < pval_thresh:
-                print(p)
+            _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+        pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+        for i_pt in range(num_time):
+            if pvals[i_pt] < pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
 
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
