@@ -266,9 +266,6 @@ if __name__ == '__main__':
                     ax.scatter(plot_pt, 0.8, color=color, marker='*')
 
         ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
-        # label_time = time[win_starts]
-        # label_time = label_time[::time_step]
-        # label_time[np.abs(label_time) < 1e-15] = 0.0
         min_time = -0.5
         max_time = 0.5*len(time[win_starts])/time_step
         label_time = np.arange(min_time, max_time, 0.5)
@@ -277,10 +274,10 @@ if __name__ == '__main__':
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                ax.text(v + 0.1, 0.7, text_to_write[i_v])
+                ax.text(v + 0.15, 0.7, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time Relative to First Noun Onset (s)')
+        ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
         # if i_sen == len(sen_type_list) - 1:
@@ -339,9 +336,10 @@ if __name__ == '__main__':
                     ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
 
         ax.set_xticks(range(0, len(sen_time[-1]), time_step))
-        label_time = sen_time[-1]
-        label_time = label_time[::time_step]
-        label_time[np.abs(label_time) < 1e-15] = 0.0
+        ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
+        min_time = -0.5
+        max_time = 0.5 * len(time[win_starts]) / time_step
+        label_time = np.arange(min_time, max_time, 0.5)
         ax.set_xticklabels(label_time)
         if i_word == 0:
             ax.set_ylabel('Accuracy')
