@@ -23,6 +23,39 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
                   'voice': 'Voice'}
 
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=True):
+    # Benjamini-Hochberg-Yekutieli
+    # originally from Mariya Toneva
+    if len(uncorrected_pvalues.shape) == 1:
+        uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
+
+    # get ranks of all p-values in ascending order
+    sorting_inds = np.argsort(uncorrected_pvalues, axis=1)
+    ranks = sorting_inds + 1  # add 1 to make the ranks start at 1 instead of 0
+
+    # calculate critical values under arbitrary dependence
+    if assume_independence:
+        dependency_constant = 1.0
+    else:
+        dependency_constant = np.sum(1.0 / ranks)
+    critical_values = ranks * alpha / float(uncorrected_pvalues.shape[1] * dependency_constant)
+
+    # find largest pvalue that is <= than its critical value
+    sorted_pvalues = np.empty(uncorrected_pvalues.shape)
+    sorted_critical_values = np.empty(critical_values.shape)
+    for i in range(uncorrected_pvalues.shape[0]):
+        sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
+        sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
+    bh_thresh = np.zeros((sorted_pvalues.shape[0],))
+    for j in range(sorted_pvalues.shape[0]):
+        for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
+            if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
+                bh_thresh[j] = sorted_pvalues[j, i]
+                print('threshold for row {} is: {}; critical value: {} (i: {})'.format(
+                    j, bh_thresh[j], sorted_critical_values[j, i], i))
+                break
+    return bh_thresh
+
 
 def intersect_accs(exp,
                    sen_type,
@@ -136,16 +169,21 @@ if __name__ == '__main__':
     sen_type_list = ['active', 'passive']
     if args.experiment == 'PassAct3':
         word_list = ['noun1', 'verb']
+        chance = {'noun1': 0.25,
+                  'verb': 0.25}
     else:
         word_list = ['noun1', 'verb', 'noun2']
+        chance = {'noun1': 0.25,
+                  'verb': 0.25,
+                  'noun2': 0.25}
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
     num_sub = float(len(run_TGM_LOSO.VALID_SUBS[args.experiment]))
-    frac_thresh = (0.5*num_sub + 1.0)/num_sub
 
     sen_accs = []
+    sub_sen_diags = []
     sen_fracs = []
     sen_time = []
 
@@ -155,6 +193,7 @@ if __name__ == '__main__':
         frac_diags = []
         time = []
         win_starts = []
+        sub_word_diags = []
         for word in word_list:
             intersection, acc_all, word_time, word_win_starts, eos_max = intersect_accs(args.experiment,
                                                                                         sen_type,
@@ -169,13 +208,18 @@ if __name__ == '__main__':
 
             frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
+            num_sub = acc_all.shape[0]
+            sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
+            sub_word_diags.append(sub_diags[None, :])
             if word == 'noun1':
                 time = word_time
                 win_starts = word_win_starts
         sen_accs.append(acc_diags)
         sen_fracs.append(frac_diags)
         sen_time.append(time[win_starts])
-
+        sub_word_diags = np.concatenate(sub_word_diags, axis=0)
+        sub_sen_diags.append(sub_word_diags[None, ...])
+        num_time = len(win_starts)
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
             max_line = 2.51 * 2 * time_step
@@ -201,10 +245,17 @@ if __name__ == '__main__':
                     acc = acc[2*time_step:]
                     frac = frac[2*time_step:]
 
-            above_thresh = frac > frac_thresh
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
-            for i_pt, pt in enumerate(above_thresh):
-                if pt:
+            pvals = np.empty((num_time,))
+            for i_pt in range(num_time):
+                num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+                pvals[i_pt] = 0.5 ** num_above_chance
+                # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+            print(pval_thresh)
+            print(np.min(pvals))
+            for i_pt in range(num_time):
+                if pvals[i_pt] <= pval_thresh:
                     ax.scatter(i_pt, 0.8, color=color, marker='*')
 
         ax.set_xticks(range(0, len(time[win_starts]), time_step))
