@@ -121,7 +121,9 @@ if __name__ == '__main__':
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
         pvals = np.empty((num_time,))
         for i_pt in range(num_time):
-            _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+            pvals[i_pt] = 0.5**num_above_chance
+            # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
         pval_thresh = bhy_multiple_comparisons_procedure(pvals)
         for i_pt in range(num_time):
             if pvals[i_pt] < pval_thresh:
