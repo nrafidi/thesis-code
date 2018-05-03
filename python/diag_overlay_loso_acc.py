@@ -178,7 +178,7 @@ if __name__ == '__main__':
                   'noun2': 0.25}
 
     time_step = int(250 / args.overlap)
-    time_adjust = args.win_len * 0.002
+    time_adjust = args.win_len * 0.002 * time_step
 
     num_sub = float(len(run_TGM_LOSO.VALID_SUBS[args.experiment]))
 
@@ -222,12 +222,12 @@ if __name__ == '__main__':
         num_time = len(win_starts)
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-            max_line = 2.51 * 2 * time_step
-            start_line = time_step
+            max_line = 2.51 * 2 * time_step - time_adjust
+            start_line = time_step - time_adjust
         else:
             text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-            max_line = 3.51 * 2 * time_step
-            start_line = time_step
+            max_line = 3.51 * 2 * time_step - time_adjust
+            start_line = time_step - time_adjust
 
 
         colors = ['r', 'g', 'b']
