@@ -23,7 +23,7 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
                   'voice': 'Voice'}
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=True):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.01, assume_independence=True):
     # Benjamini-Hochberg-Yekutieli
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
@@ -246,6 +246,7 @@ if __name__ == '__main__':
                     frac = frac[2*time_step:]
 
             ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
+            num_time = len(acc)
             pvals = np.empty((num_time,))
             for i_pt in range(num_time):
                 num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
@@ -256,7 +257,13 @@ if __name__ == '__main__':
             print(np.min(pvals))
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
-                    ax.scatter(i_pt, 0.8, color=color, marker='*')
+                    if word == 'verb' and sen_type == 'active':
+                        plot_pt = i_pt - time_step
+                    elif word == 'noun2' and sen_type == 'active':
+                        plot_pt = i_pt - 2*time_step
+                    else:
+                        plot_pt = i_pt
+                    ax.scatter(plot_pt, 0.8, color=color, marker='*')
 
         ax.set_xticks(range(0, len(time[win_starts]), time_step))
         label_time = time[win_starts]
