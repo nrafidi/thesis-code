@@ -75,8 +75,10 @@ if __name__ == '__main__':
             win_starts = word_win_starts
 
     sub_word_diags = np.concatenate(sub_word_diags, axis=0)
-    num_time = len(time)
-    pval_thresh = 0.05 / num_time  # bonferroni for now
+    print(sub_word_diags.shape)
+    num_time = len(win_starts)
+    print(num_time)
+    pval_thresh = 0.05 #/float(num_time)  # bonferroni for now
     print(pval_thresh)
     max_line = 0.3 * 2 * time_step
     colors = ['r', 'g', 'b', 'm', 'c', 'k']
