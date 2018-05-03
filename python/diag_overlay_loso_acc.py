@@ -290,6 +290,8 @@ if __name__ == '__main__':
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
+    sub_sen_diags = np.concatenate(sub_sen_diags, axis=0)
+    print(sub_sen_diags.shape)
     word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(40, 10))
     for i_word, word in enumerate(word_list):
 
@@ -309,10 +311,17 @@ if __name__ == '__main__':
             #     acc = acc[time_step:]
             #     frac = frac[time_step:]
 
-            above_thresh = frac > frac_thresh
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
-            for i_pt, pt in enumerate(above_thresh):
-                if pt:
+            pvals = np.empty((num_time,))
+            for i_pt in range(num_time):
+                num_above_chance = np.sum(np.squeeze(sub_sen_diags[i_sen, i_word, :, i_pt]) > chance[word])
+                pvals[i_pt] = 0.5 ** num_above_chance
+                # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+            print(pval_thresh)
+            print(np.min(pvals))
+            for i_pt in range(num_time):
+                if pvals[i_pt] <= pval_thresh:
                     ax.scatter(i_pt, 0.7 - i_sen*0.1 + 0.06, color=color, marker='*')
             for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
                 ax.axvline(x=v, color='k')
