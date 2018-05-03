@@ -1,14 +1,11 @@
 import argparse
-import load_data_ordered as load_data
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
-import os
 import run_TGM_LOSO_EOS
 import tgm_loso_acc_eos
-import string
+from scipy.stats import wilcoxon
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -34,20 +31,25 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
+    chance = {'noun1': 0.125,
+              'verb': 0.25,
+              'agent': 0.25,
+              'patient': 0.25,
+              'voice': 0.5,
+              'propid': 1.0/16.0}
+
     sen_type = 'pooled'
     word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
-    num_sub = float(len(run_TGM_LOSO_EOS.VALID_SUBS[args.experiment]))
-    frac_thresh = (0.5*num_sub + 1.0)/num_sub
-
     sen_fig, ax = plt.subplots(figsize=(18, 10))
     acc_diags = []
     frac_diags = []
     time = []
     win_starts = []
+    sub_word_diags = []
     for word in word_list:
         intersection, acc_all, word_time, word_win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
                                                                                                     sen_type,
@@ -62,11 +64,20 @@ if __name__ == '__main__':
 
         frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
         acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
-        if word == 'verb':
+        num_sub = acc_all.shape[0]
+        sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
+        sub_word_diags.append(sub_diags[None, :])
+
+
+
+        if word == 'voice':
             time = word_time
             win_starts = word_win_starts
 
-
+    sub_word_diags = np.concatenate(sub_word_diags, axis=0)
+    num_time = len(time)
+    pval_thresh = 0.05 / num_time  # bonferroni for now
+    print(pval_thresh)
     max_line = 0.3 * 2 * time_step
     colors = ['r', 'g', 'b', 'm', 'c', 'k']
 
@@ -75,10 +86,11 @@ if __name__ == '__main__':
         acc = acc_diags[i_word]
         frac = frac_diags[i_word]
 
-        above_thresh = frac > frac_thresh
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
-        for i_pt, pt in enumerate(above_thresh):
-            if pt:
+        for i_pt in range(num_time):
+            _, p = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            if p < pval_thresh:
+                print(p)
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
 
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
