@@ -8,6 +8,7 @@ import scipy.io as sio
 import os
 import run_TGM_LOSO
 import string
+from scipy.stats import wilcoxon
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -117,20 +118,11 @@ def intersect_accs(exp,
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
-            # if sub =='C':
-            #     fig, ax = plt.subplots()
-            #     ax.imshow(np.squeeze(fold_acc[i_fold, :, :]), interpolation='nearest', aspect='auto')
-            #     ax.set_title('{subject} {fold}'.format(subject=sub, fold=i_fold))
             argo = np.argmax(diag_acc[time_ind])
             eos_max_fold.append(time_ind[argo])
         eos_max_fold = np.array(eos_max_fold)
         eos_max_by_sub.append(eos_max_fold[None, :])
         acc = np.mean(fold_acc, axis=0)
-        # if sub == 'B':
-        #     fig, ax = plt.subplots()
-        #     ax.plot(acc[:, 0])
-        #     ax.set_title('B')
-
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.25
@@ -155,6 +147,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
+    parser.add_argument('--indep', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -249,10 +243,12 @@ if __name__ == '__main__':
             num_time = len(acc)
             pvals = np.empty((num_time,))
             for i_pt in range(num_time):
-                num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
-                pvals[i_pt] = 0.5 ** num_above_chance
-                # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-            pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+                if args.sig_test == 'binomial':
+                    num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+                    pvals[i_pt] = 0.5 ** num_above_chance
+                else:
+                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
             print(pval_thresh)
             print(np.min(pvals))
             for i_pt in range(num_time):
@@ -280,7 +276,6 @@ if __name__ == '__main__':
         ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
-        # if i_sen == len(sen_type_list) - 1:
         ax.legend(loc=2, bbox_to_anchor=(0.625, 0.825))
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
@@ -290,11 +285,13 @@ if __name__ == '__main__':
     sen_fig.tight_layout()
     plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances
+            num_instances=args.num_instances,
+            sig=args.sig_test,
+            indep=args.indep
         ), bbox_inches='tight')
 
     sub_sen_diags = np.concatenate(sub_sen_diags, axis=0)
@@ -314,17 +311,15 @@ if __name__ == '__main__':
             color = colors[i_sen]
             acc = sen_accs[i_sen][i_word]
             frac = sen_fracs[i_sen][i_word]
-            # if word == 'verb' and sen_type == 'active':
-            #     acc = acc[time_step:]
-            #     frac = frac[time_step:]
-
             ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
             pvals = np.empty((num_time,))
             for i_pt in range(num_time):
-                num_above_chance = np.sum(np.squeeze(sub_sen_diags[i_sen, i_word, :, i_pt]) > chance[word])
-                pvals[i_pt] = 0.5 ** num_above_chance
-                # _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-            pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+                if args.sig_test == 'binomial':
+                    num_above_chance = np.sum(np.squeeze(sub_sen_diags[i_sen, i_word, :, i_pt]) > chance[word])
+                    pvals[i_pt] = 0.5 ** num_above_chance
+                else:
+                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
             print(pval_thresh)
             print(np.min(pvals))
             for i_pt in range(num_time):
@@ -336,7 +331,6 @@ if __name__ == '__main__':
                     ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
 
         ax.set_xticks(np.arange(0, len(sen_time[-1]), time_step) - time_adjust)
-        # ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
         min_time = -0.5
         max_time = 0.5 * len(sen_time[-1]) / time_step
         label_time = np.arange(min_time, max_time, 0.5)
@@ -346,7 +340,6 @@ if __name__ == '__main__':
         ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
-        # if i_word == len(word_list) - 1:
         ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
         ax.legend(loc=1)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
@@ -357,11 +350,13 @@ if __name__ == '__main__':
     word_fig.tight_layout()
     plt.subplots_adjust(top=0.85)
     word_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
             exp=args.experiment, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances
+            num_instances=args.num_instances,
+            sig=args.sig_test,
+            indep=args.indep
         ), bbox_inches='tight')
 
 
