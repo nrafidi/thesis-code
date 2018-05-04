@@ -226,7 +226,7 @@ if __name__ == '__main__':
             num_time = len(time_win)
         
             ax = combo_grid[i_combo]
-            im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
             if i_word == 0:
                 ax.set_ylabel('Train Time (s)')
             if i_sen == 1:
@@ -236,11 +236,11 @@ if __name__ == '__main__':
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
             ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-            min_time = 0.0
+            min_time = -0.5
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
-            ax.set_yticks(range(0, len(time_win), time_step*2))
+            ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
             ax.set_yticklabels(label_time)
             time_adjust = args.win_len
 
