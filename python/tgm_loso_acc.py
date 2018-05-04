@@ -178,7 +178,7 @@ if __name__ == '__main__':
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
                 max_line = 2.51 * 2 * time_step - time_adjust
-                start_line = time_step - time_adjust
+                start_line = - time_adjust
                 if args.alg == 'lr-l2':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
@@ -203,7 +203,7 @@ if __name__ == '__main__':
             else:
                 text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
                 max_line = 3.51 * 2 * time_step - time_adjust
-                start_line = time_step - time_adjust
+                start_line = - time_adjust
                 if args.alg == 'lr-l2':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
@@ -237,7 +237,7 @@ if __name__ == '__main__':
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
             ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-            min_time = -0.0
+            min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
