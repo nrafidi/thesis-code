@@ -70,8 +70,8 @@ if __name__ == '__main__':
                                  perm=bool_to_str(isPerm),
                                  alg=alg,
                                  adj=adj,
-                                 avgTm=tm_avg,
-                                 avgTst=tst_avg,
+                                 avgTm=bool_to_str(tm_avg),
+                                 avgTst=bool_to_str(tst_avg),
                                  inst=ni,
                                  rsP=rs,
                                  mode=mode)
