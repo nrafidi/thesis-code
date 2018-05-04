@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(30, 10))
+    combo_fig = plt.figure(figsize=(40, 20))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True, label_mode='all')
@@ -224,8 +224,7 @@ if __name__ == '__main__':
             print(mean_acc.shape)
             print(np.max(mean_acc))
             num_time = len(time_win)
-            meow_fig, meow_ax = plt.subplots()
-            meow_ax.imshow(mean_acc, interpolation='nearest')
+
             ax = combo_grid[i_combo]
             im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
             if i_word == 0:
@@ -245,9 +244,9 @@ if __name__ == '__main__':
             ax.set_yticklabels(label_time)
 
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-                ax.axvline(x=v, color='m')
+                ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.10 * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
+                    ax.text(v + 0.05 * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
             i_combo += 1
