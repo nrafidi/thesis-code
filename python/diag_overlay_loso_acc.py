@@ -335,15 +335,15 @@ if __name__ == '__main__':
                 if i_v < len(text_to_write[i_sen]):
                     ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
 
-        ax.set_xticks(range(0, len(sen_time[-1]), time_step))
-        ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
+        ax.set_xticks(np.arange(0, len(sen_time[-1]), time_step) - time_adjust)
+        # ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
         min_time = -0.5
-        max_time = 0.5 * len(time[win_starts]) / time_step
+        max_time = 0.5 * len(sen_time[-1]) / time_step
         label_time = np.arange(min_time, max_time, 0.5)
         ax.set_xticklabels(label_time)
         if i_word == 0:
             ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time Relative to First Noun Onset (s)')
+        ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
         # if i_word == len(word_list) - 1:
