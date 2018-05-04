@@ -224,7 +224,8 @@ if __name__ == '__main__':
             print(mean_acc.shape)
             print(np.max(mean_acc))
             num_time = len(time_win)
-        
+            meow_fig, meow_ax = plt.subplots()
+            meow_ax.imshow(mean_acc, interpolation='nearest')
             ax = combo_grid[i_combo]
             im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
             if i_word == 0:
@@ -247,7 +248,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
+                    ax.text(v + 0.05 * 2*time_step, 1.25*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
             i_combo += 1
