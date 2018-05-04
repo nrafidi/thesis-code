@@ -143,15 +143,6 @@ def run_tgm_exp(subject,
                                                                     tmin=0.0,
                                                                     tmax=0.5)
 
-    print(data_det1.shape)
-    print(len(sen_ints_det1))
-    print(data_n1.shape)
-    print(len(sen_ints_n1))
-    print(data_det2.shape)
-    print(len(sen_ints_det2))
-    print(data_n2.shape)
-    print(len(sen_ints_n2))
-
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
     for sen_int in sen_ints_det1:
@@ -174,9 +165,21 @@ def run_tgm_exp(subject,
     sen_ints = np.concatenate([sen_ints_det1, sen_ints_n1, sen_ints_det2, sen_ints_n2], axis=0)
     data = np.concatenate([data_det1, data_n1, data_det2, data_n2], axis=0)
 
-    for i_label, label in enumerate(labels):
-        print('{label}: {sint}'.format(label=label, sint=sen_ints[i_label]))
+    inds_to_keep = np.ones((len(labels),), dtype=bool)
+    if analysis == 'the-dog':
+        for i_label, label in enumerate(labels):
+            if label != 'the' and label != 'dog':
+                inds_to_keep[i_label] = False
+
+    data = data[inds_to_keep, :, :]
+    sen_ints = sen_ints[inds_to_keep]
+    new_labels = [labels[i_label] for i_label, _ in enumerate(labels) if inds_to_keep[i_label]]
+
     print(data.shape)
+    print(sen_ints.shape)
+    print(new_labels)
+
+
     # total_win = int((tmax - tmin) * 500)
     #
     # if win_len < 0:
