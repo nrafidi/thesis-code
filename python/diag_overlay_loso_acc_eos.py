@@ -73,7 +73,7 @@ if __name__ == '__main__':
               'propid': 1.0/16.0}
 
     sen_type = 'pooled'
-    word_list = ['voice', 'verb', 'noun1'] #'agent', 'patient', 'noun1', 'propid']
+    word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
