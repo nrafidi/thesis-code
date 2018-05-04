@@ -161,6 +161,8 @@ if __name__ == '__main__':
         frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
         mean_acc = np.mean(acc_all, axis=0)
         mean_acc -= chance
+        if np.all(mean_acc < 0.0):
+            mean_acc = np.zeros(mean_acc.shape)
         print(mean_acc.shape)
         print(np.max(mean_acc))
         print(np.mean(mean_acc))
