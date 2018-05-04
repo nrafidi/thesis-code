@@ -27,9 +27,9 @@ if __name__ == '__main__':
                                    batch_exp.DO_TST_AVGS,
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.RANDOM_STATES,
+                                   batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
-                                   batch_exp.WIN_LENS,
                                    batch_exp.SUBJECTS)
     job_id = 0
     successful_jobs = 0
@@ -45,9 +45,9 @@ if __name__ == '__main__':
         tst_avg = grid[7]
         ni = grid[8]
         rs = grid[9]
-        sen = grid[10]
-        word = grid[11]
-        win_len = grid[12]
+        win_len = grid[10]
+        sen = grid[11]
+        word = grid[12]
         sub = grid[13]
 
         if job_id == 992:

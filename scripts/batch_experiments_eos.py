@@ -45,9 +45,9 @@ if __name__ == '__main__':
                                    DO_TST_AVGS,
                                    NUM_INSTANCESS,
                                    RANDOM_STATES,
+                                   WIN_LENS,
                                    SEN_TYPES,
                                    WORDS,
-                                   WIN_LENS,
                                    SUBJECTS)
     job_id = 0
     for grid in param_grid:
@@ -61,9 +61,9 @@ if __name__ == '__main__':
         tst_avg = grid[7]
         ni = grid[8]
         rs = grid[9]
-        sen = grid[10]
-        word = grid[11]
-        win_len = grid[12]
+        win_len = grid[10]
+        sen = grid[11]
+        word = grid[12]
         sub = grid[13]
 
         job_str = JOB_NAME.format(exp=exp,
