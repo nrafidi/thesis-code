@@ -204,6 +204,7 @@ def run_tgm_exp(subject,
                             tgm_pred=tgm_pred,
                             win_starts=win_starts,
                             time=time)
+        plt.show()
     else:
         l_ints, coef, Cs = models.lr_tgm_coef(data,
                                               labels,
