@@ -226,7 +226,8 @@ if __name__ == '__main__':
                     else:
                         max_line -= 2.5
                         start_line -= 2.5
-            mean_acc = mean_acc[time_select, time_select]
+            mean_acc = mean_acc[time_select, :]
+            mean_acc = mean_acc[:, time_select]
             time_win = time_win[time_select]
             print(mean_acc.shape)
             print(np.max(mean_acc))
