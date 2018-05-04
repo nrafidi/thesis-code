@@ -63,9 +63,9 @@ if __name__ == '__main__':
                                    NUM_INSTANCESS,
                                    REPS_TO_USES,
                                    RANDOM_STATES,
+                                   WIN_LENS,
                                    SEN_TYPES,
                                    WORDS,
-                                   WIN_LENS,
                                    SUBJECTS)
     job_id = 0
     for grid in param_grid:
@@ -80,9 +80,9 @@ if __name__ == '__main__':
         ni = grid[8]
         reps = grid[9]
         rs = grid[10]
-        sen = grid[11]
-        word = grid[12]
-        win_len = grid[13]
+        win_len = grid[11]
+        sen = grid[12]
+        word = grid[13]
         sub = grid[14]
 
         job_str = JOB_NAME.format(exp=exp,

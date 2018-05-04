@@ -28,9 +28,9 @@ if __name__ == '__main__':
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.REPS_TO_USES,
                                    batch_exp.RANDOM_STATES,
+                                   batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS,
-                                   batch_exp.WIN_LENS,
                                    batch_exp.SUBJECTS)
     job_id = 0
     successful_jobs = 0
@@ -47,9 +47,9 @@ if __name__ == '__main__':
         ni = grid[8]
         reps = grid[9]
         rs = grid[10]
-        sen = grid[11]
-        word = grid[12]
-        win_len = grid[13]
+        win_len = grid[11]
+        sen = grid[12]
+        word = grid[13]
         sub = grid[14]
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
