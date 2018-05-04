@@ -118,8 +118,8 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
-    i_combo = 0
-    for i, analysis in enumerate(run_TGM_LOSO_det.VALID_ANALYSES):
+
+    for i_combo, analysis in enumerate(['the-dog']):
         intersection, acc_all, time, win_starts = intersect_accs(args.sen_type,
                                                                  analysis,
                                                                  win_len=args.win_len,
