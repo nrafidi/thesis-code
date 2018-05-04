@@ -138,7 +138,8 @@ if __name__ == '__main__':
         aTst = 'Test Average'
     else:
         aTst = ''
-
+    time_step = int(250 / args.overlap)
+    time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(18, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
@@ -160,7 +161,6 @@ if __name__ == '__main__':
         frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
         mean_acc = np.mean(acc_all, axis=0)
 
-        time_step = int(250/args.overlap)
         print(mean_acc.shape)
         print(np.max(mean_acc))
         print(np.mean(mean_acc))
@@ -173,12 +173,17 @@ if __name__ == '__main__':
             ax.set_xlabel('Test Time (s)')
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]))
-        ax.set_xticks(range(0, len(time[win_starts]), time_step))
-        label_time = time[win_starts]
-        label_time = label_time[::time_step]
-        label_time[np.abs(label_time) < 1e-15] = 0.0
+        time_win = time[win_starts]
+        num_time = len(time_win)
+        ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
+        min_time = 0.0
+        max_time = 0.5 * len(time_win) / time_step
+        label_time = np.arange(min_time, max_time, 0.5)
+        # label_time = time[win_starts]
+        # label_time = label_time[::time_step]
+        # label_time[np.abs(label_time) < 1e-15] = 0.0
         ax.set_xticklabels(label_time)
-        ax.set_yticks(range(0, len(time[win_starts]), time_step))
+        ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
         ax.set_yticklabels(label_time)
         ax.axvline(x=0.625*time_step, color='w')
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
