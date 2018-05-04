@@ -195,8 +195,7 @@ def run_tgm_exp(subject,
                                                                       adj=adj,
                                                                       doTimeAvg=doTimeAvg,
                                                                       doTestAvg=doTestAvg)
-        fig, ax = plt.subplots()
-        ax.imshow(np.mean(tgm_acc, axis=0), interpolation='nearest')
+
         np.savez_compressed(fname,
                             l_ints=l_ints,
                             cv_membership=cv_membership,
@@ -204,7 +203,6 @@ def run_tgm_exp(subject,
                             tgm_pred=tgm_pred,
                             win_starts=win_starts,
                             time=time)
-        plt.show()
     else:
         l_ints, coef, Cs = models.lr_tgm_coef(data,
                                               labels,
