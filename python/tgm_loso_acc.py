@@ -171,7 +171,10 @@ if __name__ == '__main__':
                                                                               num_instances=args.num_instances,
                                                                               avgTime=args.avgTime,
                                                                               avgTest=args.avgTest)
-        
+            print(sen_type)
+            print(word)
+            print(np.min(time))
+            print(np.max(time))
             frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.mean(acc_all, axis=0)
             time_win = time[win_starts]
