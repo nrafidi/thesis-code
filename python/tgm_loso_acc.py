@@ -183,12 +183,12 @@ if __name__ == '__main__':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
                     elif word == 'verb':
-                        max_line += time_step
-                        start_line += time_step
+                        # max_line += time_step
+                        # start_line += time_step
                         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
                     elif word == 'noun2':
-                        max_line += 2*time_step
-                        start_line += 2*time_step
+                        # max_line += 2*time_step
+                        # start_line += 2*time_step
                         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
                 else:
                     if word == 'noun1':
@@ -212,13 +212,13 @@ if __name__ == '__main__':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
                     elif word == 'verb':
-                        max_line += time_step
-                        start_line += time_step
-                        time_select = np.logical_and(time_win >= -1.5, time_win <= 3.5)
+                        # max_line += time_step
+                        # start_line += time_step
+                        time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
                     elif word == 'noun2':
-                        max_line += 2*time_step
-                        start_line += 2*time_step
-                        time_select = np.logical_and(time_win >= -3.0, time_win <= 2.5)
+                        # max_line += 2*time_step
+                        # start_line += 2*time_step
+                        time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
                 else:
                     if word == 'verb':
                         max_line -= 1.0
