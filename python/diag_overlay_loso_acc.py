@@ -304,8 +304,8 @@ if __name__ == '__main__':
 
         text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
                          ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']]
-        max_line = [2.51 * 2 * time_step, 3.51 * 2 * time_step] - time_adjust
-        start_line = [time_step, time_step] - time_adjust
+        max_line = np.array([2.51 * 2 * time_step, 3.51 * 2 * time_step]) - time_adjust
+        start_line = np.array([time_step, time_step]) - time_adjust
 
 
         colors = ['r', 'g']
