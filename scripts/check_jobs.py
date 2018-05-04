@@ -57,8 +57,7 @@ if __name__ == '__main__':
                                             sen=sen,
                                             word=word,
                                             id=job_id)
-        if job_id == 22 or job_id == 153:
-            print(grid)
+
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
 
         err_str = batch_exp.ERR_FILE.format(dir=dir_str, job_name=job_str)
@@ -98,7 +97,7 @@ if __name__ == '__main__':
                 out_info = fid.read()
             if 'Experiment parameters not valid.' in out_info:
                 skipped_jobs += 1
-            elif os.stat(err_str).st_size != 0 and (not was_success) and job_id < 153:
+            elif os.stat(err_str).st_size != 0 and (not was_success) and job_id < 102:
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
                     print('Job {} Failed'.format(job_str))
