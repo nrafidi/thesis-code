@@ -163,10 +163,9 @@ if __name__ == '__main__':
         mean_acc -= chance
         if np.all(mean_acc < 0.0):
             mean_acc = np.zeros(mean_acc.shape)
-        print(mean_acc.shape)
-        print(np.max(mean_acc))
-        print(np.mean(mean_acc))
-        mean_acc /= np.max(mean_acc)
+        else:
+            mean_acc /= np.max(mean_acc)
+
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
         if i_word == 0 or i_word == 2:
