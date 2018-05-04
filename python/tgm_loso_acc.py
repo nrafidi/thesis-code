@@ -183,12 +183,8 @@ if __name__ == '__main__':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
                     elif word == 'verb':
-                        # max_line += time_step
-                        # start_line += time_step
                         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
                     elif word == 'noun2':
-                        # max_line += 2*time_step
-                        # start_line += 2*time_step
                         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
                 else:
                     if word == 'noun1':
@@ -212,12 +208,8 @@ if __name__ == '__main__':
                     if word == 'noun1':
                         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
                     elif word == 'verb':
-                        # max_line += time_step
-                        # start_line += time_step
                         time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
                     elif word == 'noun2':
-                        # max_line += 2*time_step
-                        # start_line += 2*time_step
                         time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
                 else:
                     if word == 'verb':
@@ -244,7 +236,7 @@ if __name__ == '__main__':
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
             ax.set_xticks(np.arange(0, len(time_win), time_step) - time_adjust)
-            min_time = -0.5
+            min_time = -0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
@@ -256,8 +248,6 @@ if __name__ == '__main__':
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
                     ax.text(v + 0.05 * 2*time_step, 1.5*time_step, text_to_write[i_v], color='w', fontsize=10)
-            # ax.set_xlim(left=time_step)
-            # ax.set_ylim(top=time_step)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
             i_combo += 1
