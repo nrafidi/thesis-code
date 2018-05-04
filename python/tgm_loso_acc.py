@@ -245,9 +245,9 @@ if __name__ == '__main__':
             ax.set_yticklabels(label_time)
 
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-                ax.axvline(x=v, color='w')
+                ax.axvline(x=v, color='m')
                 if i_v < len(text_to_write):
-                    ax.text(v + 0.05 * 2*time_step, 1.25*time_step, text_to_write[i_v], color='w', fontsize=10)
+                    ax.text(v + 0.10 * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=20, weight='bold')
             i_combo += 1
