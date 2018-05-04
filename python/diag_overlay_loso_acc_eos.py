@@ -69,8 +69,9 @@ if __name__ == '__main__':
 
     sen_type = 'pooled'
     if args.experiment == 'krns2':
-        word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
-
+        word_list = ['voice', 'verb', 'agent', 'patient', 'noun1']
+        if args.num_instances > 1:
+            word_list.append('propid')
         chance = {'noun1': 0.125,
                   'verb': 0.25,
                   'agent': 0.25,
