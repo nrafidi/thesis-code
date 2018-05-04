@@ -144,13 +144,13 @@ def run_tgm_exp(subject,
                                                                     tmax=0.5)
 
     print(data_det1.shape)
-    print(sen_ints_det1.shape)
+    print(len(sen_ints_det1))
     print(data_n1.shape)
-    print(sen_ints_n1.shape)
+    print(len(sen_ints_n1))
     print(data_det2.shape)
-    print(sen_ints_det2.shape)
+    print(len(sen_ints_det2))
     print(data_n2.shape)
-    print(sen_ints_n2.shape)
+    print(len(sen_ints_n2))
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
@@ -248,7 +248,7 @@ if __name__ == '__main__':
     parser.add_argument('--doTestAvg', default='True', choices=['True', 'False'])
     parser.add_argument('--num_instances', type=int, default=1)
     parser.add_argument('--perm_random_state', type=int, default=1)
-    parser.add_argument('--force') #, default='False', choices=['True', 'False'])
+    parser.add_argument('--force', default='False', choices=['True', 'False'])
     parser.add_argument('--mode', default='acc', choices=['acc', 'coef'])
 
     args = parser.parse_args()
