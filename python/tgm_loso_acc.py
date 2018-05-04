@@ -243,7 +243,6 @@ if __name__ == '__main__':
             ax.set_xticklabels(label_time)
             ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
             ax.set_yticklabels(label_time)
-            time_adjust = args.win_len
 
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
