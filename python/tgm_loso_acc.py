@@ -156,7 +156,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(40, 20))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5, share_all=True, label_mode='all')
+                          cbar_pad=0.5, share_all=True)
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
         for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
