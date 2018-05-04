@@ -54,6 +54,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=5)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
+    parser.add_argument('--indep', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -65,15 +67,27 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
-    chance = {'noun1': 0.125,
-              'verb': 0.25,
-              'agent': 0.25,
-              'patient': 0.25,
-              'voice': 0.5,
-              'propid': 1.0/16.0}
-
     sen_type = 'pooled'
-    word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
+    if args.experiment == 'krns2':
+        word_list = ['voice', 'verb', 'agent', 'patient', 'noun1', 'propid']
+
+        chance = {'noun1': 0.125,
+                  'verb': 0.25,
+                  'agent': 0.25,
+                  'patient': 0.25,
+                  'voice': 0.5,
+                  'propid': 1.0/16.0}
+    else:
+        word_list = ['voice', 'verb', 'noun1']
+
+        chance = {'noun1': 0.25,
+                  'verb': 0.25,
+                  'agent': 0.25,
+                  'patient': 0.25,
+                  'voice': 0.5,
+                  'propid': 1.0 / 24.0}
+
+
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
@@ -121,10 +135,12 @@ if __name__ == '__main__':
         ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
         pvals = np.empty((num_time,))
         for i_pt in range(num_time):
-            num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
-            pvals[i_pt] = 0.5**num_above_chance
-            #_, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-        pval_thresh = bhy_multiple_comparisons_procedure(pvals)
+            if args.sig_test == 'binomial':
+                num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+                pvals[i_pt] = 0.5**num_above_chance
+            else:
+                _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+        pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
         for i_pt in range(num_time):
             if  pvals[i_pt]  <= pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
@@ -146,14 +162,14 @@ if __name__ == '__main__':
     ax.legend(bbox_to_anchor=(0.85, 1.0), loc=2, borderaxespad=0.)
 
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=18)
-#    sen_fig.tight_layout()
-#    plt.subplots_adjust(top=0.9)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
             exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances
+            num_instances=args.num_instances,
+            sig=args.sig_test,
+            indep=args.indep
         ), bbox_inches='tight')
 
     plt.show()
