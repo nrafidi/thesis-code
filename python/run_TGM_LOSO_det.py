@@ -131,17 +131,17 @@ def run_tgm_exp(subject,
                                                                         tmin=-0.5,
                                                                         tmax=0.0)
 
-    data_n2, _, sen_ints_n2, _, _ = load_data.load_sentence_data_v2(subject=subject,
-                                                                    align_to='noun2',
-                                                                    voice=voice,
-                                                                    experiment=experiment,
-                                                                    proc=load_data.DEFAULT_PROC,
-                                                                    num_instances=num_instances,
-                                                                    reps_filter=None,
-                                                                    sensor_type=None,
-                                                                    is_region_sorted=False,
-                                                                    tmin=0.0,
-                                                                    tmax=0.5)
+    data_n2, _, sen_ints_n2, time, _ = load_data.load_sentence_data_v2(subject=subject,
+                                                                       align_to='noun2',
+                                                                        voice=voice,
+                                                                        experiment=experiment,
+                                                                        proc=load_data.DEFAULT_PROC,
+                                                                        num_instances=num_instances,
+                                                                        reps_filter=None,
+                                                                        sensor_type=None,
+                                                                        is_region_sorted=False,
+                                                                        tmin=0.0,
+                                                                        tmax=0.5)
 
     stimuli_voice = list(load_data.read_stimuli(experiment))
     labels = []
@@ -175,66 +175,45 @@ def run_tgm_exp(subject,
     sen_ints = sen_ints[inds_to_keep]
     new_labels = [labels[i_label] for i_label, _ in enumerate(labels) if inds_to_keep[i_label]]
 
-    print(data.shape)
-    print(sen_ints.shape)
-    print(new_labels)
+    total_win = data.shape[-1]
+    win_starts = range(0, total_win - win_len, overlap)
 
+    if isPerm:
+        random.seed(random_state_perm)
+        random.shuffle(labels)
 
-    # total_win = int((tmax - tmin) * 500)
-    #
-    # if win_len < 0:
-    #     win_len = total_win - overlap
-
-    # win_starts = range(0, total_win - win_len, overlap)
-
-    # sen_set = np.unique(labels, axis=0).tolist()
-    # num_labels = labels.shape[0]
-    # sen_ints = np.empty((num_labels,))
-    # for i_l in range(num_labels):
-    #     for j_l, l in enumerate(sen_set):
-    #         if np.all(l == labels[i_l, :]):
-    #             sen_ints[i_l] = j_l
-    #             break
-
-    # labels = labels[:, WORD_COLS[experiment][word]]
-
-    # if isPerm:
-    #     random.seed(random_state_perm)
-    #     random.shuffle(labels)
-    #
-    # if mode == 'acc':
-    #     l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso(data,
-    #                                                                     labels,
-    #                                                                     win_starts,
-    #                                                                     win_len,
-    #                                                                     sen_ints,
-    #                                                                     penalty=alg[3:],
-    #                                                                     adj=adj,
-    #                                                                     doTimeAvg=doTimeAvg,
-    #                                                                     doTestAvg=doTestAvg)
-    #     np.savez_compressed(fname,
-    #                         l_ints=l_ints,
-    #                         cv_membership=cv_membership,
-    #                         tgm_acc=tgm_acc,
-    #                         tgm_pred=tgm_pred,
-    #                         win_starts=win_starts,
-    #                         time=time,
-    #                         proc=proc)
-    # else:
-    #     l_ints, coef, Cs = models.lr_tgm_coef(data,
-    #                                           labels,
-    #                                           win_starts,
-    #                                           win_len,
-    #                                           penalty=alg[3:],
-    #                                           adj=adj,
-    #                                           doTimeAvg=doTimeAvg)
-    #     np.savez_compressed(fname,
-    #                         l_ints=l_ints,
-    #                         coef=coef,
-    #                         Cs=Cs,
-    #                         win_starts=win_starts,
-    #                         time=time,
-    #                         proc=proc)
+    if mode == 'acc':
+        l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso(data,
+                                                                      new_labels,
+                                                                      win_starts,
+                                                                      win_len,
+                                                                      sen_ints,
+                                                                      penalty=alg[3:],
+                                                                      adj=adj,
+                                                                      doTimeAvg=doTimeAvg,
+                                                                      doTestAvg=doTestAvg)
+        print(np.mean(tgm_acc, axis=0))
+        np.savez_compressed(fname,
+                            l_ints=l_ints,
+                            cv_membership=cv_membership,
+                            tgm_acc=tgm_acc,
+                            tgm_pred=tgm_pred,
+                            win_starts=win_starts,
+                            time=time)
+    else:
+        l_ints, coef, Cs = models.lr_tgm_coef(data,
+                                              labels,
+                                              win_starts,
+                                              win_len,
+                                              penalty=alg[3:],
+                                              adj=adj,
+                                              doTimeAvg=doTimeAvg)
+        np.savez_compressed(fname,
+                            l_ints=l_ints,
+                            coef=coef,
+                            Cs=Cs,
+                            win_starts=win_starts,
+                            time=time)
 
 
 if __name__ == '__main__':
