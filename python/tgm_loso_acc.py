@@ -123,13 +123,13 @@ def intersect_accs(exp,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=100)
+    parser.add_argument('--win_len', type=int, default=12)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
-    parser.add_argument('--adj', default='None', choices=['None', 'mean_center', 'zscore'])
+    parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
-    parser.add_argument('--avgTime', default='F')
-    parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--avgTime', default='T')
+    parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -235,8 +235,8 @@ if __name__ == '__main__':
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
-            ax.set_xticks(np.arange(0, len(time_win), time_step) - time_adjust)
-            min_time = -0.0
+            ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
+            min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
