@@ -5,6 +5,9 @@ import numpy as np
 import os.path
 import random
 import warnings
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 TOP_DIR = '/share/volume0/nrafidi/krns2_TGM_LOSO_det/'
 SAVE_DIR = '{top_dir}/{sub}/'
@@ -192,7 +195,8 @@ def run_tgm_exp(subject,
                                                                       adj=adj,
                                                                       doTimeAvg=doTimeAvg,
                                                                       doTestAvg=doTestAvg)
-        print(np.mean(tgm_acc, axis=0))
+        fig, ax = plt.subplots()
+        ax.imshow(np.mean(tgm_acc, axis=0), interpolation='nearest')
         np.savez_compressed(fname,
                             l_ints=l_ints,
                             cv_membership=cv_membership,
