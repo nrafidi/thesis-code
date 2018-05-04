@@ -171,26 +171,25 @@ if __name__ == '__main__':
                                                                               num_instances=args.num_instances,
                                                                               avgTime=args.avgTime,
                                                                               avgTest=args.avgTest)
-            print(sen_type)
-            print(word)
-            print(np.min(time))
-            print(np.max(time))
             frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
             mean_acc = np.mean(acc_all, axis=0)
             time_win = time[win_starts]
-            num_time = len(time_win)
 
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
                 max_line = 2.51 * 2 * time_step - time_adjust
                 start_line = time_step - time_adjust
                 if args.alg == 'lr-l2':
-                    if word == 'verb':
+                    if word == 'noun1':
+                        time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
+                    elif word == 'verb':
                         max_line += time_step
                         start_line += time_step
+                        time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
                     elif word == 'noun2':
                         max_line += 2*time_step
                         start_line += 2*time_step
+                        time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
@@ -209,17 +208,29 @@ if __name__ == '__main__':
                 text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
                 max_line = 3.51 * 2 * time_step - time_adjust
                 start_line = time_step - time_adjust
-                if args.alg == 'lr-l1':
+                if args.alg == 'lr-l2':
                     if word == 'noun1':
-                        start_line -= 0.0
+                        time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
                     elif word == 'verb':
+                        max_line += time_step
+                        start_line += time_step
+                        time_select = np.logical_and(time_win >= -1.5, time_win <= 3.5)
+                    elif word == 'noun2':
+                        max_line += 2*time_step
+                        start_line += 2*time_step
+                        time_select = np.logical_and(time_win >= -3.0, time_win <= 2.5)
+                else:
+                    if word == 'verb':
                         max_line -= 1.0
                         start_line -= 1.0
                     else:
                         max_line -= 2.5
                         start_line -= 2.5
+            mean_acc = mean_acc[time_select, time_select]
+            time_win = time_win[time_select]
             print(mean_acc.shape)
             print(np.max(mean_acc))
+            num_time = len(time_win)
         
             ax = combo_grid[i_combo]
             im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
@@ -230,20 +241,16 @@ if __name__ == '__main__':
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
-            # ax.set_xticks(range(0, len(time_win), time_step*2))
+
             ax.set_xticks(np.arange(0, len(time_win), time_step) - time_adjust)
             min_time = -0.5
-            max_time = 0.5 * len(time[win_starts]) / time_step
+            max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
-            # label_time = time_win
-            # label_time = label_time[::time_step*2]
-            # label_time[np.abs(label_time) < 1e-15] = 0.0
             ax.set_xticklabels(label_time)
             ax.set_yticks(range(0, len(time_win), time_step*2))
             ax.set_yticklabels(label_time)
             time_adjust = args.win_len
 
-            print(start_line)
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v < len(text_to_write):
