@@ -123,8 +123,6 @@ def intersect_accs(exp,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    # parser.add_argument('--sen_type', choices=run_TGM_LOSO.VALID_SEN_TYPE)
-    # parser.add_argument('--word', choices = ['noun1', 'verb', 'noun2'])
     parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
@@ -153,6 +151,8 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
+    time_step = int(250 / args.overlap)
+    time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(30, 10))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
@@ -176,17 +176,12 @@ if __name__ == '__main__':
             mean_acc = np.mean(acc_all, axis=0)
             time_win = time[win_starts]
             num_time = len(time_win)
-            print(sen_type)
-            print(word)
-            print(num_time)
-            time_step = int(250/args.overlap)
 
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
-                max_line = 2.51 * 2 * time_step
-                start_line = time_step
+                max_line = 2.51 * 2 * time_step - time_adjust
+                start_line = time_step - time_adjust
                 if args.alg == 'lr-l2':
-                    print('meow')
                     if word == 'verb':
                         max_line += time_step
                         start_line += time_step
@@ -209,8 +204,8 @@ if __name__ == '__main__':
                         start_line -= 1.5
             else:
                 text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
-                max_line = 3.51 * 2 * time_step
-                start_line = time_step
+                max_line = 3.51 * 2 * time_step - time_adjust
+                start_line = time_step - time_adjust
                 if args.alg == 'lr-l1':
                     if word == 'noun1':
                         start_line -= 0.0
@@ -232,10 +227,14 @@ if __name__ == '__main__':
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
-            ax.set_xticks(range(0, len(time_win), time_step*2))
-            label_time = time_win
-            label_time = label_time[::time_step*2]
-            label_time[np.abs(label_time) < 1e-15] = 0.0
+            # ax.set_xticks(range(0, len(time_win), time_step*2))
+            ax.set_xticks(np.arange(0, len(time_win), time_step) - time_adjust)
+            min_time = -0.5
+            max_time = 0.5 * len(time[win_starts]) / time_step
+            label_time = np.arange(min_time, max_time, 0.5)
+            # label_time = time_win
+            # label_time = label_time[::time_step*2]
+            # label_time[np.abs(label_time) < 1e-15] = 0.0
             ax.set_xticklabels(label_time)
             ax.set_yticks(range(0, len(time_win), time_step*2))
             ax.set_yticklabels(label_time)
