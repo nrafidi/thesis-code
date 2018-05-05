@@ -84,7 +84,9 @@ def intersect_accs(sen_type,
                         indexes = np.unique(curr_labels, return_index=True)[1]
                         meow = [curr_labels[index] for index in sorted(indexes)]
                         curr_labels = meow
-                    label_mat[i_fold].append(curr_labels)
+                    label_mat.append(curr_labels)
+                pred_mat = np.concatenate(pred_mat, axis=0)
+                label_mat = np.concatenate(label_mat, axis=0)
                 tgm_f1[i_time, j_time] = f1_score(label_mat, pred_mat)
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
