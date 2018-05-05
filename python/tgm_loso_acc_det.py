@@ -69,17 +69,17 @@ def intersect_accs(sen_type,
             print(preds.shape)
             print(l_ints.shape)
             print(cv_membership.shape)
-            num_fold, num_time, _ = preds.shape
-            tgm_f1 = np.empty((num_fold, num_time, num_time))
-            for i_fold in range(num_fold):
-                for i_time in range(num_time):
-                    for j_time in range(num_time):
-                        tgm_f1[i_fold, i_time, j_time] = f1_score(l_ints[cv_membership[i_fold, :]],
-                                                                  preds[i_fold, i_time, j_time])
         except:
             print(result_fname)
             continue
 
+        num_fold, num_time, _ = preds.shape
+        tgm_f1 = np.empty((num_fold, num_time, num_time))
+        for i_fold in range(num_fold):
+            for i_time in range(num_time):
+                for j_time in range(num_time):
+                    tgm_f1[i_fold, i_time, j_time] = f1_score(l_ints[cv_membership[i_fold, :]],
+                                                              preds[i_fold, i_time, j_time])
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
         f1 = np.mean(tgm_f1, axis=0)
