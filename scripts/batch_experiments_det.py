@@ -6,7 +6,7 @@ import time
 MODES = ['acc'] #, 'coef']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] #['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
 SEN_TYPES = ['pooled'] #, 'active']
-ANALYSES = ['det-type', 'the-dog']
+ANALYSES = ['det-type-first']
 WIN_LENS = [12, 25, 50]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True

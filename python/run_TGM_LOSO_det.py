@@ -18,7 +18,7 @@ SAVE_FILE = '{dir}TGM-LOSO-det_{sub}_{sen_type}_{analysis}_win{win_len}_ov{ov}_p
 VALID_SUBS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['pooled', 'active', 'passive']
-VALID_ANALYSES = ['det-type', 'the-dog']
+VALID_ANALYSES = ['det-type-first', 'det-type', 'the-dog']
 
 WORD_COLS = {'active': {'det1': 0,
                         'noun1': 1,
@@ -152,21 +152,26 @@ def run_tgm_exp(subject,
         word_list = stimuli_voice[sen_int]['stimulus'].split()
         curr_voice = stimuli_voice[sen_int]['voice']
         labels.append(word_list[WORD_COLS[curr_voice]['det1']])
-    for sen_int in sen_ints_n1:
-        word_list = stimuli_voice[sen_int]['stimulus'].split()
-        curr_voice = stimuli_voice[sen_int]['voice']
-        labels.append(word_list[WORD_COLS[curr_voice]['noun1']])
-    for sen_int in sen_ints_det2:
-        word_list = stimuli_voice[sen_int]['stimulus'].split()
-        curr_voice = stimuli_voice[sen_int]['voice']
-        labels.append(word_list[WORD_COLS[curr_voice]['det2']])
-    for sen_int in sen_ints_n2:
-        word_list = stimuli_voice[sen_int]['stimulus'].split()
-        curr_voice = stimuli_voice[sen_int]['voice']
-        labels.append(word_list[WORD_COLS[curr_voice]['noun2']])
 
-    sen_ints = np.concatenate([sen_ints_det1, sen_ints_n1, sen_ints_det2, sen_ints_n2], axis=0)
-    data = np.concatenate([data_det1, data_n1, data_det2, data_n2], axis=0)
+    if analysis != 'det-type-first':
+        for sen_int in sen_ints_n1:
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            curr_voice = stimuli_voice[sen_int]['voice']
+            labels.append(word_list[WORD_COLS[curr_voice]['noun1']])
+        for sen_int in sen_ints_det2:
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            curr_voice = stimuli_voice[sen_int]['voice']
+            labels.append(word_list[WORD_COLS[curr_voice]['det2']])
+        for sen_int in sen_ints_n2:
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            curr_voice = stimuli_voice[sen_int]['voice']
+            labels.append(word_list[WORD_COLS[curr_voice]['noun2']])
+
+        sen_ints = np.concatenate([sen_ints_det1, sen_ints_n1, sen_ints_det2, sen_ints_n2], axis=0)
+        data = np.concatenate([data_det1, data_n1, data_det2, data_n2], axis=0)
+    else:
+        sen_ints = np.array(sen_ints_det1)
+        data = data_det1
 
     inds_to_keep = np.ones((len(labels),), dtype=bool)
     if analysis == 'the-dog':
