@@ -78,8 +78,10 @@ def intersect_accs(sen_type,
         for i_fold in range(num_fold):
             for i_time in range(num_time):
                 for j_time in range(num_time):
+                    curr_pred = preds[i_fold, i_time, j_time]
+                    print(curr_pred.shape)
                     tgm_f1[i_fold, i_time, j_time] = f1_score(l_ints[cv_membership[i_fold, :]],
-                                                              preds[i_fold, i_time, j_time])
+                                                              curr_pred)
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
         f1 = np.mean(tgm_f1, axis=0)
