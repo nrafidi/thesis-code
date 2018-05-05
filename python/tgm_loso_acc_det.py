@@ -66,13 +66,11 @@ def intersect_accs(sen_type,
             preds = result['tgm_pred']
             l_ints = result['l_ints']
             cv_membership = result['cv_membership']
-            print(preds.shape)
-            print(l_ints.shape)
-            print(cv_membership.shape)
         except:
             print(result_fname)
             continue
 
+        print(np.unique(l_ints))
         num_fold, num_time, _ = preds.shape
         tgm_f1 = np.empty((num_fold, num_time, num_time))
         for i_fold in range(num_fold):
