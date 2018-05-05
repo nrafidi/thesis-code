@@ -74,17 +74,17 @@ def intersect_accs(sen_type,
         tgm_f1 = np.empty((num_time, num_time))
         for i_time in range(num_time):
             for j_time in range(num_time):
-                pred_mat = np.empty((num_fold,))
-                label_mat = np.empty((num_fold,))
+                pred_mat = []
+                label_mat = []
                 for i_fold in range(num_fold):
                     p = preds[i_fold, i_time, j_time]
-                    print(p)
-                    print(p.shape)
-                    pred_mat[i_fold] = np.argmax(p, axis=1)
+                    pred_mat.append(np.argmax(p, axis=1))
                     curr_labels = l_ints[cv_membership[i_fold, :]]
                     if avgTest == 'T':
-                        curr_labels = curr_labels[0]
-                    label_mat[i_fold] = curr_labels
+                        indexes = np.unique(curr_labels, return_index=True)[1]
+                        meow = [curr_labels[index] for index in sorted(indexes)]
+                        curr_labels = meow
+                    label_mat[i_fold].append(curr_labels)
                 tgm_f1[i_time, j_time] = f1_score(label_mat, pred_mat)
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
