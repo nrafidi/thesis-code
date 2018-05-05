@@ -142,7 +142,7 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
-
+    diag_fig, diag_ax = plt.subplots()
     for i_combo, analysis in enumerate(['det-type-first', 'the-dog']):
         intersection, acc_all, time, win_starts, f1 = intersect_accs(args.sen_type,
                                                                      analysis,
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         mean_f1 = np.mean(f1, axis=0)
         time_win = time[win_starts]
         # print(mean_acc.shape)
-        print(np.max(np.diag(mean_acc)))
+        print(np.max(np.diag(mean_f1)))
         num_time = len(time_win)
 
         ax = combo_grid[i_combo]
@@ -181,7 +181,25 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                 size=20, weight='bold')
         i_combo += 1
-        
+
+        diag_ax.plot(np.diag(mean_f1), label=PLOT_TITLE_ANALYSIS[analysis])
+
+    diag_ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
+    min_time = 0.0
+    max_time = 0.5 * num_time / time_step
+    label_time = np.arange(min_time, max_time, 0.1)
+    diag_ax.set_xticklabels(label_time)
+    diag_ax.set_xlabel('Time from word onset (s)')
+    diag_ax.legend()
+    diag_fig.suptitle('F1 Scores Averaged Over Subjects',
+                       fontsize=18)
+    diag_fig.savefig(
+        '/home/nrafidi/thesis_figs/krns2_diag-overlay-det_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            sen_type=args.sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM of F1 Scores Averaged Over Subjects',
