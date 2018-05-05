@@ -21,7 +21,7 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'passive': 'Passive Sentences',
                   'pooled': 'All Sentences'}
 
-PLOT_TITLE_ANALYSIS = {'det-type': 'Determiner ID',
+PLOT_TITLE_ANALYSIS = {'det-type-first': 'Determiner ID',
                        'the-dog': 'The vs Dog'}
 
 def intersect_accs(sen_type,
@@ -138,7 +138,7 @@ if __name__ == '__main__':
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
 
-    for i_combo, analysis in enumerate(['det-type', 'the-dog']):
+    for i_combo, analysis in enumerate(['det-type-first', 'the-dog']):
         intersection, acc_all, time, win_starts, f1 = intersect_accs(args.sen_type,
                                                                      analysis,
                                                                      win_len=args.win_len,
