@@ -64,8 +64,10 @@ def intersect_accs(sen_type,
             win_starts = result['win_starts']
             preds = result['tgm_pred']
             l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
             print(preds.shape)
             print(l_ints.shape)
+            print(cv_membership.shape)
         except:
             print(result_fname)
             continue
