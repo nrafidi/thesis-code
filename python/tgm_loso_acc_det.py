@@ -72,23 +72,25 @@ def intersect_accs(sen_type,
 
         print(np.unique(l_ints))
         num_fold, num_time, _ = preds.shape
-        tgm_f1 = np.empty((num_fold, num_time, num_time))
-        for i_fold in range(num_fold):
-            for i_time in range(num_time):
-                for j_time in range(num_time):
-                    curr_pred = preds[i_fold, i_time, j_time]
+        tgm_f1 = np.empty((num_time, num_time))
+        for i_time in range(num_time):
+            for j_time in range(num_time):
+                pred_mat = np.empty((num_fold,))
+                label_mat = np.empty((num_fold,))
+                for i_fold in range(num_fold):
+                    pred_mat[i_fold] = np.argmax(preds[i_fold, i_time, j_time], axis=1)
                     curr_labels = l_ints[cv_membership[i_fold, :]]
-                    print(curr_pred)
-                    tgm_f1[i_fold, i_time, j_time] = f1_score(curr_labels,
-                                                              curr_pred)
+                    if avgTest == 'T':
+                        curr_labels = curr_labels[0]
+                    label_mat[i_fold] = curr_labels
+                tgm_f1[i_time, j_time] = f1_score(label_mat, pred_mat)
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
-        f1 = np.mean(tgm_f1, axis=0)
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.5
         acc_by_sub.append(acc[None, ...])
-        f1_by_sub.append(f1[None, ...])
+        f1_by_sub.append(tgm_f1[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
     f1_all = np.concatenate(f1_by_sub, axis=0)
