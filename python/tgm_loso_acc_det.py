@@ -78,8 +78,7 @@ def intersect_accs(sen_type,
                 for j_time in range(num_time):
                     curr_pred = preds[i_fold, i_time, j_time]
                     curr_labels = l_ints[cv_membership[i_fold, :]]
-                    print(curr_pred.shape)
-                    print(curr_labels.shape)
+                    print(curr_pred)
                     tgm_f1[i_fold, i_time, j_time] = f1_score(curr_labels,
                                                               curr_pred)
         fold_acc = result['tgm_acc']
