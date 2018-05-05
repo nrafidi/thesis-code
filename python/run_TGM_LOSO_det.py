@@ -153,7 +153,7 @@ def run_tgm_exp(subject,
         curr_voice = stimuli_voice[sen_int]['voice']
         labels.append(word_list[WORD_COLS[curr_voice]['det1']])
 
-    if analysis != 'det-type-first':
+    if 'det-type' not in analysis:
         for sen_int in sen_ints_n1:
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             curr_voice = stimuli_voice[sen_int]['voice']
@@ -169,9 +169,17 @@ def run_tgm_exp(subject,
 
         sen_ints = np.concatenate([sen_ints_det1, sen_ints_n1, sen_ints_det2, sen_ints_n2], axis=0)
         data = np.concatenate([data_det1, data_n1, data_det2, data_n2], axis=0)
-    else:
+    elif analysis == 'det-type-first':
         sen_ints = np.array(sen_ints_det1)
         data = data_det1
+    else:
+        for sen_int in sen_ints_det2:
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            curr_voice = stimuli_voice[sen_int]['voice']
+            labels.append(word_list[WORD_COLS[curr_voice]['det2']])
+
+        sen_ints = np.concatenate([sen_ints_det1, sen_ints_det2], axis=0)
+        data = np.concatenate([data_det1, data_det2], axis=0)
 
     inds_to_keep = np.ones((len(labels),), dtype=bool)
     if analysis == 'the-dog':
