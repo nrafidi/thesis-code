@@ -9,6 +9,7 @@ import os
 import run_TGM_LOSO_det
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from sklearn.metrics import f1_score
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -61,6 +62,10 @@ def intersect_accs(sen_type,
             result = np.load(result_fname)
             time = np.squeeze(result['time'])
             win_starts = result['win_starts']
+            preds = result['tgm_pred']
+            l_ints = result['l_ints']
+            print(preds.shape)
+            print(l_ints.shape)
         except:
             print(result_fname)
             continue
