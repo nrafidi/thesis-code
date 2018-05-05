@@ -190,7 +190,7 @@ if __name__ == '__main__':
     label_time = np.arange(min_time, max_time, 0.1)
     diag_ax.set_xticklabels(label_time)
     diag_ax.set_xlabel('Time from word onset (s)')
-    diag_ax.legend()
+    diag_ax.legend(loc=4)
     diag_fig.suptitle('F1 Scores Averaged Over Subjects',
                        fontsize=18)
     diag_fig.savefig(
