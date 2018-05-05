@@ -21,7 +21,7 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'passive': 'Passive Sentences',
                   'pooled': 'All Sentences'}
 
-PLOT_TITLE_ANALYSIS = {'det-type-first': 'Determiner ID',
+PLOT_TITLE_ANALYSIS = {'det-type-first': 'First Determiner ID',
                        'the-dog': 'The vs Dog'}
 
 def intersect_accs(sen_type,
@@ -157,8 +157,8 @@ if __name__ == '__main__':
         mean_acc = np.mean(acc_all, axis=0)
         mean_f1 = np.mean(f1, axis=0)
         time_win = time[win_starts]
-        print(mean_acc.shape)
-        print(np.max(mean_acc))
+        # print(mean_acc.shape)
+        print(np.max(np.diag(mean_acc)))
         num_time = len(time_win)
 
         ax = combo_grid[i_combo]
@@ -184,7 +184,7 @@ if __name__ == '__main__':
         
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
-    combo_fig.suptitle('TGM Averaged Over Subjects',
+    combo_fig.suptitle('TGM of F1 Scores Averaged Over Subjects',
         fontsize=18)
 
     combo_fig.savefig('/home/nrafidi/thesis_figs/krns2_avg-tgm-det_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
