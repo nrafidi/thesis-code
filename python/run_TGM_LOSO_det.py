@@ -183,6 +183,7 @@ def run_tgm_exp(subject,
     sen_ints = sen_ints[inds_to_keep]
     new_labels = [labels[i_label] for i_label, _ in enumerate(labels) if inds_to_keep[i_label]]
 
+    print(np.unique(np.array(new_labels)))
     total_win = data.shape[-1]
     win_starts = range(0, total_win - win_len, overlap)
 
