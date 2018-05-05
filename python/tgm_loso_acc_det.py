@@ -70,7 +70,6 @@ def intersect_accs(sen_type,
             print(result_fname)
             continue
 
-        print(np.unique(l_ints))
         num_fold, num_time, _ = preds.shape
         tgm_f1 = np.empty((num_time, num_time))
         for i_time in range(num_time):
@@ -78,7 +77,10 @@ def intersect_accs(sen_type,
                 pred_mat = np.empty((num_fold,))
                 label_mat = np.empty((num_fold,))
                 for i_fold in range(num_fold):
-                    pred_mat[i_fold] = np.argmax(preds[i_fold, i_time, j_time], axis=1)
+                    p = preds[i_fold, i_time, j_time]
+                    print(p)
+                    print(p.shape)
+                    pred_mat[i_fold] = np.argmax(p, axis=1)
                     curr_labels = l_ints[cv_membership[i_fold, :]]
                     if avgTest == 'T':
                         curr_labels = curr_labels[0]
