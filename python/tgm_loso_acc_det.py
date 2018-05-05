@@ -39,6 +39,7 @@ def intersect_accs(sen_type,
     acc_intersect = []
     time_by_sub = []
     win_starts_by_sub = []
+    f1_by_sub = []
     for sub in run_TGM_LOSO_det.VALID_SUBS:
         save_dir = run_TGM_LOSO_det.SAVE_DIR.format(top_dir=top_dir, sub=sub)
         result_fname = run_TGM_LOSO_det.SAVE_FILE.format(dir=save_dir,
@@ -68,24 +69,33 @@ def intersect_accs(sen_type,
             print(preds.shape)
             print(l_ints.shape)
             print(cv_membership.shape)
+            num_fold, num_time, _ = preds.shape
+            tgm_f1 = np.empty((num_fold, num_time, num_time))
+            for i_fold in range(num_fold):
+                for i_time in range(num_time):
+                    for j_time in range(num_time):
+                        tgm_f1[i_fold, i_time, j_time] = f1_score(l_ints[cv_membership[i_fold, :]],
+                                                                  preds[i_fold, i_time, j_time])
         except:
             print(result_fname)
             continue
 
         fold_acc = result['tgm_acc']
         acc = np.mean(fold_acc, axis=0)
-
+        f1 = np.mean(tgm_f1, axis=0)
         time_by_sub.append(time[None, ...])
         win_starts_by_sub.append(win_starts[None, ...])
         acc_thresh = acc > 0.5
         acc_by_sub.append(acc[None, ...])
+        f1_by_sub.append(f1[None, ...])
         acc_intersect.append(acc_thresh[None, ...])
     acc_all = np.concatenate(acc_by_sub, axis=0)
+    f1_all = np.concatenate(f1_by_sub, axis=0)
     intersection = np.sum(np.concatenate(acc_intersect, axis=0), axis=0)
     time = np.mean(np.concatenate(time_by_sub, axis=0), axis=0)
     win_starts = np.mean(np.concatenate(win_starts_by_sub, axis=0), axis=0).astype('int')
 
-    return intersection, acc_all, time, win_starts
+    return intersection, acc_all, time, win_starts, f1_all
 
 
 if __name__ == '__main__':
@@ -127,24 +137,25 @@ if __name__ == '__main__':
                           cbar_pad=0.5, share_all=True)
 
     for i_combo, analysis in enumerate(['det-type', 'the-dog']):
-        intersection, acc_all, time, win_starts = intersect_accs(args.sen_type,
-                                                                 analysis,
-                                                                 win_len=args.win_len,
-                                                                 overlap=args.overlap,
-                                                                 alg=args.alg,
-                                                                 adj=args.adj,
-                                                                 num_instances=args.num_instances,
-                                                                 avgTime=args.avgTime,
-                                                                 avgTest=args.avgTest)
+        intersection, acc_all, time, win_starts, f1 = intersect_accs(args.sen_type,
+                                                                     analysis,
+                                                                     win_len=args.win_len,
+                                                                     overlap=args.overlap,
+                                                                     alg=args.alg,
+                                                                     adj=args.adj,
+                                                                     num_instances=args.num_instances,
+                                                                     avgTime=args.avgTime,
+                                                                     avgTest=args.avgTest)
         frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
         mean_acc = np.mean(acc_all, axis=0)
+        mean_f1 = np.mean(f1, axis=0)
         time_win = time[win_starts]
         print(mean_acc.shape)
         print(np.max(mean_acc))
         num_time = len(time_win)
 
         ax = combo_grid[i_combo]
-        im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
+        im = ax.imshow(mean_f1, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
         if i_combo == 0:
             ax.set_ylabel('Train Time (s)')
         ax.set_xlabel('Test Time (s)')
