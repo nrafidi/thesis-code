@@ -184,8 +184,8 @@ if __name__ == '__main__':
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
     bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
-    bar_ax.set_xticks(ind + width/ 2.0)
-    bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list], fontdict={'horizontalalignment': 'center'})
+    bar_ax.set_xticks(ind + width) #/ 2.0)
+    bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
     bar_ax.set_ylim([0.0, 1.0])
     bar_fig.suptitle('Algorithm Comparison', fontsize=suptitlesize)
     bar_ax.tick_params(labelsize=ticklabelsize)
@@ -259,7 +259,7 @@ if __name__ == '__main__':
     width = 0.3
     bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
-    bar_ax.set_xticks(ind + width / 2.0)
+    bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(win_labels)
     bar_ax.set_ylim([0.5, 1.0])
     bar_ax.tick_params(labelsize=ticklabelsize)
@@ -329,7 +329,7 @@ if __name__ == '__main__':
     width = 0.3
     bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
     bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
-    bar_ax.set_xticks(ind + width / 2.0)
+    bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(inst_list)
     bar_ax.set_ylim([0.5, 1.0])
     bar_ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
