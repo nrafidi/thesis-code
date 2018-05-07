@@ -242,7 +242,7 @@ if __name__ == '__main__':
                                                                                              word=PLOT_TITLE_WORD[word],
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
-                                 fontsize=18, pad=20)
+                                 fontsize=18)
 
                     fig.savefig(fig_fname.format(
                                 exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
@@ -293,10 +293,11 @@ if __name__ == '__main__':
                     i_combo += 1
 
             cbar = combo_grid.cbar_axes[0].colorbar(im)
-            combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
-                avgTime=avg_time_str,
-                avgTest=avg_test_str),
-                         fontsize=18, pad=20)
+            ttl = combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
+                                    avgTime=avg_time_str,
+                                    avgTest=avg_test_str),
+                                             fontsize=18)
+            ttl.set_position([.5, 1.05])
 
             combo_fig.savefig(fig_fname.format(
                 exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime, avgTest=avgTest,
