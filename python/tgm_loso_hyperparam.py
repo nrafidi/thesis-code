@@ -243,7 +243,7 @@ if __name__ == '__main__':
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
                                  fontsize=18)
-
+                    fig.subplots_adjust(top=0.85)
                     fig.savefig(fig_fname.format(
                                 exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
                                 perc=perc, fig_type='single-mean-score-comp'
@@ -284,7 +284,7 @@ if __name__ == '__main__':
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    combo_grid[i_combo].text(-0.25, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+                    combo_grid[i_combo].text(-0.275, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=20, weight='bold')
                     if i_combo > 1:
                         combo_grid[i_combo].set_xlabel('Number of Instances')
@@ -293,13 +293,12 @@ if __name__ == '__main__':
                     i_combo += 1
 
             cbar = combo_grid.cbar_axes[0].colorbar(im)
-            ttl = combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
+            combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
                                     avgTime=avg_time_str,
                                     avgTest=avg_test_str),
                                              fontsize=18)
-            # print(ttl)
-            # ttl.set_position([0.5, 1.0])
-            combo_fig.subplots_adjust(top=0.8)
+
+            combo_fig.subplots_adjust(top=0.85)
             combo_fig.savefig(fig_fname.format(
                 exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime, avgTest=avgTest,
                 perc=perc, fig_type='word-sen-combo-max-score-comp'
