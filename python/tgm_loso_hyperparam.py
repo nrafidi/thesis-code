@@ -3,8 +3,6 @@ import load_data_ordered as load_data
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
-rcParams['axes.titlepad'] = 20
 from mpl_toolkits.axes_grid1 import AxesGrid
 import numpy as np
 import scipy.io as sio
@@ -244,7 +242,7 @@ if __name__ == '__main__':
                                                                                              word=PLOT_TITLE_WORD[word],
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
-                                 fontsize=18)
+                                 fontsize=18, pad=20)
 
                     fig.savefig(fig_fname.format(
                                 exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
@@ -298,7 +296,7 @@ if __name__ == '__main__':
             combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
                 avgTime=avg_time_str,
                 avgTest=avg_test_str),
-                         fontsize=18)
+                         fontsize=18, pad=20)
 
             combo_fig.savefig(fig_fname.format(
                 exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime, avgTest=avgTest,
