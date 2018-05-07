@@ -217,7 +217,7 @@ if __name__ == '__main__':
 
                     fig = plt.figure(figsize=(12, 12))
                     grid = AxesGrid(fig, 111, nrows_ncols=(2, 2),
-                                    axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                                    axes_pad=1.0, cbar_mode='single', cbar_location='right',
                                     cbar_pad=0.5)
 
                     mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
