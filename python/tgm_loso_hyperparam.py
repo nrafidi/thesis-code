@@ -34,18 +34,18 @@ if __name__ == '__main__':
     parser.add_argument('--percentile', type=float, default=0.1)
     args = parser.parse_args()
 
-    win_lens = [12, 25, 50] #, 100, 150]
-    num_insts = [1, 2, 5] #, 10]
+    win_lens = [12, 25, 50, 100, 150]
+    num_insts = [1, 2] #, 5] #, 10]
 
     perc = args.percentile
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
 
-    avg_combo_fig = plt.figure(figsize=(12, 12))
-    avg_combo_grid = AxesGrid(avg_combo_fig, 111, nrows_ncols=(2, 2),
-                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5)
-    i_avg_combo = 0
+    # avg_combo_fig = plt.figure(figsize=(12, 12))
+    # avg_combo_grid = AxesGrid(avg_combo_fig, 111, nrows_ncols=(2, 2),
+    #                       axes_pad=0.7, cbar_mode='single', cbar_location='right',
+    #                       cbar_pad=0.5)
+    # i_avg_combo = 0
     for avgTime in ['F']:
         for avgTest in ['T']:
             # per_sub_perc_tot = []
@@ -307,22 +307,22 @@ if __name__ == '__main__':
             all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
             optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
-            # fig, ax = plt.subplots()
+            fig, ax = plt.subplots()
             # ax = avg_combo_grid[i_avg_combo]
-            # avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
-            #
-            # ax.set_title('{avgTime}\n{avgTest}'.format(
-            #     avgTime=avg_time_str,
-            #     avgTest=avg_test_str),
-            #              fontsize=14)
-            # ax.set_xticks(range(len(num_insts)))
-            # ax.set_xticklabels(num_insts)
-            # ax.set_yticks(range(len(win_lens)))
-            # ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+            avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
+
+            ax.set_title('Total Combined Scores\n{avgTime}, {avgTest}'.format(
+                avgTime=avg_time_str,
+                avgTest=avg_test_str),
+                         fontsize=14)
+            ax.set_xticks(range(len(num_insts)))
+            ax.set_xticklabels(num_insts)
+            ax.set_yticks(range(len(win_lens)))
+            ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
             # if i_avg_combo > 1:
-            #     ax.set_xlabel('Number of Instances')
+            ax.set_xlabel('Number of Instances')
             # if i_avg_combo == 0 or i_avg_combo == 2:
-            #     ax.set_ylabel('Window Length (ms)')
+            ax.set_ylabel('Window Length (ms)')
             # ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg_combo], transform=ax.transAxes,
             #         size=20, weight='bold')
             # i_avg_combo += 1
