@@ -216,13 +216,13 @@ if __name__ == '__main__':
                     # per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
                     fig = plt.figure(figsize=(12, 12))
-                    grid = AxesGrid(fig, 111, nrows_ncols=(2, 2),
+                    grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
                                     axes_pad=1.0, cbar_mode='single', cbar_location='right',
                                     cbar_pad=0.5)
 
-                    mats_to_plot = [frac_sub_tot, frac_sub_eos, mean_max_tot, mean_max_eos]
-                    titles = ['Global Fraction\nSubjects > Chance', 'Post-Sentence Fraction\nSubjects > Chance',
-                              'Global Max Accuracy', 'Post-Sentence Max Accuracy']
+                    mats_to_plot = [frac_sub_tot, mean_max_tot]
+                    titles = ['Fraction\nSubjects > Chance',
+                              'Max Accuracy']
                     for i_ax, ax in enumerate(grid):
                         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
                                            vmax=1.0)
@@ -257,29 +257,29 @@ if __name__ == '__main__':
                     all_combined_z = zscore(all_combined)
                     combo_scores.append(all_combined_z[None, ...])
 
-                    fig, ax = plt.subplots()
-                    h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
-                    plt.colorbar(h)
-                    ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                             word=PLOT_TITLE_WORD[word],
-                                                                                             avgTime=avg_time_str,
-                                                                                             avgTest=avg_test_str),
-                                 fontsize=14)
-                    ax.set_xticks(range(len(num_insts)))
-                    ax.set_xticklabels(num_insts)
-                    ax.set_yticks(range(len(win_lens)))
-                    ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    ax.set_xlabel('Number of Instances')
-                    ax.set_ylabel('Window Length (ms)')
-                    fig.tight_layout()
-                    plt.savefig(fig_fname.format(
-                        exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
-                        perc=perc, fig_type='total-comb-max-score-comp'
-                    ), bbox_inches='tight')
+                    # fig, ax = plt.subplots()
+                    # h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+                    # plt.colorbar(h)
+                    # ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    #                                                                          word=PLOT_TITLE_WORD[word],
+                    #                                                                          avgTime=avg_time_str,
+                    #                                                                          avgTest=avg_test_str),
+                    #              fontsize=14)
+                    # ax.set_xticks(range(len(num_insts)))
+                    # ax.set_xticklabels(num_insts)
+                    # ax.set_yticks(range(len(win_lens)))
+                    # ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+                    # ax.set_xlabel('Number of Instances')
+                    # ax.set_ylabel('Window Length (ms)')
+                    # fig.tight_layout()
+                    # plt.savefig(fig_fname.format(
+                    #     exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
+                    #     perc=perc, fig_type='total-comb-max-score-comp'
+                    # ), bbox_inches='tight')
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
-                    combo_grid[i_combo].set_title('Decoding {word}\nfrom {sen}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                      word=PLOT_TITLE_WORD[word]))
+                    combo_grid[i_combo].set_title('{sen} {word}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                                                                        word=PLOT_TITLE_WORD[word]))
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
