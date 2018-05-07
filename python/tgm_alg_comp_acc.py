@@ -162,8 +162,9 @@ if __name__ == '__main__':
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
-    ax.legend(fontsize=legendfontsize)
+    ax.legend(loc=3, fontsize=legendfontsize)
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
+    fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.pdf')
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.png')
 
@@ -190,6 +191,7 @@ if __name__ == '__main__':
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(fontsize=legendfontsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
+    bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.png')
 
@@ -240,7 +242,7 @@ if __name__ == '__main__':
         ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
         if i_avg == 0:
             ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-        ax.legend()
+        ax.legend(loc=3, fontsize=legendfontsize)
         ax.set_title(avg_time_str, fontsize=axistitlesize)
         ax.set_xlim([0.0, 0.5])
         ax.tick_params(labelsize=ticklabelsize)
@@ -263,6 +265,7 @@ if __name__ == '__main__':
     bar_ax.legend(fontsize=legendfontsize)
     bar_ax.set_xlabel('Window Size (s)', fontsize=axislabelsize)
     bar_ax.set_title('Window Size Max Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.png')
 
@@ -307,12 +310,13 @@ if __name__ == '__main__':
         ax.axhline(0.5, color='k', label='Chance')
         ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
         ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-        ax.legend(fontsize=legendfontsize)
+        ax.legend(loc=3, fontsize=legendfontsize)
         ax.tick_params(labelsize=ticklabelsize)
         ax.set_title(avg_test_str, fontsize=axistitlesize)
         ax.set_xlim([0.0, 0.5])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
+    inst_fig.subplots_adjust(top=0.85)
     inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.pdf')
     inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.png')
@@ -328,6 +332,7 @@ if __name__ == '__main__':
     bar_ax.legend(fontsize=legendfontsize)
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.set_title('Repetition Averaging Max Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.png')
 
