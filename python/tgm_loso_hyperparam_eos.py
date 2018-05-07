@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--avgTime', default='T')
+    parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
-    win_lens = [12, 25, 50]
-    num_insts = [2, 5, 10]
+    win_lens = [12, 25, 50, 100]
+    num_insts = [2, 5]
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
