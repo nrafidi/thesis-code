@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--percentile', type=float, default=0.1)
     args = parser.parse_args()
 
-    win_lens = [12, 25, 50, 100, 150]
+    win_lens = [12, 25, 50, 100]
     num_insts = [1, 2] #, 5] #, 10]
 
     perc = args.percentile
