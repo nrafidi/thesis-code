@@ -226,7 +226,7 @@ if __name__ == '__main__':
                     for i_ax, ax in enumerate(grid):
                         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
                                            vmax=1.0)
-                        ax.set_title(titles[i_ax])
+                        ax.set_title(titles[i_ax], fontsize=14)
                         ax.set_xticks(range(len(num_insts)))
                         ax.set_xticklabels(num_insts)
                         ax.set_yticks(range(len(win_lens)))
@@ -279,12 +279,12 @@ if __name__ == '__main__':
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                        word=PLOT_TITLE_WORD[word]))
+                                                                        word=PLOT_TITLE_WORD[word]), fontsize=14)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    combo_grid[i_combo].text(-0.275, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+                    combo_grid[i_combo].text(-0.325, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=20, weight='bold')
                     if i_combo > 1:
                         combo_grid[i_combo].set_xlabel('Number of Instances')
