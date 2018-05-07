@@ -157,7 +157,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=18)
     ax.set_ylabel('Classification Accuracy', fontsize=18)
     ax.tick_params(labelsize=16)
-    ax.legend(fontsize=14)
+    ax.legend(fontsize=16)
     ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=25)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.pdf')
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.png')
@@ -182,8 +182,11 @@ if __name__ == '__main__':
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_ylim([0.0, 1.0])
     bar_ax.set_title('Algorithm Comparison', fontsize=25)
-    bar_ax.legend()
+    bar_ax.tick_params(labelsize=16)
+    bar_ax.legend(fontsize=16)
+    bar_ax.set_xlabel('Algorithm', fontsize=18)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.png')
 
     # adj = None
     win_fig = plt.figure(figsize=(20, 8))
