@@ -231,14 +231,14 @@ if __name__ == '__main__':
                         ax.set_xticklabels(num_insts)
                         ax.set_yticks(range(len(win_lens)))
                         ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                        ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                        ax.text(-0.2, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
                                             size=20, weight='bold')
                         if i_ax > 1:
                             ax.set_xlabel('Number of Instances')
                         if i_ax == 0 or i_ax == 2:
                             ax.set_ylabel('Window Length (ms)')
                     cbar = grid.cbar_axes[0].colorbar(im)
-                    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}\n'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}\n\n\n'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                              word=PLOT_TITLE_WORD[word],
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
@@ -284,7 +284,7 @@ if __name__ == '__main__':
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    combo_grid[i_combo].text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+                    combo_grid[i_combo].text(-0.2, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=20, weight='bold')
                     if i_combo > 1:
                         combo_grid[i_combo].set_xlabel('Number of Instances')
@@ -293,7 +293,7 @@ if __name__ == '__main__':
                     i_combo += 1
 
             cbar = combo_grid.cbar_axes[0].colorbar(im)
-            combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
+            combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}\n\n\n'.format(
                 avgTime=avg_time_str,
                 avgTest=avg_test_str),
                          fontsize=18)
