@@ -226,7 +226,7 @@ if __name__ == '__main__':
                     for i_ax, ax in enumerate(grid):
                         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
                                            vmax=1.0)
-                        ax.set_title(titles[i_ax], fontsize=15)
+                        ax.set_title(titles[i_ax], fontsize=16)
                         ax.set_xticks(range(len(num_insts)))
                         ax.set_xticklabels(num_insts)
                         ax.set_yticks(range(len(win_lens)))
@@ -264,7 +264,7 @@ if __name__ == '__main__':
                     #                                                                          word=PLOT_TITLE_WORD[word],
                     #                                                                          avgTime=avg_time_str,
                     #                                                                          avgTest=avg_test_str),
-                    #              fontsize=15)
+                    #              fontsize=16)
                     # ax.set_xticks(range(len(num_insts)))
                     # ax.set_xticklabels(num_insts)
                     # ax.set_yticks(range(len(win_lens)))
@@ -279,12 +279,12 @@ if __name__ == '__main__':
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                        word=PLOT_TITLE_WORD[word]), fontsize=15)
+                                                                        word=PLOT_TITLE_WORD[word]), fontsize=16)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    combo_grid[i_combo].text(-0.35, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+                    combo_grid[i_combo].text(-0.40, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=20, weight='bold')
                     if i_combo > 1:
                         combo_grid[i_combo].set_xlabel('Number of Instances')
