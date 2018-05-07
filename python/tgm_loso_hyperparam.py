@@ -297,7 +297,8 @@ if __name__ == '__main__':
                                     avgTime=avg_time_str,
                                     avgTest=avg_test_str),
                                              fontsize=18)
-            ttl.set_position([.5, 1.05])
+            print(ttl)
+            ttl.set_position([0.0, 0.0])
 
             combo_fig.savefig(fig_fname.format(
                 exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime, avgTest=avgTest,
