@@ -238,7 +238,7 @@ if __name__ == '__main__':
                         if i_ax == 0 or i_ax == 2:
                             ax.set_ylabel('Window Length (ms)')
                     cbar = grid.cbar_axes[0].colorbar(im)
-                    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}\n'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                              word=PLOT_TITLE_WORD[word],
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
@@ -278,7 +278,7 @@ if __name__ == '__main__':
                     # ), bbox_inches='tight')
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
-                    combo_grid[i_combo].set_title('{sen} {word}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                         word=PLOT_TITLE_WORD[word]))
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
                     combo_grid[i_combo].set_xticklabels(num_insts)
@@ -314,7 +314,7 @@ if __name__ == '__main__':
             ax.set_title('Total Combined Scores\n{avgTime}, {avgTest}'.format(
                 avgTime=avg_time_str,
                 avgTest=avg_test_str),
-                         fontsize=14)
+                         fontsize=18)
             ax.set_xticks(range(len(num_insts)))
             ax.set_xticklabels(num_insts)
             ax.set_yticks(range(len(win_lens)))
