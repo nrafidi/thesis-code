@@ -62,7 +62,7 @@ if __name__ == '__main__':
             combo_scores = []
             combo_fig = plt.figure(figsize=(12, 12))
             combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
-                                axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                                axes_pad=1.0, cbar_mode='single', cbar_location='right',
                                 cbar_pad=0.5)
             i_combo = 0
             for sen_type in ['active', 'passive']:
@@ -253,7 +253,7 @@ if __name__ == '__main__':
                     z_frac[np.isnan(z_frac)] = 0.0
                     z_frac_eos = zscore(frac_sub_eos)
                     z_frac_eos[np.isnan(z_frac_eos)] = 0.0
-                    all_combined = (z_frac_eos + zscore(mean_max_eos))/2.0
+                    all_combined = (z_frac + zscore(mean_max_tot))/2.0
                     all_combined_z = zscore(all_combined)
                     combo_scores.append(all_combined_z[None, ...])
 
