@@ -120,7 +120,12 @@ if __name__ == '__main__':
     adj = args.adj
 
 
-
+    ticklabelsize = 16
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
 
 
     fig, ax = plt.subplots(figsize=(10,10))
@@ -154,11 +159,11 @@ if __name__ == '__main__':
             ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_alg], edgecolor='w', alpha=0.3)
     ax.axhline(0.5, color='k', label='Chance')
-    ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=18)
-    ax.set_ylabel('Classification Accuracy', fontsize=18)
-    ax.tick_params(labelsize=16)
-    ax.legend(fontsize=16)
-    ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+    ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
+    ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+    ax.tick_params(labelsize=ticklabelsize)
+    ax.legend(fontsize=legendfontsize)
+    ax.set_title('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.pdf')
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.png')
 
@@ -181,10 +186,10 @@ if __name__ == '__main__':
     bar_ax.set_xticks(ind + width/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
     bar_ax.set_ylim([0.0, 1.0])
-    bar_ax.set_title('Algorithm Comparison', fontsize=25)
-    bar_ax.tick_params(labelsize=16)
-    bar_ax.legend(fontsize=16)
-    bar_ax.set_xlabel('Algorithm', fontsize=18)
+    bar_ax.set_title('Algorithm Comparison', fontsize=suptitlesize)
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.png')
 
@@ -232,15 +237,19 @@ if __name__ == '__main__':
                 ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_win],
                                 edgecolor='w', alpha=0.3)
         ax.axhline(0.5, color='k', label='Chance')
-        ax.set_xlabel('Time relative to Sentence Offset (s)')
-        ax.set_ylabel('Classification Accuracy')
+        ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
+        if i_avg == 0:
+            ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
         ax.legend()
-        ax.set_title(avg_time_str)
+        ax.set_title(avg_time_str, fontsize=axistitlesize)
         ax.set_xlim([0.0, 0.5])
+        ax.tick_params(labelsize=ticklabelsize)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-                                size=20, weight='bold')
-    win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+                                size=axislettersize, weight='bold')
+    win_fig.subplots_adjust(top=0.85)
+    win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.pdf')
+    win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.png')
 
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(win_list))
@@ -250,9 +259,12 @@ if __name__ == '__main__':
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(win_labels)
     bar_ax.set_ylim([0.5, 1.0])
-    bar_ax.legend()
-    bar_ax.set_title('Window Size Max Accuracy Comparison')
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.set_xlabel('Window Size (s)', fontsize=axislabelsize)
+    bar_ax.set_title('Window Size Max Accuracy Comparison', fontsize=suptitlesize)
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.png')
 
     inst_fig = plt.figure(figsize=(20, 8))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
@@ -293,15 +305,17 @@ if __name__ == '__main__':
                 ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_inst],
                                 edgecolor='w', alpha=0.3)
         ax.axhline(0.5, color='k', label='Chance')
-        ax.set_xlabel('Time relative to Sentence Offset (s)')
-        ax.set_ylabel('Classification Accuracy')
-        ax.legend()
-        ax.set_title(avg_test_str)
+        ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
+        ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+        ax.legend(fontsize=legendfontsize)
+        ax.tick_params(labelsize=ticklabelsize)
+        ax.set_title(avg_test_str, fontsize=axistitlesize)
         ax.set_xlim([0.0, 0.5])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-                size=20, weight='bold')
-    inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=25)
+                size=axislettersize, weight='bold')
+    inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.pdf')
+    inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.png')
     print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(inst_list))
@@ -311,9 +325,11 @@ if __name__ == '__main__':
     bar_ax.set_xticks(ind + width / 2.0)
     bar_ax.set_xticklabels(inst_list)
     bar_ax.set_ylim([0.5, 1.0])
-    bar_ax.legend()
-    bar_ax.set_title('Repetition Averaging Max Accuracy Comparison')
+    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_ax.set_title('Repetition Averaging Max Accuracy Comparison', fontsize=suptitlesize)
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.png')
 
     plt.show()
 
