@@ -18,7 +18,7 @@ SAVE_FILE = '{dir}TGM-LOSO-det_{sub}_{sen_type}_{analysis}_win{win_len}_ov{ov}_p
 VALID_SUBS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['pooled', 'active', 'passive']
-VALID_ANALYSES = ['det-type-first', 'det-type', 'the-dog']
+VALID_ANALYSES = ['a-dog', 'det-type-first', 'det-type', 'the-dog']
 
 WORD_COLS = {'active': {'det1': 0,
                         'noun1': 1,
@@ -185,6 +185,10 @@ def run_tgm_exp(subject,
     if analysis == 'the-dog':
         for i_label, label in enumerate(labels):
             if label != 'the' and label != 'dog':
+                inds_to_keep[i_label] = False
+    elif analysis == 'a-dog':
+        for i_label, label in enumerate(labels):
+            if label != 'a' and label != 'dog':
                 inds_to_keep[i_label] = False
 
     data = data[inds_to_keep, :, :]
