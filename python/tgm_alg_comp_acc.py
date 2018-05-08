@@ -250,7 +250,7 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=axislettersize, weight='bold')
     win_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
-    win_fig.subplots_adjust(top=0.85)
+    win_fig.subplots_adjust(top=0.8)
     win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.pdf')
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.png')
