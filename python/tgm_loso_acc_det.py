@@ -22,7 +22,8 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'pooled': 'All Sentences'}
 
 PLOT_TITLE_ANALYSIS = {'det-type-first': 'First Determiner ID',
-                       'the-dog': 'The vs Dog'}
+                       'the-dog': 'The vs Dog',
+                       'a-dog': 'A vs Dog'}
 
 def intersect_accs(sen_type,
                    analysis,
@@ -108,11 +109,11 @@ def intersect_accs(sen_type,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--sen_type', default='pooled', choices=run_TGM_LOSO_det.VALID_SEN_TYPE)
-    parser.add_argument('--win_len', type=int, default=12)
+    parser.add_argument('--win_len', type=int, default=25)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=1)
+    parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
@@ -139,11 +140,11 @@ if __name__ == '__main__':
     time_step = int(50 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(15, 10))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 2),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
     diag_fig, diag_ax = plt.subplots()
-    for i_combo, analysis in enumerate(['det-type-first', 'the-dog']):
+    for i_combo, analysis in enumerate(['det-type-first', 'the-dog', 'a-dog']):
         intersection, acc_all, time, win_starts, f1 = intersect_accs(args.sen_type,
                                                                      analysis,
                                                                      win_len=args.win_len,
@@ -165,7 +166,7 @@ if __name__ == '__main__':
         im = ax.imshow(mean_f1, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
         if i_combo == 0:
             ax.set_ylabel('Train Time (s)')
-        ax.set_xlabel('Test Time (s)')
+        # ax.set_xlabel('Test Time (s)')
         ax.set_title('{analysis} from {sen_type}'.format(
             sen_type=PLOT_TITLE_SEN[args.sen_type],
             analysis=PLOT_TITLE_ANALYSIS[analysis]), fontsize=14)
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     max_time = 0.5 * num_time / time_step
     label_time = np.arange(min_time, max_time, 0.1)
     diag_ax.set_xticklabels(label_time)
-    diag_ax.set_xlabel('Time from word onset (s)')
+    diag_ax.set_xlabel('Time from Word Onset (s)')
     diag_ax.legend(loc=4)
     diag_fig.suptitle('F1 Scores Averaged Over Subjects',
                        fontsize=18)
@@ -202,6 +203,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.text(0.5, 0.04, 'Test Time (s)', ha='center')
     combo_fig.suptitle('TGM of F1 Scores Averaged Over Subjects',
         fontsize=18)
 
