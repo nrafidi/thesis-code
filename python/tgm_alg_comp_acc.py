@@ -319,7 +319,7 @@ if __name__ == '__main__':
         ax.set_xlim([0.0, 0.5])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
-    inst_fig.subplots_adjust(top=0.85)
+    inst_fig.subplots_adjust(top=0.8)
     inst_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
     inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.pdf')
