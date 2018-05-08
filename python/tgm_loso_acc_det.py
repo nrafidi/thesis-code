@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     time_step = int(50 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(15, 10))
+    combo_fig = plt.figure(figsize=(12, 8))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
