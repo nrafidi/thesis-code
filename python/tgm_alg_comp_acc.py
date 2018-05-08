@@ -179,7 +179,7 @@ if __name__ == '__main__':
     #     alg_times_ordered.append(alg_times[alg_names.index(a)])
     # alg_times_ordered = np.array(alg_times_ordered)
     # alg_times_ordered /= np.max(alg_times_ordered)
-
+    print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
     width = 0.3
