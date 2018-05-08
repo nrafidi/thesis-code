@@ -186,6 +186,7 @@ if __name__ == '__main__':
                         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
                     elif word == 'noun2':
                         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
+                        print(len(time_select))
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
@@ -211,6 +212,7 @@ if __name__ == '__main__':
                         time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
                     elif word == 'noun2':
                         time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
+                        print(len(time_select))
                 else:
                     if word == 'verb':
                         max_line -= 1.0
@@ -226,7 +228,7 @@ if __name__ == '__main__':
             num_time = len(time_win)
 
             ax = combo_grid[i_combo]
-            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.0)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.75)
             if i_word == 0:
                 ax.set_ylabel('Train Time (s)')
             if i_sen == 1:
