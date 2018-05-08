@@ -256,7 +256,7 @@ if __name__ == '__main__':
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v == 0:
-                    buff_space = 0.05
+                    buff_space = 0.075
                 else:
                     buff_space = 0.025
                 if i_v < len(text_to_write):
