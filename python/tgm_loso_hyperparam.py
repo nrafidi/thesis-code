@@ -238,7 +238,7 @@ if __name__ == '__main__':
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
                     combo_grid[i_combo].tick_params(labelsize=ticklabelsize)
-                    combo_grid[i_combo].text(-0.40, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
+                    combo_grid[i_combo].text(-0.35, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=axislettersize, weight='bold')
                     if i_combo > 1:
                         combo_grid[i_combo].set_xlabel('Number of Instances', fontsize=axislabelsize)
@@ -250,7 +250,7 @@ if __name__ == '__main__':
             combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
                                     avgTime=avg_time_str,
                                     avgTest=avg_test_str),
-                                             fontsize=18)
+                                             fontsize=suptitlesize)
 
             combo_fig.subplots_adjust(top=0.85)
             combo_fig.savefig(fig_fname.format(
