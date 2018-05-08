@@ -159,7 +159,7 @@ if __name__ == '__main__':
                           cbar_pad=0.5, share_all=True)
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
-        for i_word, word in enumerate(['noun1', 'noun2', 'verb']): #, 'noun2']):
+        for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
 
             intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                               sen_type,
@@ -238,13 +238,16 @@ if __name__ == '__main__':
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
-            print(ax.get_xticks())
+            ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
+            if i_combo == 5:
+                ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)))
+                ax.set_yticks(np.arange(0, num_time, time_step))
 
             min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
-            ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
+
             ax.set_yticklabels(label_time)
 
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
