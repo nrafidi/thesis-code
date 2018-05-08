@@ -171,14 +171,14 @@ if __name__ == '__main__':
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.png')
 
 
-    # result = np.load('/share/volume0/nrafidi/alg_times.npz')
-    # alg_times = result['min_times']
-    # alg_names = result['algs'].tolist()
-    # alg_times_ordered = []
-    # for a in alg_list:
-    #     alg_times_ordered.append(alg_times[alg_names.index(a)])
-    # alg_times_ordered = np.array(alg_times_ordered)
-    # alg_times_ordered /= np.max(alg_times_ordered)
+    result = np.load('/share/volume0/nrafidi/alg_times_new.npz')
+    alg_times = result['min_times']
+    alg_names = result['algs'].tolist()
+    alg_times_ordered = []
+    for a in alg_list:
+        alg_times_ordered.append(alg_times[alg_names.index(a)])
+    alg_times_ordered = np.array(alg_times_ordered)
+    alg_times_ordered /= np.max(alg_times_ordered)
     print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
