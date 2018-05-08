@@ -186,7 +186,7 @@ if __name__ == '__main__':
                         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
                     elif word == 'noun2':
                         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
-                        print(len(time_select))
+                        # print(len(time_select))
                 else:
                     if word == 'noun1':
                         start_line -= 0.0
@@ -212,7 +212,7 @@ if __name__ == '__main__':
                         time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
                     elif word == 'noun2':
                         time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
-                        print(len(time_select))
+                        # print(len(time_select))
                 else:
                     if word == 'verb':
                         max_line -= 1.0
@@ -238,7 +238,10 @@ if __name__ == '__main__':
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
             ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-            min_time = 0.0
+            if word == 'noun2' and sen_type == 'passive':
+                min_time = -0.5
+            else:
+                min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
