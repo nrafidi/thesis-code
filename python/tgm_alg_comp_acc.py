@@ -148,8 +148,8 @@ if __name__ == '__main__':
                                                                  num_instances=1,
                                                                  avgTime='T',
                                                                  avgTest='T')
-        print(acc_all.shape)
         if len(intersection) > 0:
+            print(acc_all.shape)
             diag_acc = np.diag(np.mean(acc_all, axis=0))
             diag_std = np.diag(np.std(acc_all, axis=0))
             num_sub = np.sqrt(float(acc_all.shape[0]))
