@@ -21,7 +21,7 @@ PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'passive': 'Passive Sentences',
                   'pooled': 'All Sentences'}
 
-PLOT_TITLE_ANALYSIS = {'det-type-first': 'First Determiner ID',
+PLOT_TITLE_ANALYSIS = {'det-type-first': 'The vs A',
                        'the-dog': 'The vs Dog',
                        'a-dog': 'A vs Dog'}
 
@@ -167,8 +167,7 @@ if __name__ == '__main__':
         if i_combo == 0:
             ax.set_ylabel('Train Time (s)')
         # ax.set_xlabel('Test Time (s)')
-        ax.set_title('{analysis} from {sen_type}'.format(
-            sen_type=PLOT_TITLE_SEN[args.sen_type],
+        ax.set_title('{analysis}'.format(
             analysis=PLOT_TITLE_ANALYSIS[analysis]), fontsize=14)
 
         ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
