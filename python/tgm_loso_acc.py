@@ -159,7 +159,7 @@ if __name__ == '__main__':
                           cbar_pad=0.5, share_all=True)
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
-        for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
+        for i_word, word in enumerate(['noun1', 'noun2', 'verb']): #, 'noun2']):
 
             intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                               sen_type,
@@ -237,8 +237,6 @@ if __name__ == '__main__':
                 sen_type=PLOT_TITLE_SEN[sen_type],
                 word=PLOT_TITLE_WORD[word]), fontsize=14)
 
-            if word == 'noun2' and sen_type == 'passive':
-                print(ax.get_xticks())
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
             print(ax.get_xticks())
 
