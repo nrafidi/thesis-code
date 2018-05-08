@@ -244,6 +244,7 @@ if __name__ == '__main__':
                 ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)))
                 ax.set_yticks(np.arange(0, num_time, time_step))
                 ax.set_xlim([0.0, float(num_time)])
+                ax.set_ylim([0.0, float(num_time)])
 
             min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
