@@ -37,6 +37,13 @@ if __name__ == '__main__':
     win_lens = [12, 25, 50, 100]
     num_insts = [1, 2] #, 5] #, 10]
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     perc = args.percentile
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
@@ -184,23 +191,24 @@ if __name__ == '__main__':
                     for i_ax, ax in enumerate(grid):
                         im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
                                            vmax=1.0)
-                        ax.set_title(titles[i_ax], fontsize=16)
+                        ax.set_title(titles[i_ax], fontsize=axistitlesize)
                         ax.set_xticks(range(len(num_insts)))
                         ax.set_xticklabels(num_insts)
                         ax.set_yticks(range(len(win_lens)))
                         ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+                        ax.tick_params(labelsize=ticklabelsize)
                         ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
-                                            size=20, weight='bold')
+                                            size=axislettersize, weight='bold')
 
-                        ax.set_xlabel('Number of Instances')
+                        ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
                         if i_ax == 0 or i_ax == 2:
-                            ax.set_ylabel('Window Length (ms)')
+                            ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
                     cbar = grid.cbar_axes[0].colorbar(im)
                     fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                                              word=PLOT_TITLE_WORD[word],
                                                                                              avgTime=avg_time_str,
                                                                                              avgTest=avg_test_str),
-                                 fontsize=18)
+                                 fontsize=suptitlesize)
                     fig.subplots_adjust(top=0.85)
                     fig.savefig(fig_fname.format(
                                 exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
@@ -224,17 +232,18 @@ if __name__ == '__main__':
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                        word=PLOT_TITLE_WORD[word]), fontsize=16)
+                                                                        word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
                     combo_grid[i_combo].set_xticklabels(num_insts)
                     combo_grid[i_combo].set_yticks(range(len(win_lens)))
                     combo_grid[i_combo].set_yticklabels(np.array(win_lens).astype('float') * 2)
+                    combo_grid[i_combo].tick_params(labelsize=ticklabelsize)
                     combo_grid[i_combo].text(-0.40, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
-                                            size=20, weight='bold')
+                                            size=axislettersize, weight='bold')
                     if i_combo > 1:
-                        combo_grid[i_combo].set_xlabel('Number of Instances')
+                        combo_grid[i_combo].set_xlabel('Number of Instances', fontsize=axislabelsize)
                     if i_combo == 0 or i_combo == 2:
-                        combo_grid[i_combo].set_ylabel('Window Length (ms)')
+                        combo_grid[i_combo].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
                     i_combo += 1
 
             cbar = combo_grid.cbar_axes[0].colorbar(im)
@@ -256,16 +265,18 @@ if __name__ == '__main__':
             fig, ax = plt.subplots()
             avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
 
-            ax.set_title('Total Combined Scores\n{avgTime}, {avgTest}'.format(
+            fig.suptitle('Total Combined Scores\n{avgTime}, {avgTest}'.format(
                 avgTime=avg_time_str,
                 avgTest=avg_test_str),
-                         fontsize=18)
+                         fontsize=suptitlesize)
             ax.set_xticks(range(len(num_insts)))
             ax.set_xticklabels(num_insts)
             ax.set_yticks(range(len(win_lens)))
             ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-            ax.set_xlabel('Number of Instances')
-            ax.set_ylabel('Window Length (ms)')
+            ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
+            ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
+            ax.tick_params(labelsize=ticklabelsize)
+            fig.subplots_adjust(top=0.85)
             fig.savefig(fig_fname.format(exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime,
                                          avgTest=avgTest, perc=perc, fig_type='total-comb-max-score'),
                         bbox_inches='tight')
