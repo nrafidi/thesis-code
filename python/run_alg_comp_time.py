@@ -110,7 +110,7 @@ if __name__ == '__main__':
     win_len = 25
     overlap = 12
 
-    win_starts = range(0, total_win - win_len, overlap)
+    win_starts = range(0, 24, overlap)
 
     all_times = []
     min_times = []
