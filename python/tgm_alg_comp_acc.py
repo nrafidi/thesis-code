@@ -191,7 +191,7 @@ if __name__ == '__main__':
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(fontsize=legendfontsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
-    bar_ax.set_xlabel('Classiciation Accuracy/Runtime Fraction', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classiciation Accuracy/Runtime Fraction', fontsize=axislabelsize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar.png')
