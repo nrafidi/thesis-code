@@ -75,7 +75,7 @@ def intersect_accs(exp,
             print(result_fname)
             continue
         # print(result_fname)
-        if alg == 'gnb':
+        if 'gnb' in  alg:
             acc = fold_acc
         else:
             acc = np.mean(fold_acc, axis=0)
