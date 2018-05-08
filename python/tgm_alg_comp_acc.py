@@ -184,7 +184,7 @@ if __name__ == '__main__':
     ind = np.arange(len(alg_list))
     width = 0.3
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
-    # bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
+    bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width) #/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
