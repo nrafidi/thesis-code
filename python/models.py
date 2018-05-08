@@ -933,8 +933,9 @@ def lr_tgm_loso(data,
                 train_data /= std_train[None, :]
 
             if penalty is None:
+                print('meow')
                 model = sklearn.linear_model.LogisticRegression(
-                    C=1e50,
+                    C=1e100,
                     penalty='l2',
                     solver='liblinear',
                     multi_class='ovr',
