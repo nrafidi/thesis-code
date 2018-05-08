@@ -30,7 +30,7 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
 ALG_LABELS = {'lr-l1': 'Logistic L1',
               'lr-l2': 'Logistic L2',
               'lr-None': 'Logistic',
-              'gnb': 'GNB Feat Select',
+              'gnb': 'GNB FS',
               'gnb-None': 'GNB',
               'svm-l1': 'SVM L1',
               'svm-l2': 'SVM L2'}
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
-    width = 0.3
+    width = 0.5
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
     # bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
