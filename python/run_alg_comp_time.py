@@ -12,8 +12,15 @@ NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
 VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
-VALID_ALGS = ['lr-l2', 'lr-l1', 'svm-l2', 'svm-l1', 'gnb']
+VALID_ALGS = ['lr-None', 'lr-l2', 'lr-l1', 'svm-l2', 'svm-l1', 'gnb', 'gnb-None']
 VALID_WORDS = ['verb', 'voice']
+
+
+def str_to_none(str_thing):
+    if str_thing =='None':
+        return None
+    else:
+        return str_thing
 
 
 # Runs the TGM experiment
@@ -37,7 +44,7 @@ def run_tgm_exp(data,
                                                                       win_starts,
                                                                       win_len,
                                                                       sen_ints,
-                                                                      penalty=alg[3:],
+                                                                      penalty=str_to_none(alg[3:]),
                                                                       adj=adj,
                                                                       doTimeAvg=doTimeAvg,
                                                                       doTestAvg=doTestAvg)
@@ -59,13 +66,17 @@ def run_tgm_exp(data,
             doZscore=True
         else:
             doZscore=False
+        if 'None' in alg:
+            doFeatSelect=False
+        else:
+            doFeatSelect=True
         tgm_pred, l_ints, cv_membership, feature_masks, num_feat_selected = models.nb_tgm_loso(data,
                 labels,
                 sen_ints,
                 1,
                 win_starts,
                 win_len,
-                feature_select=True,
+                feature_select=doFeatSelect,
                 doZscore=doZscore,
                 doAvg=doTimeAvg,
                 ddof=1)
@@ -116,4 +127,4 @@ if __name__ == '__main__':
 
     all_times = np.concatenate(all_times, axis=0)
     min_times = np.array(min_times)
-    np.savez('/share/volume0/nrafidi/alg_times.npz', all_times=all_times, min_times=min_times, algs=VALID_ALGS)
+    np.savez('/share/volume0/nrafidi/alg_times_new.npz', all_times=all_times, min_times=min_times, algs=VALID_ALGS)
