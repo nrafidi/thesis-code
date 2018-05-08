@@ -239,8 +239,8 @@ if __name__ == '__main__':
 
             if word == 'noun2' and sen_type == 'passive':
                 print(ax.get_xticks())
-            else:
-                ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
+            ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
+            print(ax.get_xticks())
 
             min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
