@@ -41,14 +41,8 @@ if __name__ == '__main__':
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}_perc{perc}.pdf'
 
-    # avg_combo_fig = plt.figure(figsize=(12, 12))
-    # avg_combo_grid = AxesGrid(avg_combo_fig, 111, nrows_ncols=(2, 2),
-    #                       axes_pad=0.7, cbar_mode='single', cbar_location='right',
-    #                       cbar_pad=0.5)
-    # i_avg_combo = 0
     for avgTime in ['F']:
         for avgTest in ['T']:
-            # per_sub_perc_tot = []
             if avgTime == 'T':
                 avg_time_str = 'Time Average'
             else:
@@ -78,10 +72,6 @@ if __name__ == '__main__':
                     mean_max_tot = []
                     mean_perc_eos = []
                     mean_perc_tot = []
-                    # per_sub_max_eos = []
-                    # per_sub_max_tot = []
-                    # per_sub_perc_eos = []
-                    # per_sub_perc_tot = []
                     for win_len in win_lens:
                         time_adjust = win_len * 0.002
 
@@ -91,10 +81,7 @@ if __name__ == '__main__':
                         mean_max_tot_win = []
                         mean_perc_eos_win = []
                         mean_perc_tot_win = []
-                        # per_sub_max_eos_win = []
-                        # per_sub_max_tot_win = []
-                        # per_sub_perc_tot_win = []
-                        # per_sub_perc_eos_win = []
+
                         for num_instances in num_insts:
                             intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc.intersect_accs(args.experiment,
                                                                                                            sen_type,
@@ -126,12 +113,8 @@ if __name__ == '__main__':
                             time_ind = np.where(time_win >= (max_time - time_adjust))
                             time_ind = time_ind[0]
 
-
-
                             percentile_tot = int(perc * len(mean_acc))
-                            # print(percentile_tot)
                             percentile_eos = int(perc * len(time_ind))
-                            # print(percentile_eos)
 
                             mean_max_tot_win.append(np.max(mean_acc))
                             sorted_tot_acc = np.sort(mean_acc)[::-1]
@@ -160,11 +143,6 @@ if __name__ == '__main__':
                             sub_eos_max = np.array(sub_eos_max)
                             sub_eos_perc = np.array(sub_eos_perc)
 
-                            # per_sub_max_eos_win.append(sub_eos_max[None, ...])
-                            # per_sub_max_tot_win.append(sub_tot_max[None, ...])
-                            # per_sub_perc_tot_win.append(sub_tot_perc[None, ...])
-                            # per_sub_perc_eos_win.append(sub_eos_perc[None, ...])
-
                         frac_sub_eos_win = np.array(frac_sub_eos_win)
                         frac_sub_eos.append(frac_sub_eos_win[None, ...])
 
@@ -183,18 +161,6 @@ if __name__ == '__main__':
                         mean_perc_tot_win = np.array(mean_perc_tot_win)
                         mean_perc_tot.append(mean_perc_tot_win[None, ...])
 
-                        # per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
-                        # per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
-                        #
-                        # per_sub_max_tot_win = np.concatenate(per_sub_max_tot_win, axis=0)
-                        # per_sub_max_tot.append(per_sub_max_tot_win[None, ...])
-                        #
-                        # per_sub_perc_tot_win = np.concatenate(per_sub_perc_tot_win, axis=0)
-                        # per_sub_perc_tot.append(per_sub_perc_tot_win[None, ...])
-                        #
-                        # per_sub_perc_eos_win = np.concatenate(per_sub_perc_eos_win, axis=0)
-                        # per_sub_perc_eos.append(per_sub_perc_eos_win[None, ...])
-
                     frac_sub_eos = np.concatenate(frac_sub_eos, axis=0)
 
                     frac_sub_tot = np.concatenate(frac_sub_tot, axis=0)
@@ -206,14 +172,6 @@ if __name__ == '__main__':
                     mean_perc_eos = np.concatenate(mean_perc_eos, axis=0)
 
                     mean_perc_tot = np.concatenate(mean_perc_tot, axis=0)
-
-                    # per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
-                    #
-                    # per_sub_max_tot = np.concatenate(per_sub_max_tot, axis=0)
-                    #
-                    # per_sub_perc_eos = np.concatenate(per_sub_perc_eos, axis=0)
-                    #
-                    # per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
 
                     fig = plt.figure(figsize=(12, 12))
                     grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
@@ -254,28 +212,15 @@ if __name__ == '__main__':
                     z_frac_eos = zscore(frac_sub_eos)
                     z_frac_eos[np.isnan(z_frac_eos)] = 0.0
                     all_combined = (z_frac + zscore(mean_max_tot))/2.0
+                    optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
                     all_combined_z = zscore(all_combined)
                     combo_scores.append(all_combined_z[None, ...])
-
-                    # fig, ax = plt.subplots()
-                    # h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
-                    # plt.colorbar(h)
-                    # ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                    #                                                                          word=PLOT_TITLE_WORD[word],
-                    #                                                                          avgTime=avg_time_str,
-                    #                                                                          avgTest=avg_test_str),
-                    #              fontsize=16)
-                    # ax.set_xticks(range(len(num_insts)))
-                    # ax.set_xticklabels(num_insts)
-                    # ax.set_yticks(range(len(win_lens)))
-                    # ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                    # ax.set_xlabel('Number of Instances')
-                    # ax.set_ylabel('Window Length (ms)')
-                    # fig.tight_layout()
-                    # plt.savefig(fig_fname.format(
-                    #     exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
-                    #     perc=perc, fig_type='total-comb-max-score-comp'
-                    # ), bbox_inches='tight')
+                    print(sen_type)
+                    print(word)
+                    print('Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(
+                            win=win_lens[optimal[0]],
+                            ni=num_insts[optimal[1]],
+                            score=np.max(all_combined)))
 
                     im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
@@ -309,7 +254,6 @@ if __name__ == '__main__':
             optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
             fig, ax = plt.subplots()
-            # ax = avg_combo_grid[i_avg_combo]
             avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
 
             ax.set_title('Total Combined Scores\n{avgTime}, {avgTest}'.format(
@@ -320,30 +264,88 @@ if __name__ == '__main__':
             ax.set_xticklabels(num_insts)
             ax.set_yticks(range(len(win_lens)))
             ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-            # if i_avg_combo > 1:
             ax.set_xlabel('Number of Instances')
-            # if i_avg_combo == 0 or i_avg_combo == 2:
             ax.set_ylabel('Window Length (ms)')
-            # ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg_combo], transform=ax.transAxes,
-            #         size=20, weight='bold')
-            # i_avg_combo += 1
-
+            fig.savefig(fig_fname.format(exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime,
+                                         avgTest=avgTest, perc=perc, fig_type='total-comb-max-score'),
+                        bbox_inches='tight')
 
             print(
-            'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
+            'Global optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
                                                                                                 ni=num_insts[optimal[1]],
                                                                                                     score=np.max(all_combined)))
-    # cbar = avg_combo_grid.cbar_axes[0].colorbar(avg_im)
+    plt.show()
+
+# Boneyard
+
+# avg_combo_fig = plt.figure(figsize=(12, 12))
+    # avg_combo_grid = AxesGrid(avg_combo_fig, 111, nrows_ncols=(2, 2),
+    #                       axes_pad=0.7, cbar_mode='single', cbar_location='right',
+    #                       cbar_pad=0.5)
+    # i_avg_combo = 0
+
+# per_sub_max_eos = []
+                    # per_sub_max_tot = []
+                    # per_sub_perc_eos = []
+                    # per_sub_perc_tot = []
+
+# per_sub_max_eos_win = []
+                        # per_sub_max_tot_win = []
+                        # per_sub_perc_tot_win = []
+                        # per_sub_perc_eos_win = []
+
+# per_sub_max_eos_win.append(sub_eos_max[None, ...])
+                            # per_sub_max_tot_win.append(sub_tot_max[None, ...])
+                            # per_sub_perc_tot_win.append(sub_tot_perc[None, ...])
+                            # per_sub_perc_eos_win.append(sub_eos_perc[None, ...])
+
+# per_sub_max_eos_win = np.concatenate(per_sub_max_eos_win, axis=0)
+# per_sub_max_eos.append(per_sub_max_eos_win[None, ...])
+#
+# per_sub_max_tot_win = np.concatenate(per_sub_max_tot_win, axis=0)
+# per_sub_max_tot.append(per_sub_max_tot_win[None, ...])
+#
+# per_sub_perc_tot_win = np.concatenate(per_sub_perc_tot_win, axis=0)
+# per_sub_perc_tot.append(per_sub_perc_tot_win[None, ...])
+#
+# per_sub_perc_eos_win = np.concatenate(per_sub_perc_eos_win, axis=0)
+# per_sub_perc_eos.append(per_sub_perc_eos_win[None, ...])
+
+# per_sub_max_eos = np.concatenate(per_sub_max_eos, axis=0)
+#
+# per_sub_max_tot = np.concatenate(per_sub_max_tot, axis=0)
+#
+# per_sub_perc_eos = np.concatenate(per_sub_perc_eos, axis=0)
+#
+# per_sub_perc_tot = np.concatenate(per_sub_perc_tot, axis=0)
+
+# fig, ax = plt.subplots()
+                    # h = ax.imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+                    # plt.colorbar(h)
+                    # ax.set_title('Combined Score\nDecoding {word} from {sen}\n{avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    #                                                                          word=PLOT_TITLE_WORD[word],
+                    #                                                                          avgTime=avg_time_str,
+                    #                                                                          avgTest=avg_test_str),
+                    #              fontsize=16)
+                    # ax.set_xticks(range(len(num_insts)))
+                    # ax.set_xticklabels(num_insts)
+                    # ax.set_yticks(range(len(win_lens)))
+                    # ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+                    # ax.set_xlabel('Number of Instances')
+                    # ax.set_ylabel('Window Length (ms)')
+                    # fig.tight_layout()
+                    # plt.savefig(fig_fname.format(
+                    #     exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
+                    #     perc=perc, fig_type='total-comb-max-score-comp'
+                    # ), bbox_inches='tight')
+
+# cbar = avg_combo_grid.cbar_axes[0].colorbar(avg_im)
     # avg_combo_fig.suptitle('Total Combined Scores',
     #     fontsize=18)
     # avg_combo_fig.savefig(fig_fname.format(
     #     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime='TF', avgTest='TF',
     #     perc=perc, fig_type='total-comb-max-score-comp-avg'
     # ), bbox_inches='tight')
-
-    plt.show()
-    #
-
 
     # fig = plt.figure()
     # grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
