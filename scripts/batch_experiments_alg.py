@@ -6,14 +6,14 @@ import time
 EXPERIMENTS = ['krns2']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 WORDS = ['voice']
-WIN_LENS = [2, 12, 25, 50, 100]
+WIN_LENS = [2]
 OVERLAPS = [2]
 IS_PERMS = [False]
-ALGS = ['lr-l2'] #, 'lr-l2', 'svm-l1', 'svm-l2', 'gnb']
+ALGS = ['lr-None', 'gnb-None'] #, 'lr-l2', 'svm-l1', 'svm-l2', 'gnb']
 ADJS = ['zscore']
-DO_TME_AVGS = [True, False]
-DO_TST_AVGS = [True, False]
-NUM_INSTANCESS = [1, 2, 5, 10]
+DO_TME_AVGS = [True]
+DO_TST_AVGS = [True]
+NUM_INSTANCESS = [1]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{word}-{id}'
@@ -97,5 +97,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 150:
             time.sleep(30)

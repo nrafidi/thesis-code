@@ -931,7 +931,16 @@ def lr_tgm_loso(data,
                 std_train = np.std(train_data, axis=0, ddof=ddof)
                 train_data -= mu_train[None, :]
                 train_data /= std_train[None, :]
-            if C is None:
+
+            if penalty is None:
+                model = sklearn.linear_model.LogisticRegression(
+                    C=1e50,
+                    penalty='l2',
+                    solver='liblinear',
+                    multi_class='ovr',
+                    dual=DUAL['l2'],
+                    class_weight='balanced')
+            elif C is None:
                 model = sklearn.linear_model.LogisticRegressionCV(Cs=C_OPTIONS[penalty],
                                                                   cv=2,
                                                                   penalty=penalty,
@@ -946,8 +955,7 @@ def lr_tgm_loso(data,
                     penalty=penalty,
                     solver='liblinear',
                     multi_class='ovr',
-                    class_weight='balanced',
-                    refit=True)
+                    class_weight='balanced')
 
 
             model.fit(train_data, train_labels)
