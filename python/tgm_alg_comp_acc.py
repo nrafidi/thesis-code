@@ -182,7 +182,7 @@ if __name__ == '__main__':
     print(max_acc)
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
-    width = 0.5
+    width = 0.75
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
     # bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
