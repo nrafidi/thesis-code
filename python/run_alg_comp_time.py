@@ -48,8 +48,6 @@ def run_tgm_exp(data,
                                                                       adj=adj,
                                                                       doTimeAvg=doTimeAvg,
                                                                       doTestAvg=doTestAvg)
-        print(tgm_acc)
-        print(tgm_pred)
     elif 'svm' in alg:
         l_ints, cv_membership, tgm_acc, tgm_pred = models.svc_tgm_loso(data,
                  labels,
@@ -82,7 +80,6 @@ def run_tgm_exp(data,
                 doZscore=doZscore,
                 doAvg=doTimeAvg,
                 ddof=1)
-        print(tgm_pred)
 
 
 if __name__ == '__main__':
