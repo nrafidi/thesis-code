@@ -29,7 +29,9 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
 
 ALG_LABELS = {'lr-l1': 'Logistic L1',
               'lr-l2': 'Logistic L2',
-              'gnb': 'Naive Bayes',
+              'lr-None': 'Logistic',
+              'gnb': 'GNB Feat Select',
+              'gnb-None': 'GNB',
               'svm-l1': 'SVM L1',
               'svm-l2': 'SVM L2'}
 
@@ -169,20 +171,20 @@ if __name__ == '__main__':
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time.png')
 
 
-    result = np.load('/share/volume0/nrafidi/alg_times.npz')
-    alg_times = result['min_times']
-    alg_names = result['algs'].tolist()
-    alg_times_ordered = []
-    for a in alg_list:
-        alg_times_ordered.append(alg_times[alg_names.index(a)])
-    alg_times_ordered = np.array(alg_times_ordered)
-    alg_times_ordered /= np.max(alg_times_ordered)
+    # result = np.load('/share/volume0/nrafidi/alg_times.npz')
+    # alg_times = result['min_times']
+    # alg_names = result['algs'].tolist()
+    # alg_times_ordered = []
+    # for a in alg_list:
+    #     alg_times_ordered.append(alg_times[alg_names.index(a)])
+    # alg_times_ordered = np.array(alg_times_ordered)
+    # alg_times_ordered /= np.max(alg_times_ordered)
 
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(alg_list))
     width = 0.3
     bar_ax.bar(ind, max_acc, width, yerr=max_std, color='b', ecolor='r', label='Max Accuracy')
-    bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
+    # bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
     bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width) #/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
