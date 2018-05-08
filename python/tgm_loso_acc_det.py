@@ -118,6 +118,13 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     if args.avgTime == 'T':
         aT = 'Time Average '
     else:
@@ -165,10 +172,10 @@ if __name__ == '__main__':
         ax = combo_grid[i_combo]
         im = ax.imshow(mean_f1, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
         if i_combo == 0:
-            ax.set_ylabel('Train Time (s)')
+            ax.set_ylabel('Train Time (s)', fontsize=axislabelsize)
         # ax.set_xlabel('Test Time (s)')
         ax.set_title('{analysis}'.format(
-            analysis=PLOT_TITLE_ANALYSIS[analysis]), fontsize=14)
+            analysis=PLOT_TITLE_ANALYSIS[analysis]), fontsize=axistitlesize)
 
         ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
         min_time = 0.0
@@ -177,9 +184,10 @@ if __name__ == '__main__':
         ax.set_xticklabels(label_time)
         ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
         ax.set_yticklabels(label_time)
+        ax.tick_params(labelsize=ticklabelsize)
 
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
-                                size=20, weight='bold')
+                                size=axislettersize, weight='bold')
         i_combo += 1
 
         diag_ax.plot(np.diag(mean_f1), label=PLOT_TITLE_ANALYSIS[analysis])
@@ -189,10 +197,11 @@ if __name__ == '__main__':
     max_time = 0.5 * num_time / time_step
     label_time = np.arange(min_time, max_time, 0.1)
     diag_ax.set_xticklabels(label_time)
-    diag_ax.set_xlabel('Time from Word Onset (s)')
-    diag_ax.legend(loc=4)
+    diag_ax.set_xlabel('Time from Word Onset (s)', fontsize=16)
+    diag_ax.legend(loc=4, fontsize=legendfontsize)
+    diag_ax.tick_params(labelsize=ticklabelsize)
     diag_fig.suptitle('F1 Scores Averaged Over Subjects',
-                       fontsize=18)
+                       fontsize=suptitlesize)
     diag_fig.savefig(
         '/home/nrafidi/thesis_figs/krns2_diag-overlay-det_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             sen_type=args.sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -202,9 +211,9 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
-    combo_fig.text(0.5, 0.04, 'Test Time (s)', ha='center')
+    combo_fig.text(0.5, 0.04, 'Test Time (s)', ha='center', fontsize=axislabelsize)
     combo_fig.suptitle('TGM of F1 Scores Averaged Over Subjects',
-        fontsize=18)
+        fontsize=suptitlesize)
 
     combo_fig.savefig('/home/nrafidi/thesis_figs/krns2_avg-tgm-det_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     sen_type=args.sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
