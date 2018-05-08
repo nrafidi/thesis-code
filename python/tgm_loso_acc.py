@@ -123,12 +123,12 @@ def intersect_accs(exp,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=12)
+    parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
-    parser.add_argument('--avgTime', default='T')
+    parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
@@ -226,7 +226,7 @@ if __name__ == '__main__':
             num_time = len(time_win)
 
             ax = combo_grid[i_combo]
-            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.5)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.0)
             if i_word == 0:
                 ax.set_ylabel('Train Time (s)')
             if i_sen == 1:
