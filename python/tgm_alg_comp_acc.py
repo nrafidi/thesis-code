@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots(figsize=(10,10))
-    colors = ['b', 'c', 'm', 'r', 'g']
+    colors = ['b', 'c', 'm', 'r', 'g', 'y', 'k']
     max_acc = np.zeros((len(alg_list),))
     max_std = np.zeros((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
