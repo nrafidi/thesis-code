@@ -50,8 +50,6 @@ if __name__ == '__main__':
         word = grid[12]
         sub = grid[13]
 
-        if job_id == 520:
-            print(grid)
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sub=sub,
@@ -115,7 +113,8 @@ if __name__ == '__main__':
                     elif zsl:
                         skipped_jobs += 1
                     # print(grid)
-
+        if job_id == 520 and was_success:
+            print('Longest running job completed!')
 
         job_id += 1
 
