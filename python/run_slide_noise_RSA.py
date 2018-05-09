@@ -13,7 +13,7 @@ SAVE_FILE = '{dir}RSA_{sub}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}
 NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
 VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct2': ['A', 'B', 'C'],
-              'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']}
+              'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 
@@ -177,9 +177,16 @@ def run_rsa_exp(experiment,
     val_rdm = make_rdm(val_data, windows, dist, doTimeAvg)
     test_rdm = make_rdm(test_data, windows, dist, doTimeAvg)
 
+    if draw == 0:
+        total_data, _, _, _ = load_agg_data(subject, word, experiment, voice, proc, range(num_reps))
+        total_rdm = make_rdm(total_data, windows, dist, doTimeAvg)
+    else:
+        total_rdm = []
+
     np.savez_compressed(fname,
                         val_rdm=val_rdm,
                         test_rdm=test_rdm,
+                        total_rdm=total_rdm,
                         labels=labels,
                         voice_labels=voice_labels,
                         win_starts=win_starts,
