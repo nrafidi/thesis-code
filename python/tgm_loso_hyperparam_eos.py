@@ -47,7 +47,7 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
-    win_lens = [12, 25, 50, 100]
+    win_lens = [12, 25] #, 50, 100]
     num_insts = [2, 5]
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}.pdf'
