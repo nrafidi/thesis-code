@@ -234,7 +234,7 @@ if __name__ == '__main__':
             sub_score = score_rdms(np.squeeze(sub_total_rdms[i_sub, ...]), np.squeeze(np.mean(sub_total_rdms[sub_inds, ...], axis=0)))
             noise_sub_lb_ceiling.append(sub_score[None, ...])
         noise_sub_lb_ceiling = np.concatenate(noise_sub_lb_ceiling, axis=0)
-        np.savez_compressed(noise_rep_lb_file, scores=noise_sub_lb_ceiling)
+        np.savez_compressed(noise_sub_lb_file, scores=noise_sub_lb_ceiling)
 
     noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
                                            score_type='noise-rep-ub',
@@ -267,7 +267,7 @@ if __name__ == '__main__':
             sub_score = score_rdms(np.squeeze(sub_total_rdms[i_sub, ...]), total_avg_rdms)
             noise_sub_ub_ceiling.append(sub_score[None, ...])
         noise_sub_ub_ceiling = np.concatenate(noise_sub_ub_ceiling, axis=0)
-        np.savez_compressed(noise_rep_ub_file, scores=noise_sub_ub_ceiling)
+        np.savez_compressed(noise_sub_ub_file, scores=noise_sub_ub_ceiling)
 
 
     mean_noise_rep_lb = np.squeeze(np.mean(noise_rep_lb_ceiling, axis=0))
