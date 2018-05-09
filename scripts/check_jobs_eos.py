@@ -50,7 +50,7 @@ if __name__ == '__main__':
         word = grid[12]
         sub = grid[13]
 
-        if job_id == 992:
+        if job_id == 520:
             print(grid)
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
