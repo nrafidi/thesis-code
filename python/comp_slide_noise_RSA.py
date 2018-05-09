@@ -386,6 +386,8 @@ if __name__ == '__main__':
     sub_ax.set_title('Subject Noise Ceiling')
     sub_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[0], transform=sub_ax.transAxes,
             size=20, weight='bold')
+    sub_ax.set_ylim([0.0, 0.6])
+    sub_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
     rep_ax.plot(plot_time, voice_rep_scores, label='Voice', color='b')
@@ -397,6 +399,7 @@ if __name__ == '__main__':
     rep_ax.set_title('Repetition Noise Ceiling')
     rep_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[1], transform=rep_ax.transAxes,
                 size=20, weight='bold')
+    rep_ax.set_ylim([0.0, 0.6])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     noise_fig.suptitle('Noise Ceiling Comparison', fontsize=25)
