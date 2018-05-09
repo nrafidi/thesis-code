@@ -186,7 +186,7 @@ if __name__ == '__main__':
 
     win_lens = [2, 25, 50, 100]
     doTimeAvgs = ['T', 'F']
-    word = 'eos_full'
+    word = 'eos-full'
 
     sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(experiment,
                                                                                                               word,
