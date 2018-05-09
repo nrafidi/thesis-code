@@ -366,19 +366,19 @@ if __name__ == '__main__':
 
     noise_fig = plt.figure(figsize=(12, 8))
     noise_grid = AxesGrid(noise_fig, 111, nrows_ncols=(1, 2),
-                          axes_pad=0.4)
+                          axes_pad=0.4, share_all=True)
 
     sub_ax = noise_grid[0]
     rep_ax = noise_grid[1]
 
-    sub_ax.plot(time, mean_syn, label='Syntax', color='r')
-    sub_ax.fill_between(time, mean_syn - std_syn, mean_syn + std_syn,
+    sub_ax.plot(plot_time, mean_syn, label='Syntax', color='r')
+    sub_ax.fill_between(plot_time, mean_syn - std_syn, mean_syn + std_syn,
                     facecolor='r', alpha=0.5, edgecolor='w')
-    sub_ax.plot(time, mean_voice, label='Voice', color='b')
-    sub_ax.fill_between(time, mean_voice - std_voice, mean_voice + std_voice,
+    sub_ax.plot(plot_time, mean_voice, label='Voice', color='b')
+    sub_ax.fill_between(plot_time, mean_voice - std_voice, mean_voice + std_voice,
                     facecolor='b', alpha=0.5, edgecolor='w')
 
-    sub_ax.fill_between(time, mean_noise_sub_lb - std_noise_sub_lb, mean_noise_sub_ub + std_noise_sub_ub,
+    sub_ax.fill_between(plot_time, mean_noise_sub_lb - std_noise_sub_lb, mean_noise_sub_ub + std_noise_sub_ub,
                     facecolor='0.5', alpha=0.5, edgecolor='w')
     sub_ax.legend(loc=1)
     sub_ax.set_ylabel('Kendall Tau', fontsize=18)
@@ -387,16 +387,17 @@ if __name__ == '__main__':
     sub_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[0], transform=sub_ax.transAxes,
             size=20, weight='bold')
 
-    rep_ax.plot(time, syn_rep_scores, label='Syntax', color='r')
-    rep_ax.plot(time, voice_rep_scores, label='Voice', color='b')
+    rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
+    rep_ax.plot(plot_time, voice_rep_scores, label='Voice', color='b')
 
-    rep_ax.fill_between(time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
+    rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
     rep_ax.legend(loc=1)
 
     rep_ax.set_title('Repetition Noise Ceiling')
     rep_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[1], transform=rep_ax.transAxes,
                 size=20, weight='bold')
+    rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     noise_fig.suptitle('Noise Ceiling Comparison', fontsize=25)
 
