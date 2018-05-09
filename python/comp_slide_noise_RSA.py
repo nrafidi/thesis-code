@@ -366,7 +366,7 @@ if __name__ == '__main__':
 
     noise_fig = plt.figure(figsize=(12, 8))
     noise_grid = AxesGrid(noise_fig, 111, nrows_ncols=(1, 2),
-                          axes_pad=0.4, share_all=True)
+                          axes_pad=0.4)
 
     sub_ax = noise_grid[0]
     rep_ax = noise_grid[1]
