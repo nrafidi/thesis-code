@@ -480,7 +480,7 @@ if __name__ == '__main__':
                ecolor=colors[1 - i_avg])
     ax.legend()
     ax.set_ylabel('Noise Ceiling Midpoint')
-    ax.set_ylim([0.0, 1.25])
+    ax.set_ylim([0.0, 1.0])
     ax.set_xlim([ind[0], ind[-1] + 2.0*width])
     ax.set_xticks(ind + width)
     ax.set_xticklabels(win_labels)
