@@ -14,7 +14,7 @@ from sklearn.linear_model import LinearRegression
 SAVE_FIG = '/home/nrafidi/thesis_figs/RSA_{fig_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}'
 SAVE_SCORES = '/share/volume0/nrafidi/RSA_scores/{exp}/RSA_{score_type}_{word}_win{win_len}_ov{ov}_dist{dist}_avgTime{avgTm}.npz'
 
-POS = {'boy': 'noun',
+Length = {'boy': 'noun',
        'girl': 'noun',
        'man': 'noun',
        'woman': 'noun',
@@ -150,7 +150,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
         subject_val_rdms.append(val_rdm[None, ...])
         subject_test_rdms.append(test_rdm[None, ...])
 
-    pos_labels = [POS[lab] for lab in labels]
+    pos_labels = [Length[lab] for lab in labels]
     pos_rdm = make_model_rdm(pos_labels)
     len_labels = [LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
@@ -221,6 +221,13 @@ if __name__ == '__main__':
 
     force = args.force
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     win_len = args.win_len
     doTimeAvg = args.doTimeAvg
     word = 'eos-full'
@@ -233,7 +240,7 @@ if __name__ == '__main__':
                                                                                                               doTimeAvg)
 
     syn_pos_scores, _ = ktau_rdms(pos_rdm, syn_rdm)
-    print('Correlation between POS and Syntax RDMs is: {}'.format(syn_pos_scores))
+    print('Correlation between Length and Syntax RDMs is: {}'.format(syn_pos_scores))
 
     rdm_fig = plt.figure(figsize=(12, 8))
     rdm_grid = AxesGrid(rdm_fig, 111, nrows_ncols=(1, 2),
@@ -241,7 +248,7 @@ if __name__ == '__main__':
                           cbar_pad=0.5, share_all=True, aspect=True)
 
     rdms_to_plot = [syn_rdm, pos_rdm]
-    titles_to_plot = ['Syntax', 'Part-of-Speech']
+    titles_to_plot = ['Syntax', 'Sentence Length']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
         im = rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
@@ -376,17 +383,17 @@ if __name__ == '__main__':
     ax.bar(ind, scores_to_plot[0], width,
            color='r', label='Syntax')
     ax.bar(ind + width, scores_to_plot[1], width,
-           color='b', label='POS')
-    ax.legend()
-    ax.set_ylabel('Kendall tau', fontsize=16)
+           color='b', label='Length')
+    ax.legend(fontsize=legendfontsize)
+    ax.set_ylabel('Kendall tau', fontsize=axislabelsize)
     ax.set_ylim([0.0, 0.8])
     ax.set_xticks(ind + width)
     ax.set_xticklabels(xticklabels_to_plot)
     ax.set_xlim([0.0, ind[-1] + 2.0*width])
-    ax.set_xlabel('Correlation Type', fontsize=16)
+    ax.set_xlabel('Correlation Type', fontsize=axislabelsize)
+    ax.tick_params(labelsize=ticklabelsize)
 
-    cond_fig.suptitle('Correlation Type Comparison', fontsize=25)
-
+    cond_fig.suptitle('Correlation Type Comparison', fontsize=suptitlesize)
     cond_fig.subplots_adjust(top=0.85)
     cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
                                       word=word,
