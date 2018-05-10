@@ -369,7 +369,7 @@ if __name__ == '__main__':
     sub_ax.plot(plot_time, mean_syn, label='Syntax', color='r')
     sub_ax.fill_between(plot_time, mean_syn - std_syn, mean_syn + std_syn,
                     facecolor='r', alpha=0.5, edgecolor='w')
-    sub_ax.plot(plot_time, mean_pos, label='POS', color='b')
+    sub_ax.plot(plot_time, mean_pos, label='Length', color='b')
     sub_ax.fill_between(plot_time, mean_pos - std_pos, mean_pos + std_pos,
                     facecolor='b', alpha=0.5, edgecolor='w')
 
@@ -385,7 +385,7 @@ if __name__ == '__main__':
     sub_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
-    rep_ax.plot(plot_time, pos_rep_scores, label='POS', color='b')
+    rep_ax.plot(plot_time, pos_rep_scores, label='Length', color='b')
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
@@ -415,7 +415,7 @@ if __name__ == '__main__':
                                       avgTm=doTimeAvgs[1]) + '.pdf', bbox_inches='tight')
 
     avg_time_strs = ['Time Average', 'No Time Average']
-    win_fig, ax = plt.subplots(figsize=(20, 20))
+    win_fig, ax = plt.subplots(figsize=(12, 8))
     colors = ['0.2', '0.8']
     ind = np.arange(len(win_lens))  # the x locations for the groups
     width = 0.25  # the width of the bars
