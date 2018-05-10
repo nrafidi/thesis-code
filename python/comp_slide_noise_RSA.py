@@ -476,7 +476,7 @@ if __name__ == '__main__':
 
         win_len_comp_noise = (win_len_comp_noise_lb + win_len_comp_noise_ub)/2.0
         ax.bar(ind + i_avg*width, win_len_comp_noise, width,
-               color=colors[i_avg], label=avg_time_strs[i_avg], yerr=[win_len_comp_noise_lb, win_len_comp_noise_ub - win_len_comp_noise],
+               color=colors[i_avg], label=avg_time_strs[i_avg], yerr=[win_len_comp_noise - win_len_comp_noise_lb, win_len_comp_noise_ub - win_len_comp_noise_lb],
                ecolor=colors[1 - i_avg])
     ax.legend()
     ax.set_ylabel('Noise Ceiling Midpoint')
