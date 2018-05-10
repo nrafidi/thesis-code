@@ -276,18 +276,6 @@ if __name__ == '__main__':
     mean_noise_rep_ub = np.squeeze(np.mean(noise_rep_ub_ceiling, axis=0))
     std_noise_rep_ub = np.squeeze(np.std(noise_rep_ub_ceiling, axis=0))
 
-    mean_noise_rep_lb = np.squeeze(np.mean(noise_rep_lb_ceiling, axis=0))
-    std_noise_rep_lb = np.squeeze(np.std(noise_rep_lb_ceiling, axis=0))
-
-    mean_noise_rep_ub = np.squeeze(np.mean(noise_rep_ub_ceiling, axis=0))
-    std_noise_rep_ub = np.squeeze(np.std(noise_rep_ub_ceiling, axis=0))
-
-    mean_noise_sub_lb = np.squeeze(np.mean(noise_sub_lb_ceiling, axis=0))
-    std_noise_sub_lb = np.squeeze(np.std(noise_sub_lb_ceiling, axis=0))
-
-    mean_noise_sub_ub = np.squeeze(np.mean(noise_sub_ub_ceiling, axis=0))
-    std_noise_sub_ub = np.squeeze(np.std(noise_sub_ub_ceiling, axis=0))
-
     mean_noise_sub_lb = np.squeeze(np.mean(noise_sub_lb_ceiling, axis=0))
     std_noise_sub_lb = np.squeeze(np.std(noise_sub_lb_ceiling, axis=0))
 
