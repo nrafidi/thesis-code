@@ -221,7 +221,7 @@ if __name__ == '__main__':
 
     force = args.force
 
-    ticklabelsize = 14
+    ticklabelsize = 16
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
@@ -252,7 +252,9 @@ if __name__ == '__main__':
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
         im = rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
-        rdm_grid[i_rdm].set_title(titles_to_plot[i_rdm], fontsize=18)
+        rdm_grid[i_rdm].set_title(titles_to_plot[i_rdm], fontsize=axistitlesize)
+        rdm_grid[i_rdm].text(-0.15, 1.05, string.ascii_uppercase[i_rdm], transform=rdm_grid[i_rdm].transAxes,
+                size=axislettersize, weight='bold')
     cbar = rdm_grid.cbar_axes[0].colorbar(im)
     rdm_fig.suptitle('RDM Comparison')
     rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
