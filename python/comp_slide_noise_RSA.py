@@ -418,18 +418,6 @@ if __name__ == '__main__':
         win_labels = []
         for i_win, win in enumerate(win_lens):
 
-            sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(
-                experiment,
-                word,
-                win,
-                overlap,
-                dist,
-                avg)
-
-            val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
-            test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
-            total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
-
             noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
                                                    score_type='noise-rep-lb',
                                                    word=word,
@@ -437,6 +425,30 @@ if __name__ == '__main__':
                                                    ov=overlap,
                                                    dist=dist,
                                                    avgTm=avg)
+
+            noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
+                                                   score_type='noise-rep-ub',
+                                                   word=word,
+                                                   win_len=win,
+                                                   ov=overlap,
+                                                   dist=dist,
+                                                   avgTm=avg)
+
+            if not os.path.isfile(noise_rep_lb_file) or not os.path.isfile(noise_rep_ub_file) or force:
+
+                sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(
+                    experiment,
+                    word,
+                    win,
+                    overlap,
+                    dist,
+                    avg)
+
+                val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
+                test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
+                total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
+
+
             if os.path.isfile(noise_rep_lb_file) and not force:
                 result = np.load(noise_rep_lb_file)
                 noise_rep_lb_ceiling = result['scores']
@@ -447,13 +459,7 @@ if __name__ == '__main__':
             std_noise_rep_lb = np.squeeze(np.std(noise_rep_lb_ceiling, axis=0))
             win_len_comp_noise_lb[i_win] = np.max(mean_noise_rep_lb - std_noise_rep_lb)
 
-            noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
-                                                   score_type='noise-rep-ub',
-                                                   word=word,
-                                                   win_len=win,
-                                                   ov=overlap,
-                                                   dist=dist,
-                                                   avgTm=avg)
+
             if os.path.isfile(noise_rep_ub_file) and not force:
                 result = np.load(noise_rep_ub_file)
                 noise_rep_ub_ceiling = result['scores']
@@ -470,7 +476,7 @@ if __name__ == '__main__':
 
         win_len_comp_noise = (win_len_comp_noise_lb + win_len_comp_noise_ub)/2.0
         ax.bar(ind + i_avg*width, win_len_comp_noise, width,
-               color=colors[i_avg], label=avg_time_strs[i_avg], yerr=[win_len_comp_noise_lb, win_len_comp_noise_ub],
+               color=colors[i_avg], label=avg_time_strs[i_avg], yerr=[win_len_comp_noise_lb, win_len_comp_noise_ub - win_len_comp_noise],
                ecolor=colors[1 - i_avg])
     ax.legend()
     ax.set_ylabel('Noise Ceiling Midpoint')
