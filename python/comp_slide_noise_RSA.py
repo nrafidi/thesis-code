@@ -408,17 +408,13 @@ if __name__ == '__main__':
                                       avgTm=doTimeAvgs[1]) + '.pdf', bbox_inches='tight')
 
     avg_time_strs = ['Time Average', 'No Time Average']
-    win_fig = plt.figure(figsize=(20, 20))
-    win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
-                          axes_pad=0.4, aspect=True)
+    win_fig, ax = plt.subplots(figsize=(20, 20))
+    colors = ['0.3', '0.7']
     ind = np.arange(len(win_lens))  # the x locations for the groups
     width = 0.25  # the width of the bars
     for i_avg, avg in enumerate(doTimeAvgs):
         win_len_comp_noise_lb = np.empty((len(win_lens)))
         win_len_comp_noise_ub = np.empty((len(win_lens)))
-        win_len_comp_syn = np.empty((len(win_lens)))
-        win_len_comp_voice = np.empty((len(win_lens)))
-        ax = win_grid[i_avg]
         win_labels = []
         for i_win, win in enumerate(win_lens):
 
@@ -468,60 +464,19 @@ if __name__ == '__main__':
             std_noise_rep_ub = np.squeeze(np.std(noise_rep_ub_ceiling, axis=0))
             win_len_comp_noise_ub[i_win] = np.max(mean_noise_rep_ub + std_noise_rep_ub)
 
-            ax.fill_between([i_win, i_win + 0.5], [win_len_comp_noise_lb[i_win], win_len_comp_noise_lb[i_win]],
-                            [win_len_comp_noise_ub[i_win], win_len_comp_noise_ub[i_win]],
-                            facecolor='0.5', alpha=0.5, edgecolor='w')
-
-            voice_rep_file = SAVE_SCORES.format(exp=experiment,
-                                                score_type='voice-rep',
-                                                word=word,
-                                                win_len=win,
-                                                ov=overlap,
-                                                dist=dist,
-                                                avgTm=avg)
-            if os.path.isfile(voice_rep_file) and not force:
-                result = np.load(voice_rep_file)
-                voice_rep_scores = result['scores']
-            else:
-                voice_rep_scores = score_rdms(voice_rdm, total_avg_rdms)
-                np.savez_compressed(voice_rep_file, scores=voice_rep_scores)
-            win_len_comp_voice[i_win] = np.max(voice_rep_scores)
-
-            syn_rep_file = SAVE_SCORES.format(exp=experiment,
-                                                score_type='syn-rep',
-                                                word=word,
-                                                win_len=win,
-                                                ov=overlap,
-                                                dist=dist,
-                                                avgTm=avg)
-            if os.path.isfile(syn_rep_file) and not force:
-                result = np.load(syn_rep_file)
-                syn_rep_scores = result['scores']
-            else:
-                syn_rep_scores = score_rdms(syn_rdm, total_avg_rdms)
-                np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
-            win_len_comp_syn[i_win] = np.max(syn_rep_scores)
-
             win_in_s = win * 0.002
             label_str = '%.3f s' % win_in_s
-            if i_avg == 0:
-                win_labels.append(label_str)
+            win_labels.append(label_str)
 
-        ax.bar(ind, win_len_comp_syn, width,
-               color='r', label='Syntax')
-        ax.bar(ind + width, win_len_comp_voice, width,
-               color='b', label='Voice')
-        ax.set_title(avg_time_strs[i_avg], fontsize=18)
-        ax.legend()
-
-        ax.set_ylabel('Kendall tau')
-        ax.set_ylim([0.0, 1.25])
-        ax.set_xlim([ind[0], ind[-1] + 2.0*width])
-        ax.set_xticks(ind + 0.5)
-        ax.set_xticklabels(win_labels)
-        
-        ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-                    size=20, weight='bold')
+        win_len_comp_noise = (win_len_comp_noise_lb + win_len_comp_noise_ub)/2.0
+        ax.bar(ind + i_avg*width, win_len_comp_noise, width,
+               color=colors[i_avg], label=avg_time_strs[i_avg])
+    ax.legend()
+    ax.set_ylabel('Noise Ceiling Midpoint')
+    ax.set_ylim([0.0, 1.25])
+    ax.set_xlim([ind[0], ind[-1] + 2.0*width])
+    ax.set_xticks(ind + 0.5)
+    ax.set_xticklabels(win_labels)
 
     win_fig.suptitle('Window Size Comparison', fontsize=25)
 
