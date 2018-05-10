@@ -244,8 +244,9 @@ if __name__ == '__main__':
     titles_to_plot = ['Syntax', 'Part-of-Speech']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
-        rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        im = rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         rdm_grid[i_rdm].set_title(titles_to_plot[i_rdm], fontsize=18)
+    cbar = rdm_grid.cbar_axes[0].colorbar(im)
     rdm_fig.suptitle('RDM Comparison')
     rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
                                       word=word,
