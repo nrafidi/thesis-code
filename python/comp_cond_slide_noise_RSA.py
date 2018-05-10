@@ -74,6 +74,9 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
     # axs[1].imshow(residual_Y, interpolation='nearest')
     # plt.show()
 
+    meow, _ = ktau_rdms(residual_X, rdmZ)
+    print(meow)
+
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
     return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
 
@@ -187,7 +190,6 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
             if cond_rdms is None:
                 scores[i_draw, i_time], _ = ktau_rdms(val, test)
             else:
-                print('meow')
                 rdmX = val
                 rdmY = test
                 for cond_rdm in cond_rdms:
@@ -236,13 +238,13 @@ if __name__ == '__main__':
     rdm_fig = plt.figure(figsize=(12, 8))
     rdm_grid = AxesGrid(rdm_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5, share_all=True)
+                          cbar_pad=0.5, share_all=True, aspect=True)
 
     rdms_to_plot = [syn_rdm, voice_rdm]
     titles_to_plot = ['Syntax', 'Voice']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
-        rdm_grid[i_rdm].imshow(rdm, interpolation='nearest')
+        rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
         rdm_grid[i_rdm].set_title(titles_to_plot[i_rdm], fontsize=18)
     rdm_fig.suptitle('RDM Comparison')
     rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp',
@@ -379,6 +381,7 @@ if __name__ == '__main__':
     ax.set_ylim([0.0, 0.6])
     ax.set_xticks(ind + width)
     ax.set_xticklabels(xticklabels_to_plot)
+    ax.set_xlim([0.0, ind[-1] + 2.0*width])
     ax.set_xlabel('Correlation Type', fontsize=16)
 
     cond_fig.suptitle('Correlation Type Comparison', fontsize=25)
