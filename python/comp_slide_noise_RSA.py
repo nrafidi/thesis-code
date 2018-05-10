@@ -184,6 +184,13 @@ if __name__ == '__main__':
 
     force = args.force
 
+    ticklabelsize = 16
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     win_lens = [2, 25, 50, 100]
     doTimeAvgs = ['T', 'F']
     word = 'eos-full'
@@ -368,12 +375,12 @@ if __name__ == '__main__':
 
     sub_ax.fill_between(plot_time, mean_noise_sub_lb - std_noise_sub_lb, mean_noise_sub_ub + std_noise_sub_ub,
                     facecolor='0.5', alpha=0.5, edgecolor='w')
-    sub_ax.legend(loc=1)
-    sub_ax.set_ylabel('Kendall Tau', fontsize=18)
+    sub_ax.legend(loc=1, fontsize=legendfontsize)
+    sub_ax.set_ylabel('Kendall Tau', fontsize=axislabelsize)
     
-    sub_ax.set_title('Subject Noise Ceiling')
+    sub_ax.set_title('Subject Noise Ceiling', fontsize=axistitlesize)
     sub_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[0], transform=sub_ax.transAxes,
-            size=20, weight='bold')
+            size=axislettersize, weight='bold')
     sub_ax.set_ylim([0.0, 0.8])
     sub_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
@@ -382,17 +389,17 @@ if __name__ == '__main__':
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
-    rep_ax.legend(loc=1)
+    rep_ax.legend(loc=1, fontsize=legendfontsize)
 
-    rep_ax.set_title('Repetition Noise Ceiling')
+    rep_ax.set_title('Repetition Noise Ceiling', fontsize=axistitlesize)
     rep_ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[1], transform=rep_ax.transAxes,
-                size=20, weight='bold')
+                size=axislettersize, weight='bold')
     rep_ax.set_ylim([0.0, 0.8])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
-    noise_fig.suptitle('Noise Ceiling Comparison', fontsize=25)
+    noise_fig.suptitle('Noise Ceiling Comparison', fontsize=suptitlesize)
 
-    noise_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=18)
+    noise_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     noise_fig.subplots_adjust(top=0.85)
     noise_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-noise-comp',
                                         word=word,
@@ -478,16 +485,17 @@ if __name__ == '__main__':
         ax.bar(ind + i_avg*width, win_len_comp_noise, width,
                color=colors[i_avg], label=avg_time_strs[i_avg], yerr=[win_len_comp_noise - win_len_comp_noise_lb, win_len_comp_noise_ub - win_len_comp_noise],
                ecolor=colors[1 - i_avg])
-    ax.legend()
-    ax.set_ylabel('Noise Ceiling Midpoint')
+    ax.legend(fontsize=legendfontsize)
+    ax.set_ylabel('Noise Ceiling Kendall tau', fontsize=axislabelsize)
     ax.set_ylim([0.0, 0.8])
     ax.set_xlim([ind[0], ind[-1] + 2.0*width])
     ax.set_xticks(ind + width)
     ax.set_xticklabels(win_labels)
+    ax.tick_params(labelsize=ticklabelsize)
 
-    win_fig.suptitle('Window Size Comparison', fontsize=25)
+    win_fig.suptitle('Window Size Comparison', fontsize=suptitlesize)
 
-    win_fig.text(0.5, 0.04, 'Window Size (s)', ha='center', fontsize=18)
+    win_fig.text(0.5, 0.04, 'Window Size (s)', ha='center', fontsize=axislabelsize)
     win_fig.subplots_adjust(top=0.85)
     win_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-win-comp',
                                       word=word,
