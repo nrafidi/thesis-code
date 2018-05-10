@@ -284,39 +284,39 @@ if __name__ == '__main__':
 
     plot_time = time + win_lens[0]*0.002
 
-    voice_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='voice-rep',
+    pos_rep_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='pos-rep',
                                         word=word,
                                         win_len=win_lens[0],
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvgs[1])
-    if os.path.isfile(voice_rep_file) and not force:
-        result = np.load(voice_rep_file)
-        voice_rep_scores = result['scores']
+    if os.path.isfile(pos_rep_file) and not force:
+        result = np.load(pos_rep_file)
+        pos_rep_scores = result['scores']
     else:
-        voice_rep_scores = score_rdms(voice_rdm, total_avg_rdms)
-        np.savez_compressed(voice_rep_file, scores=voice_rep_scores)
+        pos_rep_scores = score_rdms(pos_rdm, total_avg_rdms)
+        np.savez_compressed(pos_rep_file, scores=pos_rep_scores)
 
-    voice_sub_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='voice-sub',
+    pos_sub_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='pos-sub',
                                         word=word,
                                         win_len=win_lens[0],
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvgs[1])
-    if os.path.isfile(voice_sub_file) and not force:
-        result = np.load(voice_sub_file)
-        voice_sub_scores = result['scores']
+    if os.path.isfile(pos_sub_file) and not force:
+        result = np.load(pos_sub_file)
+        pos_sub_scores = result['scores']
     else:
-        voice_sub_scores = []
+        pos_sub_scores = []
         for i_sub in range(num_sub):
-            sub_score = score_rdms(voice_rdm, np.squeeze(sub_total_rdms[i_sub, ...]))
-            voice_sub_scores.append(sub_score[None, ...])
-        voice_sub_scores = np.concatenate(voice_sub_scores, axis=0)
-        np.savez_compressed(voice_sub_file, scores=voice_sub_scores)
-    mean_voice = np.squeeze(np.mean(voice_sub_scores, axis=0))
-    std_voice = np.squeeze(np.std(voice_sub_scores, axis=0))
+            sub_score = score_rdms(pos_rdm, np.squeeze(sub_total_rdms[i_sub, ...]))
+            pos_sub_scores.append(sub_score[None, ...])
+        pos_sub_scores = np.concatenate(pos_sub_scores, axis=0)
+        np.savez_compressed(pos_sub_file, scores=pos_sub_scores)
+    mean_pos = np.squeeze(np.mean(pos_sub_scores, axis=0))
+    std_pos = np.squeeze(np.std(pos_sub_scores, axis=0))
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='syn-rep',
@@ -362,8 +362,8 @@ if __name__ == '__main__':
     sub_ax.plot(plot_time, mean_syn, label='Syntax', color='r')
     sub_ax.fill_between(plot_time, mean_syn - std_syn, mean_syn + std_syn,
                     facecolor='r', alpha=0.5, edgecolor='w')
-    sub_ax.plot(plot_time, mean_voice, label='Voice', color='b')
-    sub_ax.fill_between(plot_time, mean_voice - std_voice, mean_voice + std_voice,
+    sub_ax.plot(plot_time, mean_pos, label='POS', color='b')
+    sub_ax.fill_between(plot_time, mean_pos - std_pos, mean_pos + std_pos,
                     facecolor='b', alpha=0.5, edgecolor='w')
 
     sub_ax.fill_between(plot_time, mean_noise_sub_lb - std_noise_sub_lb, mean_noise_sub_ub + std_noise_sub_ub,
@@ -378,7 +378,7 @@ if __name__ == '__main__':
     sub_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
-    rep_ax.plot(plot_time, voice_rep_scores, label='Voice', color='b')
+    rep_ax.plot(plot_time, pos_rep_scores, label='POS', color='b')
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
@@ -409,7 +409,7 @@ if __name__ == '__main__':
 
     avg_time_strs = ['Time Average', 'No Time Average']
     win_fig, ax = plt.subplots(figsize=(20, 20))
-    colors = ['0.3', '0.7']
+    colors = ['0.2', '0.8']
     ind = np.arange(len(win_lens))  # the x locations for the groups
     width = 0.25  # the width of the bars
     for i_avg, avg in enumerate(doTimeAvgs):
@@ -475,7 +475,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Noise Ceiling Midpoint')
     ax.set_ylim([0.0, 1.25])
     ax.set_xlim([ind[0], ind[-1] + 2.0*width])
-    ax.set_xticks(ind + 0.5)
+    ax.set_xticks(ind + width)
     ax.set_xticklabels(win_labels)
 
     win_fig.suptitle('Window Size Comparison', fontsize=25)
