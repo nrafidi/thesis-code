@@ -419,4 +419,130 @@ if __name__ == '__main__':
                                       dist=dist,
                                       avgTm=doTimeAvgs[1]) + '.pdf', bbox_inches='tight')
 
+    avg_time_strs = ['Time Average', 'No Time Average']
+    win_fig = plt.figure(figsize=(12, 8))
+    win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
+                          axes_pad=0.4)
+    ind = np.arange(len(win_lens))  # the x locations for the groups
+    width = 0.25  # the width of the bars
+    for i_avg, avg in enumerate(doTimeAvgs):
+        win_len_comp_noise_lb = np.empty((len(win_lens)))
+        win_len_comp_noise_ub = np.empty((len(win_lens)))
+        win_len_comp_syn = np.empty((len(win_lens)))
+        win_len_comp_voice = np.empty((len(win_lens)))
+        ax = win_grid[i_avg]
+        for i_win, win in enumerate(win_lens):
+
+            sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(
+                experiment,
+                word,
+                win,
+                overlap,
+                dist,
+                avg)
+
+            val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
+            test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
+            total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
+
+            noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
+                                                   score_type='noise-rep-lb',
+                                                   word=word,
+                                                   win_len=win,
+                                                   ov=overlap,
+                                                   dist=dist,
+                                                   avgTm=avg)
+            if os.path.isfile(noise_rep_lb_file) and not force:
+                result = np.load(noise_rep_lb_file)
+                noise_rep_lb_ceiling = result['scores']
+            else:
+                noise_rep_lb_ceiling = score_rdms(val_rdms, test_rdms)
+                np.savez_compressed(noise_rep_lb_file, scores=noise_rep_lb_ceiling)
+            mean_noise_rep_lb = np.squeeze(np.mean(noise_rep_lb_ceiling, axis=0))
+            std_noise_rep_lb = np.squeeze(np.std(noise_rep_lb_ceiling, axis=0))
+            win_len_comp_noise_lb[i_win] = np.max(mean_noise_rep_lb - std_noise_rep_lb)
+
+            noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
+                                                   score_type='noise-rep-ub',
+                                                   word=word,
+                                                   win_len=win,
+                                                   ov=overlap,
+                                                   dist=dist,
+                                                   avgTm=avg)
+            if os.path.isfile(noise_rep_ub_file) and not force:
+                result = np.load(noise_rep_ub_file)
+                noise_rep_ub_ceiling = result['scores']
+            else:
+                noise_rep_ub_ceiling = score_rdms(val_rdms, total_avg_rdms)
+                np.savez_compressed(noise_rep_ub_file, scores=noise_rep_ub_ceiling)
+            mean_noise_rep_ub = np.squeeze(np.mean(noise_rep_ub_ceiling, axis=0))
+            std_noise_rep_ub = np.squeeze(np.std(noise_rep_ub_ceiling, axis=0))
+            win_len_comp_noise_ub[i_win] = np.max(mean_noise_rep_ub + std_noise_rep_ub)
+
+            ax.fill_between([i_win, i_win + 0.5], [win_len_comp_noise_lb[i_win], win_len_comp_noise_lb[i_win]],
+                            [win_len_comp_noise_ub[i_win], win_len_comp_noise_ub[i_win]],
+                            facecolor='0.5', alpha=0.5, edgecolor='w')
+
+            voice_rep_file = SAVE_SCORES.format(exp=experiment,
+                                                score_type='voice-rep',
+                                                word=word,
+                                                win_len=win,
+                                                ov=overlap,
+                                                dist=dist,
+                                                avgTm=avg)
+            if os.path.isfile(voice_rep_file) and not force:
+                result = np.load(voice_rep_file)
+                voice_rep_scores = result['scores']
+            else:
+                voice_rep_scores = score_rdms(voice_rdm, total_avg_rdms)
+                np.savez_compressed(voice_rep_file, scores=voice_rep_scores)
+            win_len_comp_voice[i_win] = np.max(voice_rep_scores)
+
+            syn_rep_file = SAVE_SCORES.format(exp=experiment,
+                                                score_type='syn-rep',
+                                                word=word,
+                                                win_len=win,
+                                                ov=overlap,
+                                                dist=dist,
+                                                avgTm=avg)
+            if os.path.isfile(syn_rep_file) and not force:
+                result = np.load(syn_rep_file)
+                syn_rep_scores = result['scores']
+            else:
+                syn_rep_scores = score_rdms(syn_rdm, total_avg_rdms)
+                np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
+            win_len_comp_syn[i_win] = np.max(syn_rep_scores)
+
+        ax.bar(ind, win_len_comp_syn, width,
+               color='r', label='Syntax')
+        ax.bar(ind + width, win_len_comp_voice, width,
+               color='b', label='Voice')
+        ax.set_title(avg_time_strs[i_avg], fontsize=18)
+        ax.legend()
+
+        ax.set_ylabel('Kendall tau')
+        ax.set_ylim([0.0, 0.6])
+        ax.set_xticks(ind + 0.5)
+        ax.set_xticklabels(['%.2f' % float(win)*0.002 for win in win_lens])
+        
+        ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                    size=20, weight='bold')
+
+    win_fig.suptitle('Window Size Comparison', fontsize=25)
+
+    win_fig.text(0.5, 0.04, 'Window Size (s)', ha='center', fontsize=18)
+    win_fig.subplots_adjust(top=0.85)
+    win_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-win-comp',
+                                      word=word,
+                                      win_len='all',
+                                      ov=overlap,
+                                      dist=dist,
+                                      avgTm='TF') + '.png', bbox_inches='tight')
+    win_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-win-comp',
+                                      word=word,
+                                      win_len='all',
+                                      ov=overlap,
+                                      dist=dist,
+                                      avgTm='TF') + '.pdf', bbox_inches='tight')
+
     plt.show()
