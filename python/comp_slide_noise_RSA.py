@@ -419,6 +419,7 @@ if __name__ == '__main__':
         win_len_comp_syn = np.empty((len(win_lens)))
         win_len_comp_voice = np.empty((len(win_lens)))
         ax = win_grid[i_avg]
+        win_labels = []
         for i_win, win in enumerate(win_lens):
 
             sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(
@@ -501,6 +502,11 @@ if __name__ == '__main__':
                 np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
             win_len_comp_syn[i_win] = np.max(syn_rep_scores)
 
+            win_in_s = win * 0.002
+            label_str = '%.3f s' % win_in_s
+            if i_avg == 0:
+                win_labels.append(label_str)
+
         ax.bar(ind, win_len_comp_syn, width,
                color='r', label='Syntax')
         ax.bar(ind + width, win_len_comp_voice, width,
@@ -511,7 +517,7 @@ if __name__ == '__main__':
         ax.set_ylabel('Kendall tau')
         ax.set_ylim([0.0, 0.6])
         ax.set_xticks(ind + 0.5)
-        ax.set_xticklabels(['%.2f' % float(win)*0.002 for win in win_lens])
+        ax.set_xticklabels(win_labels)
         
         ax.text(TEXT_PAD_X, TEXT_PAD_Y, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                     size=20, weight='bold')
