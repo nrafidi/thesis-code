@@ -187,6 +187,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
             if cond_rdms is None:
                 scores[i_draw, i_time], _ = ktau_rdms(val, test)
             else:
+                print('meow')
                 rdmX = val
                 rdmY = test
                 for cond_rdm in cond_rdms:
@@ -327,7 +328,7 @@ if __name__ == '__main__':
         result = np.load(voice_rep_cond_file)
         voice_rep_cond_scores = result['scores']
     else:
-        voice_rep_cond_scores = score_rdms(voice_rdm, total_avg_rdms, [syn_rdm])
+        voice_rep_cond_scores = score_rdms(voice_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
         np.savez_compressed(voice_rep_cond_file, scores=voice_rep_cond_scores)
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
@@ -355,7 +356,7 @@ if __name__ == '__main__':
         result = np.load(syn_rep_cond_file)
         syn_rep_cond_scores = result['scores']
     else:
-        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, [voice_rdm])
+        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[voice_rdm])
         np.savez_compressed(syn_rep_cond_file, scores=syn_rep_cond_scores)
 
     xticklabels_to_plot = ['Full', 'Partial']
@@ -366,7 +367,7 @@ if __name__ == '__main__':
     ind = np.arange(len(xticklabels_to_plot))
     width = 0.25  # the width of the bars
 
-    ax.fill_between([ind[0], ind[-1] + width], [noise_lb, noise_lb],
+    ax.fill_between([ind[0], ind[-1] + 2.0*width], [noise_lb, noise_lb],
                     [noise_ub, noise_ub],
                     facecolor='0.5', alpha=0.5, edgecolor='w')
     ax.bar(ind, scores_to_plot[0], width,
@@ -376,7 +377,7 @@ if __name__ == '__main__':
     ax.legend()
     ax.set_ylabel('Kendall tau', fontsize=16)
     ax.set_ylim([0.0, 0.6])
-    ax.set_xticks(ind + 2.0*width)
+    ax.set_xticks(ind + width)
     ax.set_xticklabels(xticklabels_to_plot)
     ax.set_xlabel('Correlation Type', fontsize=16)
 

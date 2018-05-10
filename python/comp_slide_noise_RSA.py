@@ -408,7 +408,7 @@ if __name__ == '__main__':
                                       avgTm=doTimeAvgs[1]) + '.pdf', bbox_inches='tight')
 
     avg_time_strs = ['Time Average', 'No Time Average']
-    win_fig = plt.figure(figsize=(12, 8))
+    win_fig = plt.figure(figsize=(20, 20))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.4)
     ind = np.arange(len(win_lens))  # the x locations for the groups
@@ -515,7 +515,7 @@ if __name__ == '__main__':
         ax.legend()
 
         ax.set_ylabel('Kendall tau')
-        ax.set_ylim([0.0, 0.6])
+        ax.set_ylim([0.0, 1.0])
         ax.set_xticks(ind + 0.5)
         ax.set_xticklabels(win_labels)
         
