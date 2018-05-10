@@ -410,7 +410,7 @@ if __name__ == '__main__':
     avg_time_strs = ['Time Average', 'No Time Average']
     win_fig = plt.figure(figsize=(20, 20))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
-                          axes_pad=0.4)
+                          axes_pad=0.4, aspect=True)
     ind = np.arange(len(win_lens))  # the x locations for the groups
     width = 0.25  # the width of the bars
     for i_avg, avg in enumerate(doTimeAvgs):
@@ -515,7 +515,8 @@ if __name__ == '__main__':
         ax.legend()
 
         ax.set_ylabel('Kendall tau')
-        ax.set_ylim([0.0, 1.0])
+        ax.set_ylim([0.0, 1.25])
+        ax.set_xlim([ind[0], ind[-1] + 2.0*width])
         ax.set_xticks(ind + 0.5)
         ax.set_xticklabels(win_labels)
         
