@@ -74,8 +74,8 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
     # axs[1].imshow(residual_Y, interpolation='nearest')
     # plt.show()
 
-    meow, _ = ktau_rdms(residual_X, rdmZ)
-    print(meow)
+    # meow, _ = ktau_rdms(residual_X, rdmZ)
+    # print(meow)
 
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
     return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
