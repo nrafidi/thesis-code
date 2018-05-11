@@ -100,7 +100,7 @@ if __name__ == '__main__':
             elif os.stat(err_str).st_size != 0 and (not was_success):
                 with open(err_str, 'r') as fid:
                     err_file = fid.read()
-                    if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
+                    if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
                         if 'MemoryError' in err_file:
                             print('Job {} Failed'.format(job_str))
                         else:
