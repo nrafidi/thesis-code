@@ -291,6 +291,20 @@ if __name__ == '__main__':
     print(num_sub)
     num_time = test_rdms.shape[1]
 
+    syn_rep_cond_file = SAVE_SCORES.format(exp=experiment,
+                                           score_type='syn-rep-cond-pos',
+                                           word=word,
+                                           win_len=win_len,
+                                           ov=overlap,
+                                           dist=dist,
+                                           avgTm=doTimeAvg)
+    if os.path.isfile(syn_rep_cond_file) and not force:
+        result = np.load(syn_rep_cond_file)
+        syn_rep_cond_scores = result['scores']
+    else:
+        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[pos_rdm])
+        np.savez_compressed(syn_rep_cond_file, scores=syn_rep_cond_scores)
+
     pos_rep_cond_file = SAVE_SCORES.format(exp=experiment,
                                            score_type='pos-rep-cond-syn',
                                            word=word,
@@ -373,19 +387,7 @@ if __name__ == '__main__':
         syn_rep_scores = score_rdms(syn_rdm, total_avg_rdms)
         np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
 
-    syn_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                      score_type='syn-rep-cond-pos',
-                                      word=word,
-                                      win_len=win_len,
-                                      ov=overlap,
-                                      dist=dist,
-                                      avgTm=doTimeAvg)
-    if os.path.isfile(syn_rep_cond_file) and not force:
-        result = np.load(syn_rep_cond_file)
-        syn_rep_cond_scores = result['scores']
-    else:
-        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[pos_rdm])
-        np.savez_compressed(syn_rep_cond_file, scores=syn_rep_cond_scores)
+
 
     xticklabels_to_plot = ['Full', 'Partial']
     scores_to_plot = [[np.max(syn_rep_scores), np.max(syn_rep_cond_scores)],
