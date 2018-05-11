@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import argparse
 import numpy as np
 from scipy.stats.mstats import normaltest
+from scipy import spatial
 import os
 from scipy.stats import spearmanr, kendalltau
 import run_slide_noise_RSA
@@ -72,6 +73,10 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
     fig, axs = plt.subplots(nrows=1, ncols=2)
     axs[0].imshow(residual_X, interpolation='nearest')
     axs[1].imshow(residual_Y, interpolation='nearest')
+
+    meow = spatial.distance.squareform(residual_X, force='tovector', checks=False)
+    fig, ax = plt.subplots()
+    ax.plot(meow)
     plt.show()
 
     # meow, _ = ktau_rdms(residual_X, rdmZ)
@@ -277,6 +282,20 @@ if __name__ == '__main__':
     print(num_sub)
     num_time = test_rdms.shape[1]
 
+    pos_rep_cond_file = SAVE_SCORES.format(exp=experiment,
+                                           score_type='pos-rep-cond-syn',
+                                           word=word,
+                                           win_len=win_len,
+                                           ov=overlap,
+                                           dist=dist,
+                                           avgTm=doTimeAvg)
+    if os.path.isfile(pos_rep_cond_file) and not force:
+        result = np.load(pos_rep_cond_file)
+        pos_rep_cond_scores = result['scores']
+    else:
+        pos_rep_cond_scores = score_rdms(pos_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
+        np.savez_compressed(pos_rep_cond_file, scores=pos_rep_cond_scores)
+
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
                                             score_type='noise-rep-lb',
                                             word=word,
@@ -329,19 +348,7 @@ if __name__ == '__main__':
         pos_rep_scores = score_rdms(pos_rdm, total_avg_rdms)
         np.savez_compressed(pos_rep_file, scores=pos_rep_scores)
 
-    pos_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='pos-rep-cond-syn',
-                                        word=word,
-                                        win_len=win_len,
-                                        ov=overlap,
-                                        dist=dist,
-                                        avgTm=doTimeAvg)
-    if os.path.isfile(pos_rep_cond_file) and not force:
-        result = np.load(pos_rep_cond_file)
-        pos_rep_cond_scores = result['scores']
-    else:
-        pos_rep_cond_scores = score_rdms(pos_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
-        np.savez_compressed(pos_rep_cond_file, scores=pos_rep_cond_scores)
+
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='syn-rep',
