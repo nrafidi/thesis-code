@@ -47,7 +47,7 @@ JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc 
 if __name__ == '__main__':
 
     # -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
-    qsub_call = 'qsub -q pool2 -N {job_name} -l walltime=72:00:00 -v ' \
+    qsub_call = 'qsub -q pool2 -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
                 'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False, ' \
