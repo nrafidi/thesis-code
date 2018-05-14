@@ -20,14 +20,16 @@ import time
 # parser.add_argument('--perm_random_state', type=int, default=1)
 # parser.add_argument('--force', default='False', choices=['True', 'False'])
 
-EXPERIMENTS = ['PassAct3']  # ,  'PassAct2', 'PassAct3']
+EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B']
 RADIUS = [1]
-TMINS = [0.0]
-TMAXES = [3.0]
-SEN0S = range(32)
-SENSORS = range(306)
-NINSTS = [5, 2]
+TMINS = [0.0, 0.1, 0.2, 0.3]
+TLENS = [0.05, 0.1, 0.5]
+SEN0S = range(16)
+SENSORS = [-1] # + range(306)
+NINSTS = [10, 2]
+METRICS = ['dtw', 'total']
+VOICES = ['active']
 DISTS = ['cosine']
 
 JOB_NAME = '{sen0}-{radius}-{ninst}-{id}'
@@ -35,21 +37,23 @@ JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
 
-JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
-
+# JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
-                'experiment={exp},subject={sub},radius={radius},sen0={sen0},' \
-                'dist={dist},tmin={tmin},tmax={tmax},sensor={sensor},num_instances={ninst},force=False, ' \
+    qsub_call = 'qsub  -q pool2 -N {job_name} -l walltime=72:00:00,mem=4GB -v ' \
+                'experiment={exp},subject={sub},radius={radius},sen0={sen0},voice={voice},metric={metric}' \
+                'dist={dist},tmin={tmin},time_len={time_len},sensor={sensor},num_instances={ninst},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
                                    SUBJECTS,
+                                   VOICES,
+                                   METRICS,
                                    RADIUS,
                                    TMINS,
-                                   TMAXES,
+                                   TLENS,
                                    SEN0S,
                                    NINSTS,
                                    DISTS,
@@ -58,13 +62,15 @@ if __name__ == '__main__':
     for grid in param_grid:
         exp = grid[0]
         sub = grid[1]
-        radius = grid[2]
-        tmin = grid[3]
-        tmax = grid[4]
-        sen0 = grid[5]
-        ninst = grid[6]
-        dist = grid[7]
-        sensor = grid[8]
+        voice = grid[2]
+        metric = grid[3]
+        radius = grid[4]
+        tmin = grid[5]
+        time_len = grid[6]
+        sen0 = grid[7]
+        ninst = grid[8]
+        dist = grid[9]
+        sensor = grid[10]
 
         job_str = JOB_NAME.format(sen0=sen0,
                                   radius=radius,
@@ -81,11 +87,13 @@ if __name__ == '__main__':
         call_str = qsub_call.format(job_name=job_str,
                                     exp=exp,
                                     sub=sub,
+                                    voice=voice,
+                                    metric=metric,
                                     sen0=sen0,
                                     radius=radius,
                                     dist=dist,
                                     tmin=tmin,
-                                    tmax=tmax,
+                                    time_len=time_len,
                                     sensor=sensor,
                                     ninst=ninst,
                                     errfile=err_str,
@@ -94,5 +102,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 20:
             time.sleep(30)

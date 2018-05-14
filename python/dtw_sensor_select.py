@@ -6,7 +6,7 @@ import fastdtw
 import os
 
 
-RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_{metric}_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+RESULT_FNAME = '/share/volume0/nrafidi/DTW/EOS_{metric}_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}_{voice}.npz'
 
 
 def str_to_bool(str_bool):
@@ -34,14 +34,15 @@ def total_dist(series1, series2, do_transpose=False, dist=euclidean):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment', default='PassAct3')
+    parser.add_argument('--experiment', default='krns2')
     parser.add_argument('--subject', default='B')
+    parser.add_argument('--voice', default='active', choices=['active', 'passive', 'pooled'])
     parser.add_argument('--metric', default='dtw', choices=['dtw', 'total'])
     parser.add_argument('--dist', choices=['euclidean', 'cosine'])
     parser.add_argument('--radius', type=int)
     parser.add_argument('--num_instances', type=int)
     parser.add_argument('--tmin', type=float, default=0.0)
-    parser.add_argument('--tim_len', type=float, default=0.1)
+    parser.add_argument('--time_len', type=float, default=0.1)
     parser.add_argument('--sensor', type=int)
     parser.add_argument('--sen0', type=int, default=0)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
@@ -65,8 +66,13 @@ if __name__ == '__main__':
     else:
         dist=cosine
 
+    if args.voice == 'pooled':
+        voice = ['active', 'passive']
+    else:
+        voice = [args.voice]
+
     result_fname = RESULT_FNAME.format(metric=metric, exp=exp, sub=sub, sen0=sen0, radius=radius, dist=args.dist,
-                                 ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor)
+                                 ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=i_sensor, voice=args.voice)
 
     if os.path.isfile(result_fname) and not str_to_bool(args.force):
         print('Job already completed. Skipping Job.')
@@ -74,7 +80,7 @@ if __name__ == '__main__':
     else:
         data, labels, sen_ints, time, sensor_regions = load_data.load_sentence_data_v2(subject=sub,
                                                                                        align_to='last',
-                                                                                       voice=['active', 'passive'],
+                                                                                       voice=voice,
                                                                                        experiment=exp,
                                                                                        proc=proc,
                                                                                        num_instances=num_instances,

@@ -8,9 +8,11 @@ SAVE_FILE = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{su
 if __name__ == '__main__':
     param_grid = itertools.product(batch_exp.EXPERIMENTS,
                                    batch_exp.SUBJECTS,
+                                   batch_exp.VOICES,
+                                   batch_exp.METRICS,
                                    batch_exp.RADIUS,
                                    batch_exp.TMINS,
-                                   batch_exp.TMAXES,
+                                   batch_exp.TLENS,
                                    batch_exp.SEN0S,
                                    batch_exp.NINSTS,
                                    batch_exp.DISTS,
@@ -21,13 +23,15 @@ if __name__ == '__main__':
     for grid in param_grid:
         exp = grid[0]
         sub = grid[1]
-        radius = grid[2]
-        tmin = grid[3]
-        tmax = grid[4]
-        sen0 = grid[5]
-        ninst = grid[6]
-        dist = grid[7]
-        sensor = grid[8]
+        voice = grid[2]
+        metric = grid[3]
+        radius = grid[4]
+        tmin = grid[5]
+        tmax = grid[6] + tmin
+        sen0 = grid[7]
+        ninst = grid[8]
+        dist = grid[9]
+        sensor = grid[10]
 
         job_str = batch_exp.JOB_NAME.format(sen0=sen0,
                                   radius=radius,
@@ -49,7 +53,9 @@ if __name__ == '__main__':
                                  dist=dist,
                                  ni=ninst,
                                  tmin=tmin,
-                                 tmax=tmax)
+                                 tmax=tmax,
+                                 voice=voice,
+                                 metric=metric)
 
         if os.path.isfile(fname):
             successful_jobs += 1
