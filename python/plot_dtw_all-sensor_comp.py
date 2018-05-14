@@ -67,7 +67,7 @@ if __name__ == '__main__':
     metric_list = ['dtw', 'total']
 
     # How does averaging help?
-    combo_fig = plt.figure(figsize=(40, 20))
+    combo_fig = plt.figure(figsize=(20, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
@@ -75,10 +75,10 @@ if __name__ == '__main__':
         total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
-        im = ax.imshow(total_rdm, interpolation='nearest', aspect='auto')
+        im = ax.imshow(total_rdm, interpolation='nearest') #, aspect='auto')
         ax.set_title('{} Instances'.format(inst))
     ax = combo_grid[-1]
-    im = ax.imshow(comp_rdm, interpolation='nearest', aspect='auto')
+    im = ax.imshow(comp_rdm, interpolation='nearest') #aspect='auto')
     ax.set_title('Ideal')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
