@@ -121,7 +121,7 @@ if __name__ == '__main__':
         score_str = 'Score: %.2f' % score
         ax = combo_grid[i_grid]
         im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
-        ax.set_title('Metric\n' + score_str)
+        ax.set_title(metric + '\n' + score_str)
     ax = combo_grid[-1]
     im = ax.imshow(comp_rdm, interpolation='none', vmin=0.0, vmax=1.0)  # aspect='auto')
     ax.set_title('Ideal')
