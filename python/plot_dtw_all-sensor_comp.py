@@ -22,7 +22,7 @@ def ktau_rdms(rdm1, rdm2):
     return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
 
-def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius):
+def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius, metric):
     num_sen = NUM_SEN[voice]
     comp_rdm = np.ones((num_instances * num_sen, num_instances * num_sen), dtype=float)
     total_rdm = np.empty((num_instances * num_sen, num_instances * num_sen), dtype='float')
@@ -32,7 +32,7 @@ def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius):
         comp_rdm[start_ind:end_ind, start_ind:end_ind] = 0.0
 
         result_fname = RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, radius=radius, dist=dist,
-                                           ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=-1)
+                                           ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=-1, metric=metric)
         if not os.path.isfile(result_fname):
             print(result_fname)
         result = np.load(result_fname)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_inst, inst in enumerate(inst_list):
-        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1], tlen_list[1], dist_list[1], radius)
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1], tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
         im = ax.imshow(total_rdm, interpolation='nearest', aspect='auto')
