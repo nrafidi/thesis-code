@@ -29,7 +29,7 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=168:00:00,mem=4GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=8GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
@@ -97,8 +97,9 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)
-        call(call_str, shell=True)
+        if job_id in [569, 571, 574, 575]:
+            call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
-            time.sleep(30)
+        # while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+        #     time.sleep(30)
