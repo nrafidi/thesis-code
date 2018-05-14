@@ -96,8 +96,9 @@ if __name__ == '__main__':
     ax = combo_grid[-1]
     im = ax.imshow(comp_rdm, interpolation='none',  vmin=0.0, vmax=1.0) #aspect='auto')
     ax.set_title('Ideal')
-
-    cbar = combo_grid.cbar_axes[0].colorbar(im)
+    combo_fig.subplots_adjust(right=0.8)
+    cbar_ax = combo_fig.add_axes([0.85, 0.15, 0.05, 0.7])
+    plt.colorbar(im, cax=cbar_ax)
     combo_fig.suptitle('Averaging Comparison')
 
     plt.show()
