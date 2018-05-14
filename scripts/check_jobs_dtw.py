@@ -56,6 +56,7 @@ if __name__ == '__main__':
                                  tmax=tmax,
                                  voice=voice,
                                  metric=metric)
+        print(fname)
 
         if os.path.isfile(fname):
             successful_jobs += 1
