@@ -79,13 +79,9 @@ if __name__ == '__main__':
     metric_list = ['dtw', 'total']
 
     # How does averaging help?
-    # combo_fig = plt.figure(figsize=(20, 12))
-    # combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
-    #                       axes_pad=0.7, cbar_mode='single', cbar_location='right',
-    #                       cbar_pad=0.5, aspect=True)
     combo_fig, combo_grid = plt.subplots(1, 3)
     for i_inst, inst in enumerate(inst_list):
-        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[0], dist_list[1], radius, metric_list[0])
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[0], dist_list[0], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
         score, _ = ktau_rdms(total_rdm, comp_rdm)
@@ -99,5 +95,26 @@ if __name__ == '__main__':
     cbar_ax = combo_fig.add_axes([0.85, 0.15, 0.05, 0.7])
     plt.colorbar(im, cax=cbar_ax)
     combo_fig.suptitle('Averaging Comparison')
+
+
+    # How does this evolve over time?
+    combo_fig = plt.figure(figsize=(12, 20))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(len(tmin_list), len(tlen_list)),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, aspect=True)
+    i_grid = 0
+    for i_tmin, tmin in enumerate(tmin_list):
+        for j_tlen, tlen in enumerate(tlen_list):
+            tmax = tmin + tlen
+            total_rdm, comp_rdm = load_rdm(exp, sub, inst_list[0], voice, tmin, tmax,
+                                           dist_list[0], radius, metric_list[0])
+            total_rdm /= np.max(total_rdm)
+            score, _ = ktau_rdms(total_rdm, comp_rdm)
+            score_str = 'Score: %.2f' % score
+            ax = combo_grid[i_grid]
+            im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+            ax.set_title('%.3f-%.3f\n' % (tmin, tmax) + score_str)
+
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
 
     plt.show()
