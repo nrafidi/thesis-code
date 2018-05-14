@@ -88,9 +88,10 @@ if __name__ == '__main__':
         total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[0], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
-        score = ktau_rdms(total_rdm, comp_rdm)
+        score, _ = ktau_rdms(total_rdm, comp_rdm)
         im = ax.imshow(total_rdm, interpolation='none', vmin=0.0, vmax=1.0) #, aspect='auto')
-        ax.set_title('{} Instances\n'.format(inst) + 'Score: %.2f' % score)
+        score_str = 'Score: %.2f' % score
+        ax.set_title('{} Instances\n'.format(inst) + score_str)
     ax = combo_grid[-1]
     im = ax.imshow(comp_rdm, interpolation='none',  vmin=0.0, vmax=1.0) #aspect='auto')
     ax.set_title('Ideal')
