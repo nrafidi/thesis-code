@@ -46,18 +46,6 @@ def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius, metric):
     return total_rdm, comp_rdm
 
 
-def pad_array(arr, desired_size):
-    curr_size =arr.shape
-    new_arr = -1.0 * np.ones(desired_size, dtype=float)
-
-    start_x = (desired_size[0] - curr_size[0])/2
-    start_y = (desired_size[1] - curr_size[1])/2
-
-    new_arr[start_x:(start_x + curr_size[0]), start_y:(start_y + curr_size[1])] = arr
-    return new_arr
-
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
@@ -117,5 +105,27 @@ if __name__ == '__main__':
             i_grid += 1
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
+
+    # Does dtw help?
+    combo_fig = plt.figure(figsize=(20, 12))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, aspect=True)
+    i_grid = 0
+    for i_grid, metric in enumerate(metric_list):
+
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst_list[0], voice, tmin_list[1],tmin_list[1] + tlen_list[0],
+                                   dist_list[0], radius, metric)
+        total_rdm /= np.max(total_rdm)
+        score, _ = ktau_rdms(total_rdm, comp_rdm)
+        score_str = 'Score: %.2f' % score
+        ax = combo_grid[i_grid]
+        im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        ax.set_title('Metric\n' + score_str)
+    ax = combo_grid[-1]
+    im = ax.imshow(comp_rdm, interpolation='none', vmin=0.0, vmax=1.0)  # aspect='auto')
+    ax.set_title('Ideal')
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+
 
     plt.show()
