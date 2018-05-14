@@ -31,7 +31,7 @@ def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius, metric):
         end_ind = start_ind + num_instances
         comp_rdm[start_ind:end_ind, start_ind:end_ind] = 0.0
 
-        result_fname = RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, radius=radius, dist=dist,
+        result_fname = RESULT_FNAME.format(exp=exp, sub=sub, sen0=sen0, radius=radius, dist=dist, voice=voice,
                                            ni=num_instances, tmin=tmin, tmax=tmax, i_sensor=-1, metric=metric)
         if not os.path.isfile(result_fname):
             print(result_fname)
