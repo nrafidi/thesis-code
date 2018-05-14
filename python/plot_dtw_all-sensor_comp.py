@@ -85,7 +85,7 @@ if __name__ == '__main__':
     #                       cbar_pad=0.5, aspect=True)
     combo_fig, combo_grid = plt.subplots(1, 3)
     for i_inst, inst in enumerate(inst_list):
-        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[0], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
         # if inst == 2:
