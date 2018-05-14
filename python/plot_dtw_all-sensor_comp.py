@@ -72,7 +72,7 @@ if __name__ == '__main__':
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     for i_inst, inst in enumerate(inst_list):
-        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1], tlen_list[1], dist_list[1], radius, metric_list[0])
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
         im = ax.imshow(total_rdm, interpolation='nearest', aspect='auto')
