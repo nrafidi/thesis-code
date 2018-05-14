@@ -23,14 +23,14 @@ import time
 EXPERIMENTS = ['krns2']  # ,  'PassAct2', 'PassAct3']
 SUBJECTS = ['B']
 RADIUS = [1]
-TMINS = [0.0, 0.1, 0.2, 0.3]
+TMINS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
 TLENS = [0.05, 0.1, 0.5]
 SEN0S = range(16)
 SENSORS = [-1] # + range(306)
 NINSTS = [10, 2]
 METRICS = ['dtw', 'total']
 VOICES = ['active']
-DISTS = ['euclidean']
+DISTS = ['euclidean', 'cosine']
 
 JOB_NAME = '{sen0}-{radius}-{ninst}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -99,8 +99,8 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)
-        if job_id > 95:
-            call(call_str, shell=True)
+        # if job_id > 95:
+        call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
