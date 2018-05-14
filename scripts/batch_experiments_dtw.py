@@ -30,7 +30,7 @@ SENSORS = [-1] # + range(306)
 NINSTS = [10, 2]
 METRICS = ['dtw', 'total']
 VOICES = ['active']
-DISTS = ['cosine']
+DISTS = ['euclidean']
 
 JOB_NAME = '{sen0}-{radius}-{ninst}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
