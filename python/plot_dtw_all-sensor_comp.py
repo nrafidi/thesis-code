@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
     #                       axes_pad=0.7, cbar_mode='single', cbar_location='right',
     #                       cbar_pad=0.5, aspect=True)
-    combo_fig, combo_grid = plt.subplots((1, 3))
+    combo_fig, combo_grid = plt.subplots(1, 3)
     for i_inst, inst in enumerate(inst_list):
         total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
