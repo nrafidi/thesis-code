@@ -90,7 +90,7 @@ if __name__ == '__main__':
         ax = combo_grid[i_inst]
         score = ktau_rdms(total_rdm, comp_rdm)
         im = ax.imshow(total_rdm, interpolation='none', vmin=0.0, vmax=1.0) #, aspect='auto')
-        ax.set_title('%d Instances\nScore: %.2f' % inst, score)
+        ax.set_title('%d Instances\nScore: %.2f' % (inst, score))
     ax = combo_grid[-1]
     im = ax.imshow(comp_rdm, interpolation='none',  vmin=0.0, vmax=1.0) #aspect='auto')
     ax.set_title('Ideal')
