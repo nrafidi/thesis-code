@@ -114,6 +114,7 @@ if __name__ == '__main__':
             ax = combo_grid[i_grid]
             im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
             ax.set_title('%.3f-%.3f\n' % (tmin, tmax) + score_str)
+            i_grid += 1
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
 
