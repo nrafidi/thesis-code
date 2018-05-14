@@ -43,7 +43,7 @@ JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc 
 if __name__ == '__main__':
 
     qsub_call = 'qsub  -q pool2 -N {job_name} -l walltime=72:00:00,mem=4GB -v ' \
-                'experiment={exp},subject={sub},radius={radius},sen0={sen0},voice={voice},metric={metric}' \
+                'experiment={exp},subject={sub},radius={radius},sen0={sen0},voice={voice},metric={metric},' \
                 'dist={dist},tmin={tmin},time_len={time_len},sensor={sensor},num_instances={ninst},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_dtw.sh'
 
