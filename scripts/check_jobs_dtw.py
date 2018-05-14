@@ -2,7 +2,7 @@ import itertools
 import os.path
 import batch_experiments_dtw as batch_exp
 
-SAVE_FILE = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}.npz'
+SAVE_FILE = '/share/volume0/nrafidi/DTW/EOS_dtw_sensor{i_sensor}_score_{exp}_{sub}_sen{sen0}_{radius}_{dist}_ni{ni}_{tmin}-{tmax}_{voice}.npz'
 
 
 if __name__ == '__main__':
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                                  tmax=tmax,
                                  voice=voice,
                                  metric=metric)
-        print(fname)
+        # print(fname)
 
         if os.path.isfile(fname):
             successful_jobs += 1
