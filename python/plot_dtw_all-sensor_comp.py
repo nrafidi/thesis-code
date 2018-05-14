@@ -50,8 +50,8 @@ def pad_array(arr, desired_size):
     curr_size =arr.shape
     new_arr = -1.0 * np.ones(desired_size, dtype=float)
 
-    start_x = desired_size[0] - curr_size[0]
-    start_y = desired_size[1] - curr_size[1]
+    start_x = (desired_size[0] - curr_size[0])/2
+    start_y = (desired_size[1] - curr_size[1])/2
 
     new_arr[start_x:(start_x + curr_size[0]), start_y:(start_y + curr_size[1])] = arr
     return new_arr
