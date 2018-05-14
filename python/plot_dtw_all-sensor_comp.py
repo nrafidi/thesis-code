@@ -82,13 +82,14 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(20, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5, aspect=False)
+                          cbar_pad=0.5, aspect=True)
     for i_inst, inst in enumerate(inst_list):
         total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
         if inst == 2:
             total_rdm = pad_array(total_rdm, (160, 160))
+            print(total_rdm.shape)
         im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0) #, aspect='auto')
         ax.set_title('{} Instances'.format(inst))
     ax = combo_grid[-1]
