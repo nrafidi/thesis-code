@@ -46,6 +46,18 @@ def load_rdm(exp, sub, num_instances, voice, tmin, tmax, dist, radius, metric):
     return total_rdm, comp_rdm
 
 
+def pad_array(arr, desired_size):
+    curr_size =arr.shape
+    new_arr = -1.0 * np.ones(desired_size, dtype=float)
+
+    start_x = desired_size[0] - curr_size[0]
+    start_y = desired_size[1] - curr_size[1]
+
+    new_arr[start_x:(start_x + curr_size[0]), start_y:(start_y + curr_size[1])] = arr
+    return new_arr
+
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='krns2')
@@ -75,10 +87,12 @@ if __name__ == '__main__':
         total_rdm, comp_rdm = load_rdm(exp, sub, inst, voice, tmin_list[1],tmin_list[1] + tlen_list[1], dist_list[1], radius, metric_list[0])
         total_rdm /= np.max(total_rdm)
         ax = combo_grid[i_inst]
-        im = ax.imshow(total_rdm, interpolation='nearest') #, aspect='auto')
+        if inst == 2:
+            total_rdm = pad_array(total_rdm, (160, 160))
+        im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0) #, aspect='auto')
         ax.set_title('{} Instances'.format(inst))
     ax = combo_grid[-1]
-    im = ax.imshow(comp_rdm, interpolation='nearest') #aspect='auto')
+    im = ax.imshow(comp_rdm, interpolation='nearest',  vmin=0.0, vmax=1.0) #aspect='auto')
     ax.set_title('Ideal')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
