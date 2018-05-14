@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     dist_list = ['euclidean', 'cosine']
     inst_list = [2, 10]
-    tmin_list = [0.0, 0.1, 0.2, 0.3]
+    tmin_list = [0.0, 0.1, 0.2]
     tlen_list = [0.05, 0.1, 0.5]
     metric_list = ['dtw', 'total']
 
