@@ -90,10 +90,10 @@ if __name__ == '__main__':
         if inst == 2:
             total_rdm = pad_array(total_rdm, (160, 160))
             print(total_rdm.shape)
-        im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0) #, aspect='auto')
+        im = ax.imshow(total_rdm, interpolation='none', vmin=0.0, vmax=1.0) #, aspect='auto')
         ax.set_title('{} Instances'.format(inst))
     ax = combo_grid[-1]
-    im = ax.imshow(comp_rdm, interpolation='nearest',  vmin=0.0, vmax=1.0) #aspect='auto')
+    im = ax.imshow(comp_rdm, interpolation='none',  vmin=0.0, vmax=1.0) #aspect='auto')
     ax.set_title('Ideal')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
