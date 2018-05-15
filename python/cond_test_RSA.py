@@ -361,6 +361,8 @@ if __name__ == '__main__':
     colors = ['r', 'g', 'm', 'b']
 
     for i_score, score in enumerate(scores_to_plot):
+        print(np.min(score))
+        print(np.max(score))
         ax.plot(score, color=colors[i_score], label=score_labels[i_score])
 
     ax.legend(fontsize=legendfontsize)
