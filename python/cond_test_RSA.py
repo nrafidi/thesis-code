@@ -75,8 +75,8 @@ def partial_ktau_rdms(X, Y, Z):
 
     print(np.min(np.abs(residual_X)))
     print(np.min(np.abs(residual_Y)))
-    residual_X[residual_X < 1e-15] = 0.0
-    residual_Y[residual_Y < 1e-15] = 0.0
+    residual_X[residual_X < 1e-16] = 0.0
+    residual_Y[residual_Y < 1e-16] = 0.0
     # fig, axs = plt.subplots(nrows=1, ncols=2)
     # axs[0].imshow(residual_X, interpolation='nearest')
     # axs[1].imshow(residual_Y, interpolation='nearest')
@@ -365,7 +365,7 @@ if __name__ == '__main__':
 
     ax.legend(fontsize=legendfontsize)
     ax.set_ylabel('Kendall tau', fontsize=axislabelsize)
-    ax.set_ylim([0.0, 0.6])
+    ax.set_ylim([-1.0, 1.0])
     ax.tick_params(labelsize=ticklabelsize)
 
     cond_fig.suptitle('Correlation Type Comparison Over Time', fontsize=suptitlesize)
