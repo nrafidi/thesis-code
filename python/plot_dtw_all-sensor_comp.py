@@ -60,7 +60,7 @@ if __name__ == '__main__':
     radius = args.radius
     voice = args.voice
 
-    dist_list = ['euclidean', 'cosine']
+    dist_list = ['cosine', 'euclidean']
     inst_list = [2, 10]
     tmin_list = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
     tlen_list = [0.05, 0.1, 0.5]
@@ -126,6 +126,27 @@ if __name__ == '__main__':
     im = ax.imshow(comp_rdm, interpolation='none', vmin=0.0, vmax=1.0)  # aspect='auto')
     ax.set_title('Ideal')
     cbar = combo_grid.cbar_axes[0].colorbar(im)
+
+    # Euclidean vs cosine?
+    combo_fig = plt.figure(figsize=(20, 12))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, aspect=True)
+    i_grid = 0
+    for i_grid, dist in enumerate(dist_list):
+        total_rdm, comp_rdm = load_rdm(exp, sub, inst_list[0], voice, tmin_list[1], tmin_list[1] + tlen_list[0],
+                                       dist, radius, metric_list[0])
+        total_rdm /= np.max(total_rdm)
+        score, _ = ktau_rdms(total_rdm, comp_rdm)
+        score_str = 'Score: %.2f' % score
+        ax = combo_grid[i_grid]
+        im = ax.imshow(total_rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
+        ax.set_title(dist + '\n' + score_str)
+    ax = combo_grid[-1]
+    im = ax.imshow(comp_rdm, interpolation='none', vmin=0.0, vmax=1.0)  # aspect='auto')
+    ax.set_title('Ideal')
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+
 
 
     plt.show()
