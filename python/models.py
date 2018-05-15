@@ -763,7 +763,7 @@ def svc_tgm_loso(data,
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
-        # # print(i_split)
+        # print(i_split)
         sub_kf = KFold(n_splits=2, shuffle=True, random_state=sub_rs)
         cv_membership.append(in_test)
 
@@ -905,7 +905,7 @@ def lr_tgm_loso(data,
     for lint in uni_sen_ints:
         in_test = sen_ints == lint
         in_train = np.logical_not(in_test)
-        # # print(i_split)
+        print(i_split)
 
         cv_membership.append(in_test)
 
