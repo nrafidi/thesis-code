@@ -70,23 +70,25 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
     residual_X = rdmX - model_XZ.predict(rdmZ)
     residual_Y = rdmY - model_YZ.predict(rdmZ)
 
-    fig, axs = plt.subplots(nrows=1, ncols=2)
-    axs[0].imshow(residual_X, interpolation='nearest')
-    axs[1].imshow(residual_Y, interpolation='nearest')
+    print(np.min(np.abs(residual_X)))
+    print(np.min(np.abs(residual_Y)))
+    # fig, axs = plt.subplots(nrows=1, ncols=2)
+    # axs[0].imshow(residual_X, interpolation='nearest')
+    # axs[1].imshow(residual_Y, interpolation='nearest')
+    #
+    # fig, axs = plt.subplots(nrows=1, ncols=2)
+    # axs[0].imshow(rdmX, interpolation='nearest')
+    # axs[1].imshow(rdmY, interpolation='nearest')
+    #
+    # meow = spatial.distance.squareform(residual_X, force='tovector', checks=False)
+    # fig, ax = plt.subplots()
+    # ax.plot(meow)
+    #
+    # meow = spatial.distance.squareform(rdmX, force='tovector', checks=False)
+    # fig, ax = plt.subplots()
+    # ax.plot(meow)
 
-    fig, axs = plt.subplots(nrows=1, ncols=2)
-    axs[0].imshow(rdmX, interpolation='nearest')
-    axs[1].imshow(rdmY, interpolation='nearest')
-
-    meow = spatial.distance.squareform(residual_X, force='tovector', checks=False)
-    fig, ax = plt.subplots()
-    ax.plot(meow)
-
-    meow = spatial.distance.squareform(rdmX, force='tovector', checks=False)
-    fig, ax = plt.subplots()
-    ax.plot(meow)
-
-    plt.show()
+    # plt.show()
 
     # meow, _ = ktau_rdms(residual_X, rdmZ)
     # print(meow)
