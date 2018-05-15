@@ -221,7 +221,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='PassAct3')
-    parser.add_argument('--win_len', type=int, default=2)
+    parser.add_argument('--win_len', type=int, default=25)
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='F', choices=['T', 'F'])
@@ -358,7 +358,7 @@ if __name__ == '__main__':
 
     ax.legend(fontsize=legendfontsize)
     ax.set_ylabel('Kendall tau', fontsize=axislabelsize)
-    ax.set_ylim([0.0, 0.8])
+    ax.set_ylim([0.0, 0.6])
     ax.tick_params(labelsize=ticklabelsize)
 
     cond_fig.suptitle('Correlation Type Comparison Over Time', fontsize=suptitlesize)
