@@ -59,7 +59,10 @@ def ktau_rdms(rdm1, rdm2):
     rdm_kendall_tau, rdm_kendall_tau_pvalue = kendalltau(rdm1[upper_tri_inds],rdm2[upper_tri_inds])
     return rdm_kendall_tau, rdm_kendall_tau_pvalue
 
-def partial_ktau_rdms(rdmX, rdmY, rdmZ):
+def partial_ktau_rdms(X, Y, Z):
+    rdmX = np.copy(X)
+    rdmY = np.copy(Y)
+    rdmZ = np.copy(Z)
     # Partial correlation between X and Y, conditioned on Z
     model_XZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
     model_YZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
@@ -72,6 +75,8 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
 
     print(np.min(np.abs(residual_X)))
     print(np.min(np.abs(residual_Y)))
+    residual_X[residual_X < 1e-15] = 0.0
+    residual_Y[residual_Y < 1e-15] = 0.0
     # fig, axs = plt.subplots(nrows=1, ncols=2)
     # axs[0].imshow(residual_X, interpolation='nearest')
     # axs[1].imshow(residual_Y, interpolation='nearest')
