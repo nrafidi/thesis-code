@@ -3,7 +3,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
-from scipy.stats.mstats import normaltest
+from scipy.stats import pearsonr
 from scipy import spatial
 import os
 from scipy.stats import spearmanr, kendalltau
@@ -106,15 +106,15 @@ def compute_partial(ktau_XY, ktau_XZ, ktau_YZ):
     return num/denom
 
 
-def alt_partial_ktau_rdms(X, Y, Zs):
-    ktau_XY, _ = ktau_rdms(X, Y)
-    print('Original XY: {}'.format(ktau_XY))
+def alt_partial_corr_rdms(X, Y, Zs):
+    r_XY, _ = pearsonr(X, Y)
+    print('Original XY: {}'.format(r_XY))
     for Z in Zs:
-        ktau_XZ, _ = ktau_rdms(X, Z)
-        ktau_YZ, _ = ktau_rdms(Y, Z)
-        ktau_XY = compute_partial(ktau_XY, ktau_XZ, ktau_YZ)
-    print('Final XY: {}'.format(ktau_XY))
-    return ktau_XY
+        r_XZ, _ = pearsonr(X, Z)
+        r_YZ, _ = pearsonr(Y, Z)
+        r_XY = compute_partial(r_XY, r_XZ, r_YZ)
+    print('Final XY: {}'.format(r_XY))
+    return r_XY
 
 
 def make_model_rdm(labels):
