@@ -35,7 +35,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     win_lens = [12, 25, 50, 100]
-    num_insts = [1, 2] #, 5] #, 10]
+    num_insts = [1, 2, 5] #, 5] #, 10]
 
     ticklabelsize = 14
     legendfontsize = 16
