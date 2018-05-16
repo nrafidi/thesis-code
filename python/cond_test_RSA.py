@@ -107,9 +107,15 @@ def compute_partial(ktau_XY, ktau_XZ, ktau_YZ):
 
 
 def alt_partial_corr_rdms(X, Y, Zs):
+    if len(X.shape) == 2:
+        X = spatial.distance.squareform(X, force='tovector', checks=False)
+    if len(Y.shape) == 2:
+        Y = spatial.distance.squareform(Y, force='tovector', checks=False)
     r_XY, _ = pearsonr(X, Y)
     print('Original XY: {}'.format(r_XY))
     for Z in Zs:
+        if len(Z.shape) == 2:
+            Z = spatial.distance.squareform(Z, force='tovector', checks=False)
         r_XZ, _ = pearsonr(X, Z)
         r_YZ, _ = pearsonr(Y, Z)
         r_XY = compute_partial(r_XY, r_XZ, r_YZ)
