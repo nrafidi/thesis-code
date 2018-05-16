@@ -109,11 +109,14 @@ if __name__ == '__main__':
                     if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
                         too_long = 'exceeded limit' in err_file
                         zsl = 'ValueError: Class label' in err_file
+                        oserr = 'OSError' in err_file
                         if not too_long and not zsl:
                             print('Job {} Failed'.format(job_str))
                             print err_file
                         elif zsl:
                             skipped_jobs += 1
+                        elif oserr:
+                            print('Job {} Failed due to OSError'.format(job_str))
         # if job_id == 568 and was_success:
         #     print('Longest running job completed!')
 
