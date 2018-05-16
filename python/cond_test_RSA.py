@@ -98,20 +98,20 @@ def partial_ktau_rdms(X, Y, Z):
 
 def compute_partial(ktau_XY, ktau_XZ, ktau_YZ):
     num = ktau_XY - ktau_XZ*ktau_YZ
-    print(num)
+    print('Numerator: {}'.format(num))
     denom = np.sqrt(((1.0 - ktau_XZ)**2)*((1.0 - ktau_YZ)**2))
-    print(denom)
+    print('Denomenator: {}'.format(denom))
     return num/denom
 
 
 def alt_partial_ktau_rdms(X, Y, Zs):
     ktau_XY, _ = ktau_rdms(X, Y)
-    print(ktau_XY)
+    print('Original XY: {}'.format(ktau_XY))
     for Z in Zs:
         ktau_XZ, _ = ktau_rdms(X, Z)
         ktau_YZ, _ = ktau_rdms(Y, Z)
         ktau_XY = compute_partial(ktau_XY, ktau_XZ, ktau_YZ)
-    print(ktau_XY)
+    print('Final XY: {}'.format(ktau_XY))
     return ktau_XY
 
 
