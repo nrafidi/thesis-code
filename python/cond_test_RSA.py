@@ -78,17 +78,18 @@ def partial_ktau_rdms(X, Y, Z):
 
     fig, axs = plt.subplots(nrows=2, ncols=2)
     axs[0][0].imshow(rdmX, interpolation='nearest')
-    axs[0][0].title('Original X')
-    axs[0][1].imshow(residual_X, interpolation='nearest')
-    axs[0][1].title('Residual X')
+    axs[0][0].set_title('Original X')
+    axs[0][1].set_imshow(residual_X, interpolation='nearest')
+    axs[0][1].set_title('Residual X')
     axs[1][0].imshow(rdmY, interpolation='nearest')
-    axs[1][0].title('Original Y')
+    axs[1][0].set_title('Original Y')
     axs[1][1].imshow(residual_Y, interpolation='nearest')
-    axs[1][1].title('Residual Y')
+    axs[1][1].set_title('Residual Y')
 
 
     meow, _ = ktau_rdms(residual_X, rdmZ)
     woof, _ = ktau_rdms(residual_Y, rdmZ)
+    print('Residual corrs:')
     print(meow)
     print(woof)
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
