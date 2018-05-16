@@ -187,7 +187,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
     else:
         num_draws = 1
         num_time = test_rdms.shape[0]
-    num_time=10
+    num_time=2
     scores = np.empty((num_draws, num_time))
     for i_draw in range(num_draws):
         for i_time in range(num_time):
@@ -356,8 +356,8 @@ if __name__ == '__main__':
     colors = ['r', 'g', 'm', 'b']
 
     for i_score, score in enumerate(scores_to_plot):
-        print(np.min(score))
-        print(np.max(score))
+        # print(np.min(score))
+        # print(np.max(score))
         ax.plot(score, color=colors[i_score], label=score_labels[i_score])
 
     ax.legend(fontsize=legendfontsize)
