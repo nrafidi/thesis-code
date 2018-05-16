@@ -18,7 +18,7 @@ VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
-VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'propid']
+VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'propid', 'senlen']
 
 TMAX={'krns2': 1.5,
       'PassAct2': 1.5,
@@ -136,6 +136,11 @@ def run_tgm_exp(experiment,
             curr_voice = stimuli_voice[sen_int]['voice']
             if word == 'voice':
                 labels.append(curr_voice)
+            elif word == 'senlen':
+                if len(word_list) >= 5:
+                    labels.append('long')
+                else:
+                    labels.append('short')
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
 

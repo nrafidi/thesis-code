@@ -8,7 +8,7 @@ MODES = ['acc']
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']
 SEN_TYPES = ['pooled']
-WORDS = ['verb', 'noun1', 'voice']
+WORDS = ['verb', 'noun1', 'voice', 'senlen']
 WIN_LENS = [100]
 OVERLAPS = [12]
 IS_PERMS = [False]
@@ -98,11 +98,10 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
 
-        run_call = sub == 'O' and word == 'voice'
-        run_call = run_call or (sub in ['H', 'U', 'V'] and word == 'verb')
+        run_call = word == 'senlen'
         if run_call:
             call(call_str, shell=True)
         job_id += 1
 
-        # while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
-        #     time.sleep(30)
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
+            time.sleep(30)
