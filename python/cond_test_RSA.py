@@ -98,6 +98,8 @@ def partial_ktau_rdms(X, Y, Z):
 
 def compute_partial(ktau_XY, ktau_XZ, ktau_YZ):
     num = ktau_XY - ktau_XZ*ktau_YZ
+    print('ktau_XZ: {}'.format(ktau_XZ))
+    print('ktau_YZ: {}'.format(ktau_YZ))
     print('Numerator: {}'.format(num))
     denom = np.sqrt(((1.0 - ktau_XZ)**2)*((1.0 - ktau_YZ)**2))
     print('Denomenator: {}'.format(denom))
