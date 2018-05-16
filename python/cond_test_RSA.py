@@ -96,6 +96,23 @@ def partial_ktau_rdms(X, Y, Z):
     return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
 
 
+def compute_partial(ktau_XY, ktau_XZ, ktau_YZ):
+    num = ktau_XY - ktau_XZ*ktau_YZ
+    denom = np.sqrt(((1.0 - ktau_XZ)**2)*((1.0 - ktau_YZ)**2))
+    return num/denom
+
+
+def alt_partial_ktau_rdms(X, Y, Zs):
+    ktau_XY, _ = ktau_rdms(X, Y)
+
+    for Z in Zs:
+        ktau_XZ, _ = ktau_rdms(X, Z)
+        ktau_YZ, _ = ktau_rdms(Y, Z)
+        ktau_XY = compute_partial(ktau_XY, ktau_XZ, ktau_YZ)
+
+    return ktau_XY
+
+
 def make_model_rdm(labels):
     rdm = np.empty((len(labels), len(labels)))
     for i_lab, lab in enumerate(labels):
@@ -208,14 +225,15 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
             else:
                 rdmX = val
                 rdmY = test
-                for cond_rdm in cond_rdms:
-                    if len(cond_rdm.shape) == 4:
-                        rdmZ = np.squeeze(cond_rdm[i_draw, i_time, ...])
-                    elif len(cond_rdm.shape) == 3:
-                        rdmZ = np.squeeze(cond_rdm[i_time, ...])
-                    else:
-                        rdmZ = cond_rdm
-                    scores[i_draw, i_time], _, rdmX, rdmY = partial_ktau_rdms(rdmX, rdmY, rdmZ)
+                scores[i_draw, i_time] = alt_partial_ktau_rdms(rdmX, rdmY, cond_rdms)
+                # for cond_rdm in cond_rdms:
+                #     if len(cond_rdm.shape) == 4:
+                #         rdmZ = np.squeeze(cond_rdm[i_draw, i_time, ...])
+                #     elif len(cond_rdm.shape) == 3:
+                #         rdmZ = np.squeeze(cond_rdm[i_time, ...])
+                #     else:
+                #         rdmZ = cond_rdm
+                #     scores[i_draw, i_time], _, rdmX, rdmY = partial_ktau_rdms(rdmX, rdmY, rdmZ)
 
     return np.squeeze(scores)
 
