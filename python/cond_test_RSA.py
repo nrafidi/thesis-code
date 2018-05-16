@@ -75,29 +75,22 @@ def partial_ktau_rdms(X, Y, Z):
 
     print(np.min(np.abs(residual_X)))
     print(np.min(np.abs(residual_Y)))
-    # residual_X[residual_X < 1e-15] = 0.0
-    # residual_Y[residual_Y < 1e-15] = 0.0
-    # fig, axs = plt.subplots(nrows=1, ncols=2)
-    # axs[0].imshow(residual_X, interpolation='nearest')
-    # axs[1].imshow(residual_Y, interpolation='nearest')
-    #
-    # fig, axs = plt.subplots(nrows=1, ncols=2)
-    # axs[0].imshow(rdmX, interpolation='nearest')
-    # axs[1].imshow(rdmY, interpolation='nearest')
-    #
-    # meow = spatial.distance.squareform(residual_X, force='tovector', checks=False)
-    # fig, ax = plt.subplots()
-    # ax.plot(meow)
-    #
-    # meow = spatial.distance.squareform(rdmX, force='tovector', checks=False)
-    # fig, ax = plt.subplots()
-    # ax.plot(meow)
 
-    # plt.show()
+    fig, axs = plt.subplots(nrows=2, ncols=2)
+    axs[0][0].imshow(rdmX, interpolation='nearest')
+    axs[0][0].title('Original X')
+    axs[0][1].imshow(residual_X, interpolation='nearest')
+    axs[0][1].title('Residual X')
+    axs[1][0].imshow(rdmY, interpolation='nearest')
+    axs[1][0].title('Original Y')
+    axs[1][1].imshow(residual_Y, interpolation='nearest')
+    axs[1][1].title('Residual Y')
 
-    # meow, _ = ktau_rdms(residual_X, rdmZ)
-    # print(meow)
 
+    meow, _ = ktau_rdms(residual_X, rdmZ)
+    woof, _ = ktau_rdms(residual_Y, rdmZ)
+    print(meow)
+    print(woof)
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
     return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
 
@@ -193,6 +186,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
     else:
         num_draws = 1
         num_time = test_rdms.shape[0]
+    num_time=10
     scores = np.empty((num_draws, num_time))
     for i_draw in range(num_draws):
         for i_time in range(num_time):
