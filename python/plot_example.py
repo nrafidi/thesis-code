@@ -16,8 +16,8 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots()
-    ax.plot(sig)
-    ax.plot(avg_sig)
+    ax.plot(x, sig)
+    ax.plot(x[::10], avg_sig)
 
 
     plt.show()
