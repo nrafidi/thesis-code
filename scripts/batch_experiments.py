@@ -117,7 +117,7 @@ if __name__ == '__main__':
                                     rs=rs,
                                     errfile=err_str,
                                     outfile=out_str)
-        if job_id > 583:
+        if job_id > 696:
             call(call_str, shell=True)
         job_id += 1
 
