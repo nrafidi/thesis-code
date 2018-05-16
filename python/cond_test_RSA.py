@@ -229,7 +229,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
             else:
                 rdmX = val
                 rdmY = test
-                scores[i_draw, i_time] = alt_partial_ktau_rdms(rdmX, rdmY, cond_rdms)
+                scores[i_draw, i_time] = alt_partial_corr_rdms(rdmX, rdmY, cond_rdms)
                 # for cond_rdm in cond_rdms:
                 #     if len(cond_rdm.shape) == 4:
                 #         rdmZ = np.squeeze(cond_rdm[i_draw, i_time, ...])
