@@ -7,6 +7,13 @@ import run_TGM_LOSO_EOS
 import tgm_loso_acc_eos
 from scipy.stats import wilcoxon
 
+PLOT_TITLE_WORD = {'noun1': 'First Noun',
+                  'verb': 'Verb',
+                   'agent': 'Agent',
+                   'patient': 'Patient',
+                   'voice': 'Sentence Voice',
+                   'propid': 'Proposition ID',
+                   'senlen': 'Sentence Length'}
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -79,21 +86,26 @@ if __name__ == '__main__':
                   'voice': 0.5,
                   'propid': 1.0/16.0}
     else:
-        word_list = ['voice', 'verb', 'noun1']
+        word_list = ['voice', 'senlen', 'verb', 'noun1']
 
         chance = {'noun1': 0.25,
                   'verb': 0.25,
                   'agent': 0.25,
                   'patient': 0.25,
                   'voice': 0.5,
-                  'propid': 1.0 / 24.0}
+                  'propid': 1.0 / 24.0,
+                  'senlen': 0.5}
 
-
-
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
-    sen_fig, ax = plt.subplots(figsize=(18, 10))
+    sen_fig, ax = plt.subplots(figsize=(12, 12))
     acc_diags = []
     frac_diags = []
     time = []
@@ -133,7 +145,7 @@ if __name__ == '__main__':
         acc = acc_diags[i_word]
         frac = frac_diags[i_word]
 
-        ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
+        ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
         pvals = np.empty((num_time,))
         for i_pt in range(num_time):
             if args.sig_test == 'binomial':
@@ -141,6 +153,12 @@ if __name__ == '__main__':
                 pvals[i_pt] = 0.5**num_above_chance
             else:
                 _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+                if acc[i_pt] > chance[word]:
+                    # print('meow')
+                    pvals[i_pt] /= 2.0
+                else:
+                    # print('woof')
+                    pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
         pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
         for i_pt in range(num_time):
             if  pvals[i_pt]  <= pval_thresh:
@@ -150,21 +168,36 @@ if __name__ == '__main__':
     label_time = time[win_starts]
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
-    ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance, noun1')
+    if args.experiment == 'krns2':
+        ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance, noun1')
     ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance, words')
-    ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice')
-    ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance, proposition')
+    if args.experiment == 'PassAct3':
+        ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice/length')
+    else:
+        ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice')
+    if 'propid' in word_list:
+        ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance, proposition')
     ax.set_xticklabels(label_time)
     ax.axvline(x=max_line, color='k')
-    ax.set_ylabel('Accuracy')
-    ax.set_xlabel('Time Relative to First Noun Onset (s)')
+    ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+    ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
     ax.set_ylim([0.0, 0.9])
     ax.set_xlim([0, len(time[win_starts]) + time_step/2])
-    ax.legend(bbox_to_anchor=(0.85, 1.0), loc=2, borderaxespad=0.)
+    ax.tick_params(labelsize=ticklabelsize)
+    ax.legend(bbox_to_anchor=(0.85, 1.0), loc=2, borderaxespad=0., fontsize=legendfontsize)
 
-    sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=18)
+    sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
+            exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances,
+            sig=args.sig_test,
+            indep=args.indep
+        ), bbox_inches='tight')
+    sen_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
             exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
