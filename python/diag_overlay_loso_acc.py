@@ -238,8 +238,8 @@ if __name__ == '__main__':
 
         colors = ['r', 'g', 'b']
         ax = sen_axs[i_sen]
-        xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
-        ax.set_xticks(xtick_array)
+        xtick_array = np.arange(0, len(time[win_starts])) - time_adjust
+        ax.set_xticks(xtick_array[::time_step])
         print(xtick_array.shape)
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
