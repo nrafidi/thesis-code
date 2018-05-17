@@ -243,12 +243,8 @@ if __name__ == '__main__':
             ax = combo_grid[i_combo]
             print(i_combo)
             im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.75)
-            # if i_word == 0:
-            #     ax.set_ylabel('Train Time (s)')
-            # if i_sen == 1:
-            #     ax.set_xlabel('Test Time (s)')
-            ax.set_title('{word} from {sen_type}'.format(
-                sen_type=PLOT_TITLE_SEN[sen_type],
+
+            ax.set_title('{word}'.format(
                 word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
 
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
@@ -286,6 +282,9 @@ if __name__ == '__main__':
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+    combo_fig.text(0.5, 0.8, 'Active', ha='center', fontsize=axistitlesize)
+    combo_fig.text(0.5, 0.5, 'Passive', ha='center', fontsize=axistitlesize)
+    combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
