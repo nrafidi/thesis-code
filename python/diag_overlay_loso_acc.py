@@ -238,8 +238,8 @@ if __name__ == '__main__':
 
         colors = ['r', 'g', 'b']
         ax = sen_axs[i_sen]
-        xtick_array = np.arange(0, len(time[win_starts])) - time_adjust
-        ax.set_xticks(xtick_array[::time_step])
+        xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
+        ax.set_xticks(xtick_array)
         print(xtick_array.shape)
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
@@ -259,8 +259,8 @@ if __name__ == '__main__':
                     frac = frac[2*time_step:]
                     std = std[2 * time_step:]
 
-            ax.plot(xtick_array, acc, label='{word} accuracy'.format(word=word), color=color)
-            ax.fill_between(xtick_array, acc - std, acc + std, facecolor=color, edgecolor='w',
+            ax.plot(range(len(acc)), acc, label='{word} accuracy'.format(word=word), color=color)
+            ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
                             alpha=0.3)
             num_time = len(acc)
             pvals = np.empty((num_time,))
