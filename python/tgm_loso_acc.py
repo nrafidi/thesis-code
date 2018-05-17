@@ -282,7 +282,7 @@ if __name__ == '__main__':
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    combo_fig.text(0.488, 0.855, 'Active', ha='center', fontsize=axistitlesize+2)
+    combo_fig.text(0.488, 0.8575, 'Active', ha='center', fontsize=axistitlesize+2)
     combo_fig.text(0.488, 0.475, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
