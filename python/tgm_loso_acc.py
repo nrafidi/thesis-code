@@ -189,7 +189,7 @@ if __name__ == '__main__':
             time_win = time[win_starts]
 
             if sen_type == 'active':
-                text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+                text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
                 max_line = 2.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
                 if args.alg == 'lr-l2':
@@ -215,7 +215,7 @@ if __name__ == '__main__':
                         max_line -= 1.5
                         start_line -= 1.5
             else:
-                text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+                text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
                 max_line = 3.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
                 if args.alg == 'lr-l2':
@@ -282,8 +282,8 @@ if __name__ == '__main__':
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    combo_fig.text(0.49, 0.875, 'Active', ha='center', fontsize=axistitlesize+1)
-    combo_fig.text(0.49, 0.475, 'Passive', ha='center', fontsize=axistitlesize+1)
+    combo_fig.text(0.488, 0.85, 'Active', ha='center', fontsize=axistitlesize+2)
+    combo_fig.text(0.488, 0.475, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
