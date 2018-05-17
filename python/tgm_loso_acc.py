@@ -249,7 +249,7 @@ if __name__ == '__main__':
 
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
             ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
-            if i_combo == 5:
+            if i_combo == len(word_list)*2 - 1:
                 # ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)))
                 # ax.set_yticks(np.arange(0, num_time, time_step))
                 ax.set_xlim([0.0, float(num_time)])
@@ -270,7 +270,7 @@ if __name__ == '__main__':
                     buff_space = 0.025
                 if i_v < len(text_to_write):
                     ax.text(v + buff_space * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
-            ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+            ax.text(-0.125, 1.025, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
             i_combo += 1
         
