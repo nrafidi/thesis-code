@@ -270,7 +270,7 @@ if __name__ == '__main__':
                     buff_space = 0.025
                 if i_v < len(text_to_write):
                     ax.text(v + buff_space * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
-            ax.text(-0.125, 1.025, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+            ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
             i_combo += 1
         
