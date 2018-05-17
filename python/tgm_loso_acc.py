@@ -151,15 +151,28 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
+
+    if args.experiment == 'krns2':
+        word_list = ['noun1', 'verb', 'noun2']
+    else:
+        word_list = ['noun1', 'verb']
+    num_plots = len(word_list)
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(40, 20))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
+    combo_fig = plt.figure(figsize=(10*num_plots, 20))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
-        for i_word, word in enumerate(['noun1', 'verb', 'noun2']):
+        for i_word, word in enumerate(word_list):
 
             intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                               sen_type,
@@ -230,13 +243,13 @@ if __name__ == '__main__':
             ax = combo_grid[i_combo]
             print(i_combo)
             im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.75)
-            if i_word == 0:
-                ax.set_ylabel('Train Time (s)')
-            if i_sen == 1:
-                ax.set_xlabel('Test Time (s)')
+            # if i_word == 0:
+            #     ax.set_ylabel('Train Time (s)')
+            # if i_sen == 1:
+            #     ax.set_xlabel('Test Time (s)')
             ax.set_title('{word} from {sen_type}'.format(
                 sen_type=PLOT_TITLE_SEN[sen_type],
-                word=PLOT_TITLE_WORD[word]), fontsize=14)
+                word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
 
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
             ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
@@ -252,7 +265,7 @@ if __name__ == '__main__':
             ax.set_xticklabels(label_time)
 
             ax.set_yticklabels(label_time)
-
+            ax.tick_params(labelsize=ticklabelsize)
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v == 0:
@@ -262,21 +275,31 @@ if __name__ == '__main__':
                 if i_v < len(text_to_write):
                     ax.text(v + buff_space * 2*time_step, 0.75*time_step, text_to_write[i_v], color='w', fontsize=10)
             ax.text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
-                                    size=20, weight='bold')
+                                    size=axislettersize, weight='bold')
             i_combo += 1
         
 
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
-        fontsize=18)
-
+        fontsize=suptitlesize)
+    combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    combo_fig.text(0.5, 0.04, 'Test Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
                     num_instances=args.num_instances
                 ), bbox_inches='tight')
+
+    combo_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
 
     plt.show()
 
