@@ -147,7 +147,7 @@ if __name__ == '__main__':
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
-    parser.add_argument('--avgTest', default='F')
+    parser.add_argument('--avgTest', default='T')
     parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
     parser.add_argument('--indep', action='store_true')
     args = parser.parse_args()
@@ -279,11 +279,11 @@ if __name__ == '__main__':
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                ax.text(v + 0.15, 0.7, text_to_write[i_v])
+                ax.text(v + 0.15, 0.8, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
-        ax.set_ylim([0.0, 0.9])
+        ax.set_ylim([0.0, 1.0])
         ax.set_xlim([start_line, max_line + time_step*5])
         ax.legend(loc=2, bbox_to_anchor=(0.625, 0.825), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
@@ -291,7 +291,7 @@ if __name__ == '__main__':
                 size=axislettersize, weight='bold')
 
     sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=suptitlesize)
-    sen_fig.tight_layout()
+    # sen_fig.tight_layout()
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
