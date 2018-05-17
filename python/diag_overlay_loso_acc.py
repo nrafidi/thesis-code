@@ -267,7 +267,7 @@ if __name__ == '__main__':
                         plot_pt = i_pt - 2*time_step
                     else:
                         plot_pt = i_pt
-                    ax.scatter(plot_pt, 0.8, color=color, marker='*')
+                    ax.scatter(plot_pt, 0.75, color=color, marker='*')
 
         ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
         min_time = -0.5
@@ -279,13 +279,13 @@ if __name__ == '__main__':
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                ax.text(v + 0.15, 0.8, text_to_write[i_v])
+                ax.text(v + 0.15, 0.9, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.0])
         ax.set_xlim([start_line, max_line + time_step*5])
-        ax.legend(loc=2, bbox_to_anchor=(0.625, 0.825), fontsize=legendfontsize)
+        ax.legend(loc=2, bbox_to_anchor=(0.625, 0.925), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
