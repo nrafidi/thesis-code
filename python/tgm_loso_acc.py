@@ -166,7 +166,7 @@ if __name__ == '__main__':
     num_plots = len(word_list)
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(10*num_plots, 20))
+    combo_fig = plt.figure(figsize=(6*num_plots, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
@@ -282,8 +282,8 @@ if __name__ == '__main__':
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    combo_fig.text(0.4875, 0.9, 'Active', ha='center', fontsize=axistitlesize+1)
-    combo_fig.text(0.4875, 0.475, 'Passive', ha='center', fontsize=axistitlesize+1)
+    combo_fig.text(0.49, 0.875, 'Active', ha='center', fontsize=axistitlesize+1)
+    combo_fig.text(0.49, 0.475, 'Passive', ha='center', fontsize=axistitlesize+1)
     combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
