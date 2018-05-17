@@ -107,6 +107,7 @@ if __name__ == '__main__':
 
     sen_fig, ax = plt.subplots(figsize=(15, 12))
     acc_diags = []
+    std_diags = []
     frac_diags = []
     time = []
     win_starts = []
@@ -125,6 +126,7 @@ if __name__ == '__main__':
 
         frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
         acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
+        std_diags.append(np.diag(np.std(acc_all, axis=0)))
         num_sub = acc_all.shape[0]
         sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
         sub_word_diags.append(sub_diags[None, :])
@@ -143,9 +145,12 @@ if __name__ == '__main__':
     for i_word, word in enumerate(word_list):
         color = colors[i_word]
         acc = acc_diags[i_word]
+        std = std_diags[i_word]
         frac = frac_diags[i_word]
 
         ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
+        ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
+                        alpha=0.3)
         pvals = np.empty((num_time,))
         for i_pt in range(num_time):
             if args.sig_test == 'binomial':
