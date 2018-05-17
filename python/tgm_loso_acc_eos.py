@@ -202,7 +202,7 @@ if __name__ == '__main__':
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
                        fontsize=18)
-    combo_fig.text(0.04, 0.5, 'Train Time Relative to Last Word Onset (s)', va='center',
+    combo_fig.text(0.5, 0.5, 'Train Time Relative to Last Word Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=14)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
     combo_fig.savefig(
