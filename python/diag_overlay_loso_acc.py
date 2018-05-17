@@ -185,6 +185,7 @@ if __name__ == '__main__':
     num_sub = float(len(run_TGM_LOSO.VALID_SUBS[args.experiment]))
 
     sen_accs = []
+    sen_stds = []
     sub_sen_diags = []
     sen_fracs = []
     sen_time = []
@@ -192,6 +193,7 @@ if __name__ == '__main__':
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(16, 8))
     for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
+        std_diags = []
         frac_diags = []
         time = []
         win_starts = []
@@ -210,6 +212,7 @@ if __name__ == '__main__':
 
             frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
+            std_diags.append(np.diag(np.std(acc_all, axis=0)))
             num_sub = acc_all.shape[0]
             sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
             sub_word_diags.append(sub_diags[None, :])
@@ -217,6 +220,7 @@ if __name__ == '__main__':
                 time = word_time
                 win_starts = word_win_starts
         sen_accs.append(acc_diags)
+        sen_stds.append(std_diags)
         sen_fracs.append(frac_diags)
         sen_time.append(time[win_starts])
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
@@ -234,20 +238,27 @@ if __name__ == '__main__':
 
         colors = ['r', 'g', 'b']
         ax = sen_axs[i_sen]
+        xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
+        ax.set_xticks(xtick_array)
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+            std = std_diags[i_word]
             frac = frac_diags[i_word]
 
             if sen_type == 'active' and args.alg == 'lr-l2':
                 if word == 'verb':
                     acc = acc[time_step:]
                     frac = frac[time_step:]
+                    std = std[time_step:]
                 elif word == 'noun2':
                     acc = acc[2*time_step:]
                     frac = frac[2*time_step:]
+                    std = std[2 * time_step:]
 
-            ax.plot(acc, label='{word} accuracy'.format(word=word), color=color)
+            ax.plot(xtick_array, acc, label='{word} accuracy'.format(word=word), color=color)
+            ax.fill_between(xtick_array, acc - std, acc + std, facecolor=color, edgecolor='w',
+                            alpha=0.3)
             num_time = len(acc)
             pvals = np.empty((num_time,))
             for i_pt in range(num_time):
@@ -276,7 +287,7 @@ if __name__ == '__main__':
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.72 + 0.02*i_word, color=color, marker='*')
 
-        ax.set_xticks(np.arange(0, len(time[win_starts]), time_step) - time_adjust)
+
         min_time = -0.5
         max_time = 0.5*len(time[win_starts])/time_step
         label_time = np.arange(min_time, max_time, 0.5)
