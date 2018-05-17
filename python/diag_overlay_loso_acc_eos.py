@@ -184,7 +184,7 @@ if __name__ == '__main__':
     ax.set_ylim([0.0, 0.9])
     ax.set_xlim([0, len(time[win_starts]) + 1.5*time_step])
     ax.tick_params(labelsize=ticklabelsize)
-    ax.legend(bbox_to_anchor=(0.7, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+    ax.legend(bbox_to_anchor=(0.65, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
 
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
