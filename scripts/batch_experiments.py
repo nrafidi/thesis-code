@@ -121,5 +121,5 @@ if __name__ == '__main__':
             call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
             time.sleep(30)
