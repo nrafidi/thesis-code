@@ -138,14 +138,19 @@ if __name__ == '__main__':
         aTst = 'Test Average'
     else:
         aTst = ''
+
+    if args.experiment == 'krns2':
+        word_list = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
+    else:
+        word_list = ['noun1', 'verb', 'voice', 'senlen']
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(18, 12))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, len(word_list)/2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     sen_type = 'pooled'
-    for i_word, word in enumerate(['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']):
+    for i_word, word in enumerate(word_list):
         chance = CHANCE[args.experiment][sen_type][word]
         intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                           sen_type,
@@ -180,9 +185,7 @@ if __name__ == '__main__':
         min_time = 0.0
         max_time = 0.5 * len(time_win) / time_step
         label_time = np.arange(min_time, max_time, 0.5)
-        # label_time = time[win_starts]
-        # label_time = label_time[::time_step]
-        # label_time[np.abs(label_time) < 1e-15] = 0.0
+
         ax.set_xticklabels(label_time)
         ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
         ax.set_yticklabels(label_time)
