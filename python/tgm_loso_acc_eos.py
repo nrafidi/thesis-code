@@ -21,7 +21,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'agent': 'Agent',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
-                   'propid': 'Proposition ID'}
+                   'propid': 'Proposition ID',
+                   'senlen': 'Sentence Length'}
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
