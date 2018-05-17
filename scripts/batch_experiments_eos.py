@@ -97,7 +97,8 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
         # print(call_str)
-        if job_id in [714, 715]:
+        if job_id in [716, 717, 718, 719, 721, 724, 728, 729, 730,
+                      731, 732, 733, 734, 735]:
             call(call_str, shell=True)
         job_id += 1
 
