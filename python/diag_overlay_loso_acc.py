@@ -240,10 +240,13 @@ if __name__ == '__main__':
         ax = sen_axs[i_sen]
         xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
         ax.set_xticks(xtick_array)
+        print(xtick_array.shape)
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+            print(acc.shape)
             std = std_diags[i_word]
+            print(std.shape)
             frac = frac_diags[i_word]
 
             if sen_type == 'active' and args.alg == 'lr-l2':
