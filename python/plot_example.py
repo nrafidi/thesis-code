@@ -33,13 +33,13 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.plot(x, meg_sig_class1_rep1, color='b')
-    ax.plot(x, meg_sig_class1_rep2 + 2.0, color='b')
-    ax.plot(x, meg_sig_class2_rep2 + 4.0, color='r')
-    ax.plot(x, meg_sig_class2_rep1 + 6.0, color='r')
+    ax.plot(x, meg_sig_class1_rep2 + 4.0, color='b')
+    ax.plot(x, meg_sig_class2_rep2 + 8.0, color='r')
+    ax.plot(x, meg_sig_class2_rep1 + 12.0, color='r')
 
     fig, ax = plt.subplots()
     ax.plot(x, meg_sig_class1_rep3, color='b')
-    ax.plot(x, meg_sig_class1_rep4 + 2.0, color='b')
+    ax.plot(x, meg_sig_class1_rep4 + 4.0, color='b')
 
     fig, ax = plt.subplots()
     ax.plot(x, (meg_sig_class1_rep3 + meg_sig_class1_rep4)/2.0, color='b')
