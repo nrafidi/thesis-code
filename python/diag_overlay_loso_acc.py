@@ -255,8 +255,11 @@ if __name__ == '__main__':
                     num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
                     pvals[i_pt] = 0.5 ** num_above_chance
                 else:
-                    T, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-                    print(T)
+                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+                    if acc > chance:
+                        pvals[i_pt] /= 2.0
+                    else:
+                        pvals[i_pt] = 1 - pvals[i_pt]/2.0
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
             print(pval_thresh)
             print(np.min(pvals))
