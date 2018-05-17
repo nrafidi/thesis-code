@@ -236,7 +236,7 @@ if __name__ == '__main__':
             start_line = time_step - time_adjust
 
 
-        colors = ['r', 'g', 'b']
+        colors = ['r', 'b', 'g']
         ax = sen_axs[i_sen]
         xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
         ax.set_xticks(xtick_array)
