@@ -285,7 +285,8 @@ if __name__ == '__main__':
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.0])
         ax.set_xlim([start_line, max_line + time_step*5])
-        ax.legend(loc=2, bbox_to_anchor=(0.65, 1.025), fontsize=legendfontsize)
+        if i_sen == 1:
+            ax.legend(loc=2, bbox_to_anchor=(0.65, 1.02), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
