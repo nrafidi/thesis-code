@@ -145,10 +145,11 @@ if __name__ == '__main__':
         word_list = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
     else:
         word_list = ['noun1', 'verb', 'voice', 'senlen']
+    num_plots = len(word_list)/2
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(18, 12))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, len(word_list)/2),
+    combo_fig = plt.figure(figsize=(num_plots*6, 12))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5)
     sen_type = 'pooled'
@@ -202,7 +203,7 @@ if __name__ == '__main__':
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
                        fontsize=18)
-    combo_fig.text(0.5, 0.5, 'Train Time Relative to Last Word Onset (s)', va='center',
+    combo_fig.text(0.25, 0.6, 'Train Time Relative to Last Word Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=14)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
     combo_fig.savefig(
