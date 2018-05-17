@@ -172,6 +172,13 @@ if __name__ == '__main__':
                   'verb': 0.25,
                   'noun2': 0.25}
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+    num_plots = len(word_list)
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
@@ -182,7 +189,7 @@ if __name__ == '__main__':
     sen_fracs = []
     sen_time = []
 
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(20, 10))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(16, 8))
     for i_sen, sen_type in enumerate(sen_type_list):
         acc_diags = []
         frac_diags = []
@@ -216,11 +223,11 @@ if __name__ == '__main__':
         sub_sen_diags.append(sub_word_diags[None, ...])
         num_time = len(win_starts)
         if sen_type == 'active':
-            text_to_write = ['Det', 'Noun1', 'Verb', 'Det', 'Noun2.']
+            text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
             max_line = 2.51 * 2 * time_step - time_adjust
             start_line = time_step - time_adjust
         else:
-            text_to_write = ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']
+            text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
             max_line = 3.51 * 2 * time_step - time_adjust
             start_line = time_step - time_adjust
 
@@ -268,25 +275,36 @@ if __name__ == '__main__':
         label_time = np.arange(min_time, max_time, 0.5)
         ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
         ax.set_xticklabels(label_time)
+        ax.tick_params(labelsize=ticklabelsize)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
                 ax.text(v + 0.15, 0.7, text_to_write[i_v])
         if i_sen == 0:
-            ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time Relative to Sentence Onset (s)')
+            ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+        # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 0.9])
         ax.set_xlim([start_line, max_line + time_step*5])
-        ax.legend(loc=2, bbox_to_anchor=(0.625, 0.825))
-        ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]))
+        ax.legend(loc=2, bbox_to_anchor=(0.625, 0.825), fontsize=legendfontsize)
+        ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
-                size=20, weight='bold')
+                size=axislettersize, weight='bold')
 
-    sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
+    sen_fig.suptitle('Mean Accuracy over Subjects', fontsize=suptitlesize)
     sen_fig.tight_layout()
+    sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
+            exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances,
+            sig=args.sig_test,
+            indep=args.indep
+        ), bbox_inches='tight')
+    sen_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
