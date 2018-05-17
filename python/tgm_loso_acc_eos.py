@@ -175,10 +175,10 @@ if __name__ == '__main__':
 
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
-        if i_word == 0 or i_word == 2:
-            ax.set_ylabel('Train Time (s)')
-        if i_word > 1:
-            ax.set_xlabel('Test Time (s)')
+        # if i_word == 0 or i_word == 2:
+        #     ax.set_ylabel('Train Time (s)')
+        # if i_word > 1:
+        #     ax.set_xlabel('Test Time (s)')
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]))
         time_win = time[win_starts]
@@ -202,6 +202,9 @@ if __name__ == '__main__':
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
                        fontsize=18)
+    combo_fig.text(0.04, 0.5, 'Train Time Relative to Last Word Onset (s)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=14)
+    combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=args.experiment, sen_type='pooled', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
