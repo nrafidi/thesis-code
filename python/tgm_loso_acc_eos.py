@@ -121,11 +121,11 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     # parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
     # parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
-    parser.add_argument('--win_len', type=int, default=25)
+    parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=5)
+    parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
@@ -166,7 +166,7 @@ if __name__ == '__main__':
         frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
         mean_acc = np.mean(acc_all, axis=0)
         mean_acc -= chance
-        if np.all(mean_acc < 0.0):
+        if np.all(mean_acc <= 0.0):
             mean_acc = np.zeros(mean_acc.shape)
         else:
             mean_acc /= np.max(mean_acc)
