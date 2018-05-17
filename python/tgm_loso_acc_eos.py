@@ -132,6 +132,13 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     if args.avgTime == 'T':
         aT = 'Time Average '
     else:
@@ -176,12 +183,9 @@ if __name__ == '__main__':
 
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
-        # if i_word == 0 or i_word == 2:
-        #     ax.set_ylabel('Train Time (s)')
-        # if i_word > 1:
-        #     ax.set_xlabel('Test Time (s)')
+
         ax.set_title('{word}'.format(
-            word=PLOT_TITLE_WORD[word]))
+            word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
         time_win = time[win_starts]
         num_time = len(time_win)
         ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
@@ -192,9 +196,10 @@ if __name__ == '__main__':
         ax.set_xticklabels(label_time)
         ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
         ax.set_yticklabels(label_time)
+        ax.tick_params(labelsize=ticklabelsize)
         ax.axvline(x=0.625*time_step, color='w')
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
-                size=20, weight='bold')
+                size=axislettersize, weight='bold')
 
 
         time_adjust = args.win_len*0.002
@@ -202,10 +207,10 @@ if __name__ == '__main__':
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
-                       fontsize=18)
-    combo_fig.text(0.1, 0.3, 'Train Time Relative to Last Word Onset (s)', va='center',
-                   rotation=90, rotation_mode='anchor', fontsize=14)
-    combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=14)
+                       fontsize=suptitlesize)
+    combo_fig.text(0.1, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=args.experiment, sen_type='pooled', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
