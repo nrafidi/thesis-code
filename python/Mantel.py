@@ -7,8 +7,26 @@
 import numpy as np
 from itertools import permutations
 from scipy import spatial, stats
+from sklearn.linear_model import LinearRegression
 
-def test(X, Y, perms=10000, method='pearson', tail='two-tail'):
+
+def decorr_rdms(rdm1, rdm2, cond_rdms):
+    rdmX = np.copy(rdm1)
+    rdmY = np.copy(rdm2)
+    for rdmZ in cond_rdms:
+        model_XZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+        model_YZ = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
+
+        model_XZ.fit(rdmZ, rdmX)
+        model_YZ.fit(rdmZ, rdmY)
+
+        rdmX -= model_XZ.predict(rdmZ)
+        rdmY -= model_YZ.predict(rdmZ)
+
+    return rdmX, rdmY
+
+
+def test(rdmX, rdmY, perms=10000, method='pearson', tail='upper', Zs=None):
   """
   Takes two distance matrices (either redundant matrices or condensed vectors)
   and performs a Mantel test. The Mantel test is a significance test of the
@@ -42,13 +60,19 @@ def test(X, Y, perms=10000, method='pearson', tail='two-tail'):
   """
 
   # Ensure that X and Y are formatted as Numpy arrays.
-  X, Y = np.asarray(X, dtype=float), np.asarray(Y, dtype=float)
+  rdmX, rdmY = np.asarray(rdmX, dtype=float), np.asarray(rdmY, dtype=float)
 
   # Check that X and Y are valid distance matrices.
-  if spatial.distance.is_valid_dm(X) == False and spatial.distance.is_valid_y(X) == False:
+  if spatial.distance.is_valid_dm(rdmX) == False and spatial.distance.is_valid_y(rdmX) == False:
     raise ValueError('X is not a valid condensed or redundant distance matrix')
-  if spatial.distance.is_valid_dm(Y) == False and spatial.distance.is_valid_y(Y) == False:
+  if spatial.distance.is_valid_dm(rdmY) == False and spatial.distance.is_valid_y(rdmY) == False:
     raise ValueError('Y is not a valid condensed or redundant distance matrix')
+
+  if Zs is not None:
+    X, Y = decorr_rdms(rdmX, rdmY, Zs)
+  else:
+    X = rdmX
+    Y = rdmY
 
   # If X or Y is a redundant distance matrix, reduce it to a condensed distance matrix.
   if len(X.shape) == 2:
