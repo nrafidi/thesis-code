@@ -182,7 +182,12 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
 
             assert np.all(np.array(new_labels) == np.array(labels))
             assert np.all(np.array(new_voice_labels) == np.array(voice_labels))
-            assert np.all(np.array(new_time) == np.array(time))
+            if not np.all(np.array(new_time) == np.array(time)):
+                print(subject)
+                print(draw)
+                print(time)
+                print(new_time)
+                raise AssertionError('time differs')
 
             val_rdms.append(result['val_rdm'][None, ...])
             test_rdms.append(result['test_rdm'][None, ...])
