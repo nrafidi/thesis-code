@@ -319,7 +319,7 @@ if __name__ == '__main__':
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
     test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
     total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
-    pos_sub = sub_total_rdms.shape[0]
+    num_sub = sub_total_rdms.shape[0]
     print(num_sub)
     num_time = test_rdms.shape[1]
 
