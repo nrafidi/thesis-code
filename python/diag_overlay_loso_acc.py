@@ -24,7 +24,7 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
                   'voice': 'Voice'}
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.01, assume_independence=True):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=False):
     # Benjamini-Hochberg-Yekutieli
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
