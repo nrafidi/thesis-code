@@ -97,6 +97,7 @@ if __name__ == '__main__':
             with open(out_str, 'r') as fid:
                 meow = fid.read()
                 if 'Skipping' in meow and 'already' not in meow:
+                    print('Skipped')
                     skipped = True
                     if was_success:
                         successful_jobs -= 1
@@ -114,6 +115,7 @@ if __name__ == '__main__':
                             print('Job {} Failed'.format(job_str))
                             print err_file
                         elif zsl:
+                            print('ZSL')
                             skipped_jobs += 1
                         elif oserr:
                             print('Job {} Failed due to OSError'.format(job_str))
