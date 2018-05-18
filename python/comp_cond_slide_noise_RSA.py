@@ -285,15 +285,15 @@ if __name__ == '__main__':
                                                                                                                       dist,
                                                                                                                       doTimeAvg)
 
-    voice_num_scores, _ = ktau_rdms(num_rdm, voice_rdm)
-    print('Correlation between Length and Voice RDMs is: {}'.format(voice_num_scores))
+    voice_pos_scores, _ = ktau_rdms(pos_rdm, voice_rdm)
+    print('Correlation between Length and Voice RDMs is: {}'.format(voice_pos_scores))
 
     rdm_fig = plt.figure(figsize=(12, 8))
     rdm_grid = AxesGrid(rdm_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True, aspect=True)
 
-    rdms_to_plot = [voice_rdm, num_rdm/np.max(num_rdm)]
+    rdms_to_plot = [voice_rdm, pos_rdm/np.max(pos_rdm)]
     titles_to_plot = ['Voice', 'Sentence Length']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
@@ -303,13 +303,13 @@ if __name__ == '__main__':
                 size=axislettersize, weight='bold')
     cbar = rdm_grid.cbar_axes[0].colorbar(im)
     rdm_fig.suptitle('RDM Comparison')
-    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-num',
+    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg) + '.png', bbox_inches='tight')
-    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-num',
+    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
                                     word=word,
                                     win_len=win_len,
                                     ov=overlap,
@@ -319,12 +319,12 @@ if __name__ == '__main__':
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
     test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
     total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
-    num_sub = sub_total_rdms.shape[0]
+    pos_sub = sub_total_rdms.shape[0]
     print(num_sub)
     num_time = test_rdms.shape[1]
 
     voice_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='voice-rep-cond-num',
+                                           score_type='voice-rep-cond-pos',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
@@ -334,22 +334,22 @@ if __name__ == '__main__':
         result = np.load(voice_rep_cond_file)
         voice_rep_cond_scores = result['scores']
     else:
-        voice_rep_cond_scores = score_rdms(voice_rdm, total_avg_rdms, cond_rdms=[num_rdm])
+        voice_rep_cond_scores = score_rdms(voice_rdm, total_avg_rdms, cond_rdms=[pos_rdm])
         np.savez_compressed(voice_rep_cond_file, scores=voice_rep_cond_scores)
 
-    num_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='num-rep-cond-voice',
+    pos_rep_cond_file = SAVE_SCORES.format(exp=experiment,
+                                           score_type='pos-rep-cond-voice',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
                                            dist=dist,
                                            avgTm=doTimeAvg)
-    if os.path.isfile(num_rep_cond_file) and not force:
-        result = np.load(num_rep_cond_file)
-        num_rep_cond_scores = result['scores']
+    if os.path.isfile(pos_rep_cond_file) and not force:
+        result = np.load(pos_rep_cond_file)
+        pos_rep_cond_scores = result['scores']
     else:
-        num_rep_cond_scores = score_rdms(num_rdm, total_avg_rdms, cond_rdms=[voice_rdm])
-        np.savez_compressed(num_rep_cond_file, scores=num_rep_cond_scores)
+        pos_rep_cond_scores = score_rdms(pos_rdm, total_avg_rdms, cond_rdms=[voice_rdm])
+        np.savez_compressed(pos_rep_cond_file, scores=pos_rep_cond_scores)
 
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
                                             score_type='noise-rep-lb',
@@ -389,19 +389,19 @@ if __name__ == '__main__':
 
     noise_ub = np.max(mean_noise_rep_ub + std_noise_rep_ub)
 
-    num_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='num-rep',
+    pos_rep_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='pos-rep',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvg)
-    if os.path.isfile(num_rep_file) and not force:
-        result = np.load(num_rep_file)
-        num_rep_scores = result['scores']
+    if os.path.isfile(pos_rep_file) and not force:
+        result = np.load(pos_rep_file)
+        pos_rep_scores = result['scores']
     else:
-        num_rep_scores = score_rdms(num_rdm, total_avg_rdms)
-        np.savez_compressed(num_rep_file, scores=num_rep_scores)
+        pos_rep_scores = score_rdms(pos_rdm, total_avg_rdms)
+        np.savez_compressed(pos_rep_file, scores=pos_rep_scores)
 
 
 
@@ -423,7 +423,7 @@ if __name__ == '__main__':
 
     xticklabels_to_plot = ['Full', 'Partial']
     scores_to_plot = [[np.max(voice_rep_scores), np.max(voice_rep_cond_scores)],
-                      [np.max(num_rep_scores), np.max(num_rep_cond_scores)]]
+                      [np.max(pos_rep_scores), np.max(pos_rep_cond_scores)]]
     cond_fig, ax = plt.subplots(figsize=(12, 8))
 
     ind = np.arange(len(xticklabels_to_plot))
@@ -447,14 +447,14 @@ if __name__ == '__main__':
 
     cond_fig.suptitle('Correlation Type Comparison', fontsize=suptitlesize)
     cond_fig.subplots_adjust(top=0.85)
-    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-num',
+    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg) + '.png', bbox_inches='tight')
 
-    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-num',
+    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
                                      word=word,
                                      win_len=win_len,
                                      ov=overlap,
