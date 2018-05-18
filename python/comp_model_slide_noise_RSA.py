@@ -11,6 +11,8 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 import string
 from sklearn.linear_model import LinearRegression
 from syntax_vs_semantics import load_data
+import Mantel
+from functools import partial
 
 
 MODEL_PATH = '/share/volume0/RNNG/semantic_models/glove/sentence_similarity/direct_sentence_distance/{experiment}_{model}_glove_rdm.npz'
@@ -210,7 +212,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
 
 
 # assuming draw x time x stim x stim
-def score_rdms(val_rdms, test_rdms, cond_rdms=None):
+def score_rdms(val_rdms, test_rdms, corr_fn):
     if len(val_rdms.shape) == 4:
         num_draws = val_rdms.shape[0]
         num_time = val_rdms.shape[1]
@@ -221,6 +223,7 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
         num_draws = 1
         num_time = test_rdms.shape[0]
     scores = np.empty((num_draws, num_time))
+    pvals = np.empty((num_draws, num_time))
     for i_draw in range(num_draws):
         for i_time in range(num_time):
             if len(val_rdms.shape) == 4:
@@ -235,21 +238,9 @@ def score_rdms(val_rdms, test_rdms, cond_rdms=None):
                 test = np.squeeze(test_rdms[i_time, ...])
             else:
                 test = test_rdms
-            if cond_rdms is None:
-                scores[i_draw, i_time], _ = ktau_rdms(val, test)
-            else:
-                rdmX = val
-                rdmY = test
-                for cond_rdm in cond_rdms:
-                    if len(cond_rdm.shape) == 4:
-                        rdmZ = np.squeeze(cond_rdm[i_draw, i_time, ...])
-                    elif len(cond_rdm.shape) == 3:
-                        rdmZ = np.squeeze(cond_rdm[i_time, ...])
-                    else:
-                        rdmZ = cond_rdm
-                    scores[i_draw, i_time], _, rdmX, rdmY = partial_ktau_rdms(rdmX, rdmY, rdmZ)
+            scores[i_draw, i_time], pvals[i_draw, i_time] = corr_fn(val, test)
 
-    return np.squeeze(scores)
+    return np.squeeze(scores), np.squeeze(pvals)
 
 
 if __name__ == '__main__':
@@ -259,6 +250,7 @@ if __name__ == '__main__':
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='F', choices=['T', 'F'])
+    parser.add_argument('--corr', default='ktau', choices=['ktau', 'mantel'])
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
@@ -280,6 +272,13 @@ if __name__ == '__main__':
     doTimeAvg = args.doTimeAvg
     word = 'eos-full'
 
+    if args.corr == 'ktau':
+        noise_corr_fn = ktau_rdms
+        corr_fn = ktau_rdms
+    else:
+        noise_corr_fn = partial(Mantel.test, perms=1)
+        corr_fn = Mantel.test
+
     sub_val_rdms, sub_test_rdms, sub_total_rdms, syn_rdm, bow_rdm, hier_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
                                                                                                   win_len,
@@ -289,13 +288,13 @@ if __name__ == '__main__':
 
 
 
-    syn_bow_scores, _ = ktau_rdms(bow_rdm, syn_rdm)
+    syn_bow_scores, _ = noise_corr_fn(bow_rdm, syn_rdm)
     print('Correlation between BoW and Syntax RDMs is: {}'.format(syn_bow_scores))
 
-    syn_hier_scores, _ = ktau_rdms(hier_rdm, syn_rdm)
+    syn_hier_scores, _ = noise_corr_fn(hier_rdm, syn_rdm)
     print('Correlation between Hierarchical and Syntax RDMs is: {}'.format(syn_hier_scores))
 
-    hier_bow_scores, _ = ktau_rdms(bow_rdm, hier_rdm)
+    hier_bow_scores, _ = noise_corr_fn(bow_rdm, hier_rdm)
     print('Correlation between BoW and Hierarchical RDMs is: {}'.format(hier_bow_scores))
 
 
@@ -335,7 +334,7 @@ if __name__ == '__main__':
     num_time = test_rdms.shape[1]
 
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='noise-rep-lb',
+                                            score_type='noise-rep-lb-{}'.format(args.corr),
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -345,11 +344,11 @@ if __name__ == '__main__':
         result = np.load(noise_rep_lb_file)
         noise_rep_lb_ceiling = result['scores']
     else:
-        noise_rep_lb_ceiling = score_rdms(val_rdms, test_rdms)
+        noise_rep_lb_ceiling, _ = score_rdms(val_rdms, test_rdms, noise_corr_fn)
         np.savez_compressed(noise_rep_lb_file, scores=noise_rep_lb_ceiling)
 
     noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='noise-rep-ub',
+                                           score_type='noise-rep-ub-{}'.format(args.corr),
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
@@ -359,7 +358,7 @@ if __name__ == '__main__':
         result = np.load(noise_rep_ub_file)
         noise_rep_ub_ceiling = result['scores']
     else:
-        noise_rep_ub_ceiling = score_rdms(val_rdms, total_avg_rdms)
+        noise_rep_ub_ceiling, _ = score_rdms(val_rdms, total_avg_rdms, noise_corr_fn)
         np.savez_compressed(noise_rep_ub_file, scores=noise_rep_ub_ceiling)
 
     mean_noise_rep_lb = np.squeeze(np.mean(noise_rep_lb_ceiling, axis=0))
@@ -373,7 +372,7 @@ if __name__ == '__main__':
     noise_ub = np.max(mean_noise_rep_ub + std_noise_rep_ub)
 
     bow_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='bow-rep',
+                                        score_type='bow-rep-{}'.format(args.corr),
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -382,12 +381,13 @@ if __name__ == '__main__':
     if os.path.isfile(bow_rep_file) and not force:
         result = np.load(bow_rep_file)
         bow_rep_scores = result['scores']
+        bow_rep_pvals = result['pvals']
     else:
-        bow_rep_scores = score_rdms(bow_rdm, total_avg_rdms)
-        np.savez_compressed(bow_rep_file, scores=bow_rep_scores)
+        bow_rep_scores, bow_rep_pvals = score_rdms(bow_rdm, total_avg_rdms, corr_fn)
+        np.savez_compressed(bow_rep_file, scores=bow_rep_scores, pvals=bow_rep_pvals)
 
     hier_rep_file = SAVE_SCORES.format(exp=experiment,
-                                      score_type='hier-rep',
+                                      score_type='hier-rep-{}'.format(args.corr),
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
@@ -396,12 +396,13 @@ if __name__ == '__main__':
     if os.path.isfile(hier_rep_file) and not force:
         result = np.load(hier_rep_file)
         hier_rep_scores = result['scores']
+        hier_rep_pvals = result['pvals']
     else:
-        hier_rep_scores = score_rdms(hier_rdm, total_avg_rdms)
-        np.savez_compressed(hier_rep_file, scores=hier_rep_scores)
+        hier_rep_scores, hier_rep_pvals = score_rdms(hier_rdm, total_avg_rdms, corr_fn)
+        np.savez_compressed(hier_rep_file, scores=hier_rep_scores, pvals=hier_rep_pvals)
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='syn-rep',
+                                        score_type='syn-rep-{}'.format(args.corr),
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -410,9 +411,10 @@ if __name__ == '__main__':
     if os.path.isfile(syn_rep_file) and not force:
         result = np.load(syn_rep_file)
         syn_rep_scores = result['scores']
+        syn_rep_pvals = result['pvals']
     else:
-        syn_rep_scores = score_rdms(syn_rdm, total_avg_rdms)
-        np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
+        syn_rep_scores, syn_rep_pvals = score_rdms(syn_rdm, total_avg_rdms, corr_fn)
+        np.savez_compressed(syn_rep_file, scores=syn_rep_scores, pvals=syn_rep_pvals)
 
     plot_time = time + args.win_len * 0.002
 
@@ -429,45 +431,19 @@ if __name__ == '__main__':
     rep_ax.set_ylim([0.0, 0.8])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
-    #
-    # xticklabels_to_plot = ['Full', 'Partial']
-    # scores_to_plot = [[np.max(syn_rep_scores), np.max(syn_rep_cond_scores)],
-    #                   [np.max(pos_rep_scores), np.max(pos_rep_cond_scores)]]
-    # cond_fig, ax = plt.subplots(figsize=(12, 8))
-    #
-    # ind = np.arange(len(xticklabels_to_plot))
-    # width = 0.25  # the width of the bars
-    #
-    # ax.fill_between([ind[0], ind[-1] + 2.0*width], [noise_lb, noise_lb],
-    #                 [noise_ub, noise_ub],
-    #                 facecolor='0.5', alpha=0.5, edgecolor='w')
-    # ax.bar(ind, scores_to_plot[0], width,
-    #        color='r', label='Syntax')
-    # ax.bar(ind + width, scores_to_plot[1], width,
-    #        color='b', label='Length')
-    # ax.legend(fontsize=legendfontsize)
-    # ax.set_ylabel('Kendall tau', fontsize=axislabelsize)
-    # ax.set_ylim([0.0, 0.8])
-    # ax.set_xticks(ind + width)
-    # ax.set_xticklabels(xticklabels_to_plot)
-    # ax.set_xlim([0.0, ind[-1] + 2.0*width])
-    # ax.set_xlabel('Correlation Type', fontsize=axislabelsize)
-    # ax.tick_params(labelsize=ticklabelsize)
-    #
-    # cond_fig.suptitle('Correlation Type Comparison', fontsize=suptitlesize)
-    # cond_fig.subplots_adjust(top=0.85)
-    # cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
-    #                                   word=word,
-    #                                   win_len=win_len,
-    #                                   ov=overlap,
-    #                                   dist=dist,
-    #                                   avgTm=doTimeAvg) + '.png', bbox_inches='tight')
-    #
-    # cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
-    #                                  word=word,
-    #                                  win_len=win_len,
-    #                                  ov=overlap,
-    #                                  dist=dist,
-    #                                  avgTm=doTimeAvg) + '.pdf', bbox_inches='tight')
+
+    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
+                                      word=word,
+                                      win_len=win_len,
+                                      ov=overlap,
+                                      dist=dist,
+                                      avgTm=doTimeAvg) + '.png', bbox_inches='tight')
+
+    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
+                                     word=word,
+                                     win_len=win_len,
+                                     ov=overlap,
+                                     dist=dist,
+                                     avgTm=doTimeAvg) + '.pdf', bbox_inches='tight')
 
     plt.show()
