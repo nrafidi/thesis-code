@@ -243,7 +243,7 @@ def score_rdms(val_rdms, test_rdms, corr_fn):
     return np.squeeze(scores), np.squeeze(pvals)
 
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.01, assume_independence=True):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=False):
     # Benjamini-Hochberg-Yekutieli
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
@@ -420,6 +420,8 @@ if __name__ == '__main__':
         bow_rep_scores, bow_rep_pvals = score_rdms(bow_rdm, total_avg_rdms, corr_fn)
         np.savez_compressed(bow_rep_file, scores=bow_rep_scores, pvals=bow_rep_pvals)
 
+    bow_bh_thresh = bhy_multiple_comparisons_procedure(bow_rep_pvals)
+
     hier_rep_file = SAVE_SCORES.format(exp=experiment,
                                       score_type='hier-rep-{}'.format(args.corr),
                                       word=word,
@@ -434,6 +436,8 @@ if __name__ == '__main__':
     else:
         hier_rep_scores, hier_rep_pvals = score_rdms(hier_rdm, total_avg_rdms, corr_fn)
         np.savez_compressed(hier_rep_file, scores=hier_rep_scores, pvals=hier_rep_pvals)
+
+    hier_bh_thresh = bhy_multiple_comparisons_procedure(hier_rep_pvals)
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='syn-rep-{}'.format(args.corr),
@@ -450,6 +454,8 @@ if __name__ == '__main__':
         syn_rep_scores, syn_rep_pvals = score_rdms(syn_rdm, total_avg_rdms, corr_fn)
         np.savez_compressed(syn_rep_file, scores=syn_rep_scores, pvals=syn_rep_pvals)
 
+    syn_bh_thresh = bhy_multiple_comparisons_procedure(syn_rep_pvals)
+
     plot_time = time + args.win_len * 0.002
 
     rep_fig, rep_ax = plt.subplots()
@@ -457,6 +463,15 @@ if __name__ == '__main__':
     rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
     rep_ax.plot(plot_time, bow_rep_scores, label='Bag of Words', color='b')
     rep_ax.plot(plot_time, hier_rep_scores, label='Hierarchical', color='g')
+
+    if args.corr == 'mantel':
+        common_pts = np.zeros((len(plot_time),))
+        for i_t, t in enumerate(plot_time):
+            if syn_rep_pvals[i_t] < syn_bh_thresh:
+                rep_ax.scatter(t, 0.65, color='r', marker='*')
+            if bow_rep_pvals[i_t] < bow_bh_thresh:
+                rep_ax.scatter(t, 0.7, color='b', marker='*')
+    # MEOW MEOW
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
