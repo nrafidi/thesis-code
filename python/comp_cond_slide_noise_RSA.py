@@ -49,6 +49,27 @@ LENGTH = {'active': {'third-last-full': {'verb': 'long',
           }
 
 
+NUM_LENGTH = {'active': {'third-last-full': {'verb': 5,
+                                         'det': 3},
+                     'second-last-full': {'det': 5,
+                                          'noun': 3},
+                     'last-full': {'noun': 5,
+                                   'verb': 3},
+                     'eos-full': {'noun': 5,
+                                  'verb': 3}
+                     },
+          'passive': {'third-last-full': {'help': 7,
+                                          'noun': 4},
+                      'second-last-full': {'det': 7,
+                                           'help': 4},
+                      'last-full': {'noun':7,
+                                    'verb': 4},
+                      'eos-full': {'noun': 7,
+                                   'verb': 4}
+                      }
+          }
+
+
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02
 
@@ -103,6 +124,15 @@ def make_model_rdm(labels):
                 rdm[i_lab, j_lab] = 0.0
             else:
                 rdm[i_lab, j_lab] = 1.0
+            rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
+    return rdm
+
+
+def make_num_rdm(labels):
+    rdm = np.empty((len(labels), len(labels)))
+    for i_lab, lab in enumerate(labels):
+        for j_lab in range(i_lab, len(labels)):
+            rdm[i_lab, j_lab] = np.abs(lab - labels[j_lab])
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
@@ -167,12 +197,14 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     pos_labels = [Length[lab] for lab in labels]
     pos_rdm = make_model_rdm(pos_labels)
     len_labels = [LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
+    num_labels = [NUM_LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
+    num_rdm = make_num_rdm(num_labels)
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
     voice_rdm = make_model_rdm(voice_labels)
     word_rdm = make_model_rdm(labels)
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
-           np.concatenate(subject_total_rdms, axis=0), word_rdm, voice_rdm, pos_rdm, syn_rdm, time
+           np.concatenate(subject_total_rdms, axis=0), word_rdm, voice_rdm, pos_rdm, syn_rdm, num_rdm, time
 
 
 # assuming draw x time x stim x stim
@@ -246,22 +278,22 @@ if __name__ == '__main__':
     doTimeAvg = args.doTimeAvg
     word = 'eos-full'
 
-    sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(experiment,
-                                                                                                              word,
-                                                                                                              win_len,
-                                                                                                              overlap,
-                                                                                                              dist,
-                                                                                                              doTimeAvg)
+    sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, num_rdm, time = load_all_rdms(experiment,
+                                                                                                                      word,
+                                                                                                                      win_len,
+                                                                                                                      overlap,
+                                                                                                                      dist,
+                                                                                                                      doTimeAvg)
 
-    syn_pos_scores, _ = ktau_rdms(pos_rdm, syn_rdm)
-    print('Correlation between Length and Syntax RDMs is: {}'.format(syn_pos_scores))
+    syn_num_scores, _ = ktau_rdms(num_rdm, syn_rdm)
+    print('Correlation between Length and Syntax RDMs is: {}'.format(syn_num_scores))
 
     rdm_fig = plt.figure(figsize=(12, 8))
     rdm_grid = AxesGrid(rdm_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True, aspect=True)
 
-    rdms_to_plot = [syn_rdm, pos_rdm]
+    rdms_to_plot = [syn_rdm, num_rdm]
     titles_to_plot = ['Syntax', 'Sentence Length']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
@@ -271,13 +303,13 @@ if __name__ == '__main__':
                 size=axislettersize, weight='bold')
     cbar = rdm_grid.cbar_axes[0].colorbar(im)
     rdm_fig.suptitle('RDM Comparison')
-    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
+    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-num',
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg) + '.png', bbox_inches='tight')
-    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-pos',
+    rdm_fig.savefig(SAVE_FIG.format(fig_type='rdm-comp-num',
                                     word=word,
                                     win_len=win_len,
                                     ov=overlap,
@@ -292,7 +324,7 @@ if __name__ == '__main__':
     num_time = test_rdms.shape[1]
 
     syn_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='syn-rep-cond-pos',
+                                           score_type='syn-rep-cond-num',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
@@ -302,22 +334,22 @@ if __name__ == '__main__':
         result = np.load(syn_rep_cond_file)
         syn_rep_cond_scores = result['scores']
     else:
-        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[pos_rdm])
+        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[num_rdm])
         np.savez_compressed(syn_rep_cond_file, scores=syn_rep_cond_scores)
 
-    pos_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='pos-rep-cond-syn',
+    num_rep_cond_file = SAVE_SCORES.format(exp=experiment,
+                                           score_type='num-rep-cond-syn',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
                                            dist=dist,
                                            avgTm=doTimeAvg)
-    if os.path.isfile(pos_rep_cond_file) and not force:
-        result = np.load(pos_rep_cond_file)
-        pos_rep_cond_scores = result['scores']
+    if os.path.isfile(num_rep_cond_file) and not force:
+        result = np.load(num_rep_cond_file)
+        num_rep_cond_scores = result['scores']
     else:
-        pos_rep_cond_scores = score_rdms(pos_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
-        np.savez_compressed(pos_rep_cond_file, scores=pos_rep_cond_scores)
+        num_rep_cond_scores = score_rdms(num_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
+        np.savez_compressed(num_rep_cond_file, scores=num_rep_cond_scores)
 
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
                                             score_type='noise-rep-lb',
@@ -357,19 +389,19 @@ if __name__ == '__main__':
 
     noise_ub = np.max(mean_noise_rep_ub + std_noise_rep_ub)
 
-    pos_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='pos-rep',
+    num_rep_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='num-rep',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvg)
-    if os.path.isfile(pos_rep_file) and not force:
-        result = np.load(pos_rep_file)
-        pos_rep_scores = result['scores']
+    if os.path.isfile(num_rep_file) and not force:
+        result = np.load(num_rep_file)
+        num_rep_scores = result['scores']
     else:
-        pos_rep_scores = score_rdms(pos_rdm, total_avg_rdms)
-        np.savez_compressed(pos_rep_file, scores=pos_rep_scores)
+        num_rep_scores = score_rdms(num_rdm, total_avg_rdms)
+        np.savez_compressed(num_rep_file, scores=num_rep_scores)
 
 
 
@@ -391,7 +423,7 @@ if __name__ == '__main__':
 
     xticklabels_to_plot = ['Full', 'Partial']
     scores_to_plot = [[np.max(syn_rep_scores), np.max(syn_rep_cond_scores)],
-                      [np.max(pos_rep_scores), np.max(pos_rep_cond_scores)]]
+                      [np.max(num_rep_scores), np.max(num_rep_cond_scores)]]
     cond_fig, ax = plt.subplots(figsize=(12, 8))
 
     ind = np.arange(len(xticklabels_to_plot))
@@ -415,14 +447,14 @@ if __name__ == '__main__':
 
     cond_fig.suptitle('Correlation Type Comparison', fontsize=suptitlesize)
     cond_fig.subplots_adjust(top=0.85)
-    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
+    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-num',
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg) + '.png', bbox_inches='tight')
 
-    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-pos',
+    cond_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-cond-comp-num',
                                      word=word,
                                      win_len=win_len,
                                      ov=overlap,
