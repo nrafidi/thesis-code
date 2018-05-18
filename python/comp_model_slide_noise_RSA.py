@@ -243,6 +243,40 @@ def score_rdms(val_rdms, test_rdms, corr_fn):
     return np.squeeze(scores), np.squeeze(pvals)
 
 
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.01, assume_independence=True):
+    # Benjamini-Hochberg-Yekutieli
+    # originally from Mariya Toneva
+    if len(uncorrected_pvalues.shape) == 1:
+        uncorrected_pvalues = np.reshape(uncorrected_pvalues, (1, -1))
+
+    # get ranks of all p-values in ascending order
+    sorting_inds = np.argsort(uncorrected_pvalues, axis=1)
+    ranks = sorting_inds + 1  # add 1 to make the ranks start at 1 instead of 0
+
+    # calculate critical values under arbitrary dependence
+    if assume_independence:
+        dependency_constant = 1.0
+    else:
+        dependency_constant = np.sum(1.0 / ranks)
+    critical_values = ranks * alpha / float(uncorrected_pvalues.shape[1] * dependency_constant)
+
+    # find largest pvalue that is <= than its critical value
+    sorted_pvalues = np.empty(uncorrected_pvalues.shape)
+    sorted_critical_values = np.empty(critical_values.shape)
+    for i in range(uncorrected_pvalues.shape[0]):
+        sorted_pvalues[i, :] = uncorrected_pvalues[i, sorting_inds[i, :]]
+        sorted_critical_values[i, :] = critical_values[i, sorting_inds[i, :]]
+    bh_thresh = np.zeros((sorted_pvalues.shape[0],))
+    for j in range(sorted_pvalues.shape[0]):
+        for i in range(sorted_pvalues.shape[1] - 1, -1, -1):  # start from the back
+            if sorted_pvalues[j, i] <= sorted_critical_values[j, i]:
+                bh_thresh[j] = sorted_pvalues[j, i]
+                print('threshold for row {} is: {}; critical value: {} (i: {})'.format(
+                    j, bh_thresh[j], sorted_critical_values[j, i], i))
+                break
+    return bh_thresh
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', default='PassAct3')
