@@ -254,6 +254,14 @@ if __name__ == '__main__':
     combo_grid[1].imshow(np.mean(sub_total_rdms[1:3, 5, ...], axis=0), interpolation='nearest')
     combo_grid[2].imshow(np.mean(sub_total_rdms[:3, 5, ...], axis=0), interpolation='nearest')
 
+    combo_fig = plt.figure(figsize=(18, 6))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 3),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, share_all=True)
+    combo_grid[0].imshow(val_rdms[0, 5, ...], interpolation='nearest')
+    combo_grid[1].imshow(test_rdms[0, 5, ...], interpolation='nearest')
+    combo_grid[2].imshow(total_avg_rdms[5, ...], interpolation='nearest')
+
     plt.show()
 
     num_sub = sub_total_rdms.shape[0]
