@@ -7,11 +7,11 @@ import time
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z']
 WORDS = ['eos-full']
-WIN_LENS = [2, 25, 50, 100]
+WIN_LENS = [100]
 OVERLAPS = [2]
 DRAWS = range(126)
 DISTS = ['cosine']
-DO_TME_AVGS = [False, True]
+DO_TME_AVGS = [False]
 
 JOB_NAME = '{dist}-{sub}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
