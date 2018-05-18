@@ -3,7 +3,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
-from scipy.spacial.distance import squareform, pdist
+from scipy.spatial.distance import squareform, pdist
 import os
 from scipy.stats import spearmanr, kendalltau
 import run_slide_noise_RSA
