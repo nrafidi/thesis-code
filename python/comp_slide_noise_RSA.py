@@ -48,6 +48,27 @@ LENGTH = {'active': {'third-last-full': {'verb': 'long',
           }
 
 
+NUM_LENGTH = {'active': {'third-last-full': {'verb': 5,
+                                         'det': 3},
+                     'second-last-full': {'det': 5,
+                                          'noun': 3},
+                     'last-full': {'noun': 5,
+                                   'verb': 3},
+                     'eos-full': {'noun': 5,
+                                  'verb': 3}
+                     },
+          'passive': {'third-last-full': {'help': 7,
+                                          'noun': 4},
+                      'second-last-full': {'det': 7,
+                                           'help': 4},
+                      'last-full': {'noun':7,
+                                    'verb': 4},
+                      'eos-full': {'noun': 7,
+                                   'verb': 4}
+                      }
+          }
+
+
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02
 
@@ -67,6 +88,15 @@ def make_model_rdm(labels):
                 rdm[i_lab, j_lab] = 0.0
             else:
                 rdm[i_lab, j_lab] = 1.0
+            rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
+    return rdm
+
+
+def make_num_rdm(labels):
+    rdm = np.empty((len(labels), len(labels)))
+    for i_lab, lab in enumerate(labels):
+        for j_lab in range(i_lab, len(labels)):
+            rdm[i_lab, j_lab] = np.abs(lab - labels[j_lab])
             rdm[j_lab, i_lab] = rdm[i_lab, j_lab]
     return rdm
 
@@ -131,12 +161,14 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     pos_labels = [POS[lab] for lab in labels]
     pos_rdm = make_model_rdm(pos_labels)
     len_labels = [LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
+    num_labels = [NUM_LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
+    num_rdm = make_num_rdm(num_labels)
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
     voice_rdm = make_model_rdm(voice_labels)
     word_rdm = make_model_rdm(labels)
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
-           np.concatenate(subject_total_rdms, axis=0), word_rdm, voice_rdm, pos_rdm, syn_rdm, time
+           np.concatenate(subject_total_rdms, axis=0), word_rdm, voice_rdm, pos_rdm, syn_rdm, num_rdm, time
 
 
 # assuming draw x time x stim x stim
@@ -195,12 +227,12 @@ if __name__ == '__main__':
     doTimeAvgs = ['T', 'F']
     word = 'eos-full'
 
-    sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(experiment,
-                                                                                                              word,
-                                                                                                              win_lens[0],
-                                                                                                              overlap,
-                                                                                                              dist,
-                                                                                                              doTimeAvgs[1])
+    sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, num_rdm, time = load_all_rdms(experiment,
+                                                                                                                      word,
+                                                                                                                      win_lens[0],
+                                                                                                                      overlap,
+                                                                                                                      dist,
+                                                                                                                      doTimeAvgs[1])
 
 
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
@@ -291,39 +323,39 @@ if __name__ == '__main__':
 
     plot_time = time + win_lens[0]*0.002
 
-    pos_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='pos-rep',
+    num_rep_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='num-rep',
                                         word=word,
                                         win_len=win_lens[0],
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvgs[1])
-    if os.path.isfile(pos_rep_file) and not force:
-        result = np.load(pos_rep_file)
-        pos_rep_scores = result['scores']
+    if os.path.isfile(num_rep_file) and not force:
+        result = np.load(num_rep_file)
+        num_rep_scores = result['scores']
     else:
-        pos_rep_scores = score_rdms(pos_rdm, total_avg_rdms)
-        np.savez_compressed(pos_rep_file, scores=pos_rep_scores)
+        num_rep_scores = score_rdms(num_rdm, total_avg_rdms)
+        np.savez_compressed(num_rep_file, scores=num_rep_scores)
 
-    pos_sub_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='pos-sub',
+    num_sub_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='num-sub',
                                         word=word,
                                         win_len=win_lens[0],
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvgs[1])
-    if os.path.isfile(pos_sub_file) and not force:
-        result = np.load(pos_sub_file)
-        pos_sub_scores = result['scores']
+    if os.path.isfile(num_sub_file) and not force:
+        result = np.load(num_sub_file)
+        num_sub_scores = result['scores']
     else:
-        pos_sub_scores = []
+        num_sub_scores = []
         for i_sub in range(num_sub):
-            sub_score = score_rdms(pos_rdm, np.squeeze(sub_total_rdms[i_sub, ...]))
-            pos_sub_scores.append(sub_score[None, ...])
-        pos_sub_scores = np.concatenate(pos_sub_scores, axis=0)
-        np.savez_compressed(pos_sub_file, scores=pos_sub_scores)
-    mean_pos = np.squeeze(np.mean(pos_sub_scores, axis=0))
-    std_pos = np.squeeze(np.std(pos_sub_scores, axis=0))
+            sub_score = score_rdms(num_rdm, np.squeeze(sub_total_rdms[i_sub, ...]))
+            num_sub_scores.append(sub_score[None, ...])
+        num_sub_scores = np.concatenate(num_sub_scores, axis=0)
+        np.savez_compressed(num_sub_file, scores=num_sub_scores)
+    mean_num = np.squeeze(np.mean(num_sub_scores, axis=0))
+    std_num = np.squeeze(np.std(num_sub_scores, axis=0))
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
                                         score_type='syn-rep',
@@ -369,8 +401,8 @@ if __name__ == '__main__':
     sub_ax.plot(plot_time, mean_syn, label='Syntax', color='r')
     sub_ax.fill_between(plot_time, mean_syn - std_syn, mean_syn + std_syn,
                     facecolor='r', alpha=0.5, edgecolor='w')
-    sub_ax.plot(plot_time, mean_pos, label='Length', color='b')
-    sub_ax.fill_between(plot_time, mean_pos - std_pos, mean_pos + std_pos,
+    sub_ax.plot(plot_time, mean_num, label='Length', color='b')
+    sub_ax.fill_between(plot_time, mean_num - std_num, mean_num + std_num,
                     facecolor='b', alpha=0.5, edgecolor='w')
 
     sub_ax.fill_between(plot_time, mean_noise_sub_lb - std_noise_sub_lb, mean_noise_sub_ub + std_noise_sub_ub,
@@ -385,7 +417,7 @@ if __name__ == '__main__':
     sub_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
     rep_ax.plot(plot_time, syn_rep_scores, label='Syntax', color='r')
-    rep_ax.plot(plot_time, pos_rep_scores, label='Length', color='b')
+    rep_ax.plot(plot_time, num_rep_scores, label='Length', color='b')
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
@@ -443,7 +475,7 @@ if __name__ == '__main__':
 
             if not os.path.isfile(noise_rep_lb_file) or not os.path.isfile(noise_rep_ub_file) or force:
 
-                sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, time = load_all_rdms(
+                sub_val_rdms, sub_test_rdms, sub_total_rdms, word_rdm, voice_rdm, pos_rdm, syn_rdm, num_rdm, time = load_all_rdms(
                     experiment,
                     word,
                     win,
