@@ -285,16 +285,16 @@ if __name__ == '__main__':
                                                                                                                       dist,
                                                                                                                       doTimeAvg)
 
-    syn_num_scores, _ = ktau_rdms(num_rdm, syn_rdm)
-    print('Correlation between Length and Syntax RDMs is: {}'.format(syn_num_scores))
+    voice_num_scores, _ = ktau_rdms(num_rdm, voice_rdm)
+    print('Correlation between Length and Voice RDMs is: {}'.format(voice_num_scores))
 
     rdm_fig = plt.figure(figsize=(12, 8))
     rdm_grid = AxesGrid(rdm_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True, aspect=True)
 
-    rdms_to_plot = [syn_rdm, num_rdm/np.max(num_rdm)]
-    titles_to_plot = ['Syntax', 'Sentence Length']
+    rdms_to_plot = [voice_rdm, num_rdm/np.max(num_rdm)]
+    titles_to_plot = ['Voice', 'Sentence Length']
 
     for i_rdm, rdm in enumerate(rdms_to_plot):
         im = rdm_grid[i_rdm].imshow(rdm, interpolation='nearest', vmin=0.0, vmax=1.0)
@@ -323,22 +323,22 @@ if __name__ == '__main__':
     print(num_sub)
     num_time = test_rdms.shape[1]
 
-    syn_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='syn-rep-cond-num',
+    voice_rep_cond_file = SAVE_SCORES.format(exp=experiment,
+                                           score_type='voice-rep-cond-num',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
                                            dist=dist,
                                            avgTm=doTimeAvg)
-    if os.path.isfile(syn_rep_cond_file) and not force:
-        result = np.load(syn_rep_cond_file)
-        syn_rep_cond_scores = result['scores']
+    if os.path.isfile(voice_rep_cond_file) and not force:
+        result = np.load(voice_rep_cond_file)
+        voice_rep_cond_scores = result['scores']
     else:
-        syn_rep_cond_scores = score_rdms(syn_rdm, total_avg_rdms, cond_rdms=[num_rdm])
-        np.savez_compressed(syn_rep_cond_file, scores=syn_rep_cond_scores)
+        voice_rep_cond_scores = score_rdms(voice_rdm, total_avg_rdms, cond_rdms=[num_rdm])
+        np.savez_compressed(voice_rep_cond_file, scores=voice_rep_cond_scores)
 
     num_rep_cond_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='num-rep-cond-syn',
+                                           score_type='num-rep-cond-voice',
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
@@ -348,7 +348,7 @@ if __name__ == '__main__':
         result = np.load(num_rep_cond_file)
         num_rep_cond_scores = result['scores']
     else:
-        num_rep_cond_scores = score_rdms(num_rdm, total_avg_rdms, cond_rdms=[syn_rdm])
+        num_rep_cond_scores = score_rdms(num_rdm, total_avg_rdms, cond_rdms=[voice_rdm])
         np.savez_compressed(num_rep_cond_file, scores=num_rep_cond_scores)
 
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
@@ -405,24 +405,24 @@ if __name__ == '__main__':
 
 
 
-    syn_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='syn-rep',
+    voice_rep_file = SAVE_SCORES.format(exp=experiment,
+                                        score_type='voice-rep',
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvg)
-    if os.path.isfile(syn_rep_file) and not force:
-        result = np.load(syn_rep_file)
-        syn_rep_scores = result['scores']
+    if os.path.isfile(voice_rep_file) and not force:
+        result = np.load(voice_rep_file)
+        voice_rep_scores = result['scores']
     else:
-        syn_rep_scores = score_rdms(syn_rdm, total_avg_rdms)
-        np.savez_compressed(syn_rep_file, scores=syn_rep_scores)
+        voice_rep_scores = score_rdms(voice_rdm, total_avg_rdms)
+        np.savez_compressed(voice_rep_file, scores=voice_rep_scores)
 
 
 
     xticklabels_to_plot = ['Full', 'Partial']
-    scores_to_plot = [[np.max(syn_rep_scores), np.max(syn_rep_cond_scores)],
+    scores_to_plot = [[np.max(voice_rep_scores), np.max(voice_rep_cond_scores)],
                       [np.max(num_rep_scores), np.max(num_rep_cond_scores)]]
     cond_fig, ax = plt.subplots(figsize=(12, 8))
 
@@ -433,7 +433,7 @@ if __name__ == '__main__':
                     [noise_ub, noise_ub],
                     facecolor='0.5', alpha=0.5, edgecolor='w')
     ax.bar(ind, scores_to_plot[0], width,
-           color='r', label='Syntax')
+           color='r', label='Voice')
     ax.bar(ind + width, scores_to_plot[1], width,
            color='b', label='Length')
     ax.legend(fontsize=legendfontsize)
