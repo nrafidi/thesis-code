@@ -198,7 +198,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
 
     bow_rdm = load_bow(experiment, dist)
-    hier_rdm = np.load(MODEL_PATH.format(experiment=experiment, model='hierarchical')).item()['rdm']
+    hier_rdm = np.load(MODEL_PATH.format(experiment=experiment.lower(), model='hierarchical')).item()['rdm']
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
            np.concatenate(subject_total_rdms, axis=0), syn_rdm, bow_rdm, hier_rdm, time
