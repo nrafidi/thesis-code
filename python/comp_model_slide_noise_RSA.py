@@ -312,8 +312,8 @@ if __name__ == '__main__':
         noise_corr_fn = ktau_rdms
         corr_fn = ktau_rdms
     else:
-        noise_corr_fn = partial(Mantel.test, perms=2)
-        corr_fn = partial(Mantel.test, tail='upper')
+        noise_corr_fn = partial(Mantel.test, method='spearman', perms=2)
+        corr_fn = partial(Mantel.test, method='spearman', tail='upper')
 
     sub_val_rdms, sub_test_rdms, sub_total_rdms, syn_rdm, bow_rdm, hier_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
