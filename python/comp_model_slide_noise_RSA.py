@@ -468,16 +468,17 @@ if __name__ == '__main__':
         common_pts = np.zeros((len(plot_time),))
         for i_t, t in enumerate(plot_time):
             if syn_rep_pvals[i_t] < syn_bh_thresh:
-                rep_ax.scatter(t, 0.65, color='r', marker='*')
+                rep_ax.scatter(t, 0.75, color='r', marker='*')
             if bow_rep_pvals[i_t] < bow_bh_thresh:
-                rep_ax.scatter(t, 0.7, color='b', marker='*')
-    # MEOW MEOW
+                rep_ax.scatter(t, 0.8, color='b', marker='*')
+            if hier_rep_pvals[i_t] < hier_bh_thresh:
+                rep_ax.scatter(t, 0.85, color='g', marker='*')
 
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
     rep_ax.legend(loc=1, fontsize=legendfontsize)
 
-    rep_ax.set_ylim([0.0, 0.8])
+    rep_ax.set_ylim([0.0, 0.9])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
 
