@@ -322,7 +322,8 @@ if __name__ == '__main__':
 
 
 
-    syn_bow_scores, _ = noise_corr_fn(bow_rdm, syn_rdm)
+    result = noise_corr_fn(bow_rdm, syn_rdm)
+    syn_bow_scores = result[0]
     print('Correlation between BoW and Syntax RDMs is: {}'.format(syn_bow_scores))
 
     syn_hier_scores, _ = noise_corr_fn(hier_rdm, syn_rdm)
