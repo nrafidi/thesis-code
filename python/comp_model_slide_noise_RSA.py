@@ -238,7 +238,9 @@ def score_rdms(val_rdms, test_rdms, corr_fn):
                 test = np.squeeze(test_rdms[i_time, ...])
             else:
                 test = test_rdms
-            scores[i_draw, i_time], pvals[i_draw, i_time] = corr_fn(val, test)
+            result = corr_fn(val, test)
+            scores[i_draw, i_time] = result[0]
+            pvals[i_draw, i_time] = result[1]
 
     return np.squeeze(scores), np.squeeze(pvals)
 
@@ -310,7 +312,7 @@ if __name__ == '__main__':
         noise_corr_fn = ktau_rdms
         corr_fn = ktau_rdms
     else:
-        noise_corr_fn = partial(Mantel.test, perms=1)
+        noise_corr_fn = partial(Mantel.test, perms=2)
         corr_fn = Mantel.test
 
     sub_val_rdms, sub_test_rdms, sub_total_rdms, syn_rdm, bow_rdm, hier_rdm, time = load_all_rdms(experiment,
@@ -326,10 +328,12 @@ if __name__ == '__main__':
     syn_bow_scores = result[0]
     print('Correlation between BoW and Syntax RDMs is: {}'.format(syn_bow_scores))
 
-    syn_hier_scores, _ = noise_corr_fn(hier_rdm, syn_rdm)
+    result = noise_corr_fn(hier_rdm, syn_rdm)
+    syn_hier_scores = result[0]
     print('Correlation between Hierarchical and Syntax RDMs is: {}'.format(syn_hier_scores))
 
-    hier_bow_scores, _ = noise_corr_fn(bow_rdm, hier_rdm)
+    result = noise_corr_fn(bow_rdm, hier_rdm)
+    hier_bow_scores = result[0]
     print('Correlation between BoW and Hierarchical RDMs is: {}'.format(hier_bow_scores))
 
 
