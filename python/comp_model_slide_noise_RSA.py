@@ -364,7 +364,7 @@ if __name__ == '__main__':
                                     ov=overlap,
                                     dist=dist,
                                     avgTm=doTimeAvg) + '.pdf', bbox_inches='tight')
-
+    plt.show()
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
     test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
     total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
