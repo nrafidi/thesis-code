@@ -26,7 +26,7 @@ def decorr_rdms(rdm1, rdm2, cond_rdms):
     return rdmX, rdmY
 
 
-def test(rdmX, rdmY, perms=10000, method='pearson', tail='upper', Zs=None):
+def test(rdmX, rdmY, perms=10000, method='pearson', tail='two-tail', Zs=None):
   """
   Takes two distance matrices (either redundant matrices or condensed vectors)
   and performs a Mantel test. The Mantel test is a significance test of the
