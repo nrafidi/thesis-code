@@ -75,6 +75,10 @@ NUM_LENGTH = {'active': {'third-last-full': {'verb': 5,
           }
 
 
+CONTENT_WORDS = {'active': [1, 2, 4],
+                 'passive': [1, 3, 6]}
+
+
 TEXT_PAD_X = -0.125
 TEXT_PAD_Y = 1.02
 
@@ -98,44 +102,6 @@ def partial_ktau_rdms(rdmX, rdmY, rdmZ):
 
     rdm_k_tau, rdm_k_tau_p = ktau_rdms(residual_X, residual_Y)
     return rdm_k_tau, rdm_k_tau_p, residual_X, residual_Y
-
-
-def load_bow(experiment, distance='cosine'):
-    model_embeddings = np.load('/share/volume0/RNNG/semantic_models/embeddings_dict.npz').item()['glove']
-    print(model_embeddings.keys())
-    from itertools import groupby
-    structured_stimuli = list()
-    for _, sentence_usis in groupby(
-            load_data.filtered_query(experiment, filter_sets=[[]])[0], lambda usi: usi[1]['sentence_id']):
-        structured_stimuli.append(list(sentence_usis))
-    structured_stimuli = sorted(
-        structured_stimuli, key=lambda usi_list: usi_list[0][1]['index_in_master_experiment_stimuli'])
-
-    sentence_vectors = list()
-    for usi_list in structured_stimuli:
-        index_first_noun = [i for q, i in zip(load_data.is_first_noun(usi_list), range(len(usi_list))) if q]
-        index_verb = [i for q, i in zip(load_data.is_first_non_to_be_verb(usi_list), range(len(usi_list))) if q]
-        index_second_noun = [i for q, i in zip(load_data.is_second_noun(usi_list), range(len(usi_list))) if q]
-        first_noun = \
-            usi_list[index_first_noun[0]][1]['stimulus'] if len(index_first_noun) > 0 else None
-        verb = \
-            usi_list[index_verb[0]][1]['stimulus'] if len(index_verb) > 0 else None
-        second_noun = \
-            usi_list[index_second_noun[0]][1]['stimulus'] if len(index_second_noun) > 0 else None
-        keys = [
-            load_data.punctuation_regex.sub('', key).lower() if key is not None else None
-            for key in [first_noun, verb, second_noun]]
-        sentence_vectors.append([model_embeddings[key] if key is not None else None for key in keys])
-
-    filled_vectors = list()
-    for current_vectors in sentence_vectors:
-        filled_vectors.append(np.mean([v for v in current_vectors if v is not None], axis=0))
-    vectors = np.array(filled_vectors)
-
-
-    model_rdm = squareform(pdist(vectors, metric=distance))
-    return model_rdm
-
 
 
 def make_syntax_rdm(len_labels, voice_labels):
@@ -205,9 +171,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
 
     bow_rdm = load_bow(experiment, dist)
-    bow_rdm = sort_and_filter_stimuli(experiment, bow_rdm)
     hier_rdm = np.load(MODEL_PATH.format(experiment=experiment.lower(), model='hierarchical')).item()['rdm']
-    hier_rdm = sort_and_filter_stimuli(experiment, hier_rdm)
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
            np.concatenate(subject_total_rdms, axis=0), syn_rdm, bow_rdm, hier_rdm, time
@@ -281,48 +245,23 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
     return bh_thresh
 
 
-def sort_and_filter_stimuli(experiment, rdm):
+def load_bow(experiment, distance='cosine'):
+    model_embeddings = np.load('/share/volume0/RNNG/semantic_models/embeddings_dict.npz').item()['glove']
 
-    orig_shape = rdm.shape
+    sentence_vectors = list()
 
-    if len(rdm.shape) < 3:
-        rdm = np.reshape(rdm, (1,) + rdm.shape)
-    else:
-        rdm = np.reshape(rdm, (np.prod(rdm.shape[:-2]),) + rdm.shape[-2:])
-
-    # split the stimuli by voice
-    indices_active = list()
-    indices_passive = list()
-    stimuli_active = list()
-    stimuli_passive = list()
-    index_stimulus = 0
     for stimulus_dict in load_data.read_stimuli(experiment):
         voice = stimulus_dict['voice']
-        if voice == 'active':
-            indices_active.append(index_stimulus)
-            stimuli_active.append(stimulus_dict['stimulus'])
-        elif voice == 'passive':
-            indices_passive.append(index_stimulus)
-            stimuli_passive.append(stimulus_dict['stimulus'])
-        else:
-            raise ValueError('Unrecognized voice: {}'.format(voice))
-        index_stimulus += 1
+        stimulus = stimulus_dict['stimulus'].split()
+        curr_vectors = list()
+        for w in CONTENT_WORDS[voice]:
+            if w < len(stimulus):
+                curr_vectors.append(model_embeddings[unicode(stimulus[w])][None, ...])
+        sentence_vectors.append(np.mean(np.concatenate(curr_vectors, axis=0), axis=0)[None, ...])
+    sentence_vectors = np.concatenate(sentence_vectors, axis=0)
 
-    if len(indices_active) + len(indices_passive) != rdm.shape[1]:
-        raise ValueError('Unexpected number of stimuli in rdm. Expected {}, got {}'.format(
-            len(indices_active) + len(indices_passive), rdm.shape[1]))
-
-
-    indices_to_use = np.array(indices_active + indices_passive)
-    stimuli_to_use = stimuli_active + stimuli_passive
-    # print(stimuli_to_use)
-
-    rdm = rdm[:, indices_to_use, :]
-    rdm = rdm[:, :, indices_to_use]
-
-    rdm = np.reshape(rdm, orig_shape[:-2] + (rdm.shape[-2], rdm.shape[-1]))
-
-    return rdm
+    model_rdm = squareform(pdist(sentence_vectors, metric=distance))
+    return model_rdm
 
 
 if __name__ == '__main__':
