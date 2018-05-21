@@ -110,7 +110,7 @@ def load_bow(experiment, distance='cosine'):
         structured_stimuli.append(list(sentence_usis))
     structured_stimuli = sorted(
         structured_stimuli, key=lambda usi_list: usi_list[0][1]['index_in_master_experiment_stimuli'])
-
+    print(structured_stimuli)
     sentence_vectors = list()
     for usi_list in structured_stimuli:
         index_first_noun = [i for q, i in zip(load_data.is_first_noun(usi_list), range(len(usi_list))) if q]
@@ -315,6 +315,7 @@ def sort_and_filter_stimuli(experiment, rdm):
 
     indices_to_use = np.array(indices_active + indices_passive)
     stimuli_to_use = stimuli_active + stimuli_passive
+    print(stimuli_to_use)
 
     rdm = rdm[:, indices_to_use, :]
     rdm = rdm[:, :, indices_to_use]
