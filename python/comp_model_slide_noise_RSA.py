@@ -480,7 +480,7 @@ if __name__ == '__main__':
     rep_ax.set_ylabel('Correlation', fontsize=axislabelsize)
     rep_ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
 
-
+    rep_fig.suptitle('RSA Model Comparison', fontsize=suptitlesize)
     rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
                                       word=word,
                                       win_len=win_len,
