@@ -170,7 +170,7 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     len_labels = [LENGTH[voice_lab][word][pos_labels[i_lab]] for i_lab, voice_lab in enumerate(voice_labels)]
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
 
-    bow_rdm = load_bow(experiment, dist)
+    bow_rdm = load_bow(experiment)
     hier_rdm = np.load(MODEL_PATH.format(experiment=experiment.lower(), model='hierarchical')).item()['rdm']
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
@@ -245,7 +245,7 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
     return bh_thresh
 
 
-def load_bow(experiment, distance='cosine'):
+def load_bow(experiment, distance='euclidean'):
     model_embeddings = np.load('/share/volume0/RNNG/semantic_models/embeddings_dict.npz').item()['glove']
 
     sentence_vectors = list()
