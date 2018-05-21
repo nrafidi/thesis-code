@@ -10,7 +10,7 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
 
 NEW_SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'nr{rep}_rsPerm{rsP}_{mode}'
+            'nr{rep}_rsPerm{rsP}_{fold}'
 
 
 def bool_to_str(bool_var):
