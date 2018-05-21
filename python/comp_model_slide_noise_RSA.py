@@ -294,9 +294,11 @@ if __name__ == '__main__':
     word = 'eos-full'
 
     if args.corr == 'ktau':
+        model_corr_fn = ktau_rdms
         noise_corr_fn = ktau_rdms
         corr_fn = ktau_rdms
     else:
+        model_corr_fn = Mantel.test
         noise_corr_fn = partial(Mantel.test, method=args.corr[7:], perms=2)
         corr_fn = partial(Mantel.test, method=args.corr[7:], tail='upper')
 
@@ -309,17 +311,20 @@ if __name__ == '__main__':
 
 
 
-    result = noise_corr_fn(bow_rdm, syn_rdm)
+    result = model_corr_fn(bow_rdm, syn_rdm)
     syn_bow_scores = result[0]
-    print('Correlation between BoW and Syntax RDMs is: {}'.format(syn_bow_scores))
+    syn_bow_pval = result[1]
+    print('Correlation between BoW and Syntax RDMs is: {}, pval: {}'.format(syn_bow_scores, syn_bow_pval))
 
-    result = noise_corr_fn(hier_rdm, syn_rdm)
+    result = model_corr_fn(hier_rdm, syn_rdm)
     syn_hier_scores = result[0]
-    print('Correlation between Hierarchical and Syntax RDMs is: {}'.format(syn_hier_scores))
+    syn_hier_pval = result[1]
+    print('Correlation between Hierarchical and Syntax RDMs is: {}, pval: {}'.format(syn_hier_scores, syn_hier_pval))
 
-    result = noise_corr_fn(bow_rdm, hier_rdm)
+    result = model_corr_fn(bow_rdm, hier_rdm)
     hier_bow_scores = result[0]
-    print('Correlation between BoW and Hierarchical RDMs is: {}'.format(hier_bow_scores))
+    hier_bow_pval = result[1]
+    print('Correlation between BoW and Hierarchical RDMs is: {}, pval: {}'.format(hier_bow_scores, hier_bow_pval))
 
 
     rdm_fig = plt.figure(figsize=(16, 8))
