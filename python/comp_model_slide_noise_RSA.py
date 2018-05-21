@@ -298,7 +298,7 @@ if __name__ == '__main__':
         noise_corr_fn = ktau_rdms
         corr_fn = ktau_rdms
     else:
-        model_corr_fn = Mantel.test
+        model_corr_fn = partial(Mantel.test, method=args.corr[7:])
         noise_corr_fn = partial(Mantel.test, method=args.corr[7:], perms=2)
         corr_fn = partial(Mantel.test, method=args.corr[7:], tail='upper')
 
