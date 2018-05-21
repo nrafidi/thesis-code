@@ -205,7 +205,9 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
     syn_rdm = make_syntax_rdm(len_labels, voice_labels)
 
     bow_rdm = load_bow(experiment, dist)
+    bow_rdm = sort_and_filter_stimuli(experiment, bow_rdm)
     hier_rdm = np.load(MODEL_PATH.format(experiment=experiment.lower(), model='hierarchical')).item()['rdm']
+    hier_rdm = sort_and_filter_stimuli(experiment, hier_rdm)
 
     return np.concatenate(subject_val_rdms, axis=0), np.concatenate(subject_test_rdms, axis=0), \
            np.concatenate(subject_total_rdms, axis=0), syn_rdm, bow_rdm, hier_rdm, time
@@ -277,6 +279,49 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
                     j, bh_thresh[j], sorted_critical_values[j, i], i))
                 break
     return bh_thresh
+
+
+def sort_and_filter_stimuli(experiment, rdm):
+
+    orig_shape = rdm.shape
+
+    if len(rdm.shape) < 3:
+        rdm = np.reshape(rdm, (1,) + rdm.shape)
+    else:
+        rdm = np.reshape(rdm, (np.prod(rdm.shape[:-2]),) + rdm.shape[-2:])
+
+    # split the stimuli by voice
+    indices_active = list()
+    indices_passive = list()
+    stimuli_active = list()
+    stimuli_passive = list()
+    index_stimulus = 0
+    for stimulus_dict in load_data.read_stimuli(experiment):
+        voice = stimulus_dict['voice']
+        if voice == 'active':
+            indices_active.append(index_stimulus)
+            stimuli_active.append(stimulus_dict['stimulus'])
+        elif voice == 'passive':
+            indices_passive.append(index_stimulus)
+            stimuli_passive.append(stimulus_dict['stimulus'])
+        else:
+            raise ValueError('Unrecognized voice: {}'.format(voice))
+        index_stimulus += 1
+
+    if len(indices_active) + len(indices_passive) != rdm.shape[1]:
+        raise ValueError('Unexpected number of stimuli in rdm. Expected {}, got {}'.format(
+            len(indices_active) + len(indices_passive), rdm.shape[1]))
+
+
+    indices_to_use = np.array(indices_active + indices_passive)
+    stimuli_to_use = stimuli_active + stimuli_passive
+
+    rdm = rdm[:, indices_to_use, :]
+    rdm = rdm[:, :, indices_to_use]
+
+    rdm = np.reshape(rdm, orig_shape[:-2] + (rdm.shape[-2], rdm.shape[-1]))
+
+    return rdm
 
 
 if __name__ == '__main__':
