@@ -1,6 +1,6 @@
 import itertools
 import os.path
-import batch_experiments as batch_exp
+import batch_experiments_fold as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 SAVE_DIR = '{top_dir}/{sub}/'
