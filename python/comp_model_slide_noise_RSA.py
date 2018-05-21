@@ -454,19 +454,21 @@ if __name__ == '__main__':
     rep_ax.plot(plot_time, bow_rep_scores, label='Bag of Words', color='b')
     rep_ax.plot(plot_time, hier_rep_scores, label='Hierarchical', color='g')
 
+    rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
+                        facecolor='0.5', alpha=0.5, edgecolor='w')
+
     if args.corr == 'mantel':
         common_pts = np.zeros((len(plot_time),))
         for i_t, t in enumerate(plot_time):
-            if syn_rep_pvals[i_t] <= syn_bh_thresh:
+            if syn_rep_pvals[i_t] < syn_bh_thresh:
                 rep_ax.scatter(t, 0.75, color='r', marker='*')
-            if bow_rep_pvals[i_t] <= bow_bh_thresh:
+            if bow_rep_pvals[i_t] < bow_bh_thresh:
                 rep_ax.scatter(t, 0.8, color='b', marker='*')
-            if hier_rep_pvals[i_t] <= hier_bh_thresh:
+            if hier_rep_pvals[i_t] < hier_bh_thresh:
                 rep_ax.scatter(t, 0.85, color='g', marker='*')
 
-    rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
-                        facecolor='0.5', alpha=0.5, edgecolor='w')
-    rep_ax.legend(loc=1, fontsize=legendfontsize)
+
+    # rep_ax.legend(loc=1, fontsize=legendfontsize)
 
     rep_ax.set_ylim([0.0, 1.0])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
