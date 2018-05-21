@@ -474,8 +474,11 @@ if __name__ == '__main__':
 
     rep_ax.legend(loc=7, fontsize=legendfontsize)
 
-    rep_ax.set_ylim([-0.1, 1.0])
+    rep_ax.set_ylim([-0.2, 1.0])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
+    rep_ax.axvline(x=0.3, color='k')
+    rep_ax.set_ylabel('Correlation', fontsize=axislabelsize)
+    rep_ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
 
 
     rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
