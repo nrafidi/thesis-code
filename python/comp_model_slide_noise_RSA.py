@@ -271,7 +271,7 @@ if __name__ == '__main__':
     parser.add_argument('--overlap', type=int, default=2)
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='F', choices=['T', 'F'])
-    parser.add_argument('--corr', default='ktau', choices=['ktau', 'mantel'])
+    parser.add_argument('--corr', default='ktau', choices=['ktau', 'mantel-pearson', 'mantel-spearman'])
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
@@ -297,8 +297,8 @@ if __name__ == '__main__':
         noise_corr_fn = ktau_rdms
         corr_fn = ktau_rdms
     else:
-        noise_corr_fn = partial(Mantel.test, method='spearman', perms=2)
-        corr_fn = partial(Mantel.test, method='spearman', tail='upper')
+        noise_corr_fn = partial(Mantel.test, method=args.corr[7:], perms=2)
+        corr_fn = partial(Mantel.test, method=args.corr[7:], tail='upper')
 
     sub_val_rdms, sub_test_rdms, sub_total_rdms, syn_rdm, bow_rdm, hier_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
@@ -457,20 +457,19 @@ if __name__ == '__main__':
     rep_ax.fill_between(plot_time, mean_noise_rep_lb - std_noise_rep_lb, mean_noise_rep_ub + std_noise_rep_ub,
                         facecolor='0.5', alpha=0.5, edgecolor='w')
 
-    if args.corr == 'mantel':
-        common_pts = np.zeros((len(plot_time),))
-        for i_t, t in enumerate(plot_time):
-            if syn_rep_pvals[i_t] < syn_bh_thresh:
-                rep_ax.scatter(t, 0.75, color='r', marker='*')
-            if bow_rep_pvals[i_t] < bow_bh_thresh:
-                rep_ax.scatter(t, 0.8, color='b', marker='*')
-            if hier_rep_pvals[i_t] < hier_bh_thresh:
-                rep_ax.scatter(t, 0.85, color='g', marker='*')
+
+    for i_t, t in enumerate(plot_time):
+        if syn_rep_pvals[i_t] < syn_bh_thresh:
+            rep_ax.scatter(t, 0.85, color='r', marker='*')
+        if bow_rep_pvals[i_t] < bow_bh_thresh:
+            rep_ax.scatter(t, 0.9, color='b', marker='*')
+        if hier_rep_pvals[i_t] < hier_bh_thresh:
+            rep_ax.scatter(t, 0.95, color='g', marker='*')
 
 
-    # rep_ax.legend(loc=1, fontsize=legendfontsize)
+    rep_ax.legend(loc=7, fontsize=legendfontsize)
 
-    rep_ax.set_ylim([0.0, 1.0])
+    rep_ax.set_ylim([-0.1, 1.0])
     rep_ax.set_xlim([np.min(plot_time), np.max(plot_time)])
 
 
