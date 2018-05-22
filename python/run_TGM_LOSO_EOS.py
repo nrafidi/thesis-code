@@ -147,7 +147,7 @@ def run_tgm_exp(experiment,
                 labels.append(curr_voice)
                 valid_inds.append(i_sen_int)
             elif word == 'senlen':
-                if len(word_list) > 5:
+                if len(word_list) >= 5:
                     labels.append('long')
                 else:
                     labels.append('short')
@@ -167,7 +167,7 @@ def run_tgm_exp(experiment,
 
     valid_inds = np.array(valid_inds)
     data = data[valid_inds, ...]
-    sen_ints = sen_ints[valid_inds]
+    sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
 
     print(valid_inds)
     print(data.shape)
