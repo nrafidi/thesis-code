@@ -32,7 +32,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=8GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},mode={mode},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force={force}, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos.sh'
 
     param_grid = itertools.product(MODES,
@@ -66,6 +66,10 @@ if __name__ == '__main__':
         sub = grid[12]
         word = grid[13]
 
+        if word == 'senlen':
+            force=True
+        else:
+            force=False
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
@@ -93,14 +97,13 @@ if __name__ == '__main__':
                                     tm_avg=tm_avg,
                                     tst_avg=tst_avg,
                                     mode=mode,
+                                    force=force,
                                     inst=ni,
                                     rs=rs,
                                     errfile=err_str,
                                     outfile=out_str)
 
-        run_call = word == 'senlen'
-        if run_call:
-            call(call_str, shell=True)
+        call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
