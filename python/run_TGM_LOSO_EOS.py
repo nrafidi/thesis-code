@@ -123,28 +123,56 @@ def run_tgm_exp(experiment,
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
         content_words = []
+        valid_inds = []
         for i_word_list, word_list in enumerate(all_words):
             curr_voice = all_voices[i_word_list]
-            content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
-                                  word_list[WORD_COLS[curr_voice]['patient']]])
+            if experiment == 'PassAct3':
+                if len(word_list) >= 5:
+                    valid_inds.append(i_word_list)
+                    content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
+                                          word_list[WORD_COLS[curr_voice]['patient']]])
+            else:
+                valid_inds.append(i_word_list)
+                content_words.append(
+                    [word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
+                     word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
-        # print(uni_content)
     else:
         labels = []
+        valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             curr_voice = stimuli_voice[sen_int]['voice']
             if word == 'voice':
                 labels.append(curr_voice)
+                valid_inds.append(i_sen_int)
             elif word == 'senlen':
                 if len(word_list) >= 5:
                     labels.append('long')
                 else:
                     labels.append('short')
+                valid_inds.append(i_sen_int)
+            elif word == 'agent' or word == 'patient':
+                if experiment == 'PassAct3':
+                    if len(word_list) >= 5:
+                        valid_inds.append(i_sen_int)
+                        labels.append(word_list[WORD_COLS[curr_voice][word]])
+                else:
+                    labels.append(word_list[WORD_COLS[curr_voice][word]])
+                    valid_inds.append(i_sen_int)
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
+                valid_inds.append(i_sen_int)
 
-    # print(labels)
+    valid_inds = np.array(valid_inds)
+    data = data[valid_inds, ...]
+    sen_ints = sen_ints[valid_inds]
+
+    print(valid_inds)
+    print(data.shape)
+    print(sen_ints)
+    print(labels)
+
     tmin = time.min()
     tmax = time.max()
 
