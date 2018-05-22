@@ -147,14 +147,15 @@ def run_tgm_exp(experiment,
                 labels.append(curr_voice)
                 valid_inds.append(i_sen_int)
             elif word == 'senlen':
-                if len(word_list) >= 5:
+                if len(word_list) > 5:
                     labels.append('long')
                 else:
                     labels.append('short')
                 valid_inds.append(i_sen_int)
             elif word == 'agent' or word == 'patient':
                 if experiment == 'PassAct3':
-                    if len(word_list) >= 5:
+                    if len(word_list) > 5:
+                        print(word_list)
                         valid_inds.append(i_sen_int)
                         labels.append(word_list[WORD_COLS[curr_voice][word]])
                 else:
