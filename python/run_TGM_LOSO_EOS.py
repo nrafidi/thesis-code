@@ -127,7 +127,7 @@ def run_tgm_exp(experiment,
         for i_word_list, word_list in enumerate(all_words):
             curr_voice = all_voices[i_word_list]
             if experiment == 'PassAct3':
-                if len(word_list) >= 5:
+                if len(word_list) > 5:
                     valid_inds.append(i_word_list)
                     content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                                           word_list[WORD_COLS[curr_voice]['patient']]])
@@ -137,6 +137,7 @@ def run_tgm_exp(experiment,
                     [word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                      word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
+        print(uni_content)
     else:
         labels = []
         valid_inds = []
@@ -147,7 +148,7 @@ def run_tgm_exp(experiment,
                 labels.append(curr_voice)
                 valid_inds.append(i_sen_int)
             elif word == 'senlen':
-                if len(word_list) >= 5:
+                if len(word_list) > 5:
                     labels.append('long')
                 else:
                     labels.append('short')
@@ -155,7 +156,6 @@ def run_tgm_exp(experiment,
             elif word == 'agent' or word == 'patient':
                 if experiment == 'PassAct3':
                     if len(word_list) > 5:
-                        print(word_list)
                         valid_inds.append(i_sen_int)
                         labels.append(word_list[WORD_COLS[curr_voice][word]])
                 else:
