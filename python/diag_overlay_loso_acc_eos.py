@@ -164,7 +164,11 @@ if __name__ == '__main__':
                 else:
                     # print('woof')
                     pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
-        pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
+        if args.experiment == 'PassAct3':
+            alpha=0.01
+        else:
+            alpha=0.05
+        pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=alpha, assume_independence=args.indep)
         for i_pt in range(num_time):
             if  pvals[i_pt]  <= pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
