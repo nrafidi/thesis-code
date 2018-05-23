@@ -178,14 +178,14 @@ if __name__ == '__main__':
     label_time = label_time[::time_step]
     label_time[np.abs(label_time) < 1e-15] = 0.0
     if args.experiment == 'krns2':
-        ax.axhline(y=0.125, color='k', linestyle='dashdot', label='chance, noun1')
-    ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance, words')
+        ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
+    ax.axhline(y=chance['agent'], color='k', linestyle='dashed', label='chance, words')
     if args.experiment == 'PassAct3':
-        ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice/length')
+        ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
     else:
-        ax.axhline(y=0.5, color='k', linestyle='dashdot', label='chance, voice')
+        ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
     if 'propid' in word_list:
-        ax.axhline(y=1.0/16.0, color='k', linestyle=':', label='chance, proposition')
+        ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
     ax.set_xticklabels(label_time)
     ax.axvline(x=max_line, color='k')
     ax.set_ylabel('Accuracy', fontsize=axislabelsize)
