@@ -86,14 +86,14 @@ if __name__ == '__main__':
                   'voice': 0.5,
                   'propid': 1.0/16.0}
     else:
-        word_list = ['voice', 'senlen', 'verb', 'noun1']
+        word_list = ['voice', 'senlen', 'verb', 'agent', 'patient', 'propid']
 
         chance = {'noun1': 0.25,
                   'verb': 0.25,
                   'agent': 0.25,
                   'patient': 0.25,
                   'voice': 0.5,
-                  'propid': 1.0 / 24.0,
+                  'propid': 1.0 / 8.0,
                   'senlen': 0.5}
 
     ticklabelsize = 14

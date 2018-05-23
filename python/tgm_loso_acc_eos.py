@@ -42,7 +42,9 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
           'PassAct3': {'pooled': {'noun1': 0.25,
                              'verb': 0.25,
                              'voice': 0.5,
-                              'propid': 1.0/24.0,
+                                  'agent': 0.25,
+                                  'patient': 0.25,
+                              'propid': 1.0/8.0,
                                   'senlen': 0.5},
                   'active': {'noun1': 0.25,
                              'verb': 0.25,
@@ -151,7 +153,7 @@ if __name__ == '__main__':
     if args.experiment == 'krns2':
         word_list = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
     else:
-        word_list = ['noun1', 'verb', 'voice', 'senlen']
+        word_list = word_list = ['voice', 'senlen', 'verb', 'agent', 'patient', 'propid']
     num_plots = len(word_list)/2
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
