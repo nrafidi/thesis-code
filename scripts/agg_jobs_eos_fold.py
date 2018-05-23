@@ -56,38 +56,38 @@ if __name__ == '__main__':
         top_dir = TOP_DIR.format(exp=exp)
         save_dir = SAVE_DIR.format(top_dir=top_dir, sub=sub)
         complete_job = SAVE_FILE.format(dir=save_dir,
-                                        sub=sub,
-                                        sen_type=sen,
-                                        word=word,
-                                        win_len=win_len,
-                                        ov=overlap,
-                                        perm=bool_to_str(isPerm),
-                                        alg=alg,
-                                        adj=adj,
-                                        avgTm=bool_to_str(tm_avg),
-                                        avgTst=bool_to_str(tst_avg),
-                                        inst=ni,
-                                        rsP=rs,
-                                        mode='acc')
+                                 sub=sub,
+                                 sen_type=sen,
+                                 word=word,
+                                 win_len=win_len,
+                                 ov=overlap,
+                                 perm=bool_to_str(isPerm),
+                                 alg=alg,
+                                 adj=adj,
+                                 avgTm=bool_to_str(tm_avg),
+                                 avgTst=bool_to_str(tst_avg),
+                                 inst=ni,
+                                 rsP=rs,
+                                 mode='acc')
         if os.path.isfile(complete_job + '.npz'):
             continue
         tgm_acc = []
         tgm_pred = []
         for fold in batch_exp.FOLDS:
             fname = NEW_SAVE_FILE.format(dir=save_dir,
-                                     sub=sub,
-                                     sen_type=sen,
-                                     word=word,
-                                     win_len=win_len,
-                                     ov=overlap,
-                                     perm=bool_to_str(isPerm),
-                                     alg=alg,
-                                     adj=adj,
-                                     avgTm=bool_to_str(tm_avg),
-                                     avgTst=bool_to_str(tst_avg),
-                                     inst=ni,
-                                     rsP=rs,
-                                     fold=fold)
+                                 sub=sub,
+                                 sen_type=sen,
+                                 word=word,
+                                 win_len=win_len,
+                                 ov=overlap,
+                                 perm=bool_to_str(isPerm),
+                                 alg=alg,
+                                 adj=adj,
+                                 avgTm=bool_to_str(tm_avg),
+                                 avgTst=bool_to_str(tst_avg),
+                                 inst=ni,
+                                 rsP=rs,
+                                 fold=fold)
 
             if not os.path.isfile(fname + '.npz'):
                 print('{} missing'.format(fname))
