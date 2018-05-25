@@ -166,7 +166,7 @@ if __name__ == '__main__':
             #     combo_grid[i_word].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
 
         cbar = combo_grid.cbar_axes[0].colorbar(im)
-        combo_fig.text(0.04, 0.275, 'Window Length (ms)', va='center',
+        combo_fig.text(0.04, 0.45, 'Window Length (ms)', va='center',
                        rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
         combo_fig.text(0.5, 0.04, 'Number of Instances', ha='center', fontsize=axislabelsize)
         combo_fig.suptitle('{sen} Post-Sentence Combined Scores'.format(sen=PLOT_TITLE_SEN[sen_type]),
