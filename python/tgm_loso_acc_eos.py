@@ -34,10 +34,18 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
                               'propid': 1.0/16.0},
                   'active': {'noun1': 0.25,
                              'verb': 0.25,
-                             'voice': 0.5},
+                             'voice': 0.5,
+                             'agent': 0.25,
+                             'patient': 0.25,
+                             'propid': 1.0 / 8.0
+                             },
                   'passive': {'noun1': 0.25,
                              'verb': 0.25,
-                             'voice': 0.5}
+                             'voice': 0.5,
+                              'agent': 0.25,
+                              'patient': 0.25,
+                              'propid': 1.0 / 8.0
+                              }
                     },
           'PassAct3': {'pooled': {'noun1': 0.25,
                              'verb': 0.25,
