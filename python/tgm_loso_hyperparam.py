@@ -273,7 +273,7 @@ if __name__ == '__main__':
             ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
             ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
             ax.tick_params(labelsize=ticklabelsize)
-            fig.subplots_adjust(top=0.85)
+            # fig.subplots_adjust(top=0.85)
             fig.savefig(fig_fname.format(exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=avgTime,
                                          avgTest=avgTest, perc=perc, fig_type='total-comb-max-score'),
                         bbox_inches='tight')

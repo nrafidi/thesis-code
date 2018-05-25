@@ -36,6 +36,13 @@ if __name__ == '__main__':
 
     sen_type_list = ['pooled', 'active', 'passive']
 
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     if args.avgTime == 'T':
         avg_time_str = 'Time Average'
     else:
@@ -151,16 +158,17 @@ if __name__ == '__main__':
             combo_grid[i_word].set_xticklabels(num_insts)
             combo_grid[i_word].set_yticks(range(len(win_lens)))
             combo_grid[i_word].set_yticklabels(np.array(win_lens).astype('float') * 2)
+            combo_grid[i_word].tick_params(labelsize=ticklabelsize)
             combo_grid[i_word].text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=combo_grid[i_word].transAxes,
-                                     size=20, weight='bold')
+                                     size=axislettersize, weight='bold')
             if i_word > 2:
-                combo_grid[i_word].set_xlabel('Number of Instances')
+                combo_grid[i_word].set_xlabel('Number of Instances', fontsize=axislabelsize)
             if i_word == 0 or i_word == 2 or i_word == 4:
-                combo_grid[i_word].set_ylabel('Window Length (ms)')
+                combo_grid[i_word].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
 
         cbar = combo_grid.cbar_axes[0].colorbar(im)
         combo_fig.suptitle('Post-Sentence Combined Scores',
-            fontsize=18)
+            fontsize=suptitlesize)
 
         combo_fig.savefig(fig_fname.format(
             exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -200,14 +208,15 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=9.0)
     plt.colorbar(h)
-    ax.set_title('Post-Sentence Total Combined Score',
-        fontsize=14)
+    fig.suptitle('Post-Sentence Total Combined Score',
+        fontsize=suptitlesize)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
     ax.set_yticks(range(len(win_lens)))
     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-    ax.set_xlabel('Number of Instances')
-    ax.set_ylabel('Window Length (ms)')
+    ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
+    ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
+    ax.tick_params(labelsize=ticklabelsize)
     # fig.tight_layout()
     plt.savefig(fig_fname.format(
         exp=args.experiment, sen_type='all', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
