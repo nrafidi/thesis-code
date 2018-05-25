@@ -59,11 +59,11 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=50)
+    parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=10)
+    parser.add_argument('--num_instances', type=int, default=5)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     time_adjust = args.win_len * 0.002
 
     sen_type_list = ['pooled', 'active', 'passive']
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(24, 8))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(24, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
@@ -193,14 +193,15 @@ if __name__ == '__main__':
         label_time = time[win_starts]
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
-        if args.experiment == 'krns2':
-            ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
+
         ax.axhline(y=chance['agent'], color='k', linestyle='dashed', label='chance, words')
-        if args.experiment == 'PassAct3':
-            ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
-        else:
-            ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
-        if 'propid' in word_list:
+        if sen_type == 'pooled':
+            if args.experiment == 'krns2':
+                ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
+            if args.experiment == 'PassAct3':
+                ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
+            else:
+                ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
             ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
         ax.set_xticklabels(label_time)
         ax.axvline(x=max_line, color='k')
