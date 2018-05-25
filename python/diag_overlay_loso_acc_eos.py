@@ -4,6 +4,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import run_TGM_LOSO_EOS
+import string
 import tgm_loso_acc_eos
 from scipy.stats import wilcoxon
 
@@ -14,6 +15,10 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'voice': 'Sentence Voice',
                    'propid': 'Proposition ID',
                    'senlen': 'Sentence Length'}
+
+PLOT_TITLE_SEN = {'active': 'Active Sentences',
+                  'passive': 'Passive Sentences',
+                  'pooled': 'All Sentences'}
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -56,7 +61,6 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--win_len', type=int, default=50)
     parser.add_argument('--overlap', type=int, default=12)
-    parser.add_argument('--sen_type', default='pooled', choices=['active', 'passive', 'pooled'])
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=10)
@@ -75,35 +79,6 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
-    sen_type = args.sen_type
-    if args.experiment == 'krns2':
-        word_list = ['verb', 'agent', 'patient']
-        if sen_type == 'pooled':
-            word_list.append('noun1')
-            word_list.append('voice')
-        if args.num_instances > 1:
-            word_list.append('propid')
-        chance = {'noun1': 0.125,
-                  'verb': 0.25,
-                  'agent': 0.25,
-                  'patient': 0.25,
-                  'voice': 0.5,
-                  'propid': 1.0/16.0}
-    else:
-        word_list = ['verb', 'agent', 'patient']
-        if args.num_instances > 1:
-            word_list.append('propid')
-        if sen_type == 'pooled':
-            word_list.append('voice')
-            word_list.append('senlen')
-        chance = {'noun1': 0.25,
-                  'verb': 0.25,
-                  'agent': 0.25,
-                  'patient': 0.25,
-                  'voice': 0.5,
-                  'propid': 1.0 / 8.0,
-                  'senlen': 0.5}
-
     ticklabelsize = 14
     legendfontsize = 16
     axislabelsize = 18
@@ -113,100 +88,136 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
-    sen_fig, ax = plt.subplots(figsize=(15, 12))
-    acc_diags = []
-    std_diags = []
-    frac_diags = []
-    time = []
-    win_starts = []
-    sub_word_diags = []
-    for word in word_list:
-        intersection, acc_all, word_time, word_win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
-                                                                                                    sen_type,
-                                                                                                    word,
-                                                                                                    win_len=args.win_len,
-                                                                                                    overlap=args.overlap,
-                                                                                                    alg=args.alg,
-                                                                                                    adj=args.adj,
-                                                                                                    num_instances=args.num_instances,
-                                                                                                    avgTime=args.avgTime,
-                                                                                                    avgTest=args.avgTest)
+    sen_type_list = ['pooled', 'active', 'passive']
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(24, 8))
+    for i_sen_type, sen_type in enumerate(sen_type_list):
+        if args.experiment == 'krns2':
+            word_list = ['verb', 'agent', 'patient']
+            if sen_type == 'pooled':
+                word_list.append('noun1')
+                word_list.append('voice')
+            if args.num_instances > 1:
+                word_list.append('propid')
+            chance = {'noun1': 0.125,
+                      'verb': 0.25,
+                      'agent': 0.25,
+                      'patient': 0.25,
+                      'voice': 0.5,
+                      'propid': 1.0/16.0}
+        else:
+            word_list = ['verb', 'agent', 'patient']
+            if args.num_instances > 1:
+                word_list.append('propid')
+            if sen_type == 'pooled':
+                word_list.append('voice')
+                word_list.append('senlen')
+            chance = {'noun1': 0.25,
+                      'verb': 0.25,
+                      'agent': 0.25,
+                      'patient': 0.25,
+                      'voice': 0.5,
+                      'propid': 1.0 / 8.0,
+                      'senlen': 0.5}
 
-        frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
-        acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
-        std_diags.append(np.diag(np.std(acc_all, axis=0))/float(acc_all.shape[0]))
-        num_sub = acc_all.shape[0]
-        sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
-        sub_word_diags.append(sub_diags[None, :])
+
+
+        # sen_fig, ax = plt.subplots(figsize=(15, 12))
+        ax = sen_axs[i_sen_type]
+        acc_diags = []
+        std_diags = []
+        frac_diags = []
+        time = []
+        win_starts = []
+        sub_word_diags = []
+        for i_word, word in enumerate(word_list):
+            intersection, acc_all, word_time, word_win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
+                                                                                                        sen_type,
+                                                                                                        word,
+                                                                                                        win_len=args.win_len,
+                                                                                                        overlap=args.overlap,
+                                                                                                        alg=args.alg,
+                                                                                                        adj=args.adj,
+                                                                                                        num_instances=args.num_instances,
+                                                                                                        avgTime=args.avgTime,
+                                                                                                        avgTest=args.avgTest)
+
+            frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
+            acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
+            std_diags.append(np.diag(np.std(acc_all, axis=0))/float(acc_all.shape[0]))
+            num_sub = acc_all.shape[0]
+            sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
+            sub_word_diags.append(sub_diags[None, :])
 
 
 
-        if word == 'voice':
-            time = word_time
-            win_starts = word_win_starts
+            if i_word == 0:
+                time = word_time
+                win_starts = word_win_starts
 
-    sub_word_diags = np.concatenate(sub_word_diags, axis=0)
-    num_time = len(win_starts)
-    max_line = 0.3 * 2 * time_step
-    colors = ['b', 'm', 'g', 'r', 'c', 'k']
+        sub_word_diags = np.concatenate(sub_word_diags, axis=0)
+        num_time = len(win_starts)
+        max_line = 0.3 * 2 * time_step
+        colors = ['b', 'm', 'g', 'r', 'c', 'k']
 
-    for i_word, word in enumerate(word_list):
-        color = colors[i_word]
-        acc = acc_diags[i_word]
-        std = std_diags[i_word]
-        frac = frac_diags[i_word]
+        for i_word, word in enumerate(word_list):
+            color = colors[i_word]
+            acc = acc_diags[i_word]
+            std = std_diags[i_word]
+            frac = frac_diags[i_word]
 
-        ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
-        ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
-                        alpha=0.3)
-        pvals = np.empty((num_time,))
-        for i_pt in range(num_time):
-            if args.sig_test == 'binomial':
-                num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
-                pvals[i_pt] = 0.5**num_above_chance
-            else:
-                _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-                if acc[i_pt] > chance[word]:
-                    # print('meow')
-                    pvals[i_pt] /= 2.0
+            ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
+            ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
+                            alpha=0.3)
+            pvals = np.empty((num_time,))
+            for i_pt in range(num_time):
+                if args.sig_test == 'binomial':
+                    num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+                    pvals[i_pt] = 0.5**num_above_chance
                 else:
-                    # print('woof')
-                    pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
-        # if args.experiment == 'PassAct3':
-        #     alpha=0.01
-        # else:
-        #     alpha=0.05
-        pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
-        for i_pt in range(num_time):
-            if  pvals[i_pt]  <= pval_thresh:
-                ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
-    win_starts = np.array(win_starts)
-    ax.set_xticks(range(0, len(time[win_starts]), time_step))
-    label_time = time[win_starts]
-    label_time = label_time[::time_step]
-    label_time[np.abs(label_time) < 1e-15] = 0.0
-    if args.experiment == 'krns2':
-        ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
-    ax.axhline(y=chance['agent'], color='k', linestyle='dashed', label='chance, words')
-    if args.experiment == 'PassAct3':
-        ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
-    else:
-        ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
-    if 'propid' in word_list:
-        ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
-    ax.set_xticklabels(label_time)
-    ax.axvline(x=max_line, color='k')
-    ax.set_ylabel('Accuracy', fontsize=axislabelsize)
-    ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
-    ax.set_ylim([0.0, 1.0])
-    ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
-    ax.tick_params(labelsize=ticklabelsize)
-    ax.legend(bbox_to_anchor=(0.75, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+                    if acc[i_pt] > chance[word]:
+                        # print('meow')
+                        pvals[i_pt] /= 2.0
+                    else:
+                        # print('woof')
+                        pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
+            # if args.experiment == 'PassAct3':
+            #     alpha=0.01
+            # else:
+            #     alpha=0.05
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
+            for i_pt in range(num_time):
+                if  pvals[i_pt]  <= pval_thresh:
+                    ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
+        ax.set_xticks(range(0, len(time[win_starts]), time_step))
+        label_time = time[win_starts]
+        label_time = label_time[::time_step]
+        label_time[np.abs(label_time) < 1e-15] = 0.0
+        if args.experiment == 'krns2':
+            ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
+        ax.axhline(y=chance['agent'], color='k', linestyle='dashed', label='chance, words')
+        if args.experiment == 'PassAct3':
+            ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
+        else:
+            ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
+        if 'propid' in word_list:
+            ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
+        ax.set_xticklabels(label_time)
+        ax.axvline(x=max_line, color='k')
+        ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+        ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
+        ax.set_ylim([0.0, 1.0])
+        ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
+        ax.tick_params(labelsize=ticklabelsize)
+        ax.legend(bbox_to_anchor=(0.75, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+        ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
+        ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
 
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
-            exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
             num_instances=args.num_instances,
@@ -215,7 +226,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
-            exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
             num_instances=args.num_instances,
