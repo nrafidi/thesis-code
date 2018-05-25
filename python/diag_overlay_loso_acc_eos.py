@@ -77,11 +77,12 @@ if __name__ == '__main__':
 
     sen_type = args.sen_type
     if args.experiment == 'krns2':
-        word_list = ['verb', 'agent', 'patient', 'noun1']
+        word_list = ['verb', 'agent', 'patient']
+        if sen_type == 'pooled':
+            word_list.append('noun1')
+            word_list.append('voice')
         if args.num_instances > 1:
             word_list.append('propid')
-        if sen_type == 'pooled':
-            word_list.append('voice')
         chance = {'noun1': 0.125,
                   'verb': 0.25,
                   'agent': 0.25,
