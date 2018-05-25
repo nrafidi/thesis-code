@@ -188,7 +188,7 @@ if __name__ == '__main__':
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
             for i_pt in range(num_time):
                 if  pvals[i_pt]  <= pval_thresh:
-                    ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
+                    ax.scatter(i_pt, 0.98 - float(i_word)*0.02, color=color, marker='*')
         ax.set_xticks(range(0, len(time[win_starts]), time_step))
         label_time = time[win_starts]
         label_time = label_time[::time_step]
@@ -213,7 +213,7 @@ if __name__ == '__main__':
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(0.6, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+            ax.legend(bbox_to_anchor=(0.6, 0.8), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
