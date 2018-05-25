@@ -55,7 +55,7 @@ if __name__ == '__main__':
         print(sen_type)
         sen_combo_scores = []
         if sen_type == 'pooled':
-            word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
+            word_list = ['verb', 'agent', 'patient', 'voice', 'propid']
             num_plots = 3
         else:
             word_list = ['verb', 'agent', 'patient']
@@ -102,34 +102,34 @@ if __name__ == '__main__':
             frac_sub_eos = np.concatenate(frac_sub_eos, axis=0)
             mean_max_eos = np.concatenate(mean_max_eos, axis=0)
 
-            fig = plt.figure(figsize=(12, 12))
-            grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
-                            axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.5)
-
-            mats_to_plot = [frac_sub_eos, mean_max_eos]
-            titles = ['Fraction Subjects > Chance', 'Max Accuracy']
-            for i_ax, ax in enumerate(grid):
-                im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=chance,
-                               vmax=1.0)
-                ax.set_title(titles[i_ax])
-                ax.set_xticks(range(len(num_insts)))
-                ax.set_xticklabels(num_insts)
-                ax.set_yticks(range(len(win_lens)))
-                ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
-                        size=20, weight='bold')
-                ax.set_xlabel('Number of Instances')
-                if i_ax == 0:
-                    ax.set_ylabel('Window Length (ms)')
-            cbar = grid.cbar_axes[0].colorbar(im)
-            fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence'.format(
-                word=PLOT_TITLE_WORD[word]),
-                         fontsize=18)
-            # fig.tight_layout()
-            fig.savefig(fig_fname.format(
-                exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest, fig_type='single-mean-score-comp'
-            ), bbox_inches='tight')
+            # fig = plt.figure(figsize=(12, 12))
+            # grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+            #                 axes_pad=0.7, cbar_mode='single', cbar_location='right',
+            #                 cbar_pad=0.5)
+            #
+            # mats_to_plot = [frac_sub_eos, mean_max_eos]
+            # titles = ['Fraction Subjects > Chance', 'Max Accuracy']
+            # for i_ax, ax in enumerate(grid):
+            #     im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=chance,
+            #                    vmax=1.0)
+            #     ax.set_title(titles[i_ax])
+            #     ax.set_xticks(range(len(num_insts)))
+            #     ax.set_xticklabels(num_insts)
+            #     ax.set_yticks(range(len(win_lens)))
+            #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+            #     ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+            #             size=20, weight='bold')
+            #     ax.set_xlabel('Number of Instances')
+            #     if i_ax == 0:
+            #         ax.set_ylabel('Window Length (ms)')
+            # cbar = grid.cbar_axes[0].colorbar(im)
+            # fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence'.format(
+            #     word=PLOT_TITLE_WORD[word]),
+            #              fontsize=18)
+            # # fig.tight_layout()
+            # fig.savefig(fig_fname.format(
+            #     exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest, fig_type='single-mean-score-comp'
+            # ), bbox_inches='tight')
 
             z_frac_eos = zscore(frac_sub_eos)
             z_frac_eos[np.isnan(z_frac_eos)] = 0.0
