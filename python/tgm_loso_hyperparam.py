@@ -181,46 +181,46 @@ if __name__ == '__main__':
 
                     mean_perc_tot = np.concatenate(mean_perc_tot, axis=0)
 
-                    fig = plt.figure(figsize=(12, 12))
-                    grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
-                                    axes_pad=1.0, cbar_mode='single', cbar_location='right',
-                                    cbar_pad=0.5)
-
-                    mats_to_plot = [frac_sub_tot, mean_max_tot]
-                    titles = ['Fraction\nSubjects > Chance',
-                              'Max Accuracy']
-                    for i_ax, ax in enumerate(grid):
-                        im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
-                                           vmax=1.0)
-                        ax.set_title(titles[i_ax], fontsize=axistitlesize)
-                        ax.set_xticks(range(len(num_insts)))
-                        ax.set_xticklabels(num_insts)
-                        ax.set_yticks(range(len(win_lens)))
-                        ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-                        ax.tick_params(labelsize=ticklabelsize)
-                        ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
-                                            size=axislettersize, weight='bold')
-
-                        ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
-                        if i_ax == 0 or i_ax == 2:
-                            ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
-                    cbar = grid.cbar_axes[0].colorbar(im)
-                    fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
-                                                                                             word=PLOT_TITLE_WORD[word],
-                                                                                             avgTime=avg_time_str,
-                                                                                             avgTest=avg_test_str),
-                                 fontsize=suptitlesize)
-                    fig.subplots_adjust(top=0.85)
-                    fig.savefig(fig_fname.format(
-                                exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
-                                perc=perc, fig_type='single-mean-score-comp'
-                            ), bbox_inches='tight')
+                    # fig = plt.figure(figsize=(12, 12))
+                    # grid = AxesGrid(fig, 111, nrows_ncols=(1, 2),
+                    #                 axes_pad=1.0, cbar_mode='single', cbar_location='right',
+                    #                 cbar_pad=0.5)
+                    #
+                    # mats_to_plot = [frac_sub_tot, mean_max_tot]
+                    # titles = ['Fraction\nSubjects > Chance',
+                    #           'Max Accuracy']
+                    # for i_ax, ax in enumerate(grid):
+                    #     im = ax.imshow(mats_to_plot[i_ax], interpolation='nearest', aspect='auto', vmin=0.25,
+                    #                        vmax=1.0)
+                    #     ax.set_title(titles[i_ax], fontsize=axistitlesize)
+                    #     ax.set_xticks(range(len(num_insts)))
+                    #     ax.set_xticklabels(num_insts)
+                    #     ax.set_yticks(range(len(win_lens)))
+                    #     ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+                    #     ax.tick_params(labelsize=ticklabelsize)
+                    #     ax.text(-0.15, 1.05, string.ascii_uppercase[i_ax], transform=ax.transAxes,
+                    #                         size=axislettersize, weight='bold')
+                    #
+                    #     ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
+                    #     if i_ax == 0 or i_ax == 2:
+                    #         ax.set_ylabel('Window Length (ms)', fontsize=axislabelsize)
+                    # cbar = grid.cbar_axes[0].colorbar(im)
+                    # fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} from {sen}, {avgTime}, {avgTest}'.format(sen = PLOT_TITLE_SEN[sen_type],
+                    #                                                                          word=PLOT_TITLE_WORD[word],
+                    #                                                                          avgTime=avg_time_str,
+                    #                                                                          avgTest=avg_test_str),
+                    #              fontsize=suptitlesize)
+                    # fig.subplots_adjust(top=0.85)
+                    # fig.savefig(fig_fname.format(
+                    #             exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=avgTime, avgTest=avgTest,
+                    #             perc=perc, fig_type='single-mean-score-comp'
+                    #         ), bbox_inches='tight')
 
                     z_frac = frac_sub_tot - 0.5
                     z_frac /= np.max(z_frac)
-                    z_frac_eos = frac_sub_eos - chance
-                    z_frac_eos /= z_frac_eos
-                    all_combined_z = (z_frac + zscore(mean_max_tot))/2.0
+                    z_max = mean_max_tot - chance
+                    z_max /= np.max(z_max)
+                    all_combined_z = (z_frac + z_max)/2.0
                     optimal = np.unravel_index(np.argmax(all_combined_z), all_combined_z.shape)
                     # all_combined_z = zscore(all_combined)
                     combo_scores.append(all_combined_z[None, ...])
@@ -231,7 +231,7 @@ if __name__ == '__main__':
                             ni=num_insts[optimal[1]],
                             score=np.max(all_combined_z)))
 
-                    im = combo_grid[i_combo].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+                    im = combo_grid[i_combo].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                         word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
@@ -262,7 +262,7 @@ if __name__ == '__main__':
             optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
             fig, ax = plt.subplots()
-            avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
+            avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=6.0)
 
             fig.suptitle('Total Combined Scores',
                          fontsize=suptitlesize)
