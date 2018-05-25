@@ -56,7 +56,7 @@ if __name__ == '__main__':
         if sen_type == 'pooled':
             word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
         else:
-            word_list = ['verb', 'agent', 'patient', 'propid']
+            word_list = ['verb', 'agent', 'patient']
 
         combo_fig = plt.figure(figsize=(12, 12))
         combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, len(word_list)/2),
