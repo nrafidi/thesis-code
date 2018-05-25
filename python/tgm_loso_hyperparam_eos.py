@@ -134,7 +134,7 @@ if __name__ == '__main__':
             z_frac_eos = frac_sub_eos - 0.5
             z_frac_eos /= np.max(z_frac_eos)
 
-            z_max_eos = z_max_eos - chance[word]
+            z_max_eos = mean_max_eos - chance[word]
             z_max_eos /= np.max(z_max_eos)
             all_combined_z = (z_frac_eos + z_max_eos) / 2.0
             # print(np.any(np.isnan(all_combined)))
