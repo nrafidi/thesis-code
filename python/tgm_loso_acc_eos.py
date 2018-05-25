@@ -185,11 +185,11 @@ if __name__ == '__main__':
 
         frac_sub = np.diag(intersection).astype('float')/float(acc_all.shape[0])
         mean_acc = np.mean(acc_all, axis=0)
-        mean_acc -= chance
-        if np.all(mean_acc <= 0.0):
-            mean_acc = np.zeros(mean_acc.shape)
-        else:
-            mean_acc /= np.max(mean_acc)
+        # mean_acc -= chance
+        # if np.all(mean_acc <= 0.0):
+        #     mean_acc = np.zeros(mean_acc.shape)
+        # else:
+        #     mean_acc /= np.max(mean_acc)
 
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
