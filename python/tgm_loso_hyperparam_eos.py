@@ -55,8 +55,8 @@ if __name__ == '__main__':
         print(sen_type)
         sen_combo_scores = []
         if sen_type == 'pooled':
-            word_list = ['verb', 'agent', 'patient', 'propid']
-            num_plots = 2
+            word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
+            num_plots = 3
         else:
             word_list = ['verb', 'agent', 'patient']
             num_plots = 2
@@ -131,19 +131,20 @@ if __name__ == '__main__':
             #     exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest, fig_type='single-mean-score-comp'
             # ), bbox_inches='tight')
 
-            z_frac_eos = zscore(frac_sub_eos)
-            z_frac_eos[np.isnan(z_frac_eos)] = 0.0
-            z_max_eos = zscore(mean_max_eos)
-            z_max_eos[np.isnan(z_max_eos)] = 0.0
-            all_combined = (z_frac_eos + z_max_eos) / 2.0
-            print(np.any(np.isnan(all_combined)))
-            all_combined_z = zscore(all_combined)
-            print(np.any(np.isnan(all_combined_z)))
-            all_combined_z[np.isnan(all_combined_z)] = 0.0
+            z_frac_eos = frac_sub_eos - 0.5
+            z_frac_eos /= np.max(z_frac_eos)
+
+            z_max_eos = z_max_eos - chance[word]
+            z_max_eos /= np.max(z_max_eos)
+            all_combined_z = (z_frac_eos + z_max_eos) / 2.0
+            # print(np.any(np.isnan(all_combined)))
+            # all_combined_z = zscore(all_combined)
+            # print(np.any(np.isnan(all_combined_z)))
+            # all_combined_z[np.isnan(all_combined_z)] = 0.0
             combo_scores.append(all_combined_z[None, ...])
             sen_combo_scores.append(all_combined_z[None, ...])
 
-            im = combo_grid[i_word].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+            im = combo_grid[i_word].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
             combo_grid[i_word].set_title('Decoding {word}\nfrom {sen}'.format(sen=PLOT_TITLE_SEN[sen_type],
                                                                                word=PLOT_TITLE_WORD[word]))
             combo_grid[i_word].set_xticks(range(len(num_insts)))
