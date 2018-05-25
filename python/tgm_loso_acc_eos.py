@@ -192,7 +192,7 @@ if __name__ == '__main__':
         #     mean_acc /= np.max(mean_acc)
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.5*chance)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.0)
 
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
