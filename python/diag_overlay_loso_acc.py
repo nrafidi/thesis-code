@@ -288,7 +288,7 @@ if __name__ == '__main__':
                         plot_pt = i_pt - 2*time_step
                     else:
                         plot_pt = i_pt
-                    ax.scatter(plot_pt, 0.72 + 0.02*i_word, color=color, marker='*')
+                    ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
 
 
         min_time = -0.5
@@ -307,7 +307,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 1.0])
         ax.set_xlim([start_line, max_line + time_step*5])
         if i_sen == 1:
-            ax.legend(loc=2, bbox_to_anchor=(0.64, 1.02), fontsize=legendfontsize)
+            ax.legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
