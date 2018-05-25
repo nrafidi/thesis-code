@@ -144,7 +144,7 @@ if __name__ == '__main__':
             combo_scores.append(all_combined_z[None, ...])
             sen_combo_scores.append(all_combined_z[None, ...])
 
-            im = combo_grid[i_word].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+            im = combo_grid[i_word].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
             combo_grid[i_word].set_title('Decoding {word}\nfrom {sen}'.format(sen=PLOT_TITLE_SEN[sen_type],
                                                                                word=PLOT_TITLE_WORD[word]))
             combo_grid[i_word].set_xticks(range(len(num_insts)))
@@ -171,7 +171,7 @@ if __name__ == '__main__':
         optimal = np.unravel_index(np.argmax(all_combined_sen), all_combined_sen.shape)
 
         fig, ax = plt.subplots()
-        h = ax.imshow(all_combined_sen, interpolation='nearest', vmin=-7.0, vmax=7.0)
+        h = ax.imshow(all_combined_sen, interpolation='nearest', vmin=0.0, vmax=float(len(word_list)))
         plt.colorbar(h)
         ax.set_title('{sen} Total Combined Score'.format(sen=PLOT_TITLE_SEN[sen_type]),
                      fontsize=14)
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
-    h = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
+    h = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=9.0)
     plt.colorbar(h)
     ax.set_title('Post-Sentence Total Combined Score',
         fontsize=14)
