@@ -55,11 +55,13 @@ if __name__ == '__main__':
         print(sen_type)
         if sen_type == 'pooled':
             word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
+            num_plots = 3
         else:
             word_list = ['verb', 'agent', 'patient']
+            num_plots = 2
 
         combo_fig = plt.figure(figsize=(12, 12))
-        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, int(round(len(word_list)/2))),
+        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                               axes_pad=0.7, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.5)
         for i_word, word in enumerate(word_list):
