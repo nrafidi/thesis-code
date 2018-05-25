@@ -212,6 +212,16 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('Voice task only valid if sen_type == pooled')
+    if args.word == 'noun1':
+        is_valid = args.sen_type == 'pooled'
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('Noun1 task only valid if sen_type == pooled')
+    if args.fold > 15:
+        is_valid = args.sen_type == 'pooled'
+        total_valid = total_valid and is_valid
+        if not is_valid:
+            print('Incorrect number of folds')
 
     if total_valid:
         run_tgm_exp(experiment=args.experiment,

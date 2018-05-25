@@ -18,18 +18,18 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(16)
-EXPERIMENTS = ['krns2']#, 'PassAct3']
-SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] #['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N']
+EXPERIMENTS = ['PassAct3']
+SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'] #['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['verb', 'agent', 'patient', 'propid']
-WIN_LENS = [12, 25, 50, 100]
+WIN_LENS = [50]
 OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
 DO_TME_AVGS = [False]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [2, 5, 10]
+NUM_INSTANCESS = [10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
