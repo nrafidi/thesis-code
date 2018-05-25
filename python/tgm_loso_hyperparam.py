@@ -263,7 +263,7 @@ if __name__ == '__main__':
 
             fig, ax = plt.subplots()
             avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=6.0)
-
+            plt.colorbar(avg_im, ax=ax)
             fig.suptitle('Total Combined Scores',
                          fontsize=suptitlesize)
             ax.set_xticks(range(len(num_insts)))
