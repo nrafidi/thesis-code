@@ -132,8 +132,13 @@ if __name__ == '__main__':
 
             z_frac_eos = zscore(frac_sub_eos)
             z_frac_eos[np.isnan(z_frac_eos)] = 0.0
-            all_combined = (z_frac_eos + zscore(mean_max_eos)) / 2.0
+            z_max_eos = zscore(mean_max_eos)
+            z_max_eos[np.isnan(z_max_eos)] = 0.0
+            all_combined = (z_frac_eos + z_max_eos) / 2.0
+            print(np.any(np.isnan(all_combined)))
             all_combined_z = zscore(all_combined)
+            print(np.any(np.isnan(all_combined)))
+            all_combined[np.isnan(all_combined)] = 0.0
             combo_scores.append(all_combined_z[None, ...])
 
             im = combo_grid[i_word].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
