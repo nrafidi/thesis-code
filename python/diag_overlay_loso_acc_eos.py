@@ -194,19 +194,21 @@ if __name__ == '__main__':
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
 
-        ax.axhline(y=chance['agent'], color='k', linestyle='dashed', label='chance, words')
+        ax.axhline(y=chance['agent'], color='k', linestyle='dashed')
         if sen_type == 'pooled':
             if args.experiment == 'krns2':
-                ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot', label='chance, noun1')
+                ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot')
             if args.experiment == 'PassAct3':
-                ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot', label='chance, voice/length')
+                ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot')
             else:
-                ax.axhline(y=chance['voice'], color='k', linestyle='dashdot', label='chance, voice')
+                ax.axhline(y=chance['voice'], color='k', linestyle='dashdot')
             ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
         ax.set_xticklabels(label_time)
         ax.axvline(x=max_line, color='k')
-        ax.set_ylabel('Accuracy', fontsize=axislabelsize)
-        ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
+        if i_sen_type == 0:
+            ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+        if i_sen_type == 1:
+            ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.0])
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
