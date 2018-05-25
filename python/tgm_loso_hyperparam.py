@@ -65,6 +65,7 @@ if __name__ == '__main__':
             combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
                                 axes_pad=1.0, cbar_mode='single', cbar_location='right',
                                 cbar_pad=0.5)
+            chance = 0.25
             i_combo = 0
             for sen_type in ['active', 'passive']:
                 for word in ['noun1', 'verb']:
@@ -215,22 +216,22 @@ if __name__ == '__main__':
                                 perc=perc, fig_type='single-mean-score-comp'
                             ), bbox_inches='tight')
 
-                    z_frac = zscore(frac_sub_tot)
-                    z_frac[np.isnan(z_frac)] = 0.0
-                    z_frac_eos = zscore(frac_sub_eos)
-                    z_frac_eos[np.isnan(z_frac_eos)] = 0.0
-                    all_combined = (z_frac + zscore(mean_max_tot))/2.0
-                    optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
-                    all_combined_z = zscore(all_combined)
+                    z_frac = frac_sub_tot - 0.5
+                    z_frac /= np.max(z_frac)
+                    z_frac_eos = frac_sub_eos - chance
+                    z_frac_eos /= z_frac_eos
+                    all_combined_z = (z_frac + zscore(mean_max_tot))/2.0
+                    optimal = np.unravel_index(np.argmax(all_combined_z), all_combined_z.shape)
+                    # all_combined_z = zscore(all_combined)
                     combo_scores.append(all_combined_z[None, ...])
                     print(sen_type)
                     print(word)
                     print('Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(
                             win=win_lens[optimal[0]],
                             ni=num_insts[optimal[1]],
-                            score=np.max(all_combined)))
+                            score=np.max(all_combined_z)))
 
-                    im = combo_grid[i_combo].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
+                    im = combo_grid[i_combo].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                         word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
