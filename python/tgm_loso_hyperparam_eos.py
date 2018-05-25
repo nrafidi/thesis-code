@@ -52,6 +52,7 @@ if __name__ == '__main__':
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
     for j_sen, sen_type in enumerate(sen_type_list):
+        print(sen_type)
         if sen_type == 'pooled':
             word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
         else:
@@ -62,16 +63,15 @@ if __name__ == '__main__':
                               axes_pad=0.7, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.5)
         for i_word, word in enumerate(word_list):
+            print(word)
             chance = tgm_loso_acc_eos.CHANCE[args.experiment][sen_type][word]
             frac_sub_eos = []
             mean_max_eos = []
             for win_len in win_lens:
-                print(win_len)
                 time_adjust = win_len * 0.002
                 frac_sub_win = []
                 mean_max_win = []
                 for num_instances in num_insts:
-                    print(num_instances)
                     intersection, acc_all, time, win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
                                                                                                    sen_type,
                                                                                                    word,
@@ -120,10 +120,8 @@ if __name__ == '__main__':
                 if i_ax == 0:
                     ax.set_ylabel('Window Length (ms)')
             cbar = grid.cbar_axes[0].colorbar(im)
-            fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence, {avgTime}, {avgTest}'.format(
-                word=PLOT_TITLE_WORD[word],
-                avgTime=avg_time_str,
-                avgTest=avg_test_str),
+            fig.suptitle('Accuracy and Consistency Scores\nDecoding {word} Post-Sentence'.format(
+                word=PLOT_TITLE_WORD[word]),
                          fontsize=18)
             # fig.tight_layout()
             fig.savefig(fig_fname.format(
@@ -137,8 +135,8 @@ if __name__ == '__main__':
             all_combined = (z_frac_eos + z_max_eos) / 2.0
             print(np.any(np.isnan(all_combined)))
             all_combined_z = zscore(all_combined)
-            print(np.any(np.isnan(all_combined)))
-            all_combined[np.isnan(all_combined)] = 0.0
+            print(np.any(np.isnan(all_combined_z)))
+            all_combined_z[np.isnan(all_combined_z)] = 0.0
             combo_scores.append(all_combined_z[None, ...])
 
             im = combo_grid[i_word].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
@@ -156,9 +154,7 @@ if __name__ == '__main__':
                 combo_grid[i_word].set_ylabel('Window Length (ms)')
 
         cbar = combo_grid.cbar_axes[0].colorbar(im)
-        combo_fig.suptitle('Post-Sentence Combined Scores\n{avgTime}, {avgTest}'.format(
-            avgTime=avg_time_str,
-            avgTest=avg_test_str),
+        combo_fig.suptitle('Post-Sentence Combined Scores',
             fontsize=18)
 
         combo_fig.savefig(fig_fname.format(
@@ -172,9 +168,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin=-7.0, vmax=7.0)
     plt.colorbar(h)
-    ax.set_title('Post-Sentence Total Combined Score\n{avgTime}, {avgTest}'.format(
-        avgTime=avg_time_str,
-        avgTest=avg_test_str),
+    ax.set_title('Post-Sentence Total Combined Score',
         fontsize=14)
     ax.set_xticks(range(len(num_insts)))
     ax.set_xticklabels(num_insts)
