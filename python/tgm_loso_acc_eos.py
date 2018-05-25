@@ -160,8 +160,20 @@ if __name__ == '__main__':
 
     if args.experiment == 'krns2':
         word_list = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
+        vmaxes = {'noun1': 0.3,
+                  'agent': 0.5,
+                  'patient': 0.5,
+                  'verb': 0.5,
+                  'voice': 1.0,
+                  'propid': 0.25}
     else:
-        word_list = word_list = ['voice', 'senlen', 'verb', 'agent', 'patient', 'propid']
+        word_list = word_list = ['voice', 'noun1', 'verb', 'agent', 'patient', 'propid']
+        vmaxes = {'noun1': 0.5,
+                  'agent': 0.5,
+                  'patient': 0.5,
+                  'verb': 0.5,
+                  'voice': 1.0,
+                  'propid': 0.25}
     num_plots = len(word_list)/2
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
@@ -192,7 +204,7 @@ if __name__ == '__main__':
         #     mean_acc /= np.max(mean_acc)
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.0)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=vmaxes[word])
 
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
@@ -214,8 +226,8 @@ if __name__ == '__main__':
         cbar = combo_grid.cbar_axes[i_word].colorbar(im)
         time_adjust = args.win_len*0.002
 
-    for cax in combo_grid.cbar_axes:
-        cax.toggle_label(False)
+    # for cax in combo_grid.cbar_axes:
+    #     cax.toggle_label(False)
 
     combo_fig.suptitle('TGM Averaged Over Subjects',
                        fontsize=suptitlesize)
