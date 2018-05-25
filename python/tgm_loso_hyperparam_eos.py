@@ -35,7 +35,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     sen_type_list = ['pooled', 'active', 'passive']
-    word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
 
     if args.avgTime == 'T':
         avg_time_str = 'Time Average'
@@ -53,8 +52,13 @@ if __name__ == '__main__':
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
     for j_sen, sen_type in enumerate(sen_type_list):
+        if sen_type == 'pooled':
+            word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
+        else:
+            word_list = ['verb', 'agent', 'patient', 'propid']
+
         combo_fig = plt.figure(figsize=(12, 12))
-        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 3),
+        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, len(word_list/2)),
                               axes_pad=0.7, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.5)
         for i_word, word in enumerate(word_list):
