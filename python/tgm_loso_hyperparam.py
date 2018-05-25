@@ -231,7 +231,7 @@ if __name__ == '__main__':
                             ni=num_insts[optimal[1]],
                             score=np.max(all_combined_z)))
 
-                    im = combo_grid[i_combo].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
+                    im = combo_grid[i_combo].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
                     combo_grid[i_combo].set_title('{sen}\n{word}'.format(sen = PLOT_TITLE_SEN[sen_type],
                                                                         word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
                     combo_grid[i_combo].set_xticks(range(len(num_insts)))
@@ -262,9 +262,9 @@ if __name__ == '__main__':
             optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
 
             fig, ax = plt.subplots()
-            avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=6.0)
+            avg_im = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=4.0)
             plt.colorbar(avg_im, ax=ax)
-            fig.suptitle('Total Combined Scores',
+            fig.suptitle('During Sentence Combined Scores',
                          fontsize=suptitlesize)
             ax.set_xticks(range(len(num_insts)))
             ax.set_xticklabels(num_insts)
