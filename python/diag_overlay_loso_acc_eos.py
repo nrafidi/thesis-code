@@ -89,7 +89,7 @@ if __name__ == '__main__':
     time_adjust = args.win_len * 0.002
 
     sen_type_list = ['active', 'passive', 'pooled']
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(30, 12))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                 ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot')
             else:
                 ax.axhline(y=chance['voice'], color='k', linestyle='dashdot')
-            ax.axhline(y=chance['propid'], color='k', linestyle=':', label='chance, proposition')
+            ax.axhline(y=chance['propid'], color='k', linestyle=':')
         ax.set_xticklabels(label_time)
         ax.axvline(x=max_line, color='k')
         if i_sen_type == 0:
@@ -213,7 +213,7 @@ if __name__ == '__main__':
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(0.7, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+            ax.legend(bbox_to_anchor=(0.65, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
