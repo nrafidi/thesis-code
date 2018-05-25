@@ -241,8 +241,8 @@ if __name__ == '__main__':
                     combo_grid[i_combo].tick_params(labelsize=ticklabelsize)
                     combo_grid[i_combo].text(-0.15, 1.05, string.ascii_uppercase[i_combo], transform=combo_grid[i_combo].transAxes,
                                             size=axislettersize, weight='bold')
-                    if i_combo > 1:
-                        combo_grid[i_combo].set_xlabel('Number of Instances', fontsize=axislabelsize)
+                    # if i_combo > 1:
+                    #     combo_grid[i_combo].set_xlabel('Number of Instances', fontsize=axislabelsize)
                     # if i_combo == 0 or i_combo == 2:
                     #     combo_grid[i_combo].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
                     i_combo += 1
@@ -250,6 +250,7 @@ if __name__ == '__main__':
             cbar = combo_grid.cbar_axes[0].colorbar(im)
             combo_fig.text(0.04, 0.275, 'Window Length (ms)', va='center',
                            rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+            combo_fig.text(0.5, 0.04, 'Number of Instances', ha='center', fontsize=axislabelsize)
             combo_fig.suptitle('During Sentence Combined Scores',
                                              fontsize=suptitlesize)
 
