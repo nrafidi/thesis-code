@@ -127,7 +127,7 @@ if __name__ == '__main__':
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=2)
+    parser.add_argument('--num_instances', type=int, default=10)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
