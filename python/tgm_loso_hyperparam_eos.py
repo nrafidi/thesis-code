@@ -152,8 +152,7 @@ if __name__ == '__main__':
             sen_combo_scores.append(all_combined_z[None, ...])
 
             im = combo_grid[i_word].imshow(all_combined_z, interpolation='nearest', aspect='auto', vmin=-1.0, vmax=1.0)
-            combo_grid[i_word].set_title('Decoding {word}\nfrom {sen}'.format(sen=PLOT_TITLE_SEN[sen_type],
-                                                                               word=PLOT_TITLE_WORD[word]))
+            combo_grid[i_word].set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
             combo_grid[i_word].set_xticks(range(len(num_insts)))
             combo_grid[i_word].set_xticklabels(num_insts)
             combo_grid[i_word].set_yticks(range(len(win_lens)))
@@ -163,11 +162,13 @@ if __name__ == '__main__':
                                      size=axislettersize, weight='bold')
             if i_word > 2:
                 combo_grid[i_word].set_xlabel('Number of Instances', fontsize=axislabelsize)
-            if i_word == 0 or i_word == 2 or i_word == 4:
-                combo_grid[i_word].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
+            # if i_word == 0 or i_word == 2 or i_word == 4:
+            #     combo_grid[i_word].set_ylabel('Window Length (ms)', fontsize=axislabelsize)
 
         cbar = combo_grid.cbar_axes[0].colorbar(im)
-        combo_fig.suptitle('Post-Sentence Combined Scores',
+        combo_fig.text(0.04, 0.275, 'Window Length (ms)', va='center',
+                       rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+        combo_fig.suptitle('{sen} Post-Sentence Combined Scores'.format(sen=PLOT_TITLE_SEN[sen_type]),
             fontsize=suptitlesize)
 
         combo_fig.savefig(fig_fname.format(
