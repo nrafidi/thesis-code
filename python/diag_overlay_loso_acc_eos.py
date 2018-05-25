@@ -147,7 +147,7 @@ if __name__ == '__main__':
     sub_word_diags = np.concatenate(sub_word_diags, axis=0)
     num_time = len(win_starts)
     max_line = 0.3 * 2 * time_step
-    colors = ['r', 'g', 'b', 'm', 'c', 'k']
+    colors = ['b', 'm', 'g', 'r', 'c', 'k']
 
     for i_word, word in enumerate(word_list):
         color = colors[i_word]
