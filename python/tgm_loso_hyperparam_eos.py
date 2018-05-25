@@ -55,8 +55,8 @@ if __name__ == '__main__':
         print(sen_type)
         sen_combo_scores = []
         if sen_type == 'pooled':
-            word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
-            num_plots = 3
+            word_list = ['verb', 'agent', 'patient', 'propid']
+            num_plots = 2
         else:
             word_list = ['verb', 'agent', 'patient']
             num_plots = 2
