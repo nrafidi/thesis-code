@@ -167,7 +167,7 @@ if __name__ == '__main__':
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
-                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          axes_pad=0.7, cbar_mode='each', cbar_location='right',
                           cbar_pad=0.5)
     sen_type = 'pooled'
     for i_word, word in enumerate(word_list):
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         #     mean_acc /= np.max(mean_acc)
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.0)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2.0*chance)
 
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
@@ -211,11 +211,12 @@ if __name__ == '__main__':
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
-
+        cbar = combo_grid.cbar_axes[i_word].colorbar(im)
         time_adjust = args.win_len*0.002
 
+    for cax in combo_grid.cbar_axes:
+        cax.toggle_label(False)
 
-    cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('TGM Averaged Over Subjects',
                        fontsize=suptitlesize)
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
