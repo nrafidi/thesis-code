@@ -63,7 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=5)
+    parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
@@ -213,7 +213,7 @@ if __name__ == '__main__':
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(0.65, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+            ax.legend(bbox_to_anchor=(0.6, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
