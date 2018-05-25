@@ -29,7 +29,7 @@ ALGS = ['lr-l2']
 ADJS = ['zscore']
 DO_TME_AVGS = [False]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [10]
+NUM_INSTANCESS = [2]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
