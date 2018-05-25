@@ -247,9 +247,7 @@ if __name__ == '__main__':
                     i_combo += 1
 
             cbar = combo_grid.cbar_axes[0].colorbar(im)
-            combo_fig.suptitle('Combined Scores\n{avgTime}, {avgTest}'.format(
-                                    avgTime=avg_time_str,
-                                    avgTest=avg_test_str),
+            combo_fig.suptitle('Combined Scores',
                                              fontsize=suptitlesize)
 
             combo_fig.subplots_adjust(top=0.85)
