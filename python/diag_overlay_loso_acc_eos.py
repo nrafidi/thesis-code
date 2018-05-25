@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
         frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
         acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
-        std_diags.append(np.diag(np.std(acc_all, axis=0)))
+        std_diags.append(np.diag(np.std(acc_all, axis=0))/float(acc_all.shape[0]))
         num_sub = acc_all.shape[0]
         sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
         sub_word_diags.append(sub_diags[None, :])
