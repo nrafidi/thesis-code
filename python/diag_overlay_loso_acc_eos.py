@@ -180,7 +180,7 @@ if __name__ == '__main__':
         for i_pt in range(num_time):
             if  pvals[i_pt]  <= pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
-
+    win_starts = np.array(win_starts)
     ax.set_xticks(range(0, len(time[win_starts]), time_step))
     label_time = time[win_starts]
     label_time = label_time[::time_step]
