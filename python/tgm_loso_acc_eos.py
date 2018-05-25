@@ -160,12 +160,12 @@ if __name__ == '__main__':
 
     if args.experiment == 'krns2':
         word_list = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
-        vmaxes = {'noun1': 0.3,
-                  'agent': 0.5,
-                  'patient': 0.5,
-                  'verb': 0.5,
-                  'voice': 1.0,
-                  'propid': 0.25}
+        vmaxes = {'noun1': 0.2,
+                  'agent': 0.4,
+                  'patient': 0.4,
+                  'verb': 0.4,
+                  'voice': 0.8,
+                  'propid': 0.2}
     else:
         word_list = word_list = ['voice', 'noun1', 'verb', 'agent', 'patient', 'propid']
         vmaxes = {'noun1': 0.5,
