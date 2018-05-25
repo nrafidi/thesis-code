@@ -53,6 +53,7 @@ if __name__ == '__main__':
     combo_scores = []
     for j_sen, sen_type in enumerate(sen_type_list):
         print(sen_type)
+        sen_combo_scores = []
         if sen_type == 'pooled':
             word_list = ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid']
             num_plots = 3
@@ -140,6 +141,7 @@ if __name__ == '__main__':
             print(np.any(np.isnan(all_combined_z)))
             all_combined_z[np.isnan(all_combined_z)] = 0.0
             combo_scores.append(all_combined_z[None, ...])
+            sen_combo_scores.append(all_combined_z[None, ...])
 
             im = combo_grid[i_word].imshow(all_combined, interpolation='nearest', aspect='auto', vmin=-3.0, vmax=3.0)
             combo_grid[i_word].set_title('Decoding {word}\nfrom {sen}'.format(sen=PLOT_TITLE_SEN[sen_type],
@@ -163,6 +165,33 @@ if __name__ == '__main__':
             exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             fig_type='word-sen-combo-max-score-comp'
         ), bbox_inches='tight')
+
+        all_combined_sen = np.sum(np.concatenate(sen_combo_scores, axis=0), axis=0)
+        optimal = np.unravel_index(np.argmax(all_combined_sen), all_combined_sen.shape)
+
+        fig, ax = plt.subplots()
+        h = ax.imshow(all_combined_sen, interpolation='nearest', vmin=-7.0, vmax=7.0)
+        plt.colorbar(h)
+        ax.set_title('{sen} Total Combined Score'.format(sen=PLOT_TITLE_SEN[sen_type]),
+                     fontsize=14)
+        ax.set_xticks(range(len(num_insts)))
+        ax.set_xticklabels(num_insts)
+        ax.set_yticks(range(len(win_lens)))
+        ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
+        ax.set_xlabel('Number of Instances')
+        ax.set_ylabel('Window Length (ms)')
+        # fig.tight_layout()
+        plt.savefig(fig_fname.format(
+            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            fig_type='total-comb-max-score-comp'
+        ), bbox_inches='tight')
+
+        print(
+            'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(
+                win=win_lens[optimal[0]],
+                ni=num_insts[optimal[1]],
+                score=np.max(
+                    all_combined_sen)))
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
