@@ -168,7 +168,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                           axes_pad=0.7, cbar_mode='each', cbar_location='right',
-                          cbar_pad=0.5)
+                          cbar_pad=0.2)
     sen_type = 'pooled'
     for i_word, word in enumerate(word_list):
         chance = CHANCE[args.experiment][sen_type][word]
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         #     mean_acc /= np.max(mean_acc)
 
         ax = combo_grid[i_word]
-        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=2.0*chance)
+        im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.5*chance)
 
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
