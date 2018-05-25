@@ -88,7 +88,7 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002
 
-    sen_type_list = ['pooled', 'active', 'passive']
+    sen_type_list = ['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(30, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if args.experiment == 'krns2':
