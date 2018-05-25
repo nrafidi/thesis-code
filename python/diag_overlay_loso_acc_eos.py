@@ -89,15 +89,15 @@ if __name__ == '__main__':
     time_adjust = args.win_len * 0.002
 
     sen_type_list = ['pooled', 'active', 'passive']
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(24, 12))
+    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(30, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
+            if args.num_instances > 1:
+                word_list.append('propid')
             if sen_type == 'pooled':
                 word_list.append('noun1')
                 word_list.append('voice')
-            if args.num_instances > 1:
-                word_list.append('propid')
             chance = {'noun1': 0.125,
                       'verb': 0.25,
                       'agent': 0.25,
@@ -157,7 +157,7 @@ if __name__ == '__main__':
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
         num_time = len(win_starts)
         max_line = 0.3 * 2 * time_step
-        colors = ['b', 'm', 'g', 'r', 'c', 'k']
+        colors = ['b', 'm', 'g', 'k', 'r', 'c']
 
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
@@ -215,6 +215,7 @@ if __name__ == '__main__':
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
+    sen_fig.subplots_adjust(top=0.85)
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
