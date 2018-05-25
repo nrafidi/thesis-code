@@ -54,11 +54,12 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=100)
+    parser.add_argument('--win_len', type=int, default=50)
     parser.add_argument('--overlap', type=int, default=12)
+    parser.add_argument('--sen_type', default='pooled', choices=['active', 'passive', 'pooled'])
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=2)
+    parser.add_argument('--num_instances', type=int, default=10)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
@@ -74,11 +75,13 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
-    sen_type = 'pooled'
+    sen_type = args.sen_type
     if args.experiment == 'krns2':
-        word_list = ['voice', 'verb', 'agent', 'patient', 'noun1']
+        word_list = ['verb', 'agent', 'patient', 'noun1']
         if args.num_instances > 1:
             word_list.append('propid')
+        if sen_type == 'pooled':
+            word_list.append('voice')
         chance = {'noun1': 0.125,
                   'verb': 0.25,
                   'agent': 0.25,
@@ -86,8 +89,12 @@ if __name__ == '__main__':
                   'voice': 0.5,
                   'propid': 1.0/16.0}
     else:
-        word_list = ['voice', 'senlen', 'verb', 'agent', 'patient', 'propid']
-
+        word_list = ['verb', 'agent', 'patient']
+        if args.num_instances > 1:
+            word_list.append('propid')
+        if sen_type == 'pooled':
+            word_list.append('voice')
+            word_list.append('senlen')
         chance = {'noun1': 0.25,
                   'verb': 0.25,
                   'agent': 0.25,
@@ -164,11 +171,11 @@ if __name__ == '__main__':
                 else:
                     # print('woof')
                     pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
-        if args.experiment == 'PassAct3':
-            alpha=0.01
-        else:
-            alpha=0.05
-        pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=alpha, assume_independence=args.indep)
+        # if args.experiment == 'PassAct3':
+        #     alpha=0.01
+        # else:
+        #     alpha=0.05
+        pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
         for i_pt in range(num_time):
             if  pvals[i_pt]  <= pval_thresh:
                 ax.scatter(i_pt, 0.88 - float(i_word)*0.02, color=color, marker='*')
