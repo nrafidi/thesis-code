@@ -59,7 +59,7 @@ if __name__ == '__main__':
             word_list = ['verb', 'agent', 'patient']
 
         combo_fig = plt.figure(figsize=(12, 12))
-        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, len(word_list)/2),
+        combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, np.ceil(len(word_list)/2, dtype='int')),
                               axes_pad=0.7, cbar_mode='single', cbar_location='right',
                               cbar_pad=0.5)
         for i_word, word in enumerate(word_list):
