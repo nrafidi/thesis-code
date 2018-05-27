@@ -58,6 +58,11 @@ if __name__ == '__main__':
 
     fig_fname = '/home/nrafidi/thesis_figs/{exp}_eos_{fig_type}_{sen_type}_{word}_{alg}_avgTime{avgTime}_avgTest{avgTest}.pdf'
     combo_scores = []
+
+    sen_fig = plt.figure(figsize=(16, 8))
+    sen_grid = AxesGrid(sen_fig, 111, nrows_ncols=(1, 3),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5)
     for j_sen, sen_type in enumerate(sen_type_list):
         print(sen_type)
         sen_combo_scores = []
@@ -180,22 +185,21 @@ if __name__ == '__main__':
         all_combined_sen = np.sum(np.concatenate(sen_combo_scores, axis=0), axis=0)
         optimal = np.unravel_index(np.argmax(all_combined_sen), all_combined_sen.shape)
 
-        fig, ax = plt.subplots()
+        ax = sen_grid[j_sen]
         h = ax.imshow(all_combined_sen, interpolation='nearest', vmin=0.0, vmax=float(len(word_list)))
-        plt.colorbar(h)
-        ax.set_title('{sen} Total Combined Score'.format(sen=PLOT_TITLE_SEN[sen_type]),
+        # plt.colorbar(h)
+        ax.set_title('{sen}'.format(sen=PLOT_TITLE_SEN[sen_type]),
                      fontsize=14)
         ax.set_xticks(range(len(num_insts)))
         ax.set_xticklabels(num_insts)
         ax.set_yticks(range(len(win_lens)))
         ax.set_yticklabels(np.array(win_lens).astype('float') * 2)
-        ax.set_xlabel('Number of Instances')
-        ax.set_ylabel('Window Length (ms)')
+        ax.text(-0.15, 1.05, string.ascii_uppercase[j_sen], transform=ax.transAxes,
+                                size=axislettersize, weight='bold')
+        # ax.set_xlabel('Number of Instances')
+        # ax.set_ylabel('Window Length (ms)')
         # fig.tight_layout()
-        plt.savefig(fig_fname.format(
-            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            fig_type='total-comb-max-score-comp'
-        ), bbox_inches='tight')
+
 
         print(
             'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(
@@ -203,6 +207,16 @@ if __name__ == '__main__':
                 ni=num_insts[optimal[1]],
                 score=np.max(
                     all_combined_sen)))
+
+    cbar = sen_grid.cbar_axes[0].colorbar(h)
+    sen_fig.text(0.04, 0.375, 'Window Length (ms)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    sen_fig.text(0.5, 0.04, 'Number of Instances', ha='center', fontsize=axislabelsize)
+    sen_fig.suptitle('Post-Sentence Combined Scores', fontsize=suptitlesize)
+    sen_fig.savefig(fig_fname.format(
+        exp=args.experiment, sen_type='all', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+        fig_type='total-comb-max-score-comp-sen'
+    ), bbox_inches='tight')
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
