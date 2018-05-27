@@ -59,11 +59,11 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=100)
+    # parser.add_argument('--win_len', type=int, default=100)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=2)
+    # parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
@@ -79,6 +79,10 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
+    PARAMS = {'pooled': {'win_len': 100, 'ni': 5},
+              'active': {'win_len': 25, 'ni': 2},
+              'passive': {'win_len': 25, 'ni': 2},}
+
     ticklabelsize = 14
     legendfontsize = 16
     axislabelsize = 18
@@ -91,9 +95,11 @@ if __name__ == '__main__':
     sen_type_list = ['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
+        win_len = PARAMS[sen_type]['win_len']
+        num_instances = PARAMS[sen_type]['ni']
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
-            if args.num_instances > 1:
+            if num_instances > 1:
                 word_list.append('propid')
             if sen_type == 'pooled':
                 word_list.append('noun1')
@@ -106,7 +112,7 @@ if __name__ == '__main__':
                       'propid': 1.0/16.0}
         else:
             word_list = ['verb', 'agent', 'patient']
-            if args.num_instances > 1:
+            if num_instances > 1:
                 word_list.append('propid')
             if sen_type == 'pooled':
                 word_list.append('voice')
@@ -133,11 +139,11 @@ if __name__ == '__main__':
             intersection, acc_all, word_time, word_win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
                                                                                                         sen_type,
                                                                                                         word,
-                                                                                                        win_len=args.win_len,
+                                                                                                        win_len=win_len,
                                                                                                         overlap=args.overlap,
                                                                                                         alg=args.alg,
                                                                                                         adj=args.adj,
-                                                                                                        num_instances=args.num_instances,
+                                                                                                        num_instances=num_instances,
                                                                                                         avgTime=args.avgTime,
                                                                                                         avgTest=args.avgTest)
 
@@ -223,18 +229,18 @@ if __name__ == '__main__':
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
+            win_len='opt',
             overlap=args.overlap,
-            num_instances=args.num_instances,
+            num_instances='opt',
             sig=args.sig_test,
             indep=args.indep
         ), bbox_inches='tight')
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
+            win_len='opt',
             overlap=args.overlap,
-            num_instances=args.num_instances,
+            num_instances='opt',
             sig=args.sig_test,
             indep=args.indep
         ), bbox_inches='tight')
