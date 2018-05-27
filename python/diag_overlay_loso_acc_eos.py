@@ -90,12 +90,13 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
     time_step = int(250 / args.overlap)
-    time_adjust = args.win_len * 0.002
+
 
     sen_type_list = ['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         win_len = PARAMS[sen_type]['win_len']
+        time_adjust = win_len * 0.002
         num_instances = PARAMS[sen_type]['ni']
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
