@@ -262,7 +262,7 @@ if __name__ == '__main__':
                         axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
     win = 50
-    time_step = int(250 / args.overlap)
+    time_step = int(50 / args.overlap)
     time_adjust = win * 0.002 * time_step
     win_in_s = win * 0.002
     for i_avg, avgTime in enumerate(avgTime_list):
@@ -282,16 +282,16 @@ if __name__ == '__main__':
                                                                  avgTest=global_avgTest)
 
         tgm_acc = np.mean(acc_all, axis=0)
-
+        diag_time = time[win_starts] + win_in_s - 0.5
         num_time = tgm_acc.shape[0]
         min_time = 0.0
-        max_time = 0.5 * num_time / time_step
-        label_time = np.arange(min_time, max_time, 0.5)
+        max_time = 0.1 * num_time / time_step
+        label_time = np.arange(min_time, max_time, 0.1)
         print(label_time)
         ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
         ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
-        ax.set_xticklabels(label_time)
-        ax.set_yticklabels(label_time)
+        ax.set_xticklabels(diag_time)
+        ax.set_yticklabels(diag_time)
         im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
@@ -299,9 +299,9 @@ if __name__ == '__main__':
         ax.tick_params(labelsize=ticklabelsize)
     label_str = '%.3f s' % win_in_s
     cbar = win_tgm_grid.cbar_axes[0].colorbar(im)
-    win_tgm_fig.text(0.04, 0.15, 'Train Time Relative to Last Word Onset (s)', va='center',
+    win_tgm_fig.text(0.04, 0.15, 'Train Time Relative to Sentence Offset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-    win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Last Word Onset (s)', fontsize=axislabelsize, ha='center')
+    win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
     win_tgm_fig.subplots_adjust(top=0.8)
     win_tgm_fig.suptitle('Averaging Comparison\nWindow Size: {}'.format(label_str), fontsize=suptitlesize)
     win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp.pdf')
