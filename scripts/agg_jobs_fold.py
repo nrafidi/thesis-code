@@ -109,16 +109,17 @@ if __name__ == '__main__':
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
 
-        tgm_acc = np.concatenate(tgm_acc, axis=0)
-        tgm_pred = np.concatenate(tgm_pred, axis=0)
+        if len(tgm_acc) == len(batch_exp.FOLDS):
+            tgm_acc = np.concatenate(tgm_acc, axis=0)
+            tgm_pred = np.concatenate(tgm_pred, axis=0)
 
-        print(tgm_acc.shape)
+            print(tgm_acc.shape)
 
-        np.savez_compressed(complete_job + '.npz',
-                            l_ints=l_ints,
-                            cv_membership=cv_membership,
-                            tgm_acc=tgm_acc,
-                            tgm_pred=tgm_pred,
-                            win_starts=win_starts,
-                            time=time,
-                            proc=proc)
+            np.savez_compressed(complete_job + '.npz',
+                                l_ints=l_ints,
+                                cv_membership=cv_membership,
+                                tgm_acc=tgm_acc,
+                                tgm_pred=tgm_pred,
+                                win_starts=win_starts,
+                                time=time,
+                                proc=proc)
