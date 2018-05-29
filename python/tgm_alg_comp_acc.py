@@ -290,8 +290,8 @@ if __name__ == '__main__':
         print(label_time)
         ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
         ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
-        ax.set_xticklabels(diag_time)
-        ax.set_yticklabels(diag_time)
+        ax.set_xticklabels(label_time)
+        ax.set_yticklabels(label_time)
         im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
