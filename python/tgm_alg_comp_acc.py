@@ -257,6 +257,56 @@ if __name__ == '__main__':
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.pdf')
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.png')
 
+    win_tgm_fig = plt.figure(figsize=(20, 8))
+    win_tgm_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, share_all=True)
+    win = 50
+    time_step = int(250 / args.overlap)
+    time_adjust = win * 0.002 * time_step
+    win_in_s = win * 0.002
+    for i_avg, avgTime in enumerate(avgTime_list):
+        if avgTime == 'T':
+            avg_time_str = 'Time Average'
+        else:
+            avg_time_str = 'No Time Average'
+        ax = win_grid[i_avg]
+        intersection, acc_all, time, win_starts = intersect_accs(exp,
+                                                                 word,
+                                                                 global_alg,
+                                                                 win_len=win,
+                                                                 overlap=overlap,
+                                                                 adj=adj,
+                                                                 num_instances=global_inst,
+                                                                 avgTime=avgTime,
+                                                                 avgTest=global_avgTest)
+
+        tgm_acc = np.mean(acc_all, axis=0)
+
+        diag_time = time[win_starts] + win_in_s - 0.5
+        num_time = len(diag_time)
+        min_time = 0.0
+        max_time = 0.5 * num_time / time_step
+        label_time = np.arange(min_time, max_time, 0.5)
+        ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
+        ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
+        ax.set_xticklabels(label_time)
+        ax.set_yticklabels(label_time)
+        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=1.0)
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
+        ax.set_title(avg_time_str, fontsize=axistitlesize)
+        ax.tick_params(labelsize=ticklabelsize)
+    label_str = '%.3f s' % win_in_s
+    cbar = win_tgm_grid.cbar_axes[0].colorbar(im)
+    win_tgm_fig.text(0.04, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Last Word Onset (s)', fontsize=axislabelsize, ha='center')
+    win_tgm_fig.subplots_adjust(top=0.8)
+    win_tgm_fig.suptitle('Averaging Comparison\nWindow Size: {}'.format(label_str), fontsize=suptitlesize)
+    win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp.pdf')
+    win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp.png')
+
     bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
     ind = np.arange(len(win_list))
     width = 0.3
