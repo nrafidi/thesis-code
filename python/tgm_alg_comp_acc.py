@@ -292,14 +292,14 @@ if __name__ == '__main__':
         ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
         ax.set_xticklabels(label_time)
         ax.set_yticklabels(label_time)
-        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=1.0)
+        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
         ax.set_title(avg_time_str, fontsize=axistitlesize)
         ax.tick_params(labelsize=ticklabelsize)
     label_str = '%.3f s' % win_in_s
     cbar = win_tgm_grid.cbar_axes[0].colorbar(im)
-    win_tgm_fig.text(0.04, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
+    win_tgm_fig.text(0.04, 0.15, 'Train Time Relative to Last Word Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Last Word Onset (s)', fontsize=axislabelsize, ha='center')
     win_tgm_fig.subplots_adjust(top=0.8)
