@@ -107,7 +107,9 @@ if __name__ == '__main__':
         else:
             was_success = False
 
-        if not was_success:
+        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 7:
+            skipped_jobs +=1
+        elif not was_success:
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
                 # print('Job {} Did Not Run'.format(job_str))
                 meow = 1
