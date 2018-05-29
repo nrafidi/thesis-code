@@ -288,8 +288,9 @@ if __name__ == '__main__':
         min_time = 0.0
         max_time = 0.5 * num_time / time_step
         label_time = np.arange(min_time, max_time, 0.5)
+        print(label_time)
         ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
-        ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
+        ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
         ax.set_xticklabels(label_time)
         ax.set_yticklabels(label_time)
         im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
