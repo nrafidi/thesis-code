@@ -283,8 +283,7 @@ if __name__ == '__main__':
 
         tgm_acc = np.mean(acc_all, axis=0)
 
-        diag_time = time[win_starts] + win_in_s - 0.5
-        num_time = len(diag_time)
+        num_time = tgm_acc.shape[0]
         min_time = 0.0
         max_time = 0.5 * num_time / time_step
         label_time = np.arange(min_time, max_time, 0.5)
