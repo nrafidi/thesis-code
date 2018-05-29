@@ -258,7 +258,7 @@ if __name__ == '__main__':
     win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.png')
 
     win_tgm_fig = plt.figure(figsize=(20, 8))
-    win_tgm_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
+    win_tgm_grid = AxesGrid(win_tgm_fig, 111, nrows_ncols=(1, 2),
                         axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=True)
     win = 50
@@ -270,7 +270,7 @@ if __name__ == '__main__':
             avg_time_str = 'Time Average'
         else:
             avg_time_str = 'No Time Average'
-        ax = win_grid[i_avg]
+        ax = win_tgm_grid[i_avg]
         intersection, acc_all, time, win_starts = intersect_accs(exp,
                                                                  word,
                                                                  global_alg,
