@@ -78,7 +78,8 @@ if __name__ == '__main__':
         data = data[:, :, time_to_plot]
         time = time[time_to_plot]
         data_to_plot = np.squeeze(data[0, sorted_inds, ::2])
-        print(data_to_plot.shape)
+        print(np.max(data_to_plot))
+        print(np.min(data_to_plot))
         time = time[::2]
         num_time = time.size
         ax = inst_grid[i_inst]
