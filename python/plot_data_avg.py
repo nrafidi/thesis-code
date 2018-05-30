@@ -57,7 +57,7 @@ if __name__ == '__main__':
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     inst_list = [10, 5, 2, 1]
-    inst_fig = plt.figure(figsize=(15, 5*len(inst_list)))
+    inst_fig = plt.figure(figsize=(15, 6*len(inst_list)))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                             axes_pad=0.7, cbar_mode='single', cbar_location='right',
                             cbar_pad=0.5, share_all=True)
@@ -76,17 +76,17 @@ if __name__ == '__main__':
         time_to_plot = time < 4.0
         data = data[:, :, time_to_plot]
         time = time[time_to_plot]
-        data_to_plot = np.squeeze(data[0, sorted_inds, :])
+        data_to_plot = np.squeeze(data[0, sorted_inds, ::2])
         print(data_to_plot.shape)
-        # time = time[::5]
+        time = time[::2]
         num_time = time.size
         ax = inst_grid[i_inst]
-        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-0.4e-11,
-                      vmax=0.4e-11)
+        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-5e-12,
+                      vmax=5e-12)
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
-        ax.set_xticks(range(0, num_time, 250))
-        time_labels = time[::250] + 0.5
+        ax.set_xticks(range(0, num_time, 125))
+        time_labels = time[::125] + 0.5
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
         ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             inst=num_instances), fontsize=axistitlesize)
         if i_inst == 3:
             ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
-        ax.text(-0.12, 1.02, string.ascii_uppercase[i_inst], transform=ax.transAxes,
+        ax.text(-0.1, 1.1, string.ascii_uppercase[i_inst], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
     cbar = inst_grid.cbar_axes[0].colorbar(im)
