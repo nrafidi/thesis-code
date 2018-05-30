@@ -46,10 +46,13 @@ if __name__ == '__main__':
     ax.plot(x, (meg_sig_class1_rep3 + meg_sig_class1_rep4)/2.0, color='b')
 
     fig, ax = plt.subplots()
-    ax.plot(x, np.sin(x), color='b')
-    ax.plot(x, np.sin(x + np.pi), color='r')
+    ax.plot(x, np.sin(x), color='b', label='Class A')
+    ax.plot(x, np.sin(x + np.pi), color='r', label='Class B')
     ax.set_xlim([0.0, 10.0])
-    rect = patches.Rectangle((1.5, -0.8), width=3.0, height=3.5, fill=False, edgecolor='g', linewidth=3.0)
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Signal')
+    ax.legend()
+    rect = patches.Rectangle((1.5, -0.8), width=3.25, height=2.0, fill=False, edgecolor='g', linewidth=3.0)
     ax.add_patch(rect)
 
 
