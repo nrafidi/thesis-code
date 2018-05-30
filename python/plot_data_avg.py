@@ -83,7 +83,7 @@ if __name__ == '__main__':
         ax.set_xticks(range(0, num_time, 500))
         time_labels = time[::500] + 0.5
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
-        ax.set_xticklabels()
+        ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)
         ax.set_title('{inst} Instances'.format(
             inst=num_instances), fontsize=axistitlesize)
