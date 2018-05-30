@@ -227,18 +227,18 @@ if __name__ == '__main__':
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len='opt',
+            win_len=win_len,
             overlap=args.overlap,
-            num_instances='opt',
+            num_instances=num_instances,
             sig=args.sig_test,
             indep=args.indep
         ), bbox_inches='tight')
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len='opt',
+            win_len=win_len,
             overlap=args.overlap,
-            num_instances='opt',
+            num_instances=num_instances,
             sig=args.sig_test,
             indep=args.indep
         ), bbox_inches='tight')
