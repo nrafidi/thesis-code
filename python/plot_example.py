@@ -6,6 +6,14 @@ import matplotlib.patches as patches
 
 
 if __name__ == '__main__':
+
+    ticklabelsize = 14
+    legendfontsize = 16
+    axislabelsize = 18
+    suptitlesize = 25
+    axistitlesize = 20
+    axislettersize = 20
+
     x = np.linspace(0.0, 20.0, 1000)
 
     sig = np.sin(x) + np.sin(5*x) + np.sin(10*x)
@@ -49,10 +57,10 @@ if __name__ == '__main__':
     ax.plot(x, np.sin(x), color='b', label='Class A')
     ax.plot(x, np.sin(x + np.pi), color='r', label='Class B')
     ax.set_xlim([0.0, 10.0])
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Signal')
-    ax.legend()
-    rect = patches.Rectangle((1.5, -0.8), width=3.25, height=2.0, fill=False, edgecolor='g', linewidth=3.0)
+    ax.set_xlabel('Time', fontsize=axislabelsize)
+    ax.set_ylabel('Signal', fontsize=axislabelsize)
+    ax.legend(fontsize=legendfontsize)
+    rect = patches.Rectangle((1.5, -0.8), width=3.25, height=1.8, fill=False, edgecolor='g', linewidth=3.0)
     ax.add_patch(rect)
 
 
