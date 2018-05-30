@@ -74,14 +74,16 @@ if __name__ == '__main__':
                                                                                        tmin=None,
                                                                                        tmax=None)
         data_to_plot = np.squeeze(data[0, sorted_inds, ::2])
+        print(data_to_plot.shape)
+        time = time[::2]
         num_time = time.size
         ax = inst_grid[i_inst]
         im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-0.4e-11,
                       vmax=0.4e-11)
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
-        ax.set_xticks(range(0, num_time, 500))
-        time_labels = time[::500] + 0.5
+        ax.set_xticks(range(0, num_time, 125))
+        time_labels = time[::125] + 0.5
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
         ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)

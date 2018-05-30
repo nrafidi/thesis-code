@@ -48,7 +48,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     ax.plot(x, np.sin(x), color='b')
     ax.plot(x, np.sin(x + np.pi) + 2, color='r')
-    rect = patches.Rectangle((0.5, -0.8), width=5.0, height=3.9, fill=False, edgecolor='g')
+    rect = patches.Rectangle((1.5, -0.8), width=3.0, height=3.5, fill=False, edgecolor='g', linewidth=1.0)
     ax.add_patch(rect)
 
 
