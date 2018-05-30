@@ -54,8 +54,8 @@ if __name__ == '__main__':
     ax.plot(x, (meg_sig_class1_rep3 + meg_sig_class1_rep4)/2.0, color='b')
 
     fig, ax = plt.subplots()
-    ax.plot(x, np.sin(x), color='b', label='Class A')
-    ax.plot(x, np.sin(x + np.pi), color='r', label='Class B')
+    ax.plot(x, np.sin(x), color='b', linewidth=3.0, label='Class A')
+    ax.plot(x, np.sin(x + np.pi), color='r', linewidth=3.0, label='Class B')
     ax.set_xlim([0.0, 10.0])
     ax.set_xlabel('Time', fontsize=axislabelsize)
     ax.set_ylabel('Signal', fontsize=axislabelsize)
