@@ -62,6 +62,9 @@ if __name__ == '__main__':
     ax.legend(fontsize=legendfontsize)
     rect = patches.Rectangle((1.5, -0.8), width=3.25, height=1.6, fill=False, edgecolor='g', linewidth=3.0)
     ax.add_patch(rect)
-
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/time_avg_example.pdf', bbox_inches='tight')
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/time_avg_example.png', bbox_inches='tight')
 
     plt.show()
