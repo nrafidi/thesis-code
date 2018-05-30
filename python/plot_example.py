@@ -2,6 +2,7 @@ import matplotlib
 matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.patches as patches
 
 
 if __name__ == '__main__':
@@ -43,5 +44,11 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     ax.plot(x, (meg_sig_class1_rep3 + meg_sig_class1_rep4)/2.0, color='b')
+
+    fig, ax = plt.subplots()
+    ax.plot(x, np.sin(x), color='b')
+    ax.plot(x, np.cos(x) + 2, color='r')
+    patches.Rectangle((0.5, 0.5), width=0.1, height=1.0, fill=False, figure=fig, color='g')
+
 
     plt.show()
