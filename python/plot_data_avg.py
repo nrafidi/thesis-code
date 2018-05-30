@@ -106,3 +106,4 @@ if __name__ == '__main__':
         '/home/nrafidi/thesis_figs/{exp}_avg-data_{sen_type}_{word}.png'.format(
             exp=args.experiment, sen_type=args.sen_type, word=word
         ), bbox_inches='tight')
+    plt.show()
