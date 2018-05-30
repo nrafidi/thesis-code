@@ -79,9 +79,9 @@ if __name__ == '__main__':
     else:
         aTst = ''
 
-    PARAMS = {'pooled': {'win_len': 25, 'ni': 2},
-              'active': {'win_len': 25, 'ni': 2},
-              'passive': {'win_len': 25, 'ni': 2},}
+    PARAMS = {'pooled': {'win_len': 50, 'ni': 2},
+              'active': {'win_len': 50, 'ni': 2},
+              'passive': {'win_len': 50, 'ni': 2},}
 
     ticklabelsize = 14
     legendfontsize = 16
