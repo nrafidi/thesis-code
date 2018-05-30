@@ -45,7 +45,7 @@ if __name__ == '__main__':
     word = args.word
     proc = args.proc
 
-    ticklabelsize = 12
+    ticklabelsize = 14
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
-    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+    yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
 
     inst_list = [10, 5, 2, 1]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
@@ -77,17 +77,17 @@ if __name__ == '__main__':
         time_to_plot = time < 4.0
         data = data[:, :, time_to_plot]
         time = time[time_to_plot]
-        data_to_plot = np.squeeze(data[0, sorted_inds, ::2])
+        data_to_plot = np.squeeze(data[0, sorted_inds, ::5])
         print(data_to_plot.shape)
-        time = time[::2]
+        time = time[::5]
         num_time = time.size
         ax = inst_grid[i_inst]
-        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-5e-12,
-                      vmax=5e-12)
-        ax.set_yticks(yticks_sens)
-        ax.set_yticklabels(uni_reg)
-        ax.set_xticks(range(0, num_time, 125))
-        time_labels = time[::125] + 0.5
+        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-3e-12,
+                      vmax=3e-12)
+        ax.set_yticks(yticks_sens[1:])
+        ax.set_yticklabels(uni_reg[1:])
+        ax.set_xticks(range(0, num_time, 50))
+        time_labels = time[::50] + 0.5
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
         ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)
