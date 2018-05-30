@@ -57,7 +57,7 @@ if __name__ == '__main__':
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     inst_list = [10, 5, 2, 1]
-    inst_fig = plt.figure(figsize=(10, 10*len(inst_list)))
+    inst_fig = plt.figure(figsize=(20, 5*len(inst_list)))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                             axes_pad=0.7, cbar_mode='single', cbar_location='right',
                             cbar_pad=0.5, share_all=True)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         data_to_plot = np.squeeze(data[0, sorted_inds, :])
         num_time = time.size
         ax = inst_grid[i_inst]
-        im = ax.imshow(data_to_plot, interpolation='nearest', aspect='auto', vmin=-0.4e-11,
+        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-0.4e-11,
                       vmax=0.4e-11)
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
