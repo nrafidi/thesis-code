@@ -60,7 +60,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Time', fontsize=axislabelsize)
     ax.set_ylabel('Signal', fontsize=axislabelsize)
     ax.legend(fontsize=legendfontsize)
-    rect = patches.Rectangle((1.5, -0.8), width=3.25, height=1.8, fill=False, edgecolor='g', linewidth=3.0)
+    rect = patches.Rectangle((1.5, -0.8), width=3.25, height=1.6, fill=False, edgecolor='g', linewidth=3.0)
     ax.add_patch(rect)
 
 

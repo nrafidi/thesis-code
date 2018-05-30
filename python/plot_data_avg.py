@@ -57,7 +57,7 @@ if __name__ == '__main__':
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     inst_list = [10, 5, 2, 1]
-    inst_fig = plt.figure(figsize=(20, 5*len(inst_list)))
+    inst_fig = plt.figure(figsize=(15, 5*len(inst_list)))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                             axes_pad=0.7, cbar_mode='single', cbar_location='right',
                             cbar_pad=0.5, share_all=True)
@@ -73,17 +73,20 @@ if __name__ == '__main__':
                                                                                        is_region_sorted=False,
                                                                                        tmin=None,
                                                                                        tmax=None)
-        data_to_plot = np.squeeze(data[0, sorted_inds, ::5])
+        time_to_plot = time < 4.0
+        data = data[:, :, time_to_plot]
+        time = time[time_to_plot]
+        data_to_plot = np.squeeze(data[0, sorted_inds, :])
         print(data_to_plot.shape)
-        time = time[::5]
+        # time = time[::5]
         num_time = time.size
         ax = inst_grid[i_inst]
         im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-0.4e-11,
                       vmax=0.4e-11)
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
-        ax.set_xticks(range(0, num_time, 50))
-        time_labels = time[::50] + 0.5
+        ax.set_xticks(range(0, num_time, 250))
+        time_labels = time[::250] + 0.5
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
         ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)
