@@ -1,11 +1,11 @@
 import argparse
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from syntax_vs_semantics import load_data
 import models
 import numpy as np
 import os.path
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 import scipy.io as sio
 import string
