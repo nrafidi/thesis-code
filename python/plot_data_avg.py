@@ -81,12 +81,12 @@ if __name__ == '__main__':
         ax.set_yticks(yticks_sens)
         ax.set_yticklabels(uni_reg)
         ax.set_xticks(range(0, num_time, 250))
-        ax.set_xticklabels(time[::250])
+        ax.set_xticklabels(time[::250] + 0.5)
         ax.tick_params(labelsize=ticklabelsize)
         ax.set_title('{inst} Instances'.format(
             inst=num_instances), fontsize=axistitlesize)
         if i_inst == 3:
-            ax.set_xlabel('Time', fontsize=axislabelsize)
+            ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
         ax.text(-0.12, 1.02, string.ascii_uppercase[i_inst], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
