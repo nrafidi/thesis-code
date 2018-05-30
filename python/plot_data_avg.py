@@ -83,8 +83,8 @@ if __name__ == '__main__':
         time = time[::2]
         num_time = time.size
         ax = inst_grid[i_inst]
-        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-4e-12,
-                      vmax=4e-12)
+        im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-1.6e-11,
+                      vmax=1.6e-11)
         ax.set_yticks(yticks_sens[1:])
         ax.set_yticklabels(uni_reg[1:])
         ax.set_xticks(range(0, num_time, 125))
