@@ -45,7 +45,7 @@ if __name__ == '__main__':
     word = args.word
     proc = args.proc
 
-    ticklabelsize = 14
+    ticklabelsize = 12
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
@@ -57,7 +57,8 @@ if __name__ == '__main__':
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
     inst_list = [10, 5, 2, 1]
-    inst_fig = plt.figure(figsize=(15, 6*len(inst_list)))
+    title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
+    inst_fig = plt.figure(figsize=(16, 22))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                             axes_pad=0.7, cbar_mode='single', cbar_location='right',
                             cbar_pad=0.5, share_all=True)
@@ -90,8 +91,7 @@ if __name__ == '__main__':
         time_labels[np.abs(time_labels) < 1e-10] = 0.0
         ax.set_xticklabels(time_labels)
         ax.tick_params(labelsize=ticklabelsize)
-        ax.set_title('{inst} Instances'.format(
-            inst=num_instances), fontsize=axistitlesize)
+        ax.set_title(title_list[i_inst], fontsize=axistitlesize)
         if i_inst == 3:
             ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
         ax.text(-0.1, 1.1, string.ascii_uppercase[i_inst], transform=ax.transAxes,
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     cbar = inst_grid.cbar_axes[0].colorbar(im)
     inst_fig.suptitle('MEG Data for Sentence 0, Subject B',
                        fontsize=suptitlesize)
-    inst_fig.text(0.04, 0.275, 'Sensors', va='center',
+    inst_fig.text(0.04, 0.45, 'Sensors', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
     inst_fig.subplots_adjust(top=0.85)
