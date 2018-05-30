@@ -98,13 +98,13 @@ if __name__ == '__main__':
         ax.text(-0.1, 1.1, string.ascii_uppercase[i_inst], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
-    cbar = inst_grid.cbar_axes[0].colorbar(im)
+    cbar = inst_grid.cbar_axes[0].colorbar(im, aspect=30)
     inst_fig.suptitle('MEG Data for Sentence 0, Subject B',
                        fontsize=suptitlesize)
     inst_fig.text(0.04, 0.45, 'Sensors', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
-    inst_fig.subplots_adjust(top=0.85)
+    # inst_fig.subplots_adjust(top=0.85)
     inst_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_avg-data_{sen_type}_{word}.pdf'.format(
             exp=args.experiment, sen_type=args.sen_type, word=word
