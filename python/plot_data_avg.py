@@ -61,7 +61,7 @@ if __name__ == '__main__':
     inst_fig = plt.figure(figsize=(16, 22))
     inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                             axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                            cbar_pad=0.5, share_all=True)
+                            cbar_pad=0.5, cbar_size='2%', share_all=True)
     for i_inst, num_instances in enumerate(inst_list):
         data, labels, sen_ints, time, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                        align_to=word,
@@ -98,7 +98,8 @@ if __name__ == '__main__':
         ax.text(-0.1, 1.1, string.ascii_uppercase[i_inst], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
-    cbar = inst_grid.cbar_axes[0].colorbar(im, aspect=30)
+    cbar = inst_grid.cbar_axes[0].colorbar(im)
+    print(cbar)
     inst_fig.suptitle('MEG Data for Sentence 0, Subject B',
                        fontsize=suptitlesize)
     inst_fig.text(0.04, 0.45, 'Sensors', va='center',
