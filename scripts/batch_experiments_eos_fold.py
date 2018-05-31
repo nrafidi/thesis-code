@@ -128,7 +128,8 @@ if __name__ == '__main__':
                                  mode='acc')
 
         if not os.path.isfile(fname + '.npz'):
-            call(call_str, shell=True)
+            if job_id in [557, 1763, 2188]:
+                call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
