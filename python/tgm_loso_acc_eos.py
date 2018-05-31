@@ -174,12 +174,12 @@ if __name__ == '__main__':
                   'propid': 0.2}
     else:
         word_list = word_list = ['voice', 'noun1', 'verb', 'agent', 'patient', 'propid']
-        vmaxes = {'noun1': 0.35,
-                  'agent': 0.35,
-                  'patient': 0.35,
-                  'verb': 0.35,
-                  'voice': 1.0,
-                  'propid': 0.2}
+        vmaxes = {'noun1': 0.4,
+                  'agent': 0.4,
+                  'patient': 0.4,
+                  'verb': 0.4,
+                  'voice': 0.75,
+                  'propid': 0.3}
     num_plots = len(word_list)/2
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
