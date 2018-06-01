@@ -78,8 +78,8 @@ if __name__ == '__main__':
     rect = patches.Rectangle((2.0, -0.8), width=4.25, height=1.6, fill=False, edgecolor='r', linewidth=3.0)
     ax.add_patch(rect)
     ax = axs[1]
-    ind_to_plot_0 = x > 1.5 & x < 5.75
-    ind_to_plot_1 = x > 2.0 & x < 6.25
+    ind_to_plot_0 = np.logical_and(x > 1.5, x < 5.75)
+    ind_to_plot_1 = np.logical_and(x > 2.0, x < 6.25)
     ax.plot(x[ind_to_plot_0], np.sin(x[ind_to_plot_0]), color='g', linewidth=3.0)
     ax.plot(x[ind_to_plot_1], np.sin(x[ind_to_plot_1]), color='r', linewidth=3.0)
     # ax.set_xlim([0.0, 10.0])
