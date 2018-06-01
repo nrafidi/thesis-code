@@ -67,4 +67,31 @@ if __name__ == '__main__':
     fig.savefig(
         '/home/nrafidi/thesis_figs/time_avg_example.png', bbox_inches='tight')
 
+    fig, axs = plt.subplots(ncols=1, nrows=2)
+    ax = axs[0]
+    ax.plot(x, np.sin(x), color='b', linewidth=3.0)
+    ax.set_xlim([0.0, 10.0])
+    # ax.set_xlabel('Time', fontsize=axislabelsize)
+    # ax.set_ylabel('Signal', fontsize=axislabelsize)
+    # ax.legend(fontsize=legendfontsize)
+    rect = patches.Rectangle((1.5, -0.8), width=4.25, height=1.6, fill=False, edgecolor='g', linewidth=3.0)
+    rect = patches.Rectangle((2.0, -0.8), width=4.25, height=1.6, fill=False, edgecolor='r', linewidth=3.0)
+    ax.add_patch(rect)
+    ax = axs[1]
+    ind_to_plot_0 = x > 1.5 & x < 5.75
+    ind_to_plot_1 = x > 2.0 & x < 6.25
+    ax.plot(x[ind_to_plot_0], np.sin(x[ind_to_plot_0]), color='g', linewidth=3.0)
+    ax.plot(x[ind_to_plot_1], np.sin(x[ind_to_plot_1]), color='r', linewidth=3.0)
+    # ax.set_xlim([0.0, 10.0])
+    ax.set_xlabel('Time', fontsize=axislabelsize)
+    # ax.set_ylabel('Signal', fontsize=axislabelsize)
+    fig.text(0.04, 0.275, 'Signal', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/tgm_example.pdf', bbox_inches='tight')
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/tgm_example.png', bbox_inches='tight')
+
+
+
     plt.show()
