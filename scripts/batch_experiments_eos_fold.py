@@ -21,7 +21,7 @@ FOLDS = range(32)
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'] #['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['pooled']
-WORDS = ['verb', 'noun1', 'voice', 'agent', 'patient', 'propid']
+WORDS = ['senlen']
 WIN_LENS = [25]
 OVERLAPS = [12]
 IS_PERMS = [False]
@@ -37,12 +37,12 @@ JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
 
-JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
-# JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+# JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=8GB -v ' \
+    qsub_call = 'qsub  -q pool2 -N {job_name} -l walltime=192:00:00,mem=8GB -v ' \
                 'experiment={exp},subject={sub},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
@@ -128,8 +128,7 @@ if __name__ == '__main__':
                                  mode='acc')
 
         if not os.path.isfile(fname + '.npz'):
-            if job_id in [557, 1763, 2188]:
-                call(call_str, shell=True)
+            call(call_str, shell=True)
         job_id += 1
 
         # while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
