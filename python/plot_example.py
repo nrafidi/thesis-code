@@ -95,7 +95,8 @@ if __name__ == '__main__':
         '/home/nrafidi/thesis_figs/tgm_example.png', bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    ax.plot(x, square(x, duty=0.4), linewidth=3.0, color='k')
+    ax.plot(np.concatenate([x, x], axis=0), square(x, duty=0.6), linewidth=3.0, color='k')
+    ax.set_ylim([-2.0, 2.0])
 
 
     plt.show()
