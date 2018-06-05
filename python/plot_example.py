@@ -95,7 +95,7 @@ if __name__ == '__main__':
         '/home/nrafidi/thesis_figs/tgm_example.png', bbox_inches='tight')
 
     fig, ax = plt.subplots()
-    long_x = np.concatenate([x, x], axis=0)
+    long_x = np.concatenate([x, x + np.max(x)], axis=0)
     ax.plot(long_x, square(long_x, duty=0.6), linewidth=3.0, color='k')
     ax.set_ylim([-2.0, 2.0])
 
