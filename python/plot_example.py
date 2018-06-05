@@ -3,6 +3,7 @@ matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as patches
+from scipy.signal import square
 
 
 if __name__ == '__main__':
@@ -93,6 +94,8 @@ if __name__ == '__main__':
     fig.savefig(
         '/home/nrafidi/thesis_figs/tgm_example.png', bbox_inches='tight')
 
+    fig, ax = plt.subplots()
+    ax.plot(x, square(x, duty=0.4), linewidth=3.0, color='k')
 
 
     plt.show()
