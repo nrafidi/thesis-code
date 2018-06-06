@@ -21,7 +21,7 @@ FOLDS = range(32)
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'] #['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['pooled']
-WORDS = ['senlen']
+WORDS = ['senlen', 'voice', 'verb', 'agent', 'patient', 'propid']
 WIN_LENS = [25]
 OVERLAPS = [12]
 IS_PERMS = [False]
@@ -29,7 +29,7 @@ ALGS = ['lr-l2']
 ADJS = ['zscore']
 DO_TME_AVGS = [False]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [2]
+NUM_INSTANCESS = [5]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
@@ -131,5 +131,5 @@ if __name__ == '__main__':
             call(call_str, shell=True)
         job_id += 1
 
-        # while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
-        #     time.sleep(30)
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
+            time.sleep(30)
