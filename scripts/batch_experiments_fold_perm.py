@@ -10,7 +10,7 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
             'nr{rep}_rsPerm{rsP}_{mode}'
 
 FOLDS = range(16) #, 'coef']
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['PassAct3', 'krns2']
 SUBJECTS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'] #['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['noun1', 'verb', 'noun2']
@@ -23,7 +23,7 @@ DO_TIME_AVGS = [False]
 DO_TEST_AVGS = [True]#, True]  # True
 NUM_INSTANCESS = [10]
 REPS_TO_USES = [None]  # 10
-RANDOM_STATES = range(100)
+RANDOM_STATES = range(50)
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -48,8 +48,7 @@ if __name__ == '__main__':
                 'doTestAvg={tst_avg},num_instances={inst},reps_to_use={rep},perm_random_state={rs},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_fold.sh'
 
-    param_grid = itertools.product(FOLDS,
-                                   EXPERIMENTS,
+    param_grid = itertools.product(EXPERIMENTS,
                                    OVERLAPS,
                                    IS_PERMS,
                                    ALGS,
@@ -62,24 +61,25 @@ if __name__ == '__main__':
                                    WIN_LENS,
                                    SEN_TYPES,
                                    WORDS,
-                                   SUBJECTS)
+                                   SUBJECTS,
+                                   FOLDS,)
     job_id = 0
     for grid in param_grid:
-        fold = grid[0]
-        exp = grid[1]
-        overlap = grid[2]
-        isPerm = grid[3]
-        alg = grid[4]
-        adj = grid[5]
-        tm_avg = grid[6]
-        tst_avg = grid[7]
-        ni = grid[8]
-        reps = grid[9]
-        rs = grid[10]
-        win_len = grid[11]
-        sen = grid[12]
-        word = grid[13]
-        sub = grid[14]
+        exp = grid[0]
+        overlap = grid[1]
+        isPerm = grid[2]
+        alg = grid[3]
+        adj = grid[4]
+        tm_avg = grid[5]
+        tst_avg = grid[6]
+        ni = grid[7]
+        reps = grid[8]
+        rs = grid[9]
+        win_len = grid[10]
+        sen = grid[11]
+        word = grid[12]
+        sub = grid[13]
+        fold = grid[14]
 
         job_str = JOB_NAME.format(exp=exp,
                                   sub=sub,
@@ -129,7 +129,7 @@ if __name__ == '__main__':
                                  rep=reps,
                                  rsP=rs,
                                  mode='acc')
-        if not os.path.isfile(old_job + '.npz') and job_id > 14984:
+        if not os.path.isfile(old_job + '.npz'):
             call(call_str, shell=True)
         job_id += 1
 
