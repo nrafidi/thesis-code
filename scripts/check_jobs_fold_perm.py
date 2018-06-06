@@ -125,6 +125,8 @@ if __name__ == '__main__':
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
                             if 'MemoryError' in err_file:
                                 print('Job {} Failed'.format(job_str))
+                            elif 'axis 0 with size 8' in err_file:
+                                skipped_jobs += 1
                             else:
                                 print(err_file)
                                 print(grid)
