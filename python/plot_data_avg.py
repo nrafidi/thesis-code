@@ -54,7 +54,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     sen_type_list = ['active', 'passive']
-    sen_list = [1]
+    sen_list = [1, 18]
     inst_list = [10, 5, 2, 1]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
