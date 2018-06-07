@@ -78,7 +78,7 @@ if __name__ == '__main__':
                 time_to_plot = time < 4.0
                 data = data[:, :, time_to_plot]
                 time = time[time_to_plot]
-                if i_inst == 1:
+                if num_instances == 1:
                     data_to_plot = np.squeeze(data[sen_list[0], sorted_inds, ::2])
                 else:
                     data_to_plot = np.squeeze(data[sen_id, sorted_inds, ::2])
