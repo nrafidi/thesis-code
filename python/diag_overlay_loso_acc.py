@@ -261,6 +261,8 @@ if __name__ == '__main__':
                     frac = frac[2*time_step:]
                     std = std[2 * time_step:]
                     sub_word_diags_word = sub_word_diags[:, :, 2*time_step:]
+            else:
+                sub_word_diags_word = sub_word_diags
 
             ax.plot(range(len(acc)), acc, label='{word} accuracy'.format(word=word), color=color)
             ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
