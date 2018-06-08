@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     sen_type_list = ['active', 'passive']
     if args.experiment == 'PassAct3':
-        word_list = ['noun1', 'verb']
+        word_list = ['noun1', 'verb', 'noun2']
         chance = {'noun1': 0.25,
                   'verb': 0.25}
     else:

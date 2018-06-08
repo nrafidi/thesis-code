@@ -162,7 +162,7 @@ if __name__ == '__main__':
     if args.experiment == 'krns2':
         word_list = ['noun1', 'verb', 'noun2']
     else:
-        word_list = ['noun1', 'verb']
+        word_list = ['noun1', 'verb', 'noun2']
     num_plots = len(word_list)
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
