@@ -261,6 +261,8 @@ if __name__ == '__main__':
                     frac = frac[2*time_step:]
                     std = std[2 * time_step:]
                     sub_word_diags_word = sub_word_diags[:, :, 2*time_step:]
+                else:
+                    sub_word_diags_word = sub_word_diags
             else:
                 sub_word_diags_word = sub_word_diags
 
