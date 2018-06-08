@@ -255,10 +255,12 @@ if __name__ == '__main__':
                     acc = acc[time_step:]
                     frac = frac[time_step:]
                     std = std[time_step:]
+                    sub_word_diags = sub_word_diags[:, :, time_step:]
                 elif word == 'noun2':
                     acc = acc[2*time_step:]
                     frac = frac[2*time_step:]
                     std = std[2 * time_step:]
+                    sub_word_diags = sub_word_diags[:, :, 2*time_step:]
 
             ax.plot(range(len(acc)), acc, label='{word} accuracy'.format(word=word), color=color)
             ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
@@ -272,33 +274,26 @@ if __name__ == '__main__':
                 else:
                     _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
 
-                    # if sen_type == 'active' and word == 'noun2':
-                    #     plot_pt = i_pt - 2 * time_step + time_adjust
-                    #     if plot_pt == 81.0 or plot_pt == 82.0 or plot_pt ==107.0:
-                    #         print(pvals[i_pt])
-                    #         print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
-                        # print('meow')
                         pvals[i_pt] /= 2.0
                     else:
-                        # print('woof')
                         pvals[i_pt] = 1.0 - pvals[i_pt]/2.0
                     # print(pvals[i_pt])
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
 
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
-                    if word == 'verb' and sen_type == 'active':
-                        plot_pt = i_pt - time_step + time_adjust
-                    elif word == 'noun2' and sen_type == 'active':
-                        print('meow')
-                        print(pvals[i_pt])
-                        plot_pt = i_pt - 2*time_step + time_adjust
-                        print(plot_pt)
-                        print(acc[i_pt])
-                        print(acc[int(plot_pt)])
-                    else:
-                        plot_pt = i_pt
+                    # if word == 'verb' and sen_type == 'active':
+                    #     plot_pt = i_pt - time_step + time_adjust
+                    # elif word == 'noun2' and sen_type == 'active':
+                    #     print('meow')
+                    #     print(pvals[i_pt])
+                    #     plot_pt = i_pt - 2*time_step + time_adjust
+                    #     print(plot_pt)
+                    #     print(acc[i_pt])
+                    #     print(acc[int(plot_pt)])
+                    # else:
+                    plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
 
 
