@@ -289,12 +289,14 @@ if __name__ == '__main__':
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
                     if word == 'verb' and sen_type == 'active':
-                        plot_pt = i_pt # - time_step + time_adjust
+                        plot_pt = i_pt - time_step + time_adjust
                     elif word == 'noun2' and sen_type == 'active':
                         print('meow')
                         print(pvals[i_pt])
-                        plot_pt = i_pt #- time_step + time_adjust
+                        plot_pt = i_pt - 2*time_step + time_adjust
                         print(plot_pt)
+                        print(acc[i_pt])
+                        print(acc[plot_pt])
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
