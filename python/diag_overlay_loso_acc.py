@@ -276,7 +276,7 @@ if __name__ == '__main__':
                         pvals[i_pt] /= 2.0
                     else:
                         # print('woof')
-                        pvals[i_pt] = 1.0 - pvals[i_pt]/2.0
+                        pvals[i_pt] = 1.0 # - pvals[i_pt]/2.0
                     # print(pvals[i_pt])
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
             print(pval_thresh)
