@@ -279,8 +279,7 @@ if __name__ == '__main__':
                         pvals[i_pt] = 1.0 - pvals[i_pt]/2.0
                     # print(pvals[i_pt])
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
-            # print(pval_thresh)
-            # print(np.min(pvals))
+
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
                     if word == 'verb' and sen_type == 'active':
@@ -288,6 +287,7 @@ if __name__ == '__main__':
                     elif word == 'noun2' and sen_type == 'active':
                         print(pvals[i_pt])
                         plot_pt = i_pt - 2*time_step + time_adjust
+                        print(plot_pt)
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
@@ -337,70 +337,70 @@ if __name__ == '__main__':
             indep=args.indep
         ), bbox_inches='tight')
 
-    sub_sen_diags = np.concatenate(sub_sen_diags, axis=0)
-    print(sub_sen_diags.shape)
-    word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(40, 10))
-    for i_word, word in enumerate(word_list):
-
-        text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
-                         ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']]
-        max_line = np.array([2.51 * 2 * time_step, 3.51 * 2 * time_step]) - time_adjust
-        start_line = np.array([time_step, time_step]) - time_adjust
-
-
-        colors = ['r', 'g']
-        ax = word_axs[i_word]
-        for i_sen, sen_type in enumerate(sen_type_list):
-            color = colors[i_sen]
-            acc = sen_accs[i_sen][i_word]
-            frac = sen_fracs[i_sen][i_word]
-            ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
-            pvals = np.empty((num_time,))
-            for i_pt in range(num_time):
-                if args.sig_test == 'binomial':
-                    num_above_chance = np.sum(np.squeeze(sub_sen_diags[i_sen, i_word, :, i_pt]) > chance[word])
-                    pvals[i_pt] = 0.5 ** num_above_chance
-                else:
-                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-            pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
-            print(pval_thresh)
-            print(np.min(pvals))
-            for i_pt in range(num_time):
-                if pvals[i_pt] <= pval_thresh:
-                    ax.scatter(i_pt, 0.7 - i_sen*0.1 + 0.06, color=color, marker='*')
-            for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
-                ax.axvline(x=v, color='k')
-                if i_v < len(text_to_write[i_sen]):
-                    ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
-
-        ax.set_xticks(np.arange(0, len(sen_time[-1]), time_step) - time_adjust)
-        min_time = -0.5
-        max_time = 0.5 * len(sen_time[-1]) / time_step
-        label_time = np.arange(min_time, max_time, 0.5)
-        ax.set_xticklabels(label_time)
-        if i_word == 0:
-            ax.set_ylabel('Accuracy')
-        ax.set_xlabel('Time Relative to Sentence Onset (s)')
-        ax.set_ylim([0.0, 0.9])
-        ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
-        ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
-        ax.legend(loc=1)
-        ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
-                size=20, weight='bold')
-        ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
-
-    word_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
-    word_fig.tight_layout()
-    plt.subplots_adjust(top=0.85)
-    word_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
-            exp=args.experiment, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=args.win_len,
-            overlap=args.overlap,
-            num_instances=args.num_instances,
-            sig=args.sig_test,
-            indep=args.indep
-        ), bbox_inches='tight')
+    # sub_sen_diags = np.concatenate(sub_sen_diags, axis=0)
+    # print(sub_sen_diags.shape)
+    # word_fig, word_axs = plt.subplots(1, len(word_list), figsize=(40, 10))
+    # for i_word, word in enumerate(word_list):
+    #
+    #     text_to_write = [['Det', 'Noun1', 'Verb', 'Det', 'Noun2.'],
+    #                      ['Det', 'Noun1', 'was', 'Verb', 'by', 'Det', 'Noun2.']]
+    #     max_line = np.array([2.51 * 2 * time_step, 3.51 * 2 * time_step]) - time_adjust
+    #     start_line = np.array([time_step, time_step]) - time_adjust
+    #
+    #
+    #     colors = ['r', 'g']
+    #     ax = word_axs[i_word]
+    #     for i_sen, sen_type in enumerate(sen_type_list):
+    #         color = colors[i_sen]
+    #         acc = sen_accs[i_sen][i_word]
+    #         frac = sen_fracs[i_sen][i_word]
+    #         ax.plot(acc, label='{sen} accuracy'.format(sen=sen_type), color=color)
+    #         pvals = np.empty((num_time,))
+    #         for i_pt in range(num_time):
+    #             if args.sig_test == 'binomial':
+    #                 num_above_chance = np.sum(np.squeeze(sub_sen_diags[i_sen, i_word, :, i_pt]) > chance[word])
+    #                 pvals[i_pt] = 0.5 ** num_above_chance
+    #             else:
+    #                 _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+    #         pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
+    #         print(pval_thresh)
+    #         print(np.min(pvals))
+    #         for i_pt in range(num_time):
+    #             if pvals[i_pt] <= pval_thresh:
+    #                 ax.scatter(i_pt, 0.7 - i_sen*0.1 + 0.06, color=color, marker='*')
+    #         for i_v, v in enumerate(np.arange(start_line[i_sen], max_line[i_sen], time_step)):
+    #             ax.axvline(x=v, color='k')
+    #             if i_v < len(text_to_write[i_sen]):
+    #                 ax.text(v + 0.15, 0.7 - i_sen*0.1, text_to_write[i_sen][i_v], color=color)
+    #
+    #     ax.set_xticks(np.arange(0, len(sen_time[-1]), time_step) - time_adjust)
+    #     min_time = -0.5
+    #     max_time = 0.5 * len(sen_time[-1]) / time_step
+    #     label_time = np.arange(min_time, max_time, 0.5)
+    #     ax.set_xticklabels(label_time)
+    #     if i_word == 0:
+    #         ax.set_ylabel('Accuracy')
+    #     ax.set_xlabel('Time Relative to Sentence Onset (s)')
+    #     ax.set_ylim([0.0, 0.9])
+    #     ax.set_xlim([start_line[-1], max_line[-1] + time_step * 5])
+    #     ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
+    #     ax.legend(loc=1)
+    #     ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
+    #             size=20, weight='bold')
+    #     ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]))
+    #
+    # word_fig.suptitle('Mean Accuracy over Subjects', fontsize=18)
+    # word_fig.tight_layout()
+    # plt.subplots_adjust(top=0.85)
+    # word_fig.savefig(
+    #     '/home/nrafidi/thesis_figs/{exp}_diag_acc_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
+    #         exp=args.experiment, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+    #         win_len=args.win_len,
+    #         overlap=args.overlap,
+    #         num_instances=args.num_instances,
+    #         sig=args.sig_test,
+    #         indep=args.indep
+    #     ), bbox_inches='tight')
 
 
     plt.show()
