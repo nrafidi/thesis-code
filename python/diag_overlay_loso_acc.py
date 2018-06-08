@@ -271,9 +271,12 @@ if __name__ == '__main__':
                     pvals[i_pt] = 0.5 ** num_above_chance
                 else:
                     _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-                    if i_pt == 81:
-                        print(pvals[i_pt])
-                        print(acc[i_pt])
+
+                    if sen_type == 'active' and word == 'noun2':
+                        plot_pt = i_pt - 2 * time_step + time_adjust
+                        if plot_pt == 81:
+                            print(pvals[i_pt])
+                            print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
                         # print('meow')
                         pvals[i_pt] /= 2.0
@@ -288,9 +291,9 @@ if __name__ == '__main__':
                     if word == 'verb' and sen_type == 'active':
                         plot_pt = i_pt - time_step + time_adjust
                     elif word == 'noun2' and sen_type == 'active':
-                        print(pvals[i_pt])
+                        # print(pvals[i_pt])
                         plot_pt = i_pt - 2*time_step + time_adjust
-                        print(plot_pt)
+                        # print(plot_pt)
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
