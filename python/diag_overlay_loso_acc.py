@@ -274,7 +274,7 @@ if __name__ == '__main__':
 
                     if sen_type == 'active' and word == 'noun2':
                         plot_pt = i_pt - 2 * time_step + time_adjust
-                        if plot_pt == 7:
+                        if plot_pt == 81.0 or plot_pt == 82.0 or plot_pt ==107.0:
                             print(pvals[i_pt])
                             print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
