@@ -1125,6 +1125,158 @@ def lr_tgm_loso_fold(data,
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
 
+def lr_cross_tgm_loso_fold(data_list,
+                            labels_list,
+                            win_starts_list,
+                            win_len,
+                            sen_ints_list,
+                             fold,
+                            penalty='l1',
+                            adj='mean_center',
+                            doTimeAvg=False,
+                            doTestAvg=False,
+                            ddof=1,
+                            C=None):
+    tgm_acc = np.empty((len(data_list), len(data_list)), dtype='object')
+    tgm_pred = np.empty((len(data_list), len(data_list)), dtype='object')
+    cv_membership = np.empty((len(data_list), len(data_list)), dtype='object')
+    l_ints = np.empty((len(data_list), len(data_list)), dtype='object')
+
+    for i_data, train_data_all in enumerate(data_list):
+        train_labels_full = np.array(labels_list[i_data])
+        train_win_starts = win_starts_list[i_data]
+        train_sen_ints = sen_ints_list[i_data]
+        n_train_time = train_data_all.shape[2]
+
+        l_set = np.unique(train_labels_full)
+        n_l = len(l_set)
+        l_index = {l_set[i]: i for i in xrange(n_l)}
+        train_l_ints = np.array([l_index[l] for l in train_labels_full])
+
+        # train_uni_sen_ints = np.unique(train_sen_ints)
+
+        train_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_train_time)]) for w_s in train_win_starts]
+
+        n_train_w = len(train_windows)
+
+        for j_data, test_data_all in enumerate(data_list):
+            test_labels_full = np.array(labels_list[j_data])
+            test_win_starts = win_starts_list[j_data]
+            test_sen_ints = sen_ints_list[j_data]
+            n_test_time = test_data_all.shape[2]
+
+            l_set = np.unique(test_labels_full)
+            n_l = len(l_set)
+            l_index = {l_set[i]: i for i in xrange(n_l)}
+            test_l_ints = np.array([l_index[l] for l in test_labels_full])
+
+            test_uni_sen_ints = np.unique(test_sen_ints)
+
+            test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_test_time)]) for w_s in
+                             test_win_starts]
+
+            n_test_w = len(test_windows)
+
+            curr_tgm_acc = np.empty((1, n_train_w, n_test_w))
+            curr_tgm_pred = np.empty((1, n_train_w, n_test_w), dtype='object')
+
+            lint = test_uni_sen_ints[fold]
+            in_test = test_sen_ints == lint
+            in_train = train_sen_ints != lint
+
+            cv_membership[i_data, j_data] = in_test
+            l_ints[i_data, j_data] = train_l_ints
+
+
+            train_data_full = train_data_all[in_train, ...]
+            train_labels = np.ravel(train_l_ints[in_train])
+
+            test_data_full = test_data_all[in_test, ...]
+            test_labels = np.ravel(test_l_ints[in_test])
+
+            for wi in xrange(n_train_w):
+                train_time = train_windows[wi]
+                train_data = train_data_full[:, :, train_time]
+                if doTimeAvg:
+                    train_data = np.mean(train_data, axis=2)
+                else:
+                    train_data = np.reshape(train_data, (np.sum(in_train), -1))
+
+                if adj == 'mean_center':
+                    mu_train = np.mean(train_data, axis=0)
+                    train_data -= mu_train[None, :]
+                elif adj == 'zscore':
+                    mu_train = np.mean(train_data, axis=0)
+                    std_train = np.std(train_data, axis=0, ddof=ddof)
+                    train_data -= mu_train[None, :]
+                    train_data /= std_train[None, :]
+
+                if penalty is None:
+                    model = sklearn.linear_model.LogisticRegression(
+                        C=1e100,
+                        penalty='l2',
+                        solver='liblinear',
+                        multi_class='ovr',
+                        dual=DUAL['l2'],
+                        class_weight='balanced')
+                elif C is None:
+                    model = sklearn.linear_model.LogisticRegressionCV(Cs=C_OPTIONS[penalty],
+                                                                      cv=2,
+                                                                      penalty=penalty,
+                                                                      solver='liblinear',
+                                                                      dual=DUAL[penalty],
+                                                                      multi_class='ovr',
+                                                                      class_weight='balanced',
+                                                                      refit=True)
+                else:
+                    model = sklearn.linear_model.LogisticRegression(
+                        C=C,
+                        penalty=penalty,
+                        solver='liblinear',
+                        multi_class='ovr',
+                        class_weight='balanced')
+
+
+                model.fit(train_data, train_labels)
+
+                for wj in xrange(n_test_w):
+                    test_time = test_windows[wj]
+                    test_data = test_data_full[:, :, test_time]
+                    if doTimeAvg:
+                        test_data = np.mean(test_data, axis=2)
+                    else:
+                        test_data = np.reshape(test_data, (np.sum(in_test), -1))
+
+                    if doTestAvg:
+                        uni_test_labels = np.unique(test_labels)
+                        new_test_data = []
+                        for label in uni_test_labels:
+                            is_label = test_labels == label
+                            dat = np.mean(test_data[is_label, :], axis=0)
+                            new_test_data.append(np.reshape(dat, (1, -1)))
+                        test_data = np.concatenate(new_test_data, axis=0)
+                        if len(test_data.shape) == 1:
+                            test_data = np.reshape(test_data, (1, -1))
+                    else:
+                        uni_test_labels = test_labels
+
+
+                    if adj == 'mean_center':
+                        test_data -= mu_train[None, :]
+                    elif adj == 'zscore':
+                        test_data -= mu_train[None, :]
+                        test_data /= std_train[None, :]
+
+
+                    curr_tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
+                    curr_tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
+
+            tgm_acc[i_data, j_data] = curr_tgm_acc
+            tgm_pred[i_data, j_data] = curr_tgm_pred
+    return l_ints, cv_membership, tgm_acc, tgm_pred
+
+
+
 def lr_diag_loso_fold(data,
                     labels,
                     win_starts,
