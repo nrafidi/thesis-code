@@ -165,7 +165,8 @@ if __name__ == '__main__':
     if args.experiment == 'PassAct3':
         word_list = ['noun1', 'verb', 'noun2']
         chance = {'noun1': 0.25,
-                  'verb': 0.25}
+                  'verb': 0.25,
+                  'noun2': 0.25}
     else:
         word_list = ['noun1', 'verb', 'noun2']
         chance = {'noun1': 0.25,
