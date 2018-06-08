@@ -58,10 +58,6 @@ def str_to_bool(str_bool):
     else:
         return True
 
-def str_to_none(str_thing):
-    if str_thing =='None':
-        return None
-
 
 # Runs the TGM experiment
 def run_tgm_exp(experiment,
@@ -159,23 +155,24 @@ def run_tgm_exp(experiment,
 
     l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_cross_tgm_loso_fold(data_list=[n1_data, n2_data],
                             labels_list=[n1_labels, n2_labels],
-                            win_starts_list,
-                            win_len,
-                            sen_ints_list,
-                             fold,
-                            penalty='l1',
-                            adj='mean_center',
-                            doTimeAvg=False,
-                            doTestAvg=False,
-                            ddof=1,
-                            C=None)
+                            win_starts_list=[n1_win_starts, n2_win_starts],
+                            win_len=win_len,
+                            sen_ints_list=[n1_sen_ints, n2_sen_ints],
+                            fold=fold,
+                            penalty=alg[3:],
+                            adj=adj,
+                            doTimeAvg=doTimeAvg,
+                            doTestAvg=doTestAvg)
+
     np.savez_compressed(fname,
                         l_ints=l_ints,
                         cv_membership=cv_membership,
                         tgm_acc=tgm_acc,
                         tgm_pred=tgm_pred,
-                        win_starts=win_starts,
-                        time=time,
+                        n1_win_starts=n1_win_starts,
+                        n2_win_starts=n2_win_starts,
+                        n1_time=n1_time,
+                        n2_time=n2_time,
                         proc=proc)
 
 
@@ -183,8 +180,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--subject')
-    parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
-    parser.add_argument('--word', choices=['noun1', 'noun2', 'verb'])
     parser.add_argument('--win_len', type=int)
     parser.add_argument('--overlap', type=int)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
@@ -193,7 +188,6 @@ if __name__ == '__main__':
     parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
     parser.add_argument('--num_instances', type=int, default=1)
-    parser.add_argument('--reps_to_use')
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
     parser.add_argument('--force') #, default='False', choices=['True', 'False'])
@@ -203,10 +197,6 @@ if __name__ == '__main__':
     print(args)
     # Check that parameter setting is valid
     total_valid = True
-    # is_valid = args.reps_to_use <= NUM_REPS[args.experiment]
-    # total_valid = total_valid and is_valid
-    # if not is_valid:
-    #     print('num reps  wrong')
     is_valid = args.subject in VALID_SUBS[args.experiment]
     total_valid = total_valid and is_valid
     if not is_valid:
@@ -215,8 +205,6 @@ if __name__ == '__main__':
     if total_valid:
         run_tgm_exp(experiment=args.experiment,
                     subject=args.subject,
-                    sen_type=args.sen_type,
-                    word=args.word,
                     win_len=args.win_len,
                     overlap=args.overlap,
                     fold=args.fold,
@@ -226,7 +214,6 @@ if __name__ == '__main__':
                     doTimeAvg=str_to_bool(args.doTimeAvg),
                     doTestAvg=str_to_bool(args.doTestAvg),
                     num_instances=args.num_instances,
-                    reps_to_use=str_to_none(args.reps_to_use),
                     proc=args.proc,
                     random_state_perm=args.perm_random_state,
                     force=str_to_bool(args.force))
