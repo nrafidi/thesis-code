@@ -271,6 +271,9 @@ if __name__ == '__main__':
                     pvals[i_pt] = 0.5 ** num_above_chance
                 else:
                     _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+                    if i_pt == 81:
+                        print(pvals[i_pt])
+                        print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
                         # print('meow')
                         pvals[i_pt] /= 2.0
