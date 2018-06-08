@@ -272,11 +272,11 @@ if __name__ == '__main__':
                 else:
                     _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
 
-                    if sen_type == 'active' and word == 'noun2':
-                        plot_pt = i_pt - 2 * time_step + time_adjust
-                        if plot_pt == 81.0 or plot_pt == 82.0 or plot_pt ==107.0:
-                            print(pvals[i_pt])
-                            print(acc[i_pt])
+                    # if sen_type == 'active' and word == 'noun2':
+                    #     plot_pt = i_pt - 2 * time_step + time_adjust
+                    #     if plot_pt == 81.0 or plot_pt == 82.0 or plot_pt ==107.0:
+                    #         print(pvals[i_pt])
+                    #         print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
                         # print('meow')
                         pvals[i_pt] /= 2.0
@@ -293,7 +293,7 @@ if __name__ == '__main__':
                     elif word == 'noun2' and sen_type == 'active':
                         print('meow')
                         print(pvals[i_pt])
-                        plot_pt = i_pt - 2*time_step + time_adjust
+                        plot_pt = i_pt - time_step + time_adjust
                         print(plot_pt)
                     else:
                         plot_pt = i_pt
