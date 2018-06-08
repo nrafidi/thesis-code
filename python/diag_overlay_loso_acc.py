@@ -296,7 +296,7 @@ if __name__ == '__main__':
                         plot_pt = i_pt - 2*time_step + time_adjust
                         print(plot_pt)
                         print(acc[i_pt])
-                        print(acc[plot_pt])
+                        print(acc[int(plot_pt)])
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
