@@ -110,7 +110,8 @@ def run_tgm_exp(experiment,
                                                                                    is_region_sorted=False,
                                                                                    tmin=None,
                                                                                    tmax=None)
-
+    print(data.shape)
+    print(labels)
 
     tmin = time.min()
     tmax = time.max()

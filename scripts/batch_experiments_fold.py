@@ -9,11 +9,11 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'nr{rep}_rsPerm{rsP}_{mode}'
 
-FOLDS = range(16) #, 'coef']
+FOLDS = range(8) #, 'coef']
 EXPERIMENTS = ['PassAct3']
 SUBJECTS = ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z'] #['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 SEN_TYPES = ['active', 'passive']
-WORDS = ['noun1', 'verb']
+WORDS = ['noun2']
 WIN_LENS = [100]
 OVERLAPS = [12]
 IS_PERMS = [False]  # True
