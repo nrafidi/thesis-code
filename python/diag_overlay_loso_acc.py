@@ -289,11 +289,11 @@ if __name__ == '__main__':
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
                     if word == 'verb' and sen_type == 'active':
-                        plot_pt = i_pt - time_step + time_adjust
+                        plot_pt = i_pt # - time_step + time_adjust
                     elif word == 'noun2' and sen_type == 'active':
                         print('meow')
                         print(pvals[i_pt])
-                        plot_pt = i_pt - time_step + time_adjust
+                        plot_pt = i_pt #- time_step + time_adjust
                         print(plot_pt)
                     else:
                         plot_pt = i_pt
