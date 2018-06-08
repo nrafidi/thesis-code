@@ -274,7 +274,7 @@ if __name__ == '__main__':
 
                     if sen_type == 'active' and word == 'noun2':
                         plot_pt = i_pt - 2 * time_step + time_adjust
-                        if plot_pt == 81:
+                        if plot_pt == 7:
                             print(pvals[i_pt])
                             print(acc[i_pt])
                     if acc[i_pt] > chance[word]:
@@ -291,9 +291,10 @@ if __name__ == '__main__':
                     if word == 'verb' and sen_type == 'active':
                         plot_pt = i_pt - time_step + time_adjust
                     elif word == 'noun2' and sen_type == 'active':
-                        # print(pvals[i_pt])
+                        print('meow')
+                        print(pvals[i_pt])
                         plot_pt = i_pt - 2*time_step + time_adjust
-                        # print(plot_pt)
+                        print(plot_pt)
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
