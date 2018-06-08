@@ -255,12 +255,12 @@ if __name__ == '__main__':
                     acc = acc[time_step:]
                     frac = frac[time_step:]
                     std = std[time_step:]
-                    sub_word_diags = sub_word_diags[:, :, time_step:]
+                    sub_word_diags_word = sub_word_diags[:, :, time_step:]
                 elif word == 'noun2':
                     acc = acc[2*time_step:]
                     frac = frac[2*time_step:]
                     std = std[2 * time_step:]
-                    sub_word_diags = sub_word_diags[:, :, 2*time_step:]
+                    sub_word_diags_word = sub_word_diags[:, :, 2*time_step:]
 
             ax.plot(range(len(acc)), acc, label='{word} accuracy'.format(word=word), color=color)
             ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
@@ -269,10 +269,10 @@ if __name__ == '__main__':
             pvals = np.empty((num_time,))
             for i_pt in range(num_time):
                 if args.sig_test == 'binomial':
-                    num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
+                    num_above_chance = np.sum(np.squeeze(sub_word_diags_word[i_word, :, i_pt]) > chance[word])
                     pvals[i_pt] = 0.5 ** num_above_chance
                 else:
-                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
+                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags_word[i_word, :, i_pt]) - chance[word])
 
                     if acc[i_pt] > chance[word]:
                         pvals[i_pt] /= 2.0
