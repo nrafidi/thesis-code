@@ -276,17 +276,18 @@ if __name__ == '__main__':
                         pvals[i_pt] /= 2.0
                     else:
                         # print('woof')
-                        pvals[i_pt] = 1.0 # - pvals[i_pt]/2.0
+                        pvals[i_pt] = 1.0 - pvals[i_pt]/2.0
                     # print(pvals[i_pt])
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
-            print(pval_thresh)
-            print(np.min(pvals))
+            # print(pval_thresh)
+            # print(np.min(pvals))
             for i_pt in range(num_time):
                 if pvals[i_pt] <= pval_thresh:
                     if word == 'verb' and sen_type == 'active':
-                        plot_pt = i_pt - time_step
+                        plot_pt = i_pt - time_step + time_adjust
                     elif word == 'noun2' and sen_type == 'active':
-                        plot_pt = i_pt - 2*time_step
+                        print(pvals[i_pt])
+                        plot_pt = i_pt - 2*time_step + time_adjust
                     else:
                         plot_pt = i_pt
                     ax.scatter(plot_pt, 0.82 + 0.02*i_word, color=color, marker='*')
