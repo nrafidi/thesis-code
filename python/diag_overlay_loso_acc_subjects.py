@@ -342,8 +342,8 @@ if __name__ == '__main__':
             good_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][best_subs[j_sub]]
             bad_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][worst_subs[j_sub]]
 
-            curr_axs[j_sub, 0].set_title('Good Subject: {}'.format(good_sub_name), legendfontsize=axistitlesize)
-            curr_axs[j_sub, 1].set_title('Bad Subject: {}'.format(bad_sub_name), legendfontsize=axistitlesize)
+            curr_axs[j_sub, 0].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
+            curr_axs[j_sub, 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
 
             if i_sen == 1:
                 best_sub_axs[j_sub, i_sen].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
