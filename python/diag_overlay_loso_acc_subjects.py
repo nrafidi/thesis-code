@@ -219,7 +219,7 @@ if __name__ == '__main__':
         sen_time.append(time[win_starts])
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
         sub_sen_word_diags.append(sub_word_diags[None, ...])
-        sub_task_diags.append(sub_word_diags - chance[sen_type][word])
+        sub_task_diags.append(sub_word_diags - chance[word])
 
     sub_sen_word_diags = np.concatenate(sub_sen_word_diags, axis=0)
     sub_task_diags = np.concatenate(sub_task_diags, axis=1)
