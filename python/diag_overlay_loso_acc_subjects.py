@@ -212,6 +212,7 @@ if __name__ == '__main__':
 
             num_sub = acc_all.shape[0]
             sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
+            print(sub_diags.shape)
             sub_word_diags.append(sub_diags[None, :])
             if word == 'noun1':
                 time = word_time
@@ -219,10 +220,12 @@ if __name__ == '__main__':
         sen_time.append(time[win_starts])
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
         sub_sen_word_diags.append(sub_word_diags[None, ...])
+        print(sub_word_diags.shape)
         sub_task_diags.append(sub_word_diags - chance[word])
 
     sub_sen_word_diags = np.concatenate(sub_sen_word_diags, axis=0)
     sub_task_diags = np.concatenate(sub_task_diags, axis=1)
+    print(sub_task_diags.shape)
 
     num_time = len(win_starts)
     colors = ['r', 'b', 'g']
