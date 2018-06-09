@@ -224,6 +224,7 @@ if __name__ == '__main__':
         sub_task_diags.append(sub_word_diags - chance[word])
 
     sub_sen_word_diags = np.concatenate(sub_sen_word_diags, axis=0)
+    print(sub_sen_word_diags.shape)
     sub_task_diags = np.concatenate(sub_task_diags, axis=0)
     print(sub_task_diags.shape)
 
@@ -261,8 +262,8 @@ if __name__ == '__main__':
             for k_word, word in enumerate(word_list):
                 color = colors[k_word]
 
-                good_sub = sub_sen_word_diags[i_sen, best_subs[j_sub], :]
-                bad_sub = sub_sen_word_diags[i_sen, best_subs[j_sub], :]
+                good_sub = sub_sen_word_diags[i_sen, k_word, best_subs[j_sub], :]
+                bad_sub = sub_sen_word_diags[i_sen, k_word, best_subs[j_sub], :]
 
                 if sen_type == 'active' and args.alg == 'lr-l2':
                     if word == 'verb':
