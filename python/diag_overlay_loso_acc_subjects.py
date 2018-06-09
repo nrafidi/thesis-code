@@ -229,7 +229,10 @@ if __name__ == '__main__':
     xtick_array = np.arange(0, len(time[win_starts]), time_step) - time_adjust
 
     sub_scores = np.max(sub_task_diags, axis=2)
-    sub_scores /= np.max(sub_scores, axis=1)
+    print(sub_scores.shape)
+    meow = np.max(sub_scores, axis=1)
+    print(meow.shape)
+    sub_scores /= meow[:, None]
     sub_scores = np.sum(sub_scores, axis=1)
 
     sorted_subs = np.argsort(sub_scores)
