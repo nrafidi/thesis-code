@@ -350,7 +350,7 @@ if __name__ == '__main__':
                         size=axislettersize, weight='bold')
                 worst_sub_axs[j_sub, i_sen].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
                                                 size=axislettersize, weight='bold')
-        curr_fig.suptitle('Best/Words {num} Subjects\n{sen_type} {experiment}'.format(num=num_sub_to_plot,
+        curr_fig.suptitle('Best/Worst {num} Subjects\n{sen_type} {experiment}'.format(num=num_sub_to_plot,
                                                                                       sen_type=sen_type,
                                                                                       experiment=args.experiment),
                           fontsize=suptitlesize)
