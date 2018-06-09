@@ -353,9 +353,9 @@ if __name__ == '__main__':
             curr_axs[i_ap_fig + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
 
             if i_sen == 1:
-                best_sub_axs[i_bw_fig].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
+                best_sub_axs[i_bw_fig].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[i_bw_fig].transAxes,
                         size=axislettersize, weight='bold')
-                worst_sub_axs[i_bw_fig].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
+                worst_sub_axs[i_bw_fig].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[i_bw_fig].transAxes,
                                                 size=axislettersize, weight='bold')
             i_bw_fig += 1
             i_ap_fig += 2
