@@ -3,10 +3,10 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import run_TGM_LOSO_EOS
 import string
 import tgm_loso_acc_eos
-from scipy.stats import wilcoxon
+from mpl_toolkits.axes_grid1 import AxesGrid
+import run_TGM_LOSO_EOS
 
 PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
@@ -54,12 +54,15 @@ if __name__ == '__main__':
     num_sub_to_plot = args.num_sub
 
     ticklabelsize = 14
-    legendfontsize = 16
+    legendfontsize = 14
     axislabelsize = 18
     suptitlesize = 25
     axistitlesize = 20
     axislettersize = 20
     time_step = int(250 / args.overlap)
+
+    max_line = 0.3 * 2 * time_step
+    colors = ['b', 'm', 'g', 'k', 'r', 'c']
 
     chance = {'krns2': {'noun1': 0.125,
                   'verb': 0.25,
@@ -80,7 +83,6 @@ if __name__ == '__main__':
         word_list.append('propid')
 
     sen_type_list = ['active', 'passive', 'pooled']
-    sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if sen_type == 'pooled':
             word_list.append('voice')
@@ -89,11 +91,6 @@ if __name__ == '__main__':
             else:
                 word_list.append('senlen')
 
-
-        ax = sen_axs[i_sen_type]
-        acc_diags = []
-        std_diags = []
-        frac_diags = []
         time = []
         win_starts = []
         sub_word_diags = []
@@ -109,103 +106,82 @@ if __name__ == '__main__':
                                                                                                         avgTime=args.avgTime,
                                                                                                         avgTest=args.avgTest)
 
-            frac_diags.append(np.diag(intersection).astype('float')/float(acc_all.shape[0]))
-            acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
-            std_diags.append(np.diag(np.std(acc_all, axis=0))/float(acc_all.shape[0]))
             num_sub = acc_all.shape[0]
             sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
             sub_word_diags.append(sub_diags[None, :])
-
-
-
             if i_word == 0:
                 time = word_time
                 win_starts = word_win_starts
 
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
+        print(sub_word_diags.shape)
+        sub_scores = np.max(sub_word_diags, axis=2)
+        print(sub_scores.shape)
+        meow = np.max(sub_scores, axis=0)
+        print(meow.shape)
+        sub_scores /= meow[None, :]
+        sub_scores = np.sum(sub_scores, axis=0)
+        print(sub_scores.shape)
+
+        sorted_subs = np.argsort(sub_scores)
+
+        worst_subs = sorted_subs[:num_sub_to_plot]
+        best_subs = sorted_subs[(num_sub - 1):(num_sub - 1 - num_sub_to_plot):-1]
+
         num_time = len(win_starts)
-        max_line = 0.3 * 2 * time_step
-        colors = ['b', 'm', 'g', 'k', 'r', 'c']
-
-        for i_word, word in enumerate(word_list):
-            color = colors[i_word]
-            acc = acc_diags[i_word]
-            std = std_diags[i_word]
-            frac = frac_diags[i_word]
-
-            ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
-            ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
-                            alpha=0.3)
-            pvals = np.empty((num_time,))
-            for i_pt in range(num_time):
-                if args.sig_test == 'binomial':
-                    num_above_chance = np.sum(np.squeeze(sub_word_diags[i_word, :, i_pt]) > chance[word])
-                    pvals[i_pt] = 0.5**num_above_chance
-                else:
-                    _, pvals[i_pt] = wilcoxon(np.squeeze(sub_word_diags[i_word, :, i_pt]) - chance[word])
-                    if acc[i_pt] > chance[word]:
-                        # print('meow')
-                        pvals[i_pt] /= 2.0
-                    else:
-                        # print('woof')
-                        pvals[i_pt] = 1.0 - pvals[i_pt] / 2.0
-            # if args.experiment == 'PassAct3':
-            #     alpha=0.01
-            # else:
-            #     alpha=0.05
-            pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
-            for i_pt in range(num_time):
-                if  pvals[i_pt]  <= pval_thresh:
-                    ax.scatter(i_pt, 0.98 - float(i_word)*0.02, color=color, marker='*')
-        ax.set_xticks(range(0, len(time[win_starts]), time_step))
         label_time = time[win_starts]
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
 
-        ax.axhline(y=chance['agent'], color='k', linestyle='dashed')
-        if sen_type == 'pooled':
-            if args.experiment == 'krns2':
-                ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot')
-            if args.experiment == 'PassAct3':
-                ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot')
-            else:
-                ax.axhline(y=chance['voice'], color='k', linestyle='dashdot')
-            ax.axhline(y=chance['propid'], color='k', linestyle=':')
-        ax.set_xticklabels(label_time)
-        ax.axvline(x=max_line, color='k')
-        if i_sen_type == 0:
-            ax.set_ylabel('Accuracy', fontsize=axislabelsize)
-        if i_sen_type == 1:
-            ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
-        ax.set_ylim([0.0, 1.0])
-        ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
-        ax.tick_params(labelsize=ticklabelsize)
-        if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(0.6, 0.8), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
-        ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
-        ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
-                size=axislettersize, weight='bold')
+        curr_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
+        curr_axs = AxesGrid(curr_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
+                            axes_pad=0.7, share_all=True, direction='row', aspect=False)
+        i_ax = 0
+        for j_sub in range(num_sub_to_plot):
+            for i_word, word in enumerate(word_list):
+                color = colors[i_word]
 
-    sen_fig.subplots_adjust(top=0.85)
-    sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
-    sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
-            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=win_len,
-            overlap=args.overlap,
-            num_instances=num_instances,
-            sig=args.sig_test,
-            indep=args.indep
-        ), bbox_inches='tight')
-    sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
-            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-            win_len=win_len,
-            overlap=args.overlap,
-            num_instances=num_instances,
-            sig=args.sig_test,
-            indep=args.indep
-        ), bbox_inches='tight')
+                good_sub = sub_word_diags[i_word, best_subs[j_sub]]
+                bad_sub = sub_word_diags[i_word, worst_subs[j_sub]]
+
+                curr_axs[i_ax].plot(good_sub, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
+                curr_axs[i_ax + 1].plot(bad_sub, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
+                curr_axs[i_ax].axhline(y=chance[experiment][word], color='k', linestyle='dashed')
+
+
+            for j_ax in range(2):
+                curr_axs[i_ax + j_ax].set_xticks(range(0, len(time[win_starts]), time_step))
+                curr_axs[i_ax + j_ax].set_xticklabels(label_time)
+                curr_axs[i_ax + j_ax].axvline(x=max_line, color='k')
+
+                curr_axs[i_ax + j_ax].set_ylim([0.0, 1.0])
+                curr_axs[i_ax + j_ax].set_xlim([0, len(time[win_starts]) + 0.8*time_step])
+                curr_axs[i_ax + j_ax].tick_params(labelsize=ticklabelsize)
+
+            good_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][best_subs[j_sub]]
+            bad_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][worst_subs[j_sub]]
+
+            curr_axs[i_ax].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
+            curr_axs[i_ax + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
+            curr_axs[i_ax + 1].legend(bbox_to_anchor=(1.0, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+
+            i_ax += 2
+
+        curr_fig.suptitle('Best/Worst {num} Subjects\n{sen_type} {experiment}'.format(num=num_sub_to_plot,
+                                                                                      sen_type=sen_type,
+                                                                                      experiment=args.experiment),
+                          fontsize=suptitlesize)
+        curr_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+        curr_fig.text(0.04, 0.48, 'Accuracy', va='center',
+                      rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+        curr_fig.savefig(
+            '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_top-bot{num}_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+                exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+                win_len=win_len,
+                overlap=args.overlap,
+                num_instances=num_instances,
+                num=num_sub_to_plot
+            ), bbox_inches='tight')
 
     plt.show()
 
