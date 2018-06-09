@@ -263,7 +263,7 @@ if __name__ == '__main__':
                 color = colors[k_word]
 
                 good_sub = sub_sen_word_diags[i_sen, k_word, best_subs[j_sub], :]
-                bad_sub = sub_sen_word_diags[i_sen, k_word, best_subs[j_sub], :]
+                bad_sub = sub_sen_word_diags[i_sen, k_word, worst_subs[j_sub], :]
 
                 if sen_type == 'active' and args.alg == 'lr-l2':
                     if word == 'verb':
@@ -314,10 +314,10 @@ if __name__ == '__main__':
 
             if i_sen == 1:
                 good_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][best_subs[j_sub]]
-                bad_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][best_subs[j_sub]]
-                best_sub_axs[j_sub, i_sen].text(-0.3, 1.25, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
+                bad_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][worst_subs[j_sub]]
+                best_sub_axs[j_sub, i_sen].text(-0.15, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
                         size=axislettersize, weight='bold')
-                worst_sub_axs[j_sub, i_sen].text(-0.3, 1.25, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
+                worst_sub_axs[j_sub, i_sen].text(-0.15, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
                                                 size=axislettersize, weight='bold')
 
     best_sub_fig.suptitle('Top {} Subjects'.format(num_sub_to_plot), fontsize=suptitlesize)
