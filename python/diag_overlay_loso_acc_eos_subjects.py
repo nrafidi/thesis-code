@@ -82,14 +82,14 @@ if __name__ == '__main__':
 
     sen_type_list = ['active', 'passive', 'pooled']
     for i_sen_type, sen_type in enumerate(sen_type_list):
-        if sen_type == 'pooled':
-            if num_instances > 1:
-                word_list.append('propid')
-            word_list.append('voice')
-            if experiment == 'krns2':
-                word_list.append('noun1')
-            else:
-                word_list.append('senlen')
+        # if sen_type == 'pooled':
+        #     if num_instances > 1:
+        #         word_list.append('propid')
+        #     word_list.append('voice')
+        #     if experiment == 'krns2':
+        #         word_list.append('noun1')
+        #     else:
+        #         word_list.append('senlen')
 
         time = []
         win_starts = []
