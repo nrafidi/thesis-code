@@ -4,11 +4,9 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
 import os
 import run_TGM_LOSO
-import string
-from scipy.stats import wilcoxon
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -173,7 +171,7 @@ if __name__ == '__main__':
                   'noun2': 0.25}
 
     ticklabelsize = 14
-    legendfontsize = 16
+    legendfontsize = 14
     axislabelsize = 18
     suptitlesize = 25
     axistitlesize = 20
@@ -245,10 +243,22 @@ if __name__ == '__main__':
     worst_subs = sorted_subs[:num_sub_to_plot]
     best_subs = sorted_subs[(num_sub-1):(num_sub - 1 - num_sub_to_plot):-1]
 
-    best_sub_fig, best_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(8*num_sub_to_plot, 8))
-    worst_sub_fig, worst_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(8*num_sub_to_plot, 8))
-    act_sub_fig, act_sub_axs = plt.subplots(num_sub_to_plot, 2, figsize=(8 * num_sub_to_plot, 8))
-    pass_sub_fig, pass_sub_axs = plt.subplots(num_sub_to_plot, 2, figsize=(8 * num_sub_to_plot, 8))
+    best_sub_fig = plt.figure(figsize=(8*num_sub_to_plot, 8))
+    best_sub_axs = AxesGrid(best_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
+                          axes_pad=0.7, share_all=True)
+    worst_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+    worst_sub_axs = AxesGrid(worst_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
+                            axes_pad=0.7, share_all=True)
+
+    act_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+    act_sub_axs = AxesGrid(act_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
+                             axes_pad=0.7, share_all=True)
+
+    pass_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+    pass_sub_axs = AxesGrid(pass_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
+                           axes_pad=0.7, share_all=True)
+
+    i_bw_fig = 0
     for i_sen, sen_type in enumerate(sen_type_list):
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
@@ -262,12 +272,13 @@ if __name__ == '__main__':
             start_line = time_step - time_adjust
             curr_fig = pass_sub_fig
             curr_axs = pass_sub_axs
+        i_ap_fig = 0
         for j_sub in range(num_sub_to_plot):
-            best_sub_axs[j_sub, i_sen].set_xticks(xtick_array)
-            worst_sub_axs[j_sub, i_sen].set_xticks(xtick_array)
+            best_sub_axs[i_bw_fig].set_xticks(xtick_array)
+            worst_sub_axs[i_bw_fig].set_xticks(xtick_array)
 
             for i_ax in range(2):
-                curr_axs[j_sub, i_ax].set_xticks(xtick_array)
+                curr_axs[i_ap_fig + i_ax].set_xticks(xtick_array)
 
             for k_word, word in enumerate(word_list):
                 color = colors[k_word]
@@ -283,78 +294,78 @@ if __name__ == '__main__':
                         good_sub = good_sub[2*time_step:]
                         bad_sub = bad_sub[2*time_step:]
 
-                best_sub_axs[j_sub, i_sen].plot(range(len(good_sub)), good_sub,
-                                                label='{word} accuracy'.format(word=word),
+                best_sub_axs[i_bw_fig].plot(range(len(good_sub)), good_sub,
+                                                label='{word}'.format(word=word),
                                                 color=color)
-                curr_axs[j_sub, 0].plot(range(len(good_sub)), good_sub,
-                                                label='{word} accuracy'.format(word=word),
+                curr_axs[i_ap_fig].plot(range(len(good_sub)), good_sub,
+                                                label='{word}'.format(word=word),
                                                 color=color)
-                worst_sub_axs[j_sub, i_sen].plot(range(len(bad_sub)), bad_sub,
-                                                label='{word} accuracy'.format(word=word),
+                worst_sub_axs[i_bw_fig].plot(range(len(bad_sub)), bad_sub,
+                                                label='{word}'.format(word=word),
                                                 color=color)
-                curr_axs[j_sub, 1].plot(range(len(bad_sub)), bad_sub,
-                                                 label='{word} accuracy'.format(word=word),
+                curr_axs[i_ap_fig + 1].plot(range(len(bad_sub)), bad_sub,
+                                                 label='{word}'.format(word=word),
                                                  color=color)
 
             min_time = -0.5
             max_time = 0.5*len(time[win_starts])/time_step
             label_time = np.arange(min_time, max_time, 0.5)
-            best_sub_axs[j_sub, i_sen].axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
-            worst_sub_axs[j_sub, i_sen].axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
-            best_sub_axs[j_sub, i_sen].set_xticklabels(label_time)
-            worst_sub_axs[j_sub, i_sen].set_xticklabels(label_time)
-            best_sub_axs[j_sub, i_sen].tick_params(labelsize=ticklabelsize)
-            worst_sub_axs[j_sub, i_sen].tick_params(labelsize=ticklabelsize)
+            best_sub_axs[i_bw_fig].axhline(y=0.25, color='k', linestyle='dashed', label='chance')
+            worst_sub_axs[i_bw_fig].axhline(y=0.25, color='k', linestyle='dashed', label='chance')
+            best_sub_axs[i_bw_fig].set_xticklabels(label_time)
+            worst_sub_axs[i_bw_fig].set_xticklabels(label_time)
+            best_sub_axs[i_bw_fig].tick_params(labelsize=ticklabelsize)
+            worst_sub_axs[i_bw_fig].tick_params(labelsize=ticklabelsize)
             for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-                best_sub_axs[j_sub, i_sen].axvline(x=v, color='k')
-                worst_sub_axs[j_sub, i_sen].axvline(x=v, color='k')
+                best_sub_axs[i_bw_fig].axvline(x=v, color='k')
+                worst_sub_axs[i_bw_fig].axvline(x=v, color='k')
                 if i_v < len(text_to_write):
-                    best_sub_axs[j_sub, i_sen].text(v + 0.15, 0.9, text_to_write[i_v])
-                    worst_sub_axs[j_sub, i_sen].text(v + 0.15, 0.9, text_to_write[i_v])
+                    best_sub_axs[i_bw_fig].text(v + 0.15, 0.9, text_to_write[i_v])
+                    worst_sub_axs[i_bw_fig].text(v + 0.15, 0.9, text_to_write[i_v])
 
-            best_sub_axs[j_sub, i_sen].set_ylim([0.0, 1.0])
-            worst_sub_axs[j_sub, i_sen].set_ylim([0.0, 1.0])
-            best_sub_axs[j_sub, i_sen].set_xlim([start_line, max_line + time_step*5])
-            worst_sub_axs[j_sub, i_sen].set_xlim([start_line, max_line + time_step * 5])
+            best_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
+            worst_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
+            best_sub_axs[i_bw_fig].set_xlim([start_line, max_line + time_step*5])
+            worst_sub_axs[i_bw_fig].set_xlim([start_line, max_line + time_step * 5])
 
             for i_ax in range(2):
-                curr_axs[j_sub, i_ax].axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
-                curr_axs[j_sub, i_ax].set_xticklabels(label_time)
-                curr_axs[j_sub, i_ax].tick_params(labelsize=ticklabelsize)
+                curr_axs[i_ap_fig + i_ax].axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
+                curr_axs[i_ap_fig + i_ax].set_xticklabels(label_time)
+                curr_axs[i_ap_fig + i_ax].tick_params(labelsize=ticklabelsize)
                 for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
-                    curr_axs[j_sub, i_ax].axvline(x=v, color='k')
+                    curr_axs[i_ap_fig + i_ax].axvline(x=v, color='k')
                     if i_v < len(text_to_write):
-                        curr_axs[j_sub, i_ax].text(v + 0.15, 0.9, text_to_write[i_v])
-                curr_axs[j_sub, i_ax].set_ylim([0.0, 1.0])
-                curr_axs[j_sub, i_ax].set_xlim([start_line, max_line + time_step * 5])
+                        curr_axs[i_ap_fig + i_ax].text(v + 0.15, 0.9, text_to_write[i_v])
+                curr_axs[i_ap_fig + i_ax].set_ylim([0.0, 1.0])
+                curr_axs[i_ap_fig + i_ax].set_xlim([start_line, max_line + time_step * 5])
 
-            curr_axs[j_sub, 0].set_ylabel('Accuracy', fontsize=axislabelsize)
-            curr_axs[j_sub, 1].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
-            if i_sen == 0:
-                best_sub_axs[j_sub, i_sen].set_ylabel('Accuracy', fontsize=axislabelsize)
-                worst_sub_axs[j_sub, i_sen].set_ylabel('Accuracy', fontsize=axislabelsize)
+            curr_axs[i_ap_fig + 1].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
             if i_sen == 1:
-                best_sub_axs[j_sub, i_sen].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
-                worst_sub_axs[j_sub, i_sen].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
-            best_sub_axs[j_sub, i_sen].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
-            worst_sub_axs[j_sub, i_sen].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]),
+                best_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
+                worst_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
+            best_sub_axs[i_bw_fig].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
+            worst_sub_axs[i_bw_fig].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]),
                                                  fontsize=axistitlesize)
             good_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][best_subs[j_sub]]
             bad_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][worst_subs[j_sub]]
 
-            curr_axs[j_sub, 0].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
-            curr_axs[j_sub, 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
+            curr_axs[i_ap_fig].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
+            curr_axs[i_ap_fig + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
 
             if i_sen == 1:
-                best_sub_axs[j_sub, i_sen].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
+                best_sub_axs[i_bw_fig].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
                         size=axislettersize, weight='bold')
-                worst_sub_axs[j_sub, i_sen].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
+                worst_sub_axs[i_bw_fig].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
                                                 size=axislettersize, weight='bold')
+            i_bw_fig += 1
+            i_ap_fig += 2
         curr_fig.suptitle('Best/Worst {num} Subjects\n{sen_type} {experiment}'.format(num=num_sub_to_plot,
                                                                                       sen_type=sen_type,
                                                                                       experiment=args.experiment),
                           fontsize=suptitlesize)
         curr_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+        curr_fig.text(0.04, 0.5, 'Accuracy', va='center',
+                       rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
         curr_fig.subplots_adjust(top=0.85)
         curr_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_diag_acc_top-bot{num}_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
@@ -370,7 +381,11 @@ if __name__ == '__main__':
 
 
     best_sub_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+    best_sub_fig.text(0.04, 0.5, 'Accuracy', va='center',
+                  rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     worst_sub_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+    worst_sub_fig.text(0.04, 0.5, 'Accuracy', va='center',
+                      rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     best_sub_fig.subplots_adjust(top=0.85)
     worst_sub_fig.subplots_adjust(top=0.85)
 
