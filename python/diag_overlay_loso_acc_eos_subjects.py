@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
             num_sub = acc_all.shape[0]
             sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
-            sub_word_diags.append(sub_diags[None, :])
+            sub_word_diags.append(sub_diags[None, :] - chance[experiment][word])
             if i_word == 0:
                 time = word_time
                 win_starts = word_win_starts
