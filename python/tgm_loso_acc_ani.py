@@ -81,10 +81,10 @@ def intersect_accs(exp,
     n2n1_acc_all = np.concatenate(n2n1_acc_by_sub, axis=0)
     n2n2_acc_all = np.concatenate(n2n2_acc_by_sub, axis=0)
 
-    acc_all = np.concatenate([n1n1_acc_all[None, ...],
-                              n1n2_acc_all[None, ...],
-                              n2n1_acc_all[None, ...],
-                              n2n2_acc_all[None, ...],], axis=0)
+    acc_all = [n1n1_acc_all,
+              n1n2_acc_all,
+              n2n1_acc_all,
+              n2n2_acc_all]
 
     n1_time_all = np.mean(np.concatenate(n1_time_by_sub, axis=0), axis=0)
     n2_time_all = np.mean(np.concatenate(n2_time_by_sub, axis=0), axis=0)
@@ -130,9 +130,6 @@ if __name__ == '__main__':
 
     titles = ['Noun1-Noun1', 'Noun1-Noun2', 'Noun2-Noun1', 'Noun2-Noun2']
 
-    mean_acc_all = np.mean(acc_all, axis=1)
-    print(mean_acc_all.shape)
-
     time_step = int(50 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(16, 16))
@@ -144,7 +141,7 @@ if __name__ == '__main__':
         time_win_y = time[i_combo][1][win_starts[i_combo][1]]
 
         ax = combo_grid[i_combo]
-        im = ax.imshow(mean_acc_all[i_combo, ...], interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
+        im = ax.imshow(np.mean(acc_all[i_combo], axis=0), interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
 
         ax.set_title(titles[i_combo], fontsize=axistitlesize)
 
