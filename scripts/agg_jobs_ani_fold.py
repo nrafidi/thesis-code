@@ -22,7 +22,8 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(batch_exp.FOLDS,
+                                   batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.ALGS,
