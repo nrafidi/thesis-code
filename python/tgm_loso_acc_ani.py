@@ -143,21 +143,27 @@ if __name__ == '__main__':
         ax = combo_grid[i_combo]
         im = ax.imshow(np.mean(acc_all[i_combo], axis=0), interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.0)
 
+        print(acc_all[i_combo].shape)
+        print(len(time_win_x))
+
         ax.set_title(titles[i_combo], fontsize=axistitlesize)
 
         ax.set_xticks(np.arange(0.0, float(len(time_win_x)), float(time_step)) - time_adjust)
         ax.set_yticks(np.arange(0.0, float(len(time_win_y)), time_step) - time_adjust)
 
+        ax.set_xlim([0.0, float(len(time_win_x))])
+        ax.set_ylim([float(len(time_win_y)), 0.0])
+
         min_time = 0.0
         max_time_x = 0.1 * len(time_win_x) / time_step
         label_time_x = np.arange(min_time, max_time_x, 0.5)
         ax.set_xticklabels(label_time_x)
-        ax.set_xlim(0.0, max_time_x)
+
 
         max_time_y = 0.1 * len(time_win_y) / time_step
         label_time_y = np.arange(min_time, max_time_y, 0.5)
         ax.set_yticklabels(label_time_y)
-        ax.set_ylim(0.0, max_time_y)
+
         ax.tick_params(labelsize=ticklabelsize)
         ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                 size=axislettersize, weight='bold')
