@@ -243,20 +243,20 @@ if __name__ == '__main__':
     worst_subs = sorted_subs[:num_sub_to_plot]
     best_subs = sorted_subs[(num_sub-1):(num_sub - 1 - num_sub_to_plot):-1]
 
-    best_sub_fig = plt.figure(figsize=(8*num_sub_to_plot, 8))
+    best_sub_fig = plt.figure(figsize=(8, 8*num_sub_to_plot))
     best_sub_axs = AxesGrid(best_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
-                          axes_pad=0.2, share_all=True, direction='column')
-    worst_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+                          axes_pad=0.5, share_all=True, direction='column')
+    worst_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     worst_sub_axs = AxesGrid(worst_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
-                            axes_pad=0.2, share_all=True, direction='column')
+                            axes_pad=0.5, share_all=True, direction='column')
 
-    act_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+    act_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     act_sub_axs = AxesGrid(act_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
-                             axes_pad=0.2, share_all=True, direction='row')
+                             axes_pad=0.5, share_all=True, direction='row')
 
-    pass_sub_fig = plt.figure(figsize=(8 * num_sub_to_plot, 8))
+    pass_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     pass_sub_axs = AxesGrid(pass_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
-                           axes_pad=0.2, share_all=True, direction='row')
+                           axes_pad=0.5, share_all=True, direction='row')
 
     i_bw_fig = 0
     for i_sen, sen_type in enumerate(sen_type_list):
