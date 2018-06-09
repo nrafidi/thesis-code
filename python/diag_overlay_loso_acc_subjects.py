@@ -366,7 +366,7 @@ if __name__ == '__main__':
         curr_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
         curr_fig.text(0.04, 0.5, 'Accuracy', va='center',
                        rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-        curr_fig.subplots_adjust(top=0.85)
+        # curr_fig.subplots_adjust(top=0.85)
         curr_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_diag_acc_top-bot{num}_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=args.experiment, num=num_sub_to_plot, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
@@ -386,8 +386,8 @@ if __name__ == '__main__':
     worst_sub_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     worst_sub_fig.text(0.04, 0.5, 'Accuracy', va='center',
                       rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-    best_sub_fig.subplots_adjust(top=0.85)
-    worst_sub_fig.subplots_adjust(top=0.85)
+    # best_sub_fig.subplots_adjust(top=0.85)
+    # worst_sub_fig.subplots_adjust(top=0.85)
 
     best_sub_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_top{num}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
