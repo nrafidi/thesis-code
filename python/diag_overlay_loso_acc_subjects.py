@@ -184,7 +184,7 @@ if __name__ == '__main__':
 
     num_sub = float(len(run_TGM_LOSO.VALID_SUBS[args.experiment]))
 
-    num_sub_to_plot = args.num_subs
+    num_sub_to_plot = args.num_sub
 
     sen_accs = []
     sen_stds = []
