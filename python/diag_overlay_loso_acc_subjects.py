@@ -224,7 +224,7 @@ if __name__ == '__main__':
         sub_task_diags.append(sub_word_diags - chance[word])
 
     sub_sen_word_diags = np.concatenate(sub_sen_word_diags, axis=0)
-    sub_task_diags = np.concatenate(sub_task_diags, axis=1)
+    sub_task_diags = np.concatenate(sub_task_diags, axis=0)
     print(sub_task_diags.shape)
 
     num_time = len(win_starts)
@@ -233,10 +233,11 @@ if __name__ == '__main__':
 
     sub_scores = np.max(sub_task_diags, axis=2)
     print(sub_scores.shape)
-    meow = np.max(sub_scores, axis=1)
+    meow = np.max(sub_scores, axis=0)
     print(meow.shape)
-    sub_scores /= meow[:, None]
-    sub_scores = np.sum(sub_scores, axis=1)
+    sub_scores /= meow[None, :]
+    sub_scores = np.sum(sub_scores, axis=0)
+    print(sub_scores.shape)
 
     sorted_subs = np.argsort(sub_scores)
 
@@ -245,7 +246,7 @@ if __name__ == '__main__':
 
     best_sub_fig, best_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(16, 8))
     worst_sub_fig, worst_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(16, 8))
-    for i_sen, sen_type in sen_type_list:
+    for i_sen, sen_type in enumerate(sen_type_list):
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
             max_line = 2.51 * 2 * time_step - time_adjust
