@@ -83,9 +83,9 @@ if __name__ == '__main__':
     sen_type_list = ['active', 'passive', 'pooled']
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if sen_type == 'pooled':
-            word_list.append('voice')
             if num_instances > 1:
                 word_list.append('propid')
+            word_list.append('voice')
             if experiment == 'krns2':
                 word_list.append('noun1')
             else:
@@ -114,14 +114,15 @@ if __name__ == '__main__':
                 win_starts = word_win_starts
 
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
-        print(sub_word_diags.shape)
+
         sub_scores = np.max(sub_word_diags, axis=2)
-        print(sub_scores.shape)
+
         meow = np.max(sub_scores, axis=0)
-        print(meow.shape)
+
         sub_scores /= meow[None, :]
         sub_scores = np.sum(sub_scores, axis=0)
-        print(sub_scores.shape)
+
+        print(sub_scores)
 
         sorted_subs = np.argsort(sub_scores)
 
