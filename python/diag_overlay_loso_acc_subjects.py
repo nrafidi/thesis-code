@@ -243,18 +243,18 @@ if __name__ == '__main__':
     worst_subs = sorted_subs[:num_sub_to_plot]
     best_subs = sorted_subs[(num_sub-1):(num_sub - 1 - num_sub_to_plot):-1]
 
-    best_sub_fig = plt.figure(figsize=(8, 8*num_sub_to_plot))
+    best_sub_fig = plt.figure(figsize=(16, 8*num_sub_to_plot))
     best_sub_axs = AxesGrid(best_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
                           axes_pad=0.7, share_all=True, direction='column', aspect=False)
-    worst_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
+    worst_sub_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
     worst_sub_axs = AxesGrid(worst_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
                             axes_pad=0.7, share_all=True, direction='column', aspect=False)
 
-    act_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
+    act_sub_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
     act_sub_axs = AxesGrid(act_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
                              axes_pad=0.7, share_all=True, direction='row', aspect=False)
 
-    pass_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
+    pass_sub_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
     pass_sub_axs = AxesGrid(pass_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
                            axes_pad=0.7, share_all=True, direction='row', aspect=False)
 
@@ -339,10 +339,10 @@ if __name__ == '__main__':
                 curr_axs[i_ap_fig + i_ax].set_ylim([0.0, 1.0])
                 curr_axs[i_ap_fig + i_ax].set_xlim([start_line, max_line + time_step * 5])
 
-            curr_axs[i_ap_fig + 1].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
+            curr_axs[i_ap_fig + 1].legend(loc=2, bbox_to_anchor=(1.0, 1.0), fontsize=legendfontsize)
             if i_sen == 1:
-                best_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
-                worst_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
+                best_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(1.0, 1.0), fontsize=legendfontsize)
+                worst_sub_axs[i_bw_fig].legend(loc=2, bbox_to_anchor=(1.0, 1.0), fontsize=legendfontsize)
             best_sub_axs[i_bw_fig].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
             worst_sub_axs[i_bw_fig].set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]),
                                                  fontsize=axistitlesize)
