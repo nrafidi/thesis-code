@@ -315,9 +315,9 @@ if __name__ == '__main__':
             if i_sen == 1:
                 good_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][best_subs[j_sub]]
                 bad_sub_name = run_TGM_LOSO.VALID_SUBS[args.experiment][worst_subs[j_sub]]
-                best_sub_axs[j_sub, i_sen].text(-0.15, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
+                best_sub_axs[j_sub, i_sen].text(-0.125, 1.125, good_sub_name, transform=best_sub_axs[j_sub, i_sen].transAxes,
                         size=axislettersize, weight='bold')
-                worst_sub_axs[j_sub, i_sen].text(-0.15, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
+                worst_sub_axs[j_sub, i_sen].text(-0.125, 1.125, bad_sub_name, transform=worst_sub_axs[j_sub, i_sen].transAxes,
                                                 size=axislettersize, weight='bold')
 
     best_sub_fig.suptitle('Top {} Subjects'.format(num_sub_to_plot), fontsize=suptitlesize)
