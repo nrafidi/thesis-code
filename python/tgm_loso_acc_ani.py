@@ -94,8 +94,8 @@ def intersect_accs(exp,
     n1_win_starts_all = np.mean(np.concatenate(n1_win_starts_by_sub, axis=0), axis=0).astype('int')
     n2_win_starts_all = np.mean(np.concatenate(n2_win_starts_by_sub, axis=0), axis=0).astype('int')
 
-    win_starts = [[n1_win_starts_all, n1_win_starts_all], [n1_win_starts_all, n2_win_starts_all],
-            [n2_win_starts_all, n1_win_starts_all], [n2_win_starts_all, n2_win_starts_all]]
+    win_starts = [[n1_win_starts_all, n1_win_starts_all], [n2_win_starts_all, n1_win_starts_all],
+            [n1_win_starts_all, n2_win_starts_all], [n2_win_starts_all, n2_win_starts_all]]
 
     return acc_all, time, win_starts
 
