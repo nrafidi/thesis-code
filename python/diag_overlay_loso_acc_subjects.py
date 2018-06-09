@@ -363,8 +363,8 @@ if __name__ == '__main__':
                                                                                       sen_type=sen_type,
                                                                                       experiment=args.experiment),
                           fontsize=suptitlesize)
-        curr_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-        curr_fig.text(0.04, 0.5, 'Accuracy', va='center',
+        curr_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+        curr_fig.text(0.04, 0.48, 'Accuracy', va='center',
                        rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
         # curr_fig.subplots_adjust(top=0.85)
         curr_fig.savefig(
@@ -380,11 +380,11 @@ if __name__ == '__main__':
 
 
 
-    best_sub_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    best_sub_fig.text(0.04, 0.5, 'Accuracy', va='center',
+    best_sub_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+    best_sub_fig.text(0.04, 0.48, 'Accuracy', va='center',
                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-    worst_sub_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    worst_sub_fig.text(0.04, 0.5, 'Accuracy', va='center',
+    worst_sub_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+    worst_sub_fig.text(0.04, 0.48, 'Accuracy', va='center',
                       rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     # best_sub_fig.subplots_adjust(top=0.85)
     # worst_sub_fig.subplots_adjust(top=0.85)
