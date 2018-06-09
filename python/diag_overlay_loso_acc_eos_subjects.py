@@ -79,13 +79,13 @@ if __name__ == '__main__':
                   'senlen': 0.5}}
 
     word_list = ['verb', 'agent', 'patient']
-    if num_instances > 1:
-        word_list.append('propid')
 
     sen_type_list = ['active', 'passive', 'pooled']
     for i_sen_type, sen_type in enumerate(sen_type_list):
         if sen_type == 'pooled':
             word_list.append('voice')
+            if num_instances > 1:
+                word_list.append('propid')
             if experiment == 'krns2':
                 word_list.append('noun1')
             else:
