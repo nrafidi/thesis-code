@@ -139,14 +139,15 @@ if __name__ == '__main__':
         label_time = label_time[::time_step]
         label_time[np.abs(label_time) < 1e-15] = 0.0
 
-        curr_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
-        curr_axs = AxesGrid(curr_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
-                            axes_pad=0.7, share_all=True, direction='row', aspect=False)
-        i_ax = 0
-        for j_sub in range(num_sub_to_plot):
-            for i_word, word in enumerate(word_list):
-                color = colors[i_word]
-
+        for i_word, word in enumerate(word_list):
+            curr_fig = plt.figure(figsize=(16, 8 * num_sub_to_plot))
+            curr_axs = AxesGrid(curr_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
+                                axes_pad=0.7, share_all=True, direction='row', aspect=False)
+            i_ax = 0
+            color = colors[i_word]
+            for j_sub in range(num_sub_to_plot):
+                good_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][best_subs[j_sub]]
+                bad_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][worst_subs[j_sub]]
                 good_sub = sub_word_diags[i_word, best_subs[j_sub]]
                 bad_sub = sub_word_diags[i_word, worst_subs[j_sub]]
 
@@ -156,39 +157,39 @@ if __name__ == '__main__':
                 curr_axs[i_ax + 1].axhline(y=chance[experiment][word], color='k', linestyle='dashed')
 
 
-            for j_ax in range(2):
-                curr_axs[i_ax + j_ax].set_xticks(range(0, len(time[win_starts]), time_step))
-                curr_axs[i_ax + j_ax].set_xticklabels(label_time)
-                curr_axs[i_ax + j_ax].axvline(x=max_line, color='k')
+                for j_ax in range(2):
+                    curr_axs[i_ax + j_ax].set_xticks(range(0, len(time[win_starts]), time_step))
+                    curr_axs[i_ax + j_ax].set_xticklabels(label_time)
+                    curr_axs[i_ax + j_ax].axvline(x=max_line, color='k')
 
-                curr_axs[i_ax + j_ax].set_ylim([0.0, 1.0])
-                curr_axs[i_ax + j_ax].set_xlim([0, len(time[win_starts]) + 0.8*time_step])
-                curr_axs[i_ax + j_ax].tick_params(labelsize=ticklabelsize)
+                    curr_axs[i_ax + j_ax].set_ylim([0.0, 1.0])
+                    curr_axs[i_ax + j_ax].set_xlim([0, len(time[win_starts]) + 0.8*time_step])
+                    curr_axs[i_ax + j_ax].tick_params(labelsize=ticklabelsize)
 
-            good_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][best_subs[j_sub]]
-            bad_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][worst_subs[j_sub]]
 
-            curr_axs[i_ax].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
-            curr_axs[i_ax + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
-            curr_axs[i_ax + 1].legend(bbox_to_anchor=(1.0, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
 
-            i_ax += 2
+                curr_axs[i_ax].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
+                curr_axs[i_ax + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
+                curr_axs[i_ax + 1].legend(bbox_to_anchor=(1.0, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
 
-        curr_fig.suptitle('Best/Worst {num} Subjects\n{sen_type} {experiment}'.format(num=num_sub_to_plot,
-                                                                                      sen_type=sen_type,
-                                                                                      experiment=args.experiment),
-                          fontsize=suptitlesize)
-        curr_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-        curr_fig.text(0.04, 0.48, 'Accuracy', va='center',
-                      rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-        curr_fig.savefig(
-            '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_top-bot{num}_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-                exp=args.experiment, sen_type=sen_type, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
-                win_len=win_len,
-                overlap=args.overlap,
-                num_instances=num_instances,
-                num=num_sub_to_plot
-            ), bbox_inches='tight')
+                i_ax += 2
+
+            curr_fig.suptitle('Best/Worst {num} Subjects\n{sen_type} {word} {experiment}'.format(num=num_sub_to_plot,
+                                                                                          sen_type=sen_type,
+                                                                                                 word=word,
+                                                                                          experiment=args.experiment),
+                              fontsize=suptitlesize)
+            curr_fig.text(0.52, 0.08, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
+            curr_fig.text(0.04, 0.48, 'Accuracy', va='center',
+                          rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+            curr_fig.savefig(
+                '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_top-bot{num}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+                    exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+                    win_len=win_len,
+                    overlap=args.overlap,
+                    num_instances=num_instances,
+                    num=num_sub_to_plot
+                ), bbox_inches='tight')
 
     plt.show()
 
