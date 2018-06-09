@@ -117,19 +117,22 @@ if __name__ == '__main__':
 
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
         sub_task_diags = np.concatenate(sub_task_diags, axis=0)
-        print(sub_task_diags.shape)
+        # print(sub_task_diags.shape)
         sub_scores = np.max(sub_task_diags, axis=2)
-        print(sub_scores.shape)
+        # print(sub_scores.shape)
         meow = np.max(sub_scores, axis=0)
-        print(meow.shape)
+        # print(meow.shape)
         sub_scores /= meow[None, :]
         sub_scores = np.sum(sub_scores, axis=0)
-        print(sub_scores.shape)
+        # print(sub_scores.shape)
 
         sorted_subs = np.argsort(sub_scores)
 
         worst_subs = sorted_subs[:num_sub_to_plot]
         best_subs = sorted_subs[(num_sub - 1):(num_sub - 1 - num_sub_to_plot):-1]
+
+        print(sub_scores[worst_subs])
+        print(sub_scores[best_subs])
 
         num_time = len(win_starts)
         label_time = time[win_starts]
