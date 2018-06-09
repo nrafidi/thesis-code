@@ -120,19 +120,11 @@ if __name__ == '__main__':
         # print(sub_task_diags.shape)
         sub_scores = np.max(sub_task_diags, axis=2)
         # print(sub_scores.shape)
-        meow = np.max(sub_scores, axis=0)
-        # print(meow.shape)
-        sub_scores /= meow[None, :]
-        sub_scores = np.sum(sub_scores, axis=0)
+        # meow = np.max(sub_scores, axis=0)
+        # # print(meow.shape)
+        # sub_scores /= meow[None, :]
+        # sub_scores = np.sum(sub_scores, axis=0)
         # print(sub_scores.shape)
-
-        sorted_subs = np.argsort(sub_scores)
-
-        worst_subs = sorted_subs[:num_sub_to_plot]
-        best_subs = sorted_subs[(num_sub - 1):(num_sub - 1 - num_sub_to_plot):-1]
-
-        print(sub_scores[worst_subs])
-        print(sub_scores[best_subs])
 
         num_time = len(win_starts)
         label_time = time[win_starts]
@@ -144,6 +136,13 @@ if __name__ == '__main__':
             curr_axs = AxesGrid(curr_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
                                 axes_pad=0.7, share_all=True, direction='row', aspect=False)
             i_ax = 0
+
+            sub_scores_word = sub_scores[i_word, :]
+            sorted_subs = np.argsort(sub_scores_word)
+
+            worst_subs = sorted_subs[:num_sub_to_plot]
+            best_subs = sorted_subs[(num_sub - 1):(num_sub - 1 - num_sub_to_plot):-1]
+
             color = colors[i_word]
             for j_sub in range(num_sub_to_plot):
                 good_sub_name = run_TGM_LOSO_EOS.VALID_SUBS[args.experiment][best_subs[j_sub]]
@@ -170,7 +169,7 @@ if __name__ == '__main__':
 
                 curr_axs[i_ax].set_title('Good Subject: {}'.format(good_sub_name), fontsize=axistitlesize)
                 curr_axs[i_ax + 1].set_title('Bad Subject: {}'.format(bad_sub_name), fontsize=axistitlesize)
-                curr_axs[i_ax + 1].legend(bbox_to_anchor=(1.0, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+                # curr_axs[i_ax + 1].legend(bbox_to_anchor=(1.0, 1.0), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
 
                 i_ax += 2
 
