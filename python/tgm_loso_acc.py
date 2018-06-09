@@ -57,7 +57,7 @@ def intersect_accs(exp,
     time_by_sub = []
     win_starts_by_sub = []
     eos_max_by_sub = []
-    for sub in load_data.VALID_SUBS[exp]:
+    for sub in run_TGM_LOSO.VALID_SUBS[exp]:
         save_dir = run_TGM_LOSO.SAVE_DIR.format(top_dir=top_dir, sub=sub)
         result_fname = run_TGM_LOSO.SAVE_FILE.format(dir=save_dir,
                                                        sub=sub,
