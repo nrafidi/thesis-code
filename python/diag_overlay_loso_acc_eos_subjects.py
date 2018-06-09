@@ -147,6 +147,7 @@ if __name__ == '__main__':
                 curr_axs[i_ax].plot(good_sub, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
                 curr_axs[i_ax + 1].plot(bad_sub, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
                 curr_axs[i_ax].axhline(y=chance[experiment][word], color='k', linestyle='dashed')
+                curr_axs[i_ax + 1].axhline(y=chance[experiment][word], color='k', linestyle='dashed')
 
 
             for j_ax in range(2):
