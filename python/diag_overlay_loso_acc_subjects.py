@@ -245,8 +245,8 @@ if __name__ == '__main__':
     worst_subs = sorted_subs[:num_sub_to_plot]
     best_subs = sorted_subs[(num_sub-1):(num_sub - 1 - num_sub_to_plot):-1]
 
-    best_sub_fig, best_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(16, 8))
-    worst_sub_fig, worst_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(16, 8))
+    best_sub_fig, best_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(8*num_sub_to_plot, 8))
+    worst_sub_fig, worst_sub_axs = plt.subplots(num_sub_to_plot, len(sen_type_list), figsize=(8*num_sub_to_plot, 8))
     for i_sen, sen_type in enumerate(sen_type_list):
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
