@@ -94,6 +94,7 @@ if __name__ == '__main__':
         time = []
         win_starts = []
         sub_word_diags = []
+        sub_task_diags = []
         for i_word, word in enumerate(word_list):
             intersection, acc_all, word_time, word_win_starts, eos_max = tgm_loso_acc_eos.intersect_accs(args.experiment,
                                                                                                         sen_type,
@@ -108,14 +109,16 @@ if __name__ == '__main__':
 
             num_sub = acc_all.shape[0]
             sub_diags = np.concatenate([np.diag(acc_all[i, :, :])[None, :] for i in range(num_sub)], axis=0)
-            sub_word_diags.append(sub_diags[None, :] - chance[experiment][word])
+            sub_word_diags.append(sub_diags[None, :])
+            sub_task_diags.append(sub_diags[None, :] - chance[experiment][word])
             if i_word == 0:
                 time = word_time
                 win_starts = word_win_starts
 
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
+        sub_task_diags = np.concatenate(sub_task_diags, axis=0)
 
-        sub_scores = np.max(sub_word_diags, axis=2)
+        sub_scores = np.max(sub_task_diags, axis=2)
 
         meow = np.max(sub_scores, axis=0)
 
