@@ -16,8 +16,6 @@ SAVE_FILE = '{dir}TGM-LOSO-ANI_{sub}_win{win_len}_ov{ov}_pr{perm}_' \
 
 
 def intersect_accs(exp,
-                   sen_type,
-                   word,
                    win_len=100,
                    overlap=12,
                    alg='lr-l2',
