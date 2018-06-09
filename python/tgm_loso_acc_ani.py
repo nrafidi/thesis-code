@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
     time_step = int(50 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-    combo_fig = plt.figure(figsize=(16, 16))
+    combo_fig = plt.figure(figsize=(12, 16))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.5, share_all=False)
@@ -149,19 +149,19 @@ if __name__ == '__main__':
         ax.set_title(titles[i_combo], fontsize=axistitlesize)
 
         ax.set_xticks(np.arange(0.0, float(len(time_win_x)), float(time_step)) - time_adjust)
-        ax.set_yticks(np.arange(0.0, float(len(time_win_y)), time_step) - time_adjust)
+        ax.set_yticks(np.arange(0.0, float(len(time_win_y)), float(time_step)) - time_adjust)
 
         ax.set_xlim([0.0, float(len(time_win_x))])
         ax.set_ylim([float(len(time_win_y)), 0.0])
 
         min_time = 0.0
         max_time_x = 0.1 * len(time_win_x) / time_step
-        label_time_x = np.arange(min_time, max_time_x, 0.5)
+        label_time_x = np.arange(min_time, max_time_x, 0.1)
         ax.set_xticklabels(label_time_x)
 
 
         max_time_y = 0.1 * len(time_win_y) / time_step
-        label_time_y = np.arange(min_time, max_time_y, 0.5)
+        label_time_y = np.arange(min_time, max_time_y, 0.1)
         ax.set_yticklabels(label_time_y)
 
         ax.tick_params(labelsize=ticklabelsize)
