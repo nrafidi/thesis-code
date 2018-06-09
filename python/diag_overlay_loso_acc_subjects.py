@@ -245,18 +245,18 @@ if __name__ == '__main__':
 
     best_sub_fig = plt.figure(figsize=(8, 8*num_sub_to_plot))
     best_sub_axs = AxesGrid(best_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
-                          axes_pad=0.5, share_all=True, direction='column')
+                          axes_pad=0.7, share_all=True, direction='column', aspect=True)
     worst_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     worst_sub_axs = AxesGrid(worst_sub_fig, 111, nrows_ncols=(num_sub_to_plot, len(sen_type_list)),
-                            axes_pad=0.5, share_all=True, direction='column')
+                            axes_pad=0.7, share_all=True, direction='column', aspect=False)
 
     act_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     act_sub_axs = AxesGrid(act_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
-                             axes_pad=0.5, share_all=True, direction='row')
+                             axes_pad=0.7, share_all=True, direction='row')
 
     pass_sub_fig = plt.figure(figsize=(8, 8 * num_sub_to_plot))
     pass_sub_axs = AxesGrid(pass_sub_fig, 111, nrows_ncols=(num_sub_to_plot, 2),
-                           axes_pad=0.5, share_all=True, direction='row')
+                           axes_pad=0.7, share_all=True, direction='row')
 
     i_bw_fig = 0
     for i_sen, sen_type in enumerate(sen_type_list):
@@ -323,8 +323,8 @@ if __name__ == '__main__':
                     best_sub_axs[i_bw_fig].text(v + 0.15, 0.9, text_to_write[i_v])
                     worst_sub_axs[i_bw_fig].text(v + 0.15, 0.9, text_to_write[i_v])
 
-            best_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
-            worst_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
+            # best_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
+            # worst_sub_axs[i_bw_fig].set_ylim([0.0, 1.0])
             best_sub_axs[i_bw_fig].set_xlim([start_line, max_line + time_step*5])
             worst_sub_axs[i_bw_fig].set_xlim([start_line, max_line + time_step * 5])
 
@@ -336,7 +336,7 @@ if __name__ == '__main__':
                     curr_axs[i_ap_fig + i_ax].axvline(x=v, color='k')
                     if i_v < len(text_to_write):
                         curr_axs[i_ap_fig + i_ax].text(v + 0.15, 0.9, text_to_write[i_v])
-                curr_axs[i_ap_fig + i_ax].set_ylim([0.0, 1.0])
+                # curr_axs[i_ap_fig + i_ax].set_ylim([0.0, 1.0])
                 curr_axs[i_ap_fig + i_ax].set_xlim([start_line, max_line + time_step * 5])
 
             curr_axs[i_ap_fig + 1].legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
