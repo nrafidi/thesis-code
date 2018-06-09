@@ -152,10 +152,12 @@ if __name__ == '__main__':
         max_time_x = 0.1 * len(time_win_x) / time_step
         label_time_x = np.arange(min_time, max_time_x, 0.5)
         ax.set_xticklabels(label_time_x)
+        ax.set_xlim(0.0, max_time_x)
 
         max_time_y = 0.1 * len(time_win_y) / time_step
         label_time_y = np.arange(min_time, max_time_y, 0.5)
         ax.set_yticklabels(label_time_y)
+        ax.set_ylim(0.0, max_time_y)
         ax.tick_params(labelsize=ticklabelsize)
         ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                 size=axislettersize, weight='bold')
