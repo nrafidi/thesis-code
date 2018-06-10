@@ -198,7 +198,7 @@ if __name__ == '__main__':
                 win_labels.append(label_str)
             ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
 
-        ax.axhline(chance_word, color='k', label='Chance')
+        ax.axhline(chance_word[word], color='k', label='Chance')
         if i_avg == 0:
             ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
         ax.legend(loc=3, fontsize=legendfontsize)
@@ -260,7 +260,7 @@ if __name__ == '__main__':
         ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
         ax.set_xticklabels(label_time)
         ax.set_yticklabels(label_time)
-        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=chance_word, vmax=0.75)
+        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=chance_word[word], vmax=0.75)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
         ax.set_title(avg_time_str, fontsize=axistitlesize)
