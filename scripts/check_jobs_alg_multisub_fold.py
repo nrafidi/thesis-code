@@ -78,6 +78,7 @@ if __name__ == '__main__':
             was_success = False
 
         if not was_success:
+            print(job_str)
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
                 # print('Job {} Did Not Run'.format(job_str))
                 meow = 1
@@ -91,7 +92,7 @@ if __name__ == '__main__':
                         skipped_jobs += 1
                     else:
                         skipped=False
-                if os.stat(err_str).st_size != 0 and (not was_success) and not skipped:
+                if os.stat(err_str).st_size != 0 and not skipped:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
