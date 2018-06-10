@@ -77,6 +77,8 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
 
+    chance_word = {'verb': 0.25,
+                   'voice': 0.5}
 
     fig, ax = plt.subplots(figsize=(10,10))
     colors = ['b', 'c', 'm', 'r', 'g', 'y', 'k']
@@ -103,15 +105,20 @@ if __name__ == '__main__':
 
         print(acc_all.shape)
         diag_acc = np.diag(np.mean(acc_all, axis=0))
+
+        diag_time = time[win_starts] + global_win*0.002 - 0.3
+        win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
+        diag_acc = diag_acc[win_to_plot]
+        diag_time = diag_time[win_to_plot]
         max_time = np.argmax(diag_acc)
         max_acc[i_alg] = diag_acc[max_time]
-        diag_time = time[win_starts] + global_win*0.002 - 0.5
         ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
-    ax.axhline(0.25, color='k', linestyle='dashed', label='Chance')
+    ax.axhline(chance_word[word], color='k', linestyle='dashed', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
-    ax.legend(loc=2, fontsize=legendfontsize, ncol=2)
+    ax.legend(loc=1, fontsize=legendfontsize, ncol=2)
+    ax.set_ylim([0.0, 1.0])
     fig.suptitle('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.pdf')
@@ -132,7 +139,7 @@ if __name__ == '__main__':
     width = 0.3
     bar_ax.bar(ind, max_acc, width, color='b', label='Max Accuracy')
     bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
-    bar_ax.axhline(0.25, color='k', label='Chance Accuracy')
+    bar_ax.axhline(chance_word[word], color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width) #/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
     bar_ax.set_ylim([0.0, 1.0])
