@@ -175,7 +175,7 @@ if __name__ == '__main__':
                   'agent': 0.4,
                   'patient': 0.4,
                   'verb': 0.4,
-                  'voice': 0.8,
+                  'voice': 1.0,
                   'propid': 0.2}
     else:
         vmaxes = {'noun1': 0.4,
