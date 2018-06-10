@@ -46,6 +46,11 @@ if __name__ == '__main__':
         word = grid[9]
         win_len = grid[10]
 
+        if win_len != 2 and ni != 1:
+            continue
+        if not tm_avg and not tst_avg:
+            continue
+
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
         complete_job = SAVE_FILE.format(dir=top_dir,

@@ -60,10 +60,10 @@ if __name__ == '__main__':
         fold = grid[11]
         force = False
 
-        # if win_len != 2 and ni != 1:
-        #     continue
-        # if not tm_avg and not tst_avg:
-        #     continue
+        if win_len != 2 and ni != 1:
+            continue
+        if not tm_avg and not tst_avg:
+            continue
 
         job_str = JOB_NAME.format(exp=exp,
                                   word=word,
