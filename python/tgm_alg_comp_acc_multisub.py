@@ -281,7 +281,7 @@ if __name__ == '__main__':
     ind = np.arange(len(win_list))
     width = 0.3
     bar_ax.bar(ind, max_acc[:, 0], width, color='b', label=avg_labels[0])
-    bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
+    # bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
     bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(win_labels)
     bar_ax.set_ylim([0.5, 1.0])
