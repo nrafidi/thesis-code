@@ -78,11 +78,11 @@ if __name__ == '__main__':
             was_success = False
 
         if not was_success:
-            print(job_str)
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
-                # print('Job {} Did Not Run'.format(job_str))
+                print('Job {} Did Not Run'.format(job_str))
                 meow = 1
             else:
+                print(job_str)
                 with open(out_str, 'r') as fid:
                     meow = fid.read()
                     if 'Skipping' in meow and 'already' not in meow:
