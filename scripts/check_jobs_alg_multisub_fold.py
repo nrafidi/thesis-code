@@ -94,9 +94,9 @@ if __name__ == '__main__':
                 if os.stat(err_str).st_size != 0: # and not skipped:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
-                        print('Job {} Failed'.format(job_str))
-                        print(err_file)
-                        # if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
+                        if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
+                            print('Job {} Failed'.format(job_str))
+                            print(err_file)
                         # print(grid)
         job_id += 1
 
