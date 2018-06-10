@@ -45,10 +45,7 @@ if __name__ == '__main__':
         win_len = grid[10]
         fold = grid[11]
 
-        if win_len != 2 and ni != 1:
-            skipped_jobs += 1
-            continue
-        if not tm_avg and not tst_avg:
+        if (win_len != 2 and ni != 1) or (not tm_avg and not tst_avg):
             skipped_jobs += 1
             continue
 
