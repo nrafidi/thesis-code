@@ -106,7 +106,7 @@ if __name__ == '__main__':
         max_acc[i_alg] = diag_acc[max_time]
         diag_time = time[win_starts] + global_win*0.002 - 0.5
         ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
-    ax.axhline(0.5, color='k', linestyle='dashed', label='Chance')
+    ax.axhline(0.25, color='k', linestyle='dashed', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
@@ -131,13 +131,13 @@ if __name__ == '__main__':
     width = 0.3
     bar_ax.bar(ind, max_acc, width, color='b', label='Max Accuracy')
     bar_ax.bar(ind + width, alg_times_ordered, width, color='g', label='Runtime as fraction of max')
-    bar_ax.axhline(0.5, color='k', label='Chance Accuracy')
+    bar_ax.axhline(0.25, color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width) #/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
     bar_ax.set_ylim([0.0, 1.0])
     bar_fig.suptitle('Algorithm\nMax Accuracy Comparison', fontsize=suptitlesize)
     bar_ax.tick_params(labelsize=ticklabelsize)
-    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.legend(fontsize=legendfontsize, bbox_to_anchor=(0.8, 0.8))
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
     bar_ax.set_ylabel('Classiciation Accuracy/Runtime Fraction', fontsize=axislabelsize)
     bar_fig.subplots_adjust(top=0.85)
