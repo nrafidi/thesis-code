@@ -1158,7 +1158,7 @@ def svm_tgm_loso_multisub_fold(data_list,
 
 
             tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
-            tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
+            tgm_pred[0, wi, wj] = model.predict(test_data)
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
