@@ -4,11 +4,11 @@ from subprocess import call, check_output
 import time
 
 EXPERIMENTS = ['krns2']
-WORDS = ['voice', 'verb']
+WORDS = ['verb', 'voice']
 WIN_LENS = [2]#, 12, 25, 50, 100, 150]
 OVERLAPS = [2]
 IS_PERMS = [False]
-ALGS = ['lr-None', 'gnb-None', 'lr-l2', 'lr-l1', 'svm-l1', 'svm-l2', 'gnb']
+ALGS = ['svm-l2', 'lr-None', 'gnb-None', 'lr-l2', 'lr-l1', 'svm-l1', 'gnb']
 ADJS = ['zscore'] #, None]
 DO_TME_AVGS = [True] #, False]
 DO_TST_AVGS = [True] #, False]
