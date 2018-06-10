@@ -49,6 +49,7 @@ if __name__ == '__main__':
     avgTest_list = ['T', 'F']
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('--word', default='verb', choices=['verb', 'voice'])
     parser.add_argument('--alg', default='lr-l2', choices=run_alg_comp.VALID_ALGS)
     parser.add_argument('--win_len', type=int, default=2, choices=win_list)
     parser.add_argument('--num_instances', type=int, default=1, choices=inst_list)
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     exp = 'krns2'
-    word = 'verb'
+    word = args.word
     overlap = args.overlap
     global_alg = args.alg
     global_win = args.win_len
@@ -110,7 +111,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
-    ax.legend(loc=2, fontsize=legendfontsize)
+    ax.legend(loc=2, fontsize=legendfontsize, ncol=2)
     fig.suptitle('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
     fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.pdf')
