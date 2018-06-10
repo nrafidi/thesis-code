@@ -1477,7 +1477,7 @@ def lr_tgm_loso_multisub_fold(data_list,
             train_data -= mu_train[None, :]
             train_data /= std_train[None, :]
 
-        if penalty is None:
+        if penalty == 'None':
             model = sklearn.linear_model.LogisticRegression(
                 C=1e100,
                 penalty='l2',
