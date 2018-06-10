@@ -218,7 +218,7 @@ def run_tgm_exp(experiment,
                                                                                     sen_ints,
                                                                                     fold,
                                                                                     sub_rs=1,
-                                                                                    penalty=alg[3:],
+                                                                                    penalty=alg[4:],
                                                                                     adj=adj,
                                                                                     doTimeAvg=doTimeAvg,
                                                                                     doTestAvg=doTestAvg)
