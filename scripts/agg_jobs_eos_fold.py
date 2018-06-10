@@ -52,8 +52,8 @@ if __name__ == '__main__':
         word = grid[11]
         sub = grid[12]
 
-        if ni == 1:
-            continue
+        # if ni == 1:
+        #     continue
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
