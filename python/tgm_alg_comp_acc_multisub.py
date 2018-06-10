@@ -95,7 +95,7 @@ if __name__ == '__main__':
                                         inst=global_inst,
                                         rsP=1,
                                         mode='acc')
-        result = np.load(load_fname)
+        result = np.load(load_fname + '.npz')
         acc_all = result['tgm_acc']
         time = result['time']
         win_starts = result['win_starts']
