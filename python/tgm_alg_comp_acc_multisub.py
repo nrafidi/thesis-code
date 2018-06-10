@@ -45,7 +45,7 @@ if __name__ == '__main__':
     alg_list = run_alg_comp.VALID_ALGS
     win_list = [2, 12, 25, 50, 100]
     inst_list = [1, 2, 5, 10]
-    avgTime_list = ['T', 'F']
+    avgTime_list = ['T'] #, 'F']
     avgTest_list = ['T', 'F']
 
     parser = argparse.ArgumentParser()
