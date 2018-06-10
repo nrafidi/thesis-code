@@ -4,15 +4,15 @@ from subprocess import call, check_output
 import time
 
 EXPERIMENTS = ['krns2']
-WORDS = ['verb', 'voice']
-WIN_LENS = [2]#, 12, 25, 50, 100, 150]
+WORDS = ['verb']
+WIN_LENS = [2, 12, 25, 50, 100, 150]
 OVERLAPS = [2]
 IS_PERMS = [False]
-ALGS = ['svm-l2', 'lr-None', 'gnb-None', 'lr-l2', 'lr-l1', 'svm-l1', 'gnb']
+ALGS = ['lr-l2']
 ADJS = ['zscore'] #, None]
-DO_TME_AVGS = [True] #, False]
-DO_TST_AVGS = [True] #, False]
-NUM_INSTANCESS = [1]#, 2, 5, 10]
+DO_TME_AVGS = [False, True] #, False]
+DO_TST_AVGS = [False, True] #, False]
+NUM_INSTANCESS = [1, 2, 5, 10]
 RANDOM_STATES = [1]
 FOLDS = range(32)
 
