@@ -68,7 +68,8 @@ if __name__ == '__main__':
                                  avgTm=bool_to_str(tm_avg),
                                  avgTst=bool_to_str(tst_avg),
                                  inst=ni,
-                                 rsP=rs)
+                                 rsP=rs,
+                                 fold=fold)
 
         if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
