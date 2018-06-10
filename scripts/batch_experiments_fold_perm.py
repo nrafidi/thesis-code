@@ -129,7 +129,7 @@ if __name__ == '__main__':
                                  rep=reps,
                                  rsP=rs,
                                  mode='acc')
-        if not os.path.isfile(old_job + '.npz') and job_id > 3412:
+        if not os.path.isfile(old_job + '.npz') and job_id > 5955:
             call(call_str, shell=True)
         job_id += 1
 
