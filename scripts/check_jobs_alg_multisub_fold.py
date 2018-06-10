@@ -46,7 +46,6 @@ if __name__ == '__main__':
         fold = grid[11]
 
         if (win_len != 2 and ni != 1) or (not tm_avg and not tst_avg):
-            skipped_jobs += 1
             continue
 
 
@@ -105,4 +104,4 @@ if __name__ == '__main__':
                         # print(grid)
         job_id += 1
 
-    print('{}/{} jobs succeeded'.format(successful_jobs, job_id - skipped_jobs))
+    print('{}/{} jobs succeeded'.format(successful_jobs, job_id))
