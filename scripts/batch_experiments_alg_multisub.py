@@ -99,8 +99,8 @@ if __name__ == '__main__':
                                     force=force,
                                     errfile=err_str,
                                     outfile=out_str)
-        # if job_id in [35, 125, 132]:
-        call(call_str, shell=True)
+        if job_id in [290]:
+            call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
