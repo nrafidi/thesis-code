@@ -1436,7 +1436,7 @@ def lr_tgm_loso_multisub_fold(data_list,
     l_index = {l_set[i]: i for i in xrange(n_l)}
     l_ints = np.array([l_index[l] for l in labels])
     print('In models.py:')
-    # print(penalty)
+    print(penalty)
     uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
