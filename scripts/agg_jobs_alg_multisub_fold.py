@@ -86,8 +86,11 @@ if __name__ == '__main__':
             if not os.path.isfile(fname + '.npz'):
                 print('{} missing'.format(fname))
                 break
-
-            result = np.load(fname + '.npz')
+            try:
+                result = np.load(fname + '.npz')
+            except:
+                print('{} broken'.format(fname))
+                break
             if fold == 0:
                 l_ints = result['l_ints']
                 win_starts = result['win_starts']
