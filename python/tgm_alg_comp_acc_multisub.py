@@ -59,7 +59,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     exp = 'krns2'
-    word = 'voice'
+    word = 'verb'
     overlap = args.overlap
     global_alg = args.alg
     global_win = args.win_len
@@ -106,7 +106,7 @@ if __name__ == '__main__':
         max_acc[i_alg] = diag_acc[max_time]
         diag_time = time[win_starts] + global_win*0.002 - 0.5
         ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
-    ax.axhline(0.5, color='k', label='Chance')
+    ax.axhline(0.5, color='k', linestyle='dashed', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
