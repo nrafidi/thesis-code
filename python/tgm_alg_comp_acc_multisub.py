@@ -69,6 +69,7 @@ if __name__ == '__main__':
     global_avgTest = args.avgTest
     adj = args.adj
 
+    top_dir = TOP_DIR.format(exp=exp)
 
     ticklabelsize = 14
     legendfontsize = 16
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     max_acc = np.zeros((len(alg_list),))
     for i_alg, alg in enumerate(alg_list):
 
-        top_dir = TOP_DIR.format(exp=exp)
+
         load_fname = SAVE_FILE.format(dir=top_dir,
                                         word=word,
                                         win_len=global_win,
@@ -119,7 +120,7 @@ if __name__ == '__main__':
     ax.tick_params(labelsize=ticklabelsize)
     ax.legend(loc=1, fontsize=legendfontsize, ncol=2)
     ax.set_ylim([0.0, 1.0])
-    fig.suptitle('Algorithm Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
+    fig.suptitle('Algorithm Comparison\nVerb Decoding Post-Sentence', fontsize=suptitlesize)
     fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.pdf')
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.png')
@@ -152,131 +153,145 @@ if __name__ == '__main__':
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
 
-    # # adj = None
-    # win_fig = plt.figure(figsize=(20, 8))
-    # win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
-    #                     axes_pad=0.7)
-    # max_acc = np.zeros((len(win_list),2))
-    # max_std = np.zeros((len(win_list),2))
-    # win_labels = []
-    # avg_labels = []
-    # for i_avg, avgTime in enumerate(avgTime_list):
-    #     if avgTime == 'T':
-    #         avg_time_str = 'Time Average'
-    #     else:
-    #         avg_time_str = 'No Time Average'
-    #     avg_labels.append(avg_time_str)
-    #     ax = win_grid[i_avg]
-    #     for i_win, win in enumerate(win_list):
-    #         intersection, acc_all, time, win_starts = intersect_accs(exp,
-    #                                                                  word,
-    #                                                                  global_alg,
-    #                                                                  win_len=win,
-    #                                                                  overlap=overlap,
-    #                                                                  adj=adj,
-    #                                                                  num_instances=global_inst,
-    #                                                                  avgTime=avgTime,
-    #                                                                  avgTest=global_avgTest)
-    #         if type(acc_all) != list:
-    #             print('{} {}'.format(avgTime, win))
-    #         if len(intersection) > 0:
-    #             diag_acc = np.diag(np.mean(acc_all, axis=0))
-    #             diag_std = np.diag(np.std(acc_all, axis=0))
-    #             num_sub = np.sqrt(float(acc_all.shape[0]))
-    #             max_time = np.argmax(diag_acc)
-    #             max_acc[i_win, i_avg] = diag_acc[max_time]
-    #             max_std[i_win, i_avg] = diag_std[max_time]
-    #             diag_std = np.divide(diag_std, num_sub)
-    #             win_in_s = win * 0.002
-    #             diag_time = time[win_starts] + win_in_s - 0.5
-    #             label_str = '%.3f s' % win_in_s
-    #             if i_avg == 0:
-    #                 win_labels.append(label_str)
-    #             ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
-    #             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_win],
-    #                             edgecolor='w', alpha=0.3)
-    #     ax.axhline(0.5, color='k', label='Chance')
-    #     # ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
-    #     if i_avg == 0:
-    #         ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-    #     ax.legend(loc=3, fontsize=legendfontsize)
-    #     ax.set_title(avg_time_str, fontsize=axistitlesize)
-    #     ax.set_xlim([0.0, 0.5])
-    #     ax.tick_params(labelsize=ticklabelsize)
-    #     ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-    #                             size=axislettersize, weight='bold')
-    # win_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
-    # win_fig.subplots_adjust(top=0.8)
-    # win_fig.suptitle('Window Length Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
-    # win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.pdf')
-    # win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time.png')
-    #
-    # win_tgm_fig = plt.figure(figsize=(20, 8))
-    # win_tgm_grid = AxesGrid(win_tgm_fig, 111, nrows_ncols=(1, 2),
-    #                     axes_pad=0.7, cbar_mode='single', cbar_location='right',
-    #                       cbar_pad=0.5, share_all=True)
-    # win = 50
-    # time_step = int(50 / args.overlap)
-    # time_adjust = win * 0.002 * time_step
-    # win_in_s = win * 0.002
-    # for i_avg, avgTime in enumerate(avgTime_list):
-    #     if avgTime == 'T':
-    #         avg_time_str = 'Time Average'
-    #     else:
-    #         avg_time_str = 'No Time Average'
-    #     ax = win_tgm_grid[i_avg]
-    #     intersection, acc_all, time, win_starts = intersect_accs(exp,
-    #                                                              word,
-    #                                                              global_alg,
-    #                                                              win_len=win,
-    #                                                              overlap=overlap,
-    #                                                              adj=adj,
-    #                                                              num_instances=global_inst,
-    #                                                              avgTime=avgTime,
-    #                                                              avgTest=global_avgTest)
-    #
-    #     tgm_acc = np.mean(acc_all, axis=0)
-    #     diag_time = time[win_starts] + win_in_s - 0.5
-    #     num_time = tgm_acc.shape[0]
-    #     min_time = 0.0
-    #     max_time = 0.1 * num_time / time_step
-    #     label_time = np.arange(min_time, max_time, 0.1)
-    #     print(label_time)
-    #     ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
-    #     ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
-    #     ax.set_xticklabels(label_time)
-    #     ax.set_yticklabels(label_time)
-    #     im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
-    #     ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-    #             size=axislettersize, weight='bold')
-    #     ax.set_title(avg_time_str, fontsize=axistitlesize)
-    #     ax.tick_params(labelsize=ticklabelsize)
-    # label_str = '%.3f s' % win_in_s
-    # cbar = win_tgm_grid.cbar_axes[0].colorbar(im)
-    # win_tgm_fig.text(0.04, 0.15, 'Train Time Relative to Sentence Offset (s)', va='center',
-    #                rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-    # win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
-    # win_tgm_fig.subplots_adjust(top=0.8)
-    # win_tgm_fig.suptitle('Averaging Comparison\nWindow Size: {}'.format(label_str), fontsize=suptitlesize)
-    # win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp.pdf')
-    # win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp.png')
-    #
-    # bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
-    # ind = np.arange(len(win_list))
-    # width = 0.3
-    # bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
-    # bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
-    # bar_ax.set_xticks(ind + width) # / 2.0)
-    # bar_ax.set_xticklabels(win_labels)
-    # bar_ax.set_ylim([0.5, 1.0])
-    # bar_ax.tick_params(labelsize=ticklabelsize)
-    # bar_ax.legend(fontsize=legendfontsize)
-    # bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-    # bar_ax.set_xlabel('Window Size (s)', fontsize=axislabelsize)
-    # bar_fig.suptitle('Window Size\nMax Accuracy Comparison', fontsize=suptitlesize)
-    # bar_fig.subplots_adjust(top=0.85)
-    # bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.pdf')
-    # bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar.png')
+    win_fig = plt.figure(figsize=(20, 8))
+    win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7)
+    max_acc = np.zeros((len(win_list),2))
+    win_labels = []
+    avg_labels = []
+    for i_avg, avgTime in enumerate(avgTime_list):
+        if avgTime == 'T':
+            avg_time_str = 'Time Average'
+        else:
+            avg_time_str = 'No Time Average'
+        avg_labels.append(avg_time_str)
+        ax = win_grid[i_avg]
+        for i_win, win in enumerate(win_list):
+            load_fname = SAVE_FILE.format(dir=top_dir,
+                                          word=word,
+                                          win_len=win,
+                                          ov=overlap,
+                                          perm='F',
+                                          alg=global_alg,
+                                          adj=adj,
+                                          avgTm=avgTime,
+                                          avgTst=global_avgTest,
+                                          inst=global_inst,
+                                          rsP=1,
+                                          mode='acc')
+            result = np.load(load_fname + '.npz')
+            acc_all = result['tgm_acc']
+            time = result['time']
+            win_starts = result['win_starts']
+
+            diag_time = time[win_starts] + global_win * 0.002 - 0.3
+            win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
+            diag_acc = diag_acc[win_to_plot]
+            diag_time = diag_time[win_to_plot]
+            max_time = np.argmax(diag_acc)
+            max_acc[i_alg] = diag_acc[max_time]
+            max_acc[i_win, i_avg] = diag_acc[max_time]
+
+            win_in_s = win * 0.002
+            diag_time = time[win_starts] + win_in_s - 0.5
+            label_str = '%.3f s' % win_in_s
+            if i_avg == 0:
+                win_labels.append(label_str)
+            ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
+
+        ax.axhline(chance_word, color='k', label='Chance')
+        if i_avg == 0:
+            ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+        ax.legend(loc=3, fontsize=legendfontsize)
+        ax.set_title(avg_time_str, fontsize=axistitlesize)
+        ax.set_xlim([0.0, 0.5])
+        ax.tick_params(labelsize=ticklabelsize)
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                                size=axislettersize, weight='bold')
+    win_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
+    win_fig.subplots_adjust(top=0.8)
+    win_fig.suptitle('Window Length Comparison\nVerb Decoding Post-Sentence', fontsize=suptitlesize)
+    win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time_multisub.pdf')
+    win_fig.savefig('/home/nrafidi/thesis_figs/win_comp_over_time_multisub.png')
+
+    win_tgm_fig = plt.figure(figsize=(20, 8))
+    win_tgm_grid = AxesGrid(win_tgm_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, share_all=True)
+    win = 50
+    time_step = int(50 / args.overlap)
+    time_adjust = win * 0.002 * time_step
+    win_in_s = win * 0.002
+    for i_avg, avgTime in enumerate(avgTime_list):
+        if avgTime == 'T':
+            avg_time_str = 'Time Average'
+        else:
+            avg_time_str = 'No Time Average'
+        ax = win_tgm_grid[i_avg]
+        load_fname = SAVE_FILE.format(dir=top_dir,
+                                      word=word,
+                                      win_len=win,
+                                      ov=overlap,
+                                      perm='F',
+                                      alg=global_alg,
+                                      adj=adj,
+                                      avgTm=avgTime,
+                                      avgTst=global_avgTest,
+                                      inst=global_inst,
+                                      rsP=1,
+                                      mode='acc')
+        result = np.load(load_fname + '.npz')
+        acc_all = result['tgm_acc']
+        time = result['time']
+        win_starts = result['win_starts']
+
+        tgm_acc = np.mean(acc_all, axis=0)
+        diag_time = time[win_starts] + win_in_s - 0.5
+
+        win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
+        tgm_acc = tgm_acc[win_to_plot, win_to_plot]
+        diag_time = diag_time[win_to_plot]
+
+        num_time = tgm_acc.shape[0]
+        min_time = 0.0
+        max_time = 0.1 * num_time / time_step
+        label_time = np.arange(min_time, max_time, 0.1)
+        print(label_time)
+        ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
+        ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
+        ax.set_xticklabels(label_time)
+        ax.set_yticklabels(label_time)
+        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=chance_word, vmax=0.75)
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
+        ax.set_title(avg_time_str, fontsize=axistitlesize)
+        ax.tick_params(labelsize=ticklabelsize)
+    label_str = '%.3f s' % win_in_s
+    cbar = win_tgm_grid.cbar_axes[0].colorbar(im)
+    win_tgm_fig.text(0.04, 0.15, 'Train Time Relative to Sentence Offset (s)', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
+    win_tgm_fig.text(0.5, 0.04, 'Test Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
+    win_tgm_fig.subplots_adjust(top=0.8)
+    win_tgm_fig.suptitle('Averaging Comparison\nWindow Size: {}'.format(label_str), fontsize=suptitlesize)
+    win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp_multisub.pdf')
+    win_tgm_fig.savefig('/home/nrafidi/thesis_figs/win_tgm_comp_multisub.png')
+
+    bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
+    ind = np.arange(len(win_list))
+    width = 0.3
+    bar_ax.bar(ind, max_acc[:, 0], width, color='b', label=avg_labels[0])
+    bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
+    bar_ax.set_xticks(ind + width) # / 2.0)
+    bar_ax.set_xticklabels(win_labels)
+    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+    bar_ax.set_xlabel('Window Size (s)', fontsize=axislabelsize)
+    bar_fig.suptitle('Window Size\nMax Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.subplots_adjust(top=0.85)
+    bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.png')
     #
     # inst_fig = plt.figure(figsize=(20, 8))
     # inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
