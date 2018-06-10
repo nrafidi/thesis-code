@@ -48,7 +48,8 @@ if __name__ == '__main__':
         if (win_len != 2 and ni != 1) or (not tm_avg and not tst_avg):
             continue
 
-
+        if job_id == 256:
+            print(grid)
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             word=word,
                                             alg=alg,
