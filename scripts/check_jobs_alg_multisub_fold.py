@@ -79,20 +79,18 @@ if __name__ == '__main__':
 
         if not was_success:
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
-                print('Job {} Did Not Run'.format(job_str))
                 meow = 1
             else:
-                print(job_str)
-                with open(out_str, 'r') as fid:
-                    meow = fid.read()
-                    if 'Skipping' in meow and 'already' not in meow:
-                        skipped = True
-                        if was_success:
-                            successful_jobs -= 1
-                        skipped_jobs += 1
-                    else:
-                        skipped=False
-                if os.stat(err_str).st_size != 0 and not skipped:
+                # with open(out_str, 'r') as fid:
+                #     meow = fid.read()
+                #     if 'Skipping' in meow and 'already' not in meow:
+                #         skipped = True
+                #         if was_success:
+                #             successful_jobs -= 1
+                #         skipped_jobs += 1
+                #     else:
+                #         skipped=False
+                if os.stat(err_str).st_size != 0: # and not skipped:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
