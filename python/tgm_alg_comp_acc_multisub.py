@@ -248,7 +248,9 @@ if __name__ == '__main__':
         diag_time = time[win_starts] + win_in_s - 0.5
 
         win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
-        tgm_acc = tgm_acc[win_to_plot, win_to_plot]
+        tgm_acc = tgm_acc[win_to_plot, :]
+        tgm_acc = tgm_acc[:, win_to_plot]
+        print(tgm_acc.shape)
         diag_time = diag_time[win_to_plot]
 
         num_time = tgm_acc.shape[0]
