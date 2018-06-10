@@ -101,7 +101,7 @@ if __name__ == '__main__':
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
                             print('Job {} Failed'.format(job_str))
                             print(err_file)
-                        # print(grid)
+                            print(grid)
         job_id += 1
 
     print('{}/{} jobs succeeded'.format(successful_jobs, job_id))
