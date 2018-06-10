@@ -29,8 +29,7 @@ if __name__ == '__main__':
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.RANDOM_STATES,
                                    batch_exp.WORDS,
-                                   batch_exp.WIN_LENS,
-                                   batch_exp.FOLDS)
+                                   batch_exp.WIN_LENS)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
@@ -46,7 +45,6 @@ if __name__ == '__main__':
         rs = grid[8]
         word = grid[9]
         win_len = grid[10]
-        fold = grid[11]
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
