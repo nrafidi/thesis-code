@@ -183,14 +183,14 @@ if __name__ == '__main__':
             acc_all = result['tgm_acc']
             time = result['time']
             win_starts = result['win_starts']
-
+            diag_acc = np.diag(np.mean(acc_all, axis=0))
             win_in_s = win * 0.002
             diag_time = time[win_starts] + win_in_s - 0.3
             win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
+
             diag_acc = diag_acc[win_to_plot]
             diag_time = diag_time[win_to_plot]
             max_time = np.argmax(diag_acc)
-            max_acc[i_alg] = diag_acc[max_time]
             max_acc[i_win, i_avg] = diag_acc[max_time]
 
             label_str = '%.3f s' % win_in_s
