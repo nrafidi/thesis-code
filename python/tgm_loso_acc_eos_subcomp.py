@@ -244,7 +244,7 @@ if __name__ == '__main__':
                                     rsP=1,
                                     mode='acc')
 
-    result = np.load(multi_file)
+    result = np.load(multi_file + '.npz')
     multi_fold_acc = result['tgm_acc']
 
     multi_mean_acc = np.mean(multi_fold_acc, axis=0)
