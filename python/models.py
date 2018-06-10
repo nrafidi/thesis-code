@@ -439,6 +439,150 @@ def nb_tgm_loso(data,
     return preds, l_ints, cv_membership, feature_masks, num_feat_selected
 
 
+def nb_tgm_loso_multisub_fold(data_list,
+                labels,
+                sen_ints,
+                sub_rs,
+                win_starts,
+                win_len,
+                fold,
+                feature_select=False,
+                doZscore=False,
+                doAvg=False,
+                ddof=1):
+    labels = np.array(labels)
+    n_time = data_list[0].shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    in_l = [l_ints == i for i in xrange(n_l)]
+    print('In models.py:')
+    # print(penalty)
+    uni_sen_ints = np.unique(sen_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+
+    lint = uni_sen_ints[fold]
+    in_test = sen_ints == lint
+    in_train = np.logical_not(in_test)
+
+    sub_kf = KFold(n_splits=2, shuffle=True, random_state=sub_rs)
+
+    cv_membership = np.empty((len(uni_sen_ints),), dtype=np.object)
+    cv_membership[0] = in_test
+
+    train_data_full = [data[in_train, ...] for data in data_list]
+    train_l_ints = l_ints[in_train]
+    train_in_l = [in_l[li][in_train] for li in xrange(n_l)]
+
+    test_data_full = [data[in_test, ...] for data in data_list]
+
+    preds = np.empty((1, n_w, n_w), dtype=np.object)
+    feature_masks = np.empty((1, n_w), dtype=np.object)
+    num_feat_selected = np.empty((1, n_w))
+    for wi in xrange(n_w):
+        train_time = test_windows[wi]
+        train_data = [data[:, :, train_time] for data in train_data_full]
+        if doAvg:
+            train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
+        else:
+            train_data = np.concatenate([np.reshape(data, (np.sum(in_train), -1)) for data in train_data], axis=1)
+        if doZscore:
+            mu_full_all = np.mean(train_data, axis=0)
+            std_full_all = np.std(train_data, axis=0, ddof=ddof)
+            train_data_z = train_data - mu_full_all[None, ...]
+            train_data_z /= std_full_all[None, ...]
+        else:
+            train_data_z = train_data
+
+        A_top, B_top, mu_full_top = gnb_model(train_data_z, train_in_l, ddof)
+
+        if feature_select:
+            num_feat_opts = flatten_list(NUM_FEAT_OPTIONS)
+            num_feat_accs = np.empty((len(num_feat_opts), sub_kf.get_n_splits()))
+
+            i_split = 0
+            for in_sub_train, in_sub_test in sub_kf.split(train_data, train_l_ints):
+                sub_train_data = train_data[in_sub_train, ...]
+                sub_test_data = train_data[in_sub_test, ...]
+                sub_test_ints = train_l_ints[in_sub_test]
+                sub_train_in_l = [train_in_l[li][in_sub_train] for li in xrange(n_l)]
+
+                if doZscore:
+                    mu_full_all = np.mean(sub_train_data, axis=0)
+                    std_full_all = np.std(sub_train_data, axis=0, ddof=ddof)
+                    sub_train_data -= mu_full_all[None, ...]
+                    sub_train_data /= std_full_all[None, ...]
+                    sub_test_data -= mu_full_all[None, ...]
+                    sub_test_data /= std_full_all[None, ...]
+                # # print('{}/{}'.format(wi, n_w))
+                # # print(sub_train_in_l)
+                A, B, mu_full = gnb_model(sub_train_data, sub_train_in_l, ddof)
+                mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full[lis[0]] - mu_full[lis[1]]),
+                                 ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
+                                 np.zeros(mu_full[0].shape))
+                sorted_indices = np.argsort(-mu_diff, axis=None)
+
+                for i_feat_num, feat_num in enumerate(num_feat_opts):
+                    if feat_num > len(sorted_indices):
+                        break
+                    mask = np.zeros(mu_diff.shape, dtype=np.bool)
+                    mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
+                    A_mask = np.multiply(mask[None, ...], A)
+
+                    B_mask = np.sum(np.multiply(B, mask[None, ...]), axis=1)
+
+                    pred_mask = np.sum(np.multiply(sub_test_data[:, None, ...], A_mask[None, ...]),
+                                       axis=2) - B_mask
+
+                    num_feat_accs[i_feat_num, i_split] = get_pred_acc(pred_mask, sub_test_ints)
+                i_split += 1
+
+            best_feat_ind = np.argmax(np.mean(num_feat_accs, axis=1))
+            feat_num = num_feat_opts[best_feat_ind]
+            mu_diff = reduce(lambda accum, lis: accum + np.abs(mu_full_top[lis[0]] - mu_full_top[lis[1]]),
+                             ((li1, li2) for li1 in xrange(n_l) for li2 in xrange(li1 + 1, n_l)),
+                             np.zeros(mu_full_top[0].shape))
+            sorted_indices = np.argsort(-mu_diff, axis=None)
+            mask = np.zeros(mu_diff.shape, dtype=np.bool)
+            mask[np.unravel_index(sorted_indices[:feat_num], mu_diff.shape)] = True
+            feature_masks[0, wi] = mask
+            num_feat_selected[0, wi] = feat_num
+        else:
+            mask = np.ones(A_top.shape[1:], dtype=np.bool)
+
+        A_top = np.multiply(mask[None, ...], A_top)
+        if doAvg:
+            B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=1)
+        else:
+            B_top = np.sum(np.multiply(B_top, mask[None, ...]), axis=(1, 2))
+
+        for wj in xrange(n_w):
+            test_time = test_windows[wj]
+            test_data = [data[:, :, test_time] for data in test_data_full]
+            if doAvg:
+                test_data = np.concatenate([np.mean(data, axis=2) for data in test_data], axis=1)
+            else:
+                test_data = np.concatenate([np.reshape(data, (np.sum(in_test), -1)) for data in test_data], axis=1)
+            if doZscore:
+                mu_full_all = np.mean(train_data, axis=0)
+                std_full_all = np.std(train_data, axis=0, ddof=ddof)
+                test_data -= mu_full_all[None, ...]
+                test_data /= std_full_all[None, ...]
+
+
+            pred_top = np.sum(np.multiply(test_data[:, None, ...], A_top[None, ...]),
+                               axis=2) - B_top
+
+            preds[0, wi, wj] = pred_top
+
+    return preds, l_ints, cv_membership, feature_masks, num_feat_selected
+
+
 def nb_tgm(data,
            labels,
            kf,
@@ -868,6 +1012,153 @@ def svc_tgm_loso(data,
                 tgm_pred[i_split, wi, wj] = model.predict(test_data)
                 # # print(tgm_acc[i_split, wi, wj])
         i_split += 1
+
+    return l_ints, cv_membership, tgm_acc, tgm_pred
+
+
+def svm_tgm_loso_multisub_fold(data_list,
+                            labels,
+                            win_starts,
+                            win_len,
+                            sen_ints,
+                            fold,
+                            sub_rs,
+                            penalty='l1',
+                            adj='mean_center',
+                            doTimeAvg=False,
+                            doTestAvg=False,
+                            ddof=1,
+                            C=None):
+    labels = np.array(labels)
+    n_time = data_list[0].shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    print('In models.py:')
+    # print(penalty)
+    uni_sen_ints = np.unique(sen_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    cv_membership = []
+    tgm_acc = np.empty((1, n_w, n_w))
+    tgm_pred = np.empty((1, n_w, n_w), dtype='object')
+
+    lint = uni_sen_ints[fold]
+    in_test = sen_ints == lint
+    in_train = np.logical_not(in_test)
+
+    sub_kf = KFold(n_splits=2, shuffle=True, random_state=sub_rs)
+
+    cv_membership.append(in_test)
+
+    train_data_full = [data[in_train, ...] for data in data_list]
+    train_labels = np.ravel(l_ints[in_train])
+
+    test_data_full = [data[in_test, ...] for data in data_list]
+    test_labels = np.ravel(l_ints[in_test])
+
+    for wi in xrange(n_w):
+        train_time = test_windows[wi]
+        train_data = [data[:, :, train_time] for data in train_data_full]
+        if doTimeAvg:
+            train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
+        else:
+            train_data = np.concatenate([np.reshape(data, (np.sum(in_train), -1)) for data in train_data], axis=1)
+        print(train_data.shape)
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_data, axis=0)
+            train_data -= mu_train[None, :]
+        elif adj == 'zscore':
+            mu_train = np.mean(train_data, axis=0)
+            std_train = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train[None, :]
+            train_data /= std_train[None, :]
+
+        if C is None:
+            Cs = C_OPTIONS[penalty]
+            C_accs = np.empty((len(Cs), np.sum(in_train)))
+            i_sub_split = 0
+            for in_sub_train, in_sub_test in sub_kf.split(train_data, train_labels):
+                sub_train_data = train_data[in_sub_train, ...]
+                sub_test_data = train_data[in_sub_test, ...]
+                sub_test_labels = train_labels[in_sub_test]
+                sub_train_labels = train_labels[in_sub_train]
+
+                if adj == 'zscore':
+                    mu_full_all = np.mean(sub_train_data, axis=0)
+                    std_full_all = np.std(sub_train_data, axis=0, ddof=ddof)
+                    sub_train_data -= mu_full_all[None, ...]
+                    sub_train_data /= std_full_all[None, ...]
+                    sub_test_data -= mu_full_all[None, ...]
+                    sub_test_data /= std_full_all[None, ...]
+                for i_c, c in enumerate(Cs):
+                    model = sklearn.svm.LinearSVC(penalty=penalty,
+                                                  loss='squared_hinge',
+                                                  dual=DUAL[penalty],
+                                                  C=c,
+                                                  multi_class='ovr',
+                                                  class_weight='balanced')
+                    model.fit(sub_train_data, sub_train_labels)
+                    C_accs[i_c, i_sub_split] = model.score(sub_test_data, sub_test_labels)
+                i_sub_split += 1
+            best_C = Cs[np.argmax(np.mean(C_accs, axis=1))]
+            # print(best_C)
+
+            model = sklearn.svm.LinearSVC(penalty=penalty,
+                                          loss='squared_hinge',
+                                          dual=DUAL[penalty],
+                                          C=best_C,
+                                          multi_class='ovr',
+                                          class_weight='balanced')
+        else:
+            model = sklearn.svm.LinearSVC(penalty=penalty,
+                                          loss='squared_hinge',
+                                          dual=DUAL[penalty],
+                                          C=C,
+                                          multi_class='ovr',
+                                          class_weight='balanced')
+
+
+        model.fit(train_data, train_labels)
+
+        # if penalty == 'l2':
+        #     print(model.C_)
+        for wj in xrange(n_w):
+            test_time = test_windows[wj]
+            test_data = [data[:, :, test_time] for data in test_data_full]
+            if doTimeAvg:
+                test_data = np.concatenate([np.mean(data, axis=2) for data in test_data], axis=1)
+            else:
+                test_data = np.concatenate([np.reshape(data, (np.sum(in_test), -1)) for data in test_data], axis=1)
+
+            if doTestAvg:
+                uni_test_labels = np.unique(test_labels)
+                new_test_data = []
+                for label in uni_test_labels:
+                    is_label = test_labels == label
+                    dat = np.mean(test_data[is_label, :], axis=0)
+                    new_test_data.append(np.reshape(dat, (1, -1)))
+                test_data = np.concatenate(new_test_data, axis=0)
+                if len(test_data.shape) == 1:
+                    test_data = np.reshape(test_data, (1, -1))
+            else:
+                uni_test_labels = test_labels
+
+
+            if adj == 'mean_center':
+                test_data -= mu_train[None, :]
+            elif adj == 'zscore':
+                test_data -= mu_train[None, :]
+                test_data /= std_train[None, :]
+
+
+            tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
+            tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
