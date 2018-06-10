@@ -77,10 +77,10 @@ if __name__ == '__main__':
         err_str = ERR_FILE.format(dir=dir_str, job_name=job_str)
         out_str = OUT_FILE.format(dir=dir_str, job_name=job_str)
 
-        if job_id in [125, 132, 262, 271, 273]:
-            mem=16
-        else:
-            mem=8
+        # if job_id in [125, 132, 262, 271, 273]:
+        mem=16
+        # else:
+        #     mem=8
 
         call_str = qsub_call.format(job_name=job_str,
                                     mem=mem,
