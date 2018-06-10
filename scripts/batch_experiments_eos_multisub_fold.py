@@ -19,15 +19,15 @@ def bool_to_str(bool_var):
 FOLDS = range(32)
 EXPERIMENTS = ['krns2']
 SEN_TYPES = ['pooled']
-WORDS = ['voice']
-WIN_LENS = [25, 12, 50, 100]
-OVERLAPS = [12]
+WORDS = ['verb']
+WIN_LENS = [2]
+OVERLAPS = [2]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
-DO_TME_AVGS = [False, True]
+DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [2, 1, 5, 10]
+NUM_INSTANCESS = [1]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
