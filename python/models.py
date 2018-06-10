@@ -1125,6 +1125,132 @@ def lr_tgm_loso_fold(data,
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
 
+def lr_tgm_loso_multisub_fold(data_list,
+                            labels,
+                            win_starts,
+                            win_len,
+                            sen_ints,
+                             fold,
+                            penalty='l1',
+                            adj='mean_center',
+                            doTimeAvg=False,
+                            doTestAvg=False,
+                            ddof=1,
+                            C=None):
+    labels = np.array(labels)
+    n_time = data_list[0].shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+    print('In models.py:')
+    # print(penalty)
+    uni_sen_ints = np.unique(sen_ints)
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    cv_membership = []
+    tgm_acc = np.empty((1, n_w, n_w))
+    tgm_pred = np.empty((1, n_w, n_w), dtype='object')
+
+    lint = uni_sen_ints[fold]
+    in_test = sen_ints == lint
+    in_train = np.logical_not(in_test)
+
+
+    cv_membership.append(in_test)
+
+    train_data_full = [data[in_train, ...] for data in data_list]
+    train_labels = np.ravel(l_ints[in_train])
+
+    test_data_full = [data[in_test, ...] for data in data_list]
+    test_labels = np.ravel(l_ints[in_test])
+
+    for wi in xrange(n_w):
+        train_time = test_windows[wi]
+        train_data = [data[:, :, train_time] for data in train_data_full]
+        if doTimeAvg:
+            train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
+        else:
+            train_data = np.concatenate([np.reshape(data, (np.sum(in_train), -1)) for data in train_data], axis=1)
+        print(train_data.shape)
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_data, axis=0)
+            train_data -= mu_train[None, :]
+        elif adj == 'zscore':
+            mu_train = np.mean(train_data, axis=0)
+            std_train = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train[None, :]
+            train_data /= std_train[None, :]
+
+        if penalty is None:
+            model = sklearn.linear_model.LogisticRegression(
+                C=1e100,
+                penalty='l2',
+                solver='liblinear',
+                multi_class='ovr',
+                dual=DUAL['l2'],
+                class_weight='balanced')
+        elif C is None:
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=C_OPTIONS[penalty],
+                                                              cv=2,
+                                                              penalty=penalty,
+                                                              solver='liblinear',
+                                                              dual=DUAL[penalty],
+                                                              multi_class='ovr',
+                                                              class_weight='balanced',
+                                                              refit=True)
+        else:
+            model = sklearn.linear_model.LogisticRegression(
+                C=C,
+                penalty=penalty,
+                solver='liblinear',
+                multi_class='ovr',
+                class_weight='balanced')
+
+
+        model.fit(train_data, train_labels)
+
+        # if penalty == 'l2':
+        #     print(model.C_)
+        for wj in xrange(n_w):
+            test_time = test_windows[wj]
+            test_data = [data[:, :, test_time] for data in test_data_full]
+            if doTimeAvg:
+                test_data = np.concatenate([np.mean(data, axis=2) for data in test_data], axis=1)
+            else:
+                test_data = np.concatenate([np.reshape(data, (np.sum(in_test), -1)) for data in test_data], axis=1)
+
+            if doTestAvg:
+                uni_test_labels = np.unique(test_labels)
+                new_test_data = []
+                for label in uni_test_labels:
+                    is_label = test_labels == label
+                    dat = np.mean(test_data[is_label, :], axis=0)
+                    new_test_data.append(np.reshape(dat, (1, -1)))
+                test_data = np.concatenate(new_test_data, axis=0)
+                if len(test_data.shape) == 1:
+                    test_data = np.reshape(test_data, (1, -1))
+            else:
+                uni_test_labels = test_labels
+
+
+            if adj == 'mean_center':
+                test_data -= mu_train[None, :]
+            elif adj == 'zscore':
+                test_data -= mu_train[None, :]
+                test_data /= std_train[None, :]
+
+
+            tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
+            tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
+
+    return l_ints, cv_membership, tgm_acc, tgm_pred
+
+
 def lr_cross_tgm_loso_fold(data_list,
                             labels_list,
                             win_starts_list,
