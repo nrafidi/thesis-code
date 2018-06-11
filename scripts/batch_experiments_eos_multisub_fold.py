@@ -25,9 +25,9 @@ OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
-DO_TME_AVGS = [False]
+DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [1]
+NUM_INSTANCESS = [2]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
@@ -74,6 +74,9 @@ if __name__ == '__main__':
         sen = grid[10]
         word = grid[11]
         fold = grid[12]
+
+        if fold > 15 and sen != 'pooled':
+            continue
 
         job_str = JOB_NAME.format(exp=exp,
                                   sen=sen,

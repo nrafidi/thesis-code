@@ -50,6 +50,9 @@ if __name__ == '__main__':
         word = grid[11]
         fold = grid[12]
 
+        if fold > 15 and sen != 'pooled':
+            continue
+
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sen=sen,
@@ -90,7 +93,6 @@ if __name__ == '__main__':
                                  fold=fold)
 
         if os.path.isfile(old_job + '.npz'):
-            skipped_jobs += 1.0/float(len(batch_exp.FOLDS))
             was_success = True
         elif os.path.isfile(fname + '.npz'):
             successful_jobs += 1
