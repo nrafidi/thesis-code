@@ -148,11 +148,11 @@ if __name__ == '__main__':
         if sen_type == 'active':
             text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
             max_line = 2.51 * 2 * time_step - time_adjust
-            start_line = time_step - time_adjust
+            start_line = 0.0 - time_adjust
         else:
             text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
             max_line = 3.51 * 2 * time_step - time_adjust
-            start_line = time_step - time_adjust
+            start_line = 0.0 - time_adjust
 
 
         colors = ['r', 'b', 'g']
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         if i_sen == 0:
             ax.set_ylabel('Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
-        ax.set_ylim([0.0, 1.0])
+        ax.set_ylim([0.0, 1.2])
         ax.set_xlim([start_line, max_line + time_step*5])
         if i_sen == 1:
             ax.legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
