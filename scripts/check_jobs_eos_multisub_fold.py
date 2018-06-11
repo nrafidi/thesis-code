@@ -53,6 +53,8 @@ if __name__ == '__main__':
         if fold > 15 and sen != 'pooled':
             continue
 
+        if exp == 'krns2' and word == 'senlen':
+            continue
 
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sen=sen,

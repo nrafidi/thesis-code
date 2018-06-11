@@ -17,18 +17,18 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['PassAct3']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SEN_TYPES = ['active', 'passive', 'pooled']
 WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
 OVERLAPS = [5]
-IS_PERMS = [False]
+IS_PERMS = [True]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
 DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
 NUM_INSTANCESS = [2]
-RANDOM_STATES = [1]
+RANDOM_STATES = range(1000)
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -76,6 +76,9 @@ if __name__ == '__main__':
         fold = grid[12]
 
         if fold > 15 and sen != 'pooled':
+            continue
+
+        if exp == 'krns2' and word == 'senlen':
             continue
 
         job_str = JOB_NAME.format(exp=exp,
