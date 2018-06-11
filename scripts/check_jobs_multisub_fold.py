@@ -116,6 +116,8 @@ if __name__ == '__main__':
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
                             if 'MemoryError' in err_file:
                                 print('Job {} Failed Memory Error'.format(job_str))
+                            elif 'IndexError' in err_file and word=='noun2' and exp == 'PassAct3':
+                                skipped_jobs += 1
                             else:
                                 print(err_file)
                                 print(grid)
