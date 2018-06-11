@@ -129,7 +129,7 @@ if __name__ == '__main__':
         n_rows=2
     else:
         n_rows=1
-    num_plots = len(word_list)/n_rows
+    num_plots = round(len(word_list)/n_rows)
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
