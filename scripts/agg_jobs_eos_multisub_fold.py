@@ -101,6 +101,8 @@ if __name__ == '__main__':
 
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
             fold_num = len(batch_exp.FOLDS)/2
+        elif sen in ['active', 'passive']:
+            fold_num = len(batch_exp.FOLDS) / 2
         else:
             fold_num = len(batch_exp.FOLDS)
 
