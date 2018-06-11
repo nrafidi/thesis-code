@@ -339,7 +339,7 @@ if __name__ == '__main__':
         ax.legend(loc=3, fontsize=legendfontsize)
         ax.tick_params(labelsize=ticklabelsize)
         ax.set_title(avg_test_str, fontsize=axistitlesize)
-        # ax.set_xlim([0.0, 0.5])
+        ax.set_ylim([0.0, 1.0])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
     inst_fig.subplots_adjust(top=0.8)
@@ -352,7 +352,7 @@ if __name__ == '__main__':
     ind = np.arange(len(inst_list))
     width = 0.3
     bar_ax.bar(ind, max_acc[:, 0], width, color='b', label=avg_labels[0])
-    # bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
+    bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
     bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(inst_list)
     bar_ax.set_ylim([chance_word[word], 1.0])
