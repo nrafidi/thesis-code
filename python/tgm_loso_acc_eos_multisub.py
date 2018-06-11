@@ -105,10 +105,6 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = args.sen_type
-    if sen_type == 'pooled':
-        n_rows = 2
-    else:
-        n_rows = 1
     word_list = ['agent', 'patient', 'verb']
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
@@ -129,7 +125,12 @@ if __name__ == '__main__':
                   'voice': 0.75,
                   'senlen': 0.75,
                   'propid': 0.25}
-    num_plots = len(word_list)/2
+
+    if sen_type == 'pooled':
+        n_rows = 2
+    else:
+        n_rows = 1
+    num_plots = len(word_list)/n_rows
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
