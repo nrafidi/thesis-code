@@ -14,7 +14,7 @@ import string
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{fold}'
+            'rsPerm{rsP}_{mode}'
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
