@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
             ax = combo_grid[i_combo]
             print(i_combo)
-            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.00)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.00)
 
             ax.set_title('{word}'.format(
                 word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
