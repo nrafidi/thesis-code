@@ -109,7 +109,7 @@ if __name__ == '__main__':
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
             word_list.extend(['noun1', 'voice', 'propid'])
-        vmaxes = {'noun1': 0.25,
+        vmaxes = {'noun1': 0.3,
                   'agent': 0.5,
                   'patient': 0.5,
                   'verb': 0.75,
