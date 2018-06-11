@@ -130,6 +130,8 @@ if __name__ == '__main__':
         n_rows=2
     else:
         n_rows=1
+    print(word_list)
+    print(len(word_list))
     num_plots = ceil(len(word_list)/n_rows)
     print(num_plots)
     time_step = int(250 / args.overlap)
