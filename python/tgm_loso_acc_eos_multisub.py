@@ -79,12 +79,12 @@ if __name__ == '__main__':
     parser.add_argument('--experiment')
     parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
     # parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
-    parser.add_argument('--win_len', type=int, default=25)
+    parser.add_argument('--win_len', type=int, default=50)
     parser.add_argument('--overlap', type=int, default=12)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
-    parser.add_argument('--avgTime', default='F')
+    parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     args = parser.parse_args()
 
@@ -105,6 +105,10 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = args.sen_type
+    if sen_type == 'pooled':
+        n_rows = 2
+    else:
+        n_rows = 1
     word_list = ['agent', 'patient', 'verb']
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
@@ -129,7 +133,7 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(n_rows, num_plots),
                           axes_pad=0.7, cbar_mode='each', cbar_location='right',
                           cbar_pad=0.2)
 
