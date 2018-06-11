@@ -105,10 +105,10 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = args.sen_type
-    word_list = ['agent', 'patient', 'verb']
+    word_list = ['agent', 'patient', 'verb', 'propid']
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
-            word_list.extend(['noun1', 'voice', 'propid'])
+            word_list.extend(['noun1', 'voice'])
         vmaxes = {'noun1': 0.5,
                   'agent': 0.75,
                   'patient': 0.75,
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                   'propid': 0.5}
     else:
         if sen_type == 'pooled':
-            word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
+            word_list.extend(['senlen', 'noun1', 'voice'])
         vmaxes = {'noun1': 0.4,
                   'agent': 0.35,
                   'patient': 0.35,
@@ -126,10 +126,7 @@ if __name__ == '__main__':
                   'senlen': 0.75,
                   'propid': 0.25}
 
-    if sen_type == 'pooled':
-        n_rows = 2
-    else:
-        n_rows = 1
+    n_rows=2
     num_plots = len(word_list)/n_rows
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
