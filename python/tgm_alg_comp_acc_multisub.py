@@ -203,7 +203,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
         ax.legend(loc=3, fontsize=legendfontsize)
         ax.set_title(avg_time_str, fontsize=axistitlesize)
-        ax.set_xlim([0.0, 0.5])
+        # ax.set_xlim([0.0, 0.5])
         ax.tick_params(labelsize=ticklabelsize)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=axislettersize, weight='bold')
@@ -284,7 +284,7 @@ if __name__ == '__main__':
     # bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
     bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(win_labels)
-    bar_ax.set_ylim([0.5, 1.0])
+    bar_ax.set_ylim([chance_word[word], 1.0])
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(fontsize=legendfontsize)
     bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
