@@ -19,7 +19,7 @@ VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive', 'pooled']
 VALID_WORDS = ['noun1', 'noun2', 'verb', 'voice', 'agent', 'patient', 'propid', 'senlen']
 
-TMAX={'krns2': 1.5,
+TMAX={'krns2': 1.3,
       'PassAct2': 1.5,
       'PassAct3': 2.0}
 

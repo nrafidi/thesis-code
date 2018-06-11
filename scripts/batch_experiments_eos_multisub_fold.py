@@ -18,14 +18,14 @@ def bool_to_str(bool_var):
 
 FOLDS = range(32)
 EXPERIMENTS = ['krns2']
-SEN_TYPES = ['pooled']
-WORDS = ['verb']
-WIN_LENS = [2]
-OVERLAPS = [2]
+SEN_TYPES = ['active', 'passive', 'pooled']
+WORDS = ['noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
+WIN_LENS = [50]
+OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
-DO_TME_AVGS = [True]
+DO_TME_AVGS = [False]
 DO_TST_AVGS = [True]
 NUM_INSTANCESS = [1]
 RANDOM_STATES = [1]
@@ -40,7 +40,7 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=8GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=16GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
@@ -119,9 +119,9 @@ if __name__ == '__main__':
                                  rsP=rs,
                                  mode='acc')
 
-        if not os.path.isfile(fname + '.npz') and job_id == 6:
+        if not os.path.isfile(fname + '.npz'):
             call(call_str, shell=True)
         job_id += 1
-        #
-        # while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
-        #     time.sleep(30)
+
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+            time.sleep(30)
