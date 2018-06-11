@@ -109,12 +109,12 @@ if __name__ == '__main__':
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
             word_list.extend(['noun1', 'voice', 'propid'])
-        vmaxes = {'noun1': 0.2,
-                  'agent': 0.4,
-                  'patient': 0.4,
-                  'verb': 0.4,
-                  'voice': 0.8,
-                  'propid': 0.2}
+        vmaxes = {'noun1': 0.5,
+                  'agent': 0.75,
+                  'patient': 0.75,
+                  'verb': 0.75,
+                  'voice': 1.0,
+                  'propid': 0.5}
     else:
         if sen_type == 'pooled':
             word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(n_rows, num_plots),
                           axes_pad=0.7, cbar_mode='each', cbar_location='right',
-                          cbar_pad=0.2)
+                          cbar_pad=0.2, share_all=True)
 
     for i_word, word in enumerate(word_list):
         chance = CHANCE[args.experiment][sen_type][word]
