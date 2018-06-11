@@ -23,7 +23,7 @@ DO_TEST_AVGS = [True]
 NUM_INSTANCESS = [2]
 RANDOM_STATES = [1]
 
-JOB_NAME = '{exp}-{sen}-{word}-{id}'
+JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'

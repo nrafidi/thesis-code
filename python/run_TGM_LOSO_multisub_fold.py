@@ -125,8 +125,8 @@ def run_tgm_exp(experiment,
                                                                                        reps_filter=lambda x: [i for i in range(x) if i < 10],
                                                                                        sensor_type=None,
                                                                                        is_region_sorted=False,
-                                                                                       tmin=TIME_LIMITS[experiment][sen_type]['tmin'],
-                                                                                       tmax=TIME_LIMITS[experiment][sen_type]['tmax'])
+                                                                                       tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
+                                                                                       tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
         data_list.append(data)
         if i_sub == 0:
             sen_ints = sen_ints_sub
