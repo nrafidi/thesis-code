@@ -101,7 +101,7 @@ if __name__ == '__main__':
         else:
             was_success = False
 
-        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 15:
+        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 8:
             skipped_jobs +=1
         elif not was_success:
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
