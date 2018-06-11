@@ -44,7 +44,7 @@ SAVE_FILE = '{dir}TGM-alg-comp_multisub_pooled_{word}_win{win_len}_ov{ov}_pr{per
 if __name__ == '__main__':
     alg_list = run_alg_comp.VALID_ALGS
     win_list = [2, 12, 25, 50]
-    inst_list = [1, 2, 5, 10]
+    inst_list = [1, 2, 5]
     avgTime_list = ['T', 'F']
     avgTest_list = ['T', 'F']
 
