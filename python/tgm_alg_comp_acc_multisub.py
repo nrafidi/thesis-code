@@ -46,7 +46,7 @@ if __name__ == '__main__':
     win_list = [2, 12, 25, 50, 100]
     inst_list = [1, 2, 5, 10]
     avgTime_list = ['T'] #, 'F']
-    avgTest_list = ['T', 'F']
+    avgTest_list = ['T']
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--word', default='verb', choices=['verb', 'voice'])
@@ -293,75 +293,76 @@ if __name__ == '__main__':
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.png')
-    #
-    # inst_fig = plt.figure(figsize=(20, 8))
-    # inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
-    #                     axes_pad=0.7)
-    # max_acc = np.zeros((len(inst_list), 2))
-    # max_std = np.zeros((len(inst_list), 2))
-    # avg_labels = []
-    # for i_avg, avgTest in enumerate(avgTest_list):
-    #     if avgTest == 'T':
-    #         avg_test_str = 'Test Sample Average'
-    #     else:
-    #         avg_test_str = 'No Test Sample Average'
-    #     avg_labels.append(avg_test_str)
-    #     ax = inst_grid[i_avg]
-    #     for i_inst, inst in enumerate(inst_list):
-    #         intersection, acc_all, time, win_starts = intersect_accs(exp,
-    #                                                                  word,
-    #                                                                  global_alg,
-    #                                                                  win_len=global_win,
-    #                                                                  overlap=overlap,
-    #                                                                  adj=adj,
-    #                                                                  num_instances=inst,
-    #                                                                  avgTime=global_avgTime,
-    #                                                                  avgTest=avgTest)
-    #         if type(acc_all) != list:
-    #             print('{} {}'.format(avgTest, inst))
-    #         if len(intersection) > 0:
-    #             diag_acc = np.diag(np.mean(acc_all, axis=0))
-    #             diag_std = np.diag(np.std(acc_all, axis=0))
-    #             num_sub = np.sqrt(float(acc_all.shape[0]))
-    #             max_time = np.argmax(diag_acc)
-    #             max_acc[i_inst, i_avg] = diag_acc[max_time]
-    #             max_std[i_inst, i_avg] = diag_std[max_time]
-    #             diag_std = np.divide(diag_std, num_sub)
-    #             win_in_s = global_win * 0.002
-    #             diag_time = time[win_starts] + win_in_s - 0.5
-    #             ax.plot(diag_time, diag_acc, color=colors[i_inst], label='{}'.format(inst))
-    #             ax.fill_between(diag_time, diag_acc - diag_std, diag_acc + diag_std, facecolor=colors[i_inst],
-    #                             edgecolor='w', alpha=0.3)
-    #     ax.axhline(0.5, color='k', label='Chance')
-    #     # ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
-    #     ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-    #     ax.legend(loc=3, fontsize=legendfontsize)
-    #     ax.tick_params(labelsize=ticklabelsize)
-    #     ax.set_title(avg_test_str, fontsize=axistitlesize)
-    #     ax.set_xlim([0.0, 0.5])
-    #     ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
-    #             size=axislettersize, weight='bold')
-    # inst_fig.subplots_adjust(top=0.8)
-    # inst_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
-    # inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
-    # inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.pdf')
-    # inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time.png')
-    # print(max_acc)
-    # bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
-    # ind = np.arange(len(inst_list))
-    # width = 0.3
-    # bar_ax.bar(ind, max_acc[:, 0], width, yerr=max_std[:, 0], color='b', ecolor='r', label=avg_labels[0])
-    # bar_ax.bar(ind + width, max_acc[:, 1], width, yerr=max_std[:, 1], color='g', ecolor='r', label=avg_labels[1])
-    # bar_ax.set_xticks(ind + width) # / 2.0)
-    # bar_ax.set_xticklabels(inst_list)
-    # bar_ax.set_ylim([0.5, 1.0])
-    # bar_ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
-    # bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
-    # bar_ax.legend(fontsize=legendfontsize)
-    # bar_ax.tick_params(labelsize=ticklabelsize)
-    # bar_fig.suptitle('Repetition Averaging\nMax Accuracy Comparison', fontsize=suptitlesize)
-    # bar_fig.subplots_adjust(top=0.85)
-    # bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.pdf')
-    # bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar.png')
+
+    inst_fig = plt.figure(figsize=(20, 8))
+    inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(1, 2),
+                        axes_pad=0.7)
+    max_acc = np.zeros((len(inst_list), 2))
+    max_std = np.zeros((len(inst_list), 2))
+    avg_labels = []
+    for i_avg, avgTest in enumerate(avgTest_list):
+        if avgTest == 'T':
+            avg_test_str = 'Test Sample Average'
+        else:
+            avg_test_str = 'No Test Sample Average'
+        avg_labels.append(avg_test_str)
+        ax = inst_grid[i_avg]
+        for i_inst, inst in enumerate(inst_list):
+            load_fname = SAVE_FILE.format(dir=top_dir,
+                                          word=word,
+                                          win_len=global_win,
+                                          ov=overlap,
+                                          perm='F',
+                                          alg=global_alg,
+                                          adj=adj,
+                                          avgTm=global_avgTime,
+                                          avgTst=avgTest,
+                                          inst=inst,
+                                          rsP=1,
+                                          mode='acc')
+            result = np.load(load_fname + '.npz')
+            acc_all = result['tgm_acc']
+            time = result['time']
+            win_starts = result['win_starts']
+            win_in_s = global_win * 0.002
+            diag_time = time[win_starts] + win_in_s - 0.5
+            win_to_plot = np.logical_and(diag_time >= -0.3, diag_time <= 1.0)
+            diag_time = diag_time[win_to_plot]
+            diag_acc = np.diag(np.mean(acc_all, axis=0))
+            diag_acc = diag_acc[win_to_plot]
+            max_time = np.argmax(diag_acc)
+            max_acc[i_inst, i_avg] = diag_acc[max_time]
+            ax.plot(diag_time, diag_acc, color=colors[i_inst], label='{}'.format(inst))
+        ax.axhline(chance_word[word], color='k', label='Chance')
+        # ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
+        ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+        ax.legend(loc=3, fontsize=legendfontsize)
+        ax.tick_params(labelsize=ticklabelsize)
+        ax.set_title(avg_test_str, fontsize=axistitlesize)
+        # ax.set_xlim([0.0, 0.5])
+        ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
+    inst_fig.subplots_adjust(top=0.8)
+    inst_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
+    inst_fig.suptitle('Repetition Averaging Comparison\nVoice Decoding Post-Sentence', fontsize=suptitlesize)
+    inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time_multisub.pdf')
+    inst_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_over_time_multisub.png')
+    print(max_acc)
+    bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
+    ind = np.arange(len(inst_list))
+    width = 0.3
+    bar_ax.bar(ind, max_acc[:, 0], width, color='b', label=avg_labels[0])
+    # bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
+    bar_ax.set_xticks(ind + width) # / 2.0)
+    bar_ax.set_xticklabels(inst_list)
+    bar_ax.set_ylim([chance_word[word], 1.0])
+    bar_ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
+    bar_ax.legend(fontsize=legendfontsize)
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_fig.suptitle('Repetition Averaging\nMax Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.subplots_adjust(top=0.85)
+    bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar_multisub.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar_multisub.png')
 
     plt.show()
