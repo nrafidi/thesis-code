@@ -100,7 +100,7 @@ if __name__ == '__main__':
             tgm_pred.append(result['tgm_pred'])
 
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
-            fold_num = len(batch_exp.FOLDS)/2
+            fold_num = len(batch_exp.FOLDS)/4
         elif sen in ['active', 'passive']:
             fold_num = len(batch_exp.FOLDS) / 2
         else:
