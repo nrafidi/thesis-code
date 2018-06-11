@@ -205,6 +205,7 @@ if __name__ == '__main__':
         ax.set_title(avg_time_str, fontsize=axistitlesize)
         # ax.set_xlim([0.0, 0.5])
         ax.tick_params(labelsize=ticklabelsize)
+        ax.set_ylim([0.0, 1.0])
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                                 size=axislettersize, weight='bold')
     win_fig.text(0.5, 0.04, 'Time relative to Sentence Offset (s)', fontsize=axislabelsize, ha='center')
