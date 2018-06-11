@@ -99,12 +99,11 @@ if __name__ == '__main__':
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
 
+        fold_num = len(batch_exp.FOLDS)
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
-            fold_num = len(batch_exp.FOLDS)/4
-        elif sen in ['active', 'passive']:
-            fold_num = len(batch_exp.FOLDS) / 2
-        else:
-            fold_num = len(batch_exp.FOLDS)
+            fold_num /= 2
+        if sen in ['active', 'passive']:
+            fold_num /= 2
 
         if len(tgm_acc) == fold_num:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
