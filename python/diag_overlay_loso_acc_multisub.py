@@ -61,15 +61,13 @@ def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_i
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
-    parser.add_argument('--win_len', type=int, default=100)
-    parser.add_argument('--overlap', type=int, default=12)
+    parser.add_argument('--win_len', type=int, default=50)
+    parser.add_argument('--overlap', type=int, default=5)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
-    parser.add_argument('--num_instances', type=int, default=10)
-    parser.add_argument('--avgTime', default='F')
+    parser.add_argument('--num_instances', type=int, default=2)
+    parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
-    parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
-    parser.add_argument('--indep', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -202,22 +200,18 @@ if __name__ == '__main__':
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.85)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances,
-            sig=args.sig_test,
-            indep=args.indep
+            num_instances=args.num_instances
         ), bbox_inches='tight')
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances,
-            sig=args.sig_test,
-            indep=args.indep
+            num_instances=args.num_instances
         ), bbox_inches='tight')
 
 
