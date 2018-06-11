@@ -43,8 +43,8 @@ TIME_LIMITS = {'PassAct3':
 'krns2': {
         'active': {
             'noun1': {'tmin': -0.5, 'tmax': 3.8},
-            'verb': {'tmin': -1.5, 'tmax': 2.8},
-            'noun2': {'tmin': -3.0, 'tmax': 1.3}},
+            'verb': {'tmin': -1.0, 'tmax': 3.3},
+            'noun2': {'tmin': -2.0, 'tmax': 2.3}},
         'passive': {
             'noun1': {'tmin': -0.5, 'tmax': 3.8},
             'verb': {'tmin': -1.5, 'tmax': 2.8},
