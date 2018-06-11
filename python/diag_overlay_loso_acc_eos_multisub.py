@@ -109,6 +109,7 @@ if __name__ == '__main__':
             if num_instances > 1:
                 word_list.append('propid')
             if sen_type == 'pooled':
+                word_list.append('noun1')
                 word_list.append('voice')
                 word_list.append('senlen')
             chance = {'noun1': 0.25,
