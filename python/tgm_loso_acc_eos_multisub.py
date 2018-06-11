@@ -187,21 +187,21 @@ if __name__ == '__main__':
     # for cax in combo_grid.cbar_axes:
     #     cax.toggle_label(False)
 
-    combo_fig.suptitle('TGM Averaged Over Subjects',
+    combo_fig.suptitle('TGM Averaged Over Subjects\n{}'.format(PLOT_TITLE_SEN[sen_type]),
                        fontsize=suptitlesize)
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-                exp=args.experiment, sen_type='pooled', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+                exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                 win_len=args.win_len,
                 overlap=args.overlap,
                 num_instances=args.num_instances
             ), bbox_inches='tight')
     combo_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type='pooled', word='all', alg=args.alg, avgTime=args.avgTime,
+            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
