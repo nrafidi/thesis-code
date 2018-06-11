@@ -119,13 +119,13 @@ if __name__ == '__main__':
     else:
         if sen_type == 'pooled':
             word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
-        vmaxes = {'noun1': 0.4,
-                  'agent': 0.35,
-                  'patient': 0.35,
-                  'verb': 0.35,
-                  'voice': 0.75,
-                  'senlen': 0.75,
-                  'propid': 0.25}
+        vmaxes = {'noun1': 0.5,
+                  'agent': 0.5,
+                  'patient': 0.5,
+                  'verb': 0.5,
+                  'voice': 1.0,
+                  'senlen': 1.0,
+                  'propid': 0.5}
     if sen_type == 'pooled':
         n_rows=2
     else:
