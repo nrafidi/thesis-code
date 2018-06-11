@@ -33,13 +33,13 @@ WORD_COLS = {'krns2': {'art1': 0,
 
 TIME_LIMITS = {'PassAct3':
     {'active': {
-            'noun1': {'tmin': -0.5, 'tmax': 6.0},
-            'verb': {'tmin': -2.0, 'tmax': 5.0},
-            'noun2': {'tmin': -3.5, 'tmax': 3.5}},
+            'noun1': {'tmin': -0.5, 'tmax': 5.0},
+            'verb': {'tmin': -1.0, 'tmax': 4.5},
+            'noun2': {'tmin': -2.0, 'tmax': 3.5}},
         'passive': {
-            'noun1': {'tmin': -1.0, 'tmax': 6.0},
-            'verb': {'tmin': -2.0, 'tmax': 5.0},
-            'noun2': {'tmin': -3.5, 'tmax': 3.5}}},
+            'noun1': {'tmin': -0.5, 'tmax': 5.0},
+            'verb': {'tmin': -1.5, 'tmax': 4.0},
+            'noun2': {'tmin': -3.0, 'tmax': 2.5}}},
 'krns2': {
         'active': {
             'noun1': {'tmin': -0.5, 'tmax': 3.8},
