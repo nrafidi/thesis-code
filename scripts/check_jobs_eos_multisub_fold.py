@@ -93,6 +93,7 @@ if __name__ == '__main__':
                                  fold=fold)
 
         if os.path.isfile(old_job + '.npz'):
+            successful_jobs += 1
             was_success = True
         elif os.path.isfile(fname + '.npz'):
             successful_jobs += 1
