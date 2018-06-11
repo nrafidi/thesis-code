@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
         num_time = len(win_starts)
         max_line = 0.3 * 2 * time_step
-        colors = ['b', 'm', 'g', 'k', 'r', 'c']
+        colors = ['b', 'm', 'g', 'k', 'r', 'c', 'y']
 
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
