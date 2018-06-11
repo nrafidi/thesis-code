@@ -188,10 +188,10 @@ if __name__ == '__main__':
         if i_sen_type == 1:
             ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.0])
-        ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
+        ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(1.5, 1.0), loc=1, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+            ax.legend(bbox_to_anchor=(1.2, 1.0), loc=1, borderaxespad=0., ncol=1, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
