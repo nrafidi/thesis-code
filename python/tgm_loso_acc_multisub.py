@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--win_len', type=int, default=50)
-    parser.add_argument('--overlap', type=int, default=12)
+    parser.add_argument('--overlap', type=int, default=5)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
@@ -110,57 +110,57 @@ if __name__ == '__main__':
                 text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
                 max_line = 2.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
-                if args.alg == 'lr-l2':
-                    if word == 'noun1':
-                        time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
-                    elif word == 'verb':
-                        time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
-                    elif word == 'noun2':
-                        time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
-                        # print(len(time_select))
-                else:
-                    if word == 'noun1':
-                        start_line -= 0.0
-                    elif word == 'verb':
-                        end_point = num_time - 83
-                        frac_sub = frac_sub[time_step:(time_step+end_point)]
-                        mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                        time_win = time_win[time_step:(time_step+end_point)]
-                        intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                        max_line -= 0.5
-                        start_line -= 0.5
-                    else:
-                        max_line -= 1.5
-                        start_line -= 1.5
+                # if args.alg == 'lr-l2':
+                #     if word == 'noun1':
+                #         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
+                #     elif word == 'verb':
+                #         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
+                #     elif word == 'noun2':
+                #         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
+                #         # print(len(time_select))
+                # else:
+                #     if word == 'noun1':
+                #         start_line -= 0.0
+                #     elif word == 'verb':
+                #         end_point = num_time - 83
+                #         frac_sub = frac_sub[time_step:(time_step+end_point)]
+                #         mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
+                #         time_win = time_win[time_step:(time_step+end_point)]
+                #         intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
+                #         max_line -= 0.5
+                #         start_line -= 0.5
+                #     else:
+                #         max_line -= 1.5
+                #         start_line -= 1.5
             else:
                 text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
                 max_line = 3.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
-                if args.alg == 'lr-l2':
-                    if word == 'noun1':
-                        time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
-                    elif word == 'verb':
-                        time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
-                    elif word == 'noun2':
-                        time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
-                        # print(len(time_select))
-                else:
-                    if word == 'verb':
-                        max_line -= 1.0
-                        start_line -= 1.0
-                    else:
-                        max_line -= 2.5
-                        start_line -= 2.5
-            mean_acc = mean_acc[time_select, :]
-            mean_acc = mean_acc[:, time_select]
-            time_win = time_win[time_select]
+                # if args.alg == 'lr-l2':
+                #     if word == 'noun1':
+                #         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
+                #     elif word == 'verb':
+                #         time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
+                #     elif word == 'noun2':
+                #         time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
+                #         # print(len(time_select))
+                # else:
+                #     if word == 'verb':
+                #         max_line -= 1.0
+                #         start_line -= 1.0
+                #     else:
+                #         max_line -= 2.5
+                #         start_line -= 2.5
+            # mean_acc = mean_acc[time_select, :]
+            # mean_acc = mean_acc[:, time_select]
+            # time_win = time_win[time_select]
             print(mean_acc.shape)
             print(np.max(mean_acc))
             num_time = len(time_win)
 
             ax = combo_grid[i_combo]
             print(i_combo)
-            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=0.75)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.0, vmax=1.00)
 
             ax.set_title('{word}'.format(
                 word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
