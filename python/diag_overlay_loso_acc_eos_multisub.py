@@ -64,8 +64,6 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='F')
     parser.add_argument('--avgTest', default='T')
-    parser.add_argument('--sig_test', default='binomial', choices=['binomial', 'wilcoxon'])
-    parser.add_argument('--indep', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -201,22 +199,18 @@ if __name__ == '__main__':
     sen_fig.subplots_adjust(top=0.85)
     sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
-            num_instances=num_instances,
-            sig=args.sig_test,
-            indep=args.indep
+            num_instances=num_instances
         ), bbox_inches='tight')
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_{sig}{indep}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
-            num_instances=num_instances,
-            sig=args.sig_test,
-            indep=args.indep
+            num_instances=num_instances
         ), bbox_inches='tight')
 
     plt.show()
