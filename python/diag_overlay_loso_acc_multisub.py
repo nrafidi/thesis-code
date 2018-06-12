@@ -166,10 +166,12 @@ if __name__ == '__main__':
             text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
             max_line = 2.51 * 2 * time_step - time_adjust
             start_line = 0.0 - time_adjust
+            multiplier=4
         else:
             text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
             max_line = 3.51 * 2 * time_step - time_adjust
             start_line = 0.0 - time_adjust
+            multiplier=2
 
 
         colors = ['r', 'b', 'g']
@@ -205,7 +207,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.2])
-        ax.set_xlim([start_line, max_line + time_step*4])
+        ax.set_xlim([start_line, max_line + time_step*multiplier])
         if i_sen == 1:
             ax.legend(loc=2, bbox_to_anchor=(0.70, 1.0), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
