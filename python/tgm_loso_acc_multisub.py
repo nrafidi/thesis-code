@@ -4,11 +4,9 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
-import os
-import run_TGM_LOSO
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from rank_from_pred import rank_from_pred
 
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
@@ -100,7 +98,14 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            acc_all = result['tgm_acc']
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)
@@ -110,57 +115,17 @@ if __name__ == '__main__':
                 text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
                 max_line = 2.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
-                # if args.alg == 'lr-l2':
-                #     if word == 'noun1':
-                #         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
-                #     elif word == 'verb':
-                #         time_select = np.logical_and(time_win >= -1.0, time_win <= 3.5)
-                #     elif word == 'noun2':
-                #         time_select = np.logical_and(time_win >= -2.0, time_win <= 2.5)
-                #         # print(len(time_select))
-                # else:
-                #     if word == 'noun1':
-                #         start_line -= 0.0
-                #     elif word == 'verb':
-                #         end_point = num_time - 83
-                #         frac_sub = frac_sub[time_step:(time_step+end_point)]
-                #         mean_acc = mean_acc[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                #         time_win = time_win[time_step:(time_step+end_point)]
-                #         intersection = intersection[time_step:(time_step+end_point), time_step:(time_step+end_point)]
-                #         max_line -= 0.5
-                #         start_line -= 0.5
-                #     else:
-                #         max_line -= 1.5
-                #         start_line -= 1.5
             else:
                 text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
                 max_line = 3.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
-                # if args.alg == 'lr-l2':
-                #     if word == 'noun1':
-                #         time_select = np.logical_and(time_win >= -0.5, time_win <= 4.0)
-                #     elif word == 'verb':
-                #         time_select = np.logical_and(time_win >= -1.5, time_win <= 3.0)
-                #     elif word == 'noun2':
-                #         time_select = np.logical_and(time_win >= -3.0, time_win <= 1.5)
-                #         # print(len(time_select))
-                # else:
-                #     if word == 'verb':
-                #         max_line -= 1.0
-                #         start_line -= 1.0
-                #     else:
-                #         max_line -= 2.5
-                #         start_line -= 2.5
-            # mean_acc = mean_acc[time_select, :]
-            # mean_acc = mean_acc[:, time_select]
-            # time_win = time_win[time_select]
             print(mean_acc.shape)
             print(np.max(mean_acc))
             num_time = len(time_win)
 
             ax = combo_grid[i_combo]
             print(i_combo)
-            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.25, vmax=1.00)
+            im = ax.imshow(mean_acc, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1.00)
 
             ax.set_title('{word}'.format(
                 word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
@@ -168,8 +133,6 @@ if __name__ == '__main__':
             ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)) - time_adjust)
             ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
             if i_combo == len(word_list)*2 - 1:
-                # ax.set_xticks(np.arange(0.0, float(num_time), float(time_step)))
-                # ax.set_yticks(np.arange(0, num_time, time_step))
                 ax.set_xlim([0.0, float(num_time)])
                 ax.set_ylim([float(num_time), 0.0])
 
@@ -195,7 +158,7 @@ if __name__ == '__main__':
 
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
-    combo_fig.suptitle('TGM Averaged Over Subjects',
+    combo_fig.suptitle('Rank Accuracy TGMs',
         fontsize=suptitlesize)
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Sentence Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
