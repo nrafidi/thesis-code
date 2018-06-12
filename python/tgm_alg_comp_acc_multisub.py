@@ -102,38 +102,11 @@ if __name__ == '__main__':
                                         rank_str='',
                                         mode='acc')
 
-        rank_fname = SAVE_FILE.format(dir=top_dir,
-                                      word=word,
-                                      win_len=global_win,
-                                      ov=overlap,
-                                      perm='F',
-                                      alg=alg,
-                                      adj=adj,
-                                      avgTm=global_avgTime,
-                                      avgTst=global_avgTest,
-                                      inst=global_inst,
-                                      rsP=1,
-                                      rank_str='rank',
-                                      mode='acc')
-
         result = np.load(load_fname + '.npz')
         print(load_fname)
         time = result['time']
         win_starts = result['win_starts']
-
-        if os.path.isfile(rank_fname):
-            rank_result = np.load(rank_fname + '.npz')
-            acc_all = rank_result['tgm_rank']
-        else:
-            tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            cv_membership = result['cv_membership']
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-
-            acc_all = rank_from_pred(tgm_pred, fold_labels)
-            np.savez_compressed(rank_fname, tgm_rank=acc_all)
+        acc_all = result['tgm_acc']
 
         print(acc_all.shape)
         diag_acc = np.diag(np.mean(acc_all, axis=0))
@@ -147,7 +120,7 @@ if __name__ == '__main__':
         ax.plot(diag_time, diag_acc, color=colors[i_alg], label=ALG_LABELS[alg])
     ax.axhline(chance_word[word], color='k', linestyle='dashed', label='Chance')
     ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
-    ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
+    ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     ax.tick_params(labelsize=ticklabelsize)
     ax.legend(loc=1, fontsize=legendfontsize, ncol=2)
     ax.set_ylim([0.0, 1.0])
