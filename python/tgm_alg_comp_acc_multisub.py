@@ -275,6 +275,7 @@ if __name__ == '__main__':
                                       avgTst=global_avgTest,
                                       inst=global_inst,
                                       rsP=1,
+                                      rank_str='',
                                       mode='acc')
         rank_fname = SAVE_FILE.format(dir=top_dir,
                                       word=word,
@@ -385,6 +386,7 @@ if __name__ == '__main__':
                                           avgTst=avgTest,
                                           inst=inst,
                                           rsP=1,
+                                          rank_str='',
                                           mode='acc')
             rank_fname = SAVE_FILE.format(dir=top_dir,
                                           word=word,
