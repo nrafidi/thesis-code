@@ -77,14 +77,16 @@ if __name__ == '__main__':
                 elif os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
-                        if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
-                            if 'MemoryError' in err_file:
-                                print('Job {} Failed Memory Error'.format(job_str))
-                            elif 'IndexError' in err_file and word=='noun2' and exp == 'PassAct3':
-                                skipped_jobs += 1
-                            else:
-                                print(err_file)
-                                print(grid)
+                        print(err_file)
+                        print(grid)
+                        # if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
+                        #     if 'MemoryError' in err_file:
+                        #         print('Job {} Failed Memory Error'.format(job_str))
+                        #     elif 'IndexError' in err_file and word=='noun2' and exp == 'PassAct3':
+                        #         skipped_jobs += 1
+                        #     else:
+                        #         print(err_file)
+                        #         print(grid)
 
         job_id += 1
 
