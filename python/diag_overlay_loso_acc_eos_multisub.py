@@ -93,11 +93,12 @@ if __name__ == '__main__':
         time_adjust = win_len * 0.002
         if args.experiment == 'krns2':
             word_list = ['verb', 'agent', 'patient']
-            if num_instances > 1:
-                word_list.append('propid')
+
             if sen_type == 'pooled':
                 word_list.append('noun1')
                 word_list.append('voice')
+                if num_instances > 1:
+                    word_list.append('propid')
             chance = {'noun1': 0.125,
                       'verb': 0.25,
                       'agent': 0.25,
@@ -106,12 +107,13 @@ if __name__ == '__main__':
                       'propid': 1.0/16.0}
         else:
             word_list = ['verb', 'agent', 'patient']
-            if num_instances > 1:
-                word_list.append('propid')
+
             if sen_type == 'pooled':
                 word_list.append('noun1')
                 word_list.append('voice')
                 word_list.append('senlen')
+                if num_instances > 1:
+                    word_list.append('propid')
             chance = {'noun1': 0.25,
                       'verb': 0.25,
                       'agent': 0.25,
