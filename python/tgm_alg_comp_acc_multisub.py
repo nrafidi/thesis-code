@@ -124,7 +124,7 @@ if __name__ == '__main__':
     ax.tick_params(labelsize=ticklabelsize)
     ax.legend(loc=1, fontsize=legendfontsize, ncol=2)
     ax.set_ylim([0.0, 1.0])
-    fig.suptitle('Algorithm Comparison\n{word} Decoding Post-Sentence'.format(word=PLOT_TITLE_WORD[WORD]),
+    fig.suptitle('Algorithm Comparison\n{word} Decoding Post-Sentence'.format(word=PLOT_TITLE_WORD[word]),
                  fontsize=suptitlesize)
     fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.pdf')
