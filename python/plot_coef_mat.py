@@ -77,18 +77,18 @@ if __name__ == '__main__':
     fig.suptitle('Map averaged over classes')
     fig.colorbar(im)
 
-    sub_map = np.zeros((306,))
+    sub_map = np.zeros((1, 306))
     for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[experiment])):
         start_ind = i_sub*306
         end_ind = start_ind + 306
-        sub_map += class_map[start_ind:end_ind]
+        sub_map += class_map[:, start_ind:end_ind]
     sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
 
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    sub_map = np.reshape(sub_map[sorted_inds], (1, -1))
+    sub_map = sub_map[sorted_inds]
 
     fig, ax = plt.subplots()
     h = ax.imshow(sub_map, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
