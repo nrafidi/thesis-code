@@ -50,6 +50,15 @@ if __name__ == '__main__':
             continue
         if not tm_avg and not tst_avg:
             continue
+        if alg != 'lr-l2':
+            if win_len != 2:
+                continue
+            if ni != 1:
+                continue
+            if not tm_avg:
+                continue
+            if not tst_avg:
+                continue
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
