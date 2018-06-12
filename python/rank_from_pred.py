@@ -34,6 +34,10 @@ if __name__ == '__main__':
     # print(cv_membership)
     rank_acc = rank_from_pred(tgm_pred, fold_labels)
     fig, ax = plt.subplots()
-    im = ax.imshow(np.mean(rank_acc, axis=0), interpolation='nearest', vmin=0.0, vmax=1.0)
+    im = ax.imshow(np.mean(rank_acc, axis=0), interpolation='nearest', vmin=0.5, vmax=1.0)
     plt.colorbar(im)
+
+    fig, ax = plt.subplots()
+    ax.plot(np.diag(np.mean(rank_acc, axis=0)))
+
     plt.show()
