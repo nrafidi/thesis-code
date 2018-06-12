@@ -62,8 +62,9 @@ if __name__ == '__main__':
     print(maps.shape)
     win_starts = result['win_starts']
     time = result['time'][win_starts]
-    print(time)
+    print(time.shape)
     time_to_plot = np.logical_and(time >= 0.2, time <= 0.3)
+    print(time_to_plot)
     time_to_plot = time_to_plot[0]
 
     map = maps[time_to_plot]
