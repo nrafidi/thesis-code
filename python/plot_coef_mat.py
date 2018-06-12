@@ -58,18 +58,15 @@ if __name__ == '__main__':
 
     result = np.load(fname + '.npz')
     maps = result['haufe_maps']
-    print(type(maps))
-    print(maps.shape)
     win_starts = result['win_starts']
     time = result['time'][win_starts]
-    print(time.shape)
     time_to_plot = np.where(np.logical_and(time >= 0.2, time <= 0.3))
     print(time_to_plot)
     time_to_plot = time_to_plot[0]
 
     map = maps[time_to_plot]
     print(type(map))
-    print(map.shape)
+    print(map)
 
     fig, ax = plt.subplots()
     im = ax.imshow(map, interpolation='nearest')
