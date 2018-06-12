@@ -73,7 +73,7 @@ if __name__ == '__main__':
             else:
                 with open(out_str, 'r') as fid:
                     out_info = fid.read()
-                    print(out_info)
+                    # print(out_info)
                 if 'Experiment parameters not valid.' in out_info:
                     skipped_jobs += 1
                 elif os.stat(err_str).st_size != 0:
