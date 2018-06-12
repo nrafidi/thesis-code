@@ -83,9 +83,10 @@ if __name__ == '__main__':
 
 
     time_to_plot = np.arange(tmin_to_plot, tmax_to_plot, t_step).tolist()
-    num_plots = len(time_to_plot)/2
-    combo_fig = plt.figure(figsize=(num_plots * 6, 12))
-    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
+    n_rows = 5
+    n_cols = len(time_to_plot)/n_rows
+    combo_fig = plt.figure(figsize=(n_cols * 6, n_rows * 6))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(n_rows, n_cols),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.2)
     for i_t, tmin in enumerate(time_to_plot):
