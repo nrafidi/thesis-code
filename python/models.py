@@ -1613,10 +1613,10 @@ def lr_tgm_loso_multisub_coef(data_list,
             W = np.transpose(coef[wi][i_l, :])
             S = np.dot(train_data, W)
             cov_X = np.cov(train_data.T, ddof=ddof)
-            cov_S = np.cov(S.T, ddof=ddof)
+            cov_S = np.dot(S.T, S)
             a = np.dot(cov_X, W)
             b = cov_S
-            win_haufe_map[i_l, :] = linalg.lstsq(b.T, a.T)[0]
+            win_haufe_map[i_l, :] = a/b #if b not scalar should be matrix divide
         haufe_maps[wi] = win_haufe_map
     return coef, Cs, haufe_maps
 
