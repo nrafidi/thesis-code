@@ -92,7 +92,7 @@ if __name__ == '__main__':
     for i_t, tmin in enumerate(time_to_plot):
         time_to_plot = np.where(np.logical_and(time >= tmin, time <= tmin + t_step))
         time_to_plot = time_to_plot[0][0]
-        print(time_to_plot)
+        # print(time_to_plot)
         map = maps[time_to_plot]
         class_map = np.mean(map, axis=0)
         sub_map = np.zeros((306,))
@@ -102,10 +102,11 @@ if __name__ == '__main__':
             sub_map += class_map[start_ind:end_ind]
         sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
         sub_map = sub_map[sensors_to_keep]
-        print(np.min(sub_map))
-        print(np.max(sub_map))
+        sub_map /= np.max(sub_map)
+        # print(np.min(sub_map))
+        # print(np.max(sub_map))
         ax = combo_grid[i_t]
-        im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin = -4e-5, vmax=5e-5)
+        im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin = -1.0, vmax=1.0)
         ax.set_title('%.2f-%.2f' % (tmin, tmin + win_len*0.002))
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
