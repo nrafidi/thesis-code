@@ -1,6 +1,6 @@
 import itertools
 import os.path
-import batch_experiments_multisub_fold as batch_exp
+import batch_experiments_multisub_coef as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 SAVE_FILE = '{dir}coef-TGM_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_' \
@@ -73,7 +73,7 @@ if __name__ == '__main__':
             else:
                 with open(out_str, 'r') as fid:
                     out_info = fid.read()
-                    # print(out_info)
+                    print(out_info)
                 if 'Experiment parameters not valid.' in out_info:
                     skipped_jobs += 1
                 elif os.stat(err_str).st_size != 0:
