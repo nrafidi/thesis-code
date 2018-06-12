@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     for tmin in np.arange(0.1, 0.2, 0.01):
 
-        time_to_plot = np.where(np.logical_and(time >= 0.2, time <= 0.3))
+        time_to_plot = np.where(np.logical_and(time >= tmin, time <= 0.3))
         time_to_plot = time_to_plot[0][0]
         print(time_to_plot)
         map = maps[time_to_plot]
