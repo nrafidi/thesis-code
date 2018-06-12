@@ -10,7 +10,7 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
             'nr{rep}_rsPerm{rsP}_{mode}'
 
 FOLDS = range(16) #, 'coef']
-EXPERIMENTS = ['PassAct3']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['noun1', 'verb', 'noun2']
 WIN_LENS = [50]
