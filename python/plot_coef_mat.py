@@ -71,7 +71,7 @@ if __name__ == '__main__':
     fig.suptitle('Raw importance map')
     fig.colorbar(im)
 
-    class_map = np.mean(map, axis=0)
+    class_map = np.reshape(np.mean(map, axis=0), (1, -1))
     fig, ax = plt.subplots()
     im = ax.imshow(class_map, interpolation='nearest')
     fig.suptitle('Map averaged over classes')
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    sub_map = sub_map[sorted_inds]
+    sub_map = np.reshape(sub_map[sorted_inds], (1, -1))
 
     fig, ax = plt.subplots()
     h = ax.imshow(sub_map, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
