@@ -44,6 +44,10 @@ if __name__ == '__main__':
     avgTime = args.avgTime
     num_instances = args.num_instances
 
+    sorted_inds, sorted_reg = sort_sensors()
+    uni_reg = np.unique(sorted_reg)
+    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+
     top_dir = run_coef_TGM_multisub.TOP_DIR.format(exp=experiment)
 
     fname = run_coef_TGM_multisub.SAVE_FILE.format(dir=top_dir,
@@ -60,43 +64,41 @@ if __name__ == '__main__':
     maps = result['haufe_maps']
     win_starts = result['win_starts']
     time = result['time'][win_starts]
-    time_to_plot = np.where(np.logical_and(time >= 0.2, time <= 0.3))
 
-    time_to_plot = time_to_plot[0][0]
-    print(time_to_plot)
-    map = maps[time_to_plot]
+    for tmin in np.arange(0.1, 0.2, 0.01):
 
-    fig, ax = plt.subplots()
-    im = ax.imshow(map, interpolation='nearest', aspect='auto')
-    fig.suptitle('Raw importance map')
-    fig.colorbar(im)
+        time_to_plot = np.where(np.logical_and(time >= 0.2, time <= 0.3))
+        time_to_plot = time_to_plot[0][0]
+        print(time_to_plot)
+        map = maps[time_to_plot]
 
-    class_map = np.reshape(np.mean(map, axis=0), (1, -1))
-    fig, ax = plt.subplots()
-    im = ax.imshow(class_map, interpolation='nearest', aspect='auto')
-    fig.suptitle('Map averaged over classes')
-    fig.colorbar(im)
+        # fig, ax = plt.subplots()
+        # im = ax.imshow(map, interpolation='nearest', aspect='auto')
+        # fig.suptitle('Raw importance map')
+        # fig.colorbar(im)
 
-    sub_map = np.zeros((1, 306))
-    for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[experiment])):
-        start_ind = i_sub*306
-        end_ind = start_ind + 306
-        sub_map += class_map[:, start_ind:end_ind]
-    sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
+        class_map = np.reshape(np.mean(map, axis=0), (1, -1))
+        # fig, ax = plt.subplots()
+        # im = ax.imshow(class_map, interpolation='nearest', aspect='auto')
+        # fig.suptitle('Map averaged over classes')
+        # fig.colorbar(im)
 
-    sorted_inds, sorted_reg = sort_sensors()
-    uni_reg = np.unique(sorted_reg)
-    yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
+        sub_map = np.zeros((1, 306))
+        for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[experiment])):
+            start_ind = i_sub*306
+            end_ind = start_ind + 306
+            sub_map += class_map[:, start_ind:end_ind]
+        sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
 
-    sub_map = sub_map[:, sorted_inds]
+        sub_map = sub_map[:, sorted_inds]
 
-    fig, ax = plt.subplots(figsize=(12, 12))
-    h = ax.imshow(sub_map, interpolation='nearest', aspect='auto')
-    ax.set_xticks(yticks_sens)
-    ax.set_xticklabels(uni_reg)
-    ax.set_xlabel('Sensors')
-    fig.suptitle('Map averaged over classes and Subjects')
-    fig.colorbar(h)
+        fig, ax = plt.subplots(figsize=(12, 12))
+        h = ax.imshow(sub_map, interpolation='nearest', aspect='auto')
+        ax.set_xticks(yticks_sens)
+        ax.set_xticklabels(uni_reg)
+        ax.set_xlabel('Sensors')
+        fig.suptitle('Map averaged over classes and Subjects')
+        fig.colorbar(h)
 
 
     plt.show()
