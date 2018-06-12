@@ -105,7 +105,7 @@ if __name__ == '__main__':
         print(np.max(sub_map))
         ax = combo_grid[i_t]
         im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False)
-        ax.set_title('%.2f-%.2f' % tmin, tmin + win_len*0.002)
+        ax.set_title('%.2f-%.2f' % (tmin, tmin + win_len*0.002))
 
     cbar = combo_grid.cbar_axes[i_t].colorbar(im)
 
