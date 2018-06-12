@@ -1542,6 +1542,74 @@ def lr_tgm_loso_multisub_fold(data_list,
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
 
+def lr_tgm_loso_multisub_coef(data_list,
+                            labels,
+                            win_starts,
+                            win_len,
+                            penalty='l1',
+                            adj='mean_center',
+                            doTimeAvg=False,
+                            ddof=1):
+    labels = np.array(labels)
+    n_time = data_list[0].shape[2]
+
+    l_set = np.unique(labels)
+    n_l = len(l_set)
+    l_index = {l_set[i]: i for i in xrange(n_l)}
+    l_ints = np.array([l_index[l] for l in labels])
+
+    test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
+    n_w = len(test_windows)
+
+    coef = np.empty((n_w,), dtype=object)
+    Cs = np.empty((n_w,), dtype=object)
+    train_data_full = data_list
+    train_labels = np.ravel(l_ints)
+
+    for wi in xrange(n_w):
+        train_time = test_windows[wi]
+        train_data = [data[:, :, train_time] for data in train_data_full]
+        if doTimeAvg:
+            train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
+        else:
+            train_data = np.concatenate([np.reshape(data, (data.shape[0], -1)) for data in train_data], axis=1)
+        print(train_data.shape)
+
+        if adj == 'mean_center':
+            mu_train = np.mean(train_data, axis=0)
+            train_data -= mu_train[None, :]
+        elif adj == 'zscore':
+            mu_train = np.mean(train_data, axis=0)
+            std_train = np.std(train_data, axis=0, ddof=ddof)
+            train_data -= mu_train[None, :]
+            train_data /= std_train[None, :]
+
+        if penalty == 'None':
+            model = sklearn.linear_model.LogisticRegression(
+                C=1e100,
+                penalty='l2',
+                solver='liblinear',
+                multi_class='ovr',
+                dual=DUAL['l2'],
+                class_weight='balanced')
+        else:
+            model = sklearn.linear_model.LogisticRegressionCV(Cs=C_OPTIONS[penalty],
+                                                              cv=2,
+                                                              penalty=penalty,
+                                                              solver='liblinear',
+                                                              dual=DUAL[penalty],
+                                                              multi_class='ovr',
+                                                              class_weight='balanced',
+                                                              refit=True)
+
+        model.fit(train_data, train_labels)
+        Cs[wi] = model.C_
+        coef[wi] = model.coef_
+        print(coef[wi].shape)
+
+    return coef, Cs
+
+
 def lr_cross_tgm_loso_fold(data_list,
                             labels_list,
                             win_starts_list,
@@ -2028,20 +2096,16 @@ def lr_tgm(data,
 
 
 if __name__ == '__main__':
-    data = rand(16, 306, 2000)
+    win_len = 4
+    win_starts = range(0, 20, win_len)
+    data_list = [rand(16, 306, 20), rand(16, 306, 20), rand(16, 306, 20)]
     labels = np.array([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4])
-    semantic_vectors = rand(16, 300) + labels[:, None]
 
-    kf = KFold(n_splits=16)
-    preds, l_ints, cv_membership, scores = lin_reg(data,
-                                                   semantic_vectors,
-                                                   labels,
-                                                   kf,
-                                                   reg='ridge',
-                                                   adj='zscore',
-                                                   ddof=1)
-    # print(scores.shape)
-    # scores = np.reshape(scores, (306, 2000))
-    # fig, ax = plt.subplots()
-    # ax.imshow(scores, interpolation='nearest', aspect='auto')
-    # plt.show()
+    lr_tgm_loso_multisub_coef(data_list,
+                              labels,
+                              win_starts,
+                              win_len,
+                              penalty='l2',
+                              adj='zscore',
+                              doTimeAvg=True,
+                              ddof=1)
