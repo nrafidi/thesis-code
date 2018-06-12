@@ -61,11 +61,10 @@ if __name__ == '__main__':
     win_starts = result['win_starts']
     time = result['time'][win_starts]
     time_to_plot = np.where(np.logical_and(time >= 0.2, time <= 0.3))
-    print(time_to_plot)
-    time_to_plot = time_to_plot[0]
 
+    time_to_plot = time_to_plot[0][0]
+    print(time_to_plot)
     map = maps[time_to_plot]
-    print(map[0].shape)
 
     fig, ax = plt.subplots()
     im = ax.imshow(map, interpolation='nearest')
