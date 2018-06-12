@@ -1612,8 +1612,8 @@ def lr_tgm_loso_multisub_coef(data_list,
         for i_l in range(n_l):
             W = np.transpose(coef[wi][i_l, :])
             S = train_data*W
-            cov_X = np.cov(train_data)
-            cov_S = np.cov(S)
+            cov_X = np.cov(train_data.T, ddof=ddof)
+            cov_S = np.cov(S.T, ddof=ddof)
             a = cov_X*W
             b = cov_S
             win_haufe_map[i_l, :] = linalg.lstsq(b.T, a.T)[0]
