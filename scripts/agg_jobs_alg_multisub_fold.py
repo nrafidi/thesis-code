@@ -74,8 +74,8 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-        # if os.path.isfile(complete_job + '.npz'):
-        #     continue
+        if os.path.isfile(complete_job + '.npz') and alg == 'lr-l2':
+            continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
