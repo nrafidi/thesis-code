@@ -67,13 +67,13 @@ if __name__ == '__main__':
     map = maps[time_to_plot]
 
     fig, ax = plt.subplots()
-    im = ax.imshow(map, interpolation='nearest')
+    im = ax.imshow(map, interpolation='nearest', aspect='auto')
     fig.suptitle('Raw importance map')
     fig.colorbar(im)
 
     class_map = np.reshape(np.mean(map, axis=0), (1, -1))
     fig, ax = plt.subplots()
-    im = ax.imshow(class_map, interpolation='nearest')
+    im = ax.imshow(class_map, interpolation='nearest', aspect='auto')
     fig.suptitle('Map averaged over classes')
     fig.colorbar(im)
 
@@ -92,9 +92,9 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     h = ax.imshow(sub_map, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
-    ax.set_yticks(yticks_sens)
-    ax.set_yticklabels(uni_reg)
-    ax.set_ylabel('Sensors')
+    ax.set_xticks(yticks_sens)
+    ax.set_xticklabels(uni_reg)
+    ax.set_xlabel('Sensors')
     fig.suptitle('Map averaged over classes and Subjects')
     fig.colorbar(im)
 
