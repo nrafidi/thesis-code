@@ -99,12 +99,12 @@ if __name__ == '__main__':
                 word_list.append('voice')
                 if num_instances > 1:
                     word_list.append('propid')
-            chance = {'noun1': 0.125,
-                      'verb': 0.25,
-                      'agent': 0.25,
-                      'patient': 0.25,
+            chance = {'noun1': 0.5,
+                      'verb': 0.5,
+                      'agent': 0.5,
+                      'patient': 0.5,
                       'voice': 0.5,
-                      'propid': 1.0/16.0}
+                      'propid': 0.5}
         else:
             word_list = ['verb', 'agent', 'patient']
 
@@ -114,12 +114,12 @@ if __name__ == '__main__':
                 word_list.append('senlen')
                 if num_instances > 1:
                     word_list.append('propid')
-            chance = {'noun1': 0.25,
-                      'verb': 0.25,
-                      'agent': 0.25,
-                      'patient': 0.25,
+            chance = {'noun1': 0.5,
+                      'verb': 0.5,
+                      'agent': 0.5,
+                      'patient': 0.5,
                       'voice': 0.5,
-                      'propid': 1.0 / 8.0,
+                      'propid': 0.5,
                       'senlen': 0.5}
 
 
@@ -210,7 +210,7 @@ if __name__ == '__main__':
         ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(1.5, 1.0), loc=1, borderaxespad=0., ncol=2, fontsize=legendfontsize)
+            ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
