@@ -94,7 +94,7 @@ if __name__ == '__main__':
         print(time_to_plot)
         map = maps[time_to_plot]
         class_map = np.reshape(np.mean(map, axis=0), (1, -1))
-        sub_map = np.zeros((1, 306))
+        sub_map = np.zeros((306,))
         for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[experiment])):
             start_ind = i_sub*306
             end_ind = start_ind + 306
