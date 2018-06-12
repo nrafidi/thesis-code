@@ -93,12 +93,12 @@ if __name__ == '__main__':
         time_to_plot = time_to_plot[0][0]
         print(time_to_plot)
         map = maps[time_to_plot]
-        class_map = np.reshape(np.mean(map, axis=0), (1, -1))
+        class_map = np.mean(map, axis=0)
         sub_map = np.zeros((306,))
         for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[experiment])):
             start_ind = i_sub*306
             end_ind = start_ind + 306
-            sub_map += class_map[:, start_ind:end_ind]
+            sub_map += class_map[start_ind:end_ind]
         sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
         sub_map = sub_map[sensors_to_keep]
         print(np.min(sub_map))
