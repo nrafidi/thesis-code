@@ -28,5 +28,5 @@ source /home/python27/envs/p27default/bin/activate
 cd /home/nrafidi/thesis-code/python
 echo $force
 python run_coef_TGM_multisub.py --experiment $experiment  --sen_type $sen_type --word $word --win_len $win_len --overlap $overlap \
---adj $adj --alg $alg --doTimeAvg $doTimeAvg --fold $fold \
+--adj $adj --alg $alg --doTimeAvg $doTimeAvg \
 --num_instances $num_instances --force $force \
