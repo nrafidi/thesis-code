@@ -82,7 +82,7 @@ if __name__ == '__main__':
     parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
     # parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
     parser.add_argument('--win_len', type=int, default=50)
-    parser.add_argument('--overlap', type=int, default=12)
+    parser.add_argument('--overlap', type=int, default=5)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
     parser.add_argument('--adj', default='zscore', choices=['None', 'mean_center', 'zscore'])
     parser.add_argument('--num_instances', type=int, default=2)
