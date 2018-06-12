@@ -58,6 +58,8 @@ if __name__ == '__main__':
 
     result = np.load(fname + '.npz')
     maps = result['haufe_maps']
+    print(type(maps))
+    print(maps.shape)
     win_starts = result['win_starts']
     time = result['time'][win_starts]
 
