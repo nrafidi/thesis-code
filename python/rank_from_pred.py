@@ -26,8 +26,11 @@ if __name__ == '__main__':
     fname = '/share/volume0/nrafidi/{exp}_TGM_LOSO/TGM-LOSO_multisub_{sen_type}_{word}_win50_ov5_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestT_ni2_rsPerm1_{rank_str}acc.npz'
     for exp in ['krns2', 'PassAct3']:
+        print(exp)
         for sen_type in ['active', 'passive']:
+            print(sen_type)
             for word in ['noun1', 'verb', 'noun2']:
+                print(word)
                 fname_load = fname.format(exp=exp, sen_type=sen_type,
                                           word=word, rank_str='')
                 fname_save = fname.format(exp=exp, sen_type=sen_type,
@@ -51,8 +54,11 @@ if __name__ == '__main__':
     fname = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_{sen_type}_{word}_win50_ov5_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestT_ni2_rsPerm1_{rank_str}acc.npz'
     for exp in ['krns2', 'PassAct3']:
+        print(exp)
         for sen_type in ['active', 'passive', 'pooled']:
+            print(sen_type)
             for word in ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid', 'senlen']:
+                print(word)
                 fname_load = fname.format(exp=exp, sen_type=sen_type,
                                           word=word, rank_str='')
                 fname_save = fname.format(exp=exp, sen_type=sen_type,
