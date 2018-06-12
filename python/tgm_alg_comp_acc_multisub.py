@@ -79,7 +79,7 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
 
-    chance_word = {'verb': 0.5,
+    chance_word = {'verb': 0.25,
                    'voice': 0.5}
 
     fig, ax = plt.subplots(figsize=(10,10))
@@ -165,6 +165,7 @@ if __name__ == '__main__':
     win_labels = []
     avg_labels = []
     for i_avg, avgTime in enumerate(avgTime_list):
+        print(avgTime)
         if avgTime == 'T':
             avg_time_str = 'Time Average'
         else:
@@ -172,6 +173,7 @@ if __name__ == '__main__':
         avg_labels.append(avg_time_str)
         ax = win_grid[i_avg]
         for i_win, win in enumerate(win_list):
+            print(win)
             load_fname = SAVE_FILE.format(dir=top_dir,
                                           word=word,
                                           win_len=win,
@@ -232,7 +234,7 @@ if __name__ == '__main__':
                 win_labels.append(label_str)
             ax.plot(diag_time, diag_acc, color=colors[i_win], label=label_str)
 
-        ax.axhline(chance_word[word], color='k', label='Chance')
+        ax.axhline(0.5, color='k', label='Chance')
         if i_avg == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         ax.legend(loc=1,  fontsize=legendfontsize, ncol=2)
@@ -324,7 +326,7 @@ if __name__ == '__main__':
         ax.set_yticks(np.arange(0.0, num_time, time_step) - time_adjust)
         ax.set_xticklabels(label_time)
         ax.set_yticklabels(label_time)
-        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=chance_word[word], vmax=0.75)
+        im = ax.imshow(tgm_acc, interpolation='nearest', vmin=0.5, vmax=0.75)
         ax.text(-0.15, 1.05, string.ascii_uppercase[i_avg], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
         ax.set_title(avg_time_str, fontsize=axistitlesize)
@@ -346,7 +348,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
     bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(win_labels)
-    bar_ax.set_ylim([chance_word[word], 1.0])
+    bar_ax.set_ylim([0.5, 1.0])
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(loc=1, fontsize=legendfontsize)
     bar_ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
@@ -363,6 +365,7 @@ if __name__ == '__main__':
     max_std = np.zeros((len(inst_list), 2))
     avg_labels = []
     for i_avg, avgTest in enumerate(avgTest_list):
+        print(avgTest)
         if avgTest == 'T':
             avg_test_str = 'Test Sample Average'
         else:
@@ -370,6 +373,7 @@ if __name__ == '__main__':
         avg_labels.append(avg_test_str)
         ax = inst_grid[i_avg]
         for i_inst, inst in enumerate(inst_list):
+            print(inst)
             load_fname = SAVE_FILE.format(dir=top_dir,
                                           word=word,
                                           win_len=global_win,
@@ -421,7 +425,7 @@ if __name__ == '__main__':
             max_time = np.argmax(diag_acc)
             max_acc[i_inst, i_avg] = diag_acc[max_time]
             ax.plot(diag_time, diag_acc, color=colors[i_inst], label='{}'.format(inst))
-        ax.axhline(chance_word[word], color='k', label='Chance')
+        ax.axhline(0.5, color='k', label='Chance')
         # ax.set_xlabel('Time relative to Sentence Offset (s)', fontsize=axislabelsize)
         ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         ax.legend(loc=1, fontsize=legendfontsize)
@@ -443,7 +447,7 @@ if __name__ == '__main__':
     bar_ax.bar(ind + width, max_acc[:, 1], width, color='g', label=avg_labels[1])
     bar_ax.set_xticks(ind + width) # / 2.0)
     bar_ax.set_xticklabels(inst_list)
-    bar_ax.set_ylim([chance_word[word], 1.0])
+    bar_ax.set_ylim([0.5, 1.0])
     bar_ax.set_xlabel('Number of Instances', fontsize=axislabelsize)
     bar_ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
     bar_ax.legend(loc=1, fontsize=legendfontsize)
