@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
 import run_coef_TGM_multisub
-import os
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -65,7 +64,8 @@ if __name__ == '__main__':
     win_starts = result['win_starts']
     time = result['time'][win_starts]
 
-    for tmin in np.arange(0.1, 0.2, 0.01):
+    maps_over_time = []
+    for tmin in np.arange(0.0, 0.3, 0.01):
 
         time_to_plot = np.where(np.logical_and(time >= tmin, time <= 0.3))
         time_to_plot = time_to_plot[0][0]
@@ -90,17 +90,24 @@ if __name__ == '__main__':
             sub_map += class_map[:, start_ind:end_ind]
         sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[experiment])
 
-        sub_map = sub_map[:, sorted_inds]
 
-        fig, ax = plt.subplots(figsize=(12, 12))
-        h = ax.imshow(sub_map, interpolation='nearest', aspect='auto')
-        ax.set_xticks(yticks_sens)
-        ax.set_xticklabels(uni_reg)
-        ax.set_xlabel('Sensors')
-        fig.suptitle('Map averaged over classes and Subjects')
-        fig.colorbar(h)
+        maps_over_time.append(sub_map)
+        # sub_map = sub_map[:, sorted_inds]
+        # fig, ax = plt.subplots(figsize=(12, 12))
+        # h = ax.imshow(sub_map, interpolation='nearest', aspect='auto')
+        # ax.set_xticks(yticks_sens)
+        # ax.set_xticklabels(uni_reg)
+        # ax.set_xlabel('Sensors')
+        # fig.suptitle('Map averaged over classes and Subjects')
+        # fig.colorbar(h)
 
+    maps_over_time = np.concatenate(maps_over_time, axis=0)
 
-    plt.show()
+    sio.savemat('maps_over_time_{exp}_{sen}_{word}.mat'.format(exp=experiment,
+                                                               sen=sen_type,
+                                                               word=word),
+                mdict={'maps_over_time': maps_over_time})
+
+    # plt.show()
 
 
