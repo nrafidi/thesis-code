@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.linalg as linalg
 import sklearn.linear_model
 import sklearn.svm
 from sklearn.model_selection import KFold
@@ -1562,6 +1563,7 @@ def lr_tgm_loso_multisub_coef(data_list,
     n_w = len(test_windows)
 
     coef = np.empty((n_w,), dtype=object)
+    haufe_maps = np.empty((n_w,), dtype=object)
     Cs = np.empty((n_w,), dtype=object)
     train_data_full = data_list
     train_labels = np.ravel(l_ints)
@@ -1606,8 +1608,17 @@ def lr_tgm_loso_multisub_coef(data_list,
         Cs[wi] = model.C_
         coef[wi] = model.coef_
         print(coef[wi].shape)
-
-    return coef, Cs
+        win_haufe_map = np.empty(coef[wi].shape)
+        for i_l in range(n_l):
+            W = np.transpose(coef[wi][i_l, :])
+            S = train_data*W
+            cov_X = np.cov(train_data)
+            cov_S = np.cov(S)
+            a = cov_X*W
+            b = cov_S
+            win_haufe_map[i_l, :] = linalg.lstsq(b.T, a.T)[0]
+        haufe_maps[wi] = win_haufe_map
+    return coef, Cs, haufe_maps
 
 
 def lr_cross_tgm_loso_fold(data_list,
