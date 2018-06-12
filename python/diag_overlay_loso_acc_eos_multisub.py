@@ -95,10 +95,11 @@ if __name__ == '__main__':
             word_list = ['verb', 'agent', 'patient']
 
             if sen_type == 'pooled':
-                word_list.append('noun1')
-                word_list.append('voice')
                 if num_instances > 1:
                     word_list.append('propid')
+                word_list.append('noun1')
+                word_list.append('voice')
+
             chance = {'noun1': 0.5,
                       'verb': 0.5,
                       'agent': 0.5,
@@ -109,11 +110,12 @@ if __name__ == '__main__':
             word_list = ['verb', 'agent', 'patient']
 
             if sen_type == 'pooled':
+                if num_instances > 1:
+                    word_list.append('propid')
                 word_list.append('noun1')
                 word_list.append('voice')
                 word_list.append('senlen')
-                if num_instances > 1:
-                    word_list.append('propid')
+
             chance = {'noun1': 0.5,
                       'verb': 0.5,
                       'agent': 0.5,
@@ -192,21 +194,21 @@ if __name__ == '__main__':
         label_time[np.abs(label_time) < 1e-15] = 0.0
 
         ax.axhline(y=chance['agent'], color='k', linestyle='dashed')
-        if sen_type == 'pooled':
-            if args.experiment == 'krns2':
-                ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot')
-            if args.experiment == 'PassAct3':
-                ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot')
-            else:
-                ax.axhline(y=chance['voice'], color='k', linestyle='dashdot')
-            ax.axhline(y=chance['propid'], color='k', linestyle=':')
+        # if sen_type == 'pooled':
+            # if args.experiment == 'krns2':
+            #     ax.axhline(y=chance['noun1'], color='k', linestyle='dashdot')
+            # if args.experiment == 'PassAct3':
+            #     ax.axhline(y=chance['senlen'], color='k', linestyle='dashdot')
+            # else:
+            #     ax.axhline(y=chance['voice'], color='k', linestyle='dashdot')
+            # ax.axhline(y=chance['propid'], color='k', linestyle=':')
         ax.set_xticklabels(label_time)
         ax.axvline(x=max_line, color='k')
         if i_sen_type == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         if i_sen_type == 1:
             ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
-        ax.set_ylim([0.0, 1.0])
+        ax.set_ylim([0.0, 1.1])
         ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
