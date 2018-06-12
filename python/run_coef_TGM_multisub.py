@@ -145,6 +145,7 @@ def run_tgm_exp(experiment,
                                                             penalty=alg[3:],
                                                             adj=adj,
                                                             doTimeAvg=doTimeAvg)
+    print('Saving {}'.format(fname))
     np.savez_compressed(fname,
                         coef=coef,
                         Cs=Cs,
