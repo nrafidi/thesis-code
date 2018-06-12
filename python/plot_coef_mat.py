@@ -91,12 +91,12 @@ if __name__ == '__main__':
     sub_map = sub_map[:, sorted_inds]
 
     fig, ax = plt.subplots()
-    h = ax.imshow(sub_map, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
-    ax.set_xticks(yticks_sens)
-    ax.set_xticklabels(uni_reg)
-    ax.set_xlabel('Sensors')
+    h = ax.imshow(sub_map, interpolation='nearest', aspect='auto')
+    # ax.set_xticks(yticks_sens)
+    # ax.set_xticklabels(uni_reg)
+    # ax.set_xlabel('Sensors')
     fig.suptitle('Map averaged over classes and Subjects')
-    fig.colorbar(im)
+    fig.colorbar(h)
 
 
     plt.show()
