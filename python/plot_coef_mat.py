@@ -65,8 +65,7 @@ if __name__ == '__main__':
     time_to_plot = time_to_plot[0]
 
     map = maps[time_to_plot]
-    print(type(map))
-    print(map)
+    print(map[0].shape)
 
     fig, ax = plt.subplots()
     im = ax.imshow(map, interpolation='nearest')
