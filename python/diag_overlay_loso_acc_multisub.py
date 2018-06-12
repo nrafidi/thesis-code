@@ -9,6 +9,7 @@ import os
 import run_TGM_LOSO
 import tgm_loso_acc_multisub
 import string
+from rank_from_pred import rank_from_pred
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -82,14 +83,14 @@ if __name__ == '__main__':
     sen_type_list = ['active', 'passive']
     if args.experiment == 'PassAct3':
         word_list = ['noun1', 'verb', 'noun2']
-        chance = {'noun1': 0.25,
-                  'verb': 0.25,
-                  'noun2': 0.25}
+        chance = {'noun1': 0.5,
+                  'verb': 0.5,
+                  'noun2': 0.5}
     else:
         word_list = ['noun1', 'verb', 'noun2']
-        chance = {'noun1': 0.25,
-                  'verb': 0.25,
-                  'noun2': 0.25}
+        chance = {'noun1': 0.5,
+                  'verb': 0.5,
+                  'noun2': 0.5}
 
     ticklabelsize = 14
     legendfontsize = 16
@@ -134,7 +135,14 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            acc_all = result['tgm_acc']
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
             word_time = result['time']
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
@@ -185,7 +193,7 @@ if __name__ == '__main__':
             if i_v < len(text_to_write):
                 ax.text(v + 0.15, 0.9, text_to_write[i_v])
         if i_sen == 0:
-            ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+            ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.2])
         ax.set_xlim([start_line, max_line + time_step*5])
@@ -195,7 +203,7 @@ if __name__ == '__main__':
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
-    sen_fig.suptitle('Accuracy', fontsize=suptitlesize)
+    sen_fig.suptitle('Rank Accuracy Over Time', fontsize=suptitlesize)
     # sen_fig.tight_layout()
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.85)
