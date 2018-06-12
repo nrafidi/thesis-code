@@ -1609,7 +1609,7 @@ def lr_tgm_loso_multisub_coef(data_list,
         coef[wi] = model.coef_
         print(coef[wi].shape)
         win_haufe_map = np.empty(coef[wi].shape)
-        for i_l in range(n_l):
+        for i_l in range(coef[wi].shape[0]):
             W = np.transpose(coef[wi][i_l, :])
             S = np.dot(train_data, W)
             cov_X = np.cov(train_data.T, ddof=ddof)
