@@ -25,13 +25,13 @@ def bool_to_str(bool_var):
 if __name__ == '__main__':
     param_grid = itertools.product(batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
-                                   batch_exp.IS_PERMS,
+                                   [False],
                                    batch_exp.ALGS,
                                    batch_exp.ADJS,
                                    batch_exp.DO_TIME_AVGS,
                                    batch_exp.DO_TEST_AVGS,
                                    batch_exp.NUM_INSTANCESS,
-                                   batch_exp.RANDOM_STATES,
+                                   [1],
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
@@ -68,8 +68,8 @@ if __name__ == '__main__':
                                         inst=ni,
                                         rsP=rs,
                                         mode='acc')
-        if os.path.isfile(complete_job + '.npz'):
-            continue
+        # if os.path.isfile(complete_job + '.npz'):
+        #     continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
