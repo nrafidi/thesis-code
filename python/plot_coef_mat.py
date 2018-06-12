@@ -88,7 +88,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = [sorted_reg.index(reg) for reg in uni_reg]
 
-    sub_map = sub_map[sorted_inds]
+    sub_map = sub_map[:, sorted_inds]
 
     fig, ax = plt.subplots()
     h = ax.imshow(sub_map, interpolation='nearest', aspect='auto', vmin=0.5, vmax=1)
