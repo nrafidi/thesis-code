@@ -12,8 +12,8 @@ def rank_from_pred(tgm_pred, fold_labels):
             for k in range(curr_pred.shape[0]):
                 label_sort = np.argsort(curr_pred[j, k])
                 label_sort = label_sort[::-1]
-                rank = float(np.where(label_sort == curr_label))/float(len(label_sort))
-                rank_acc[i, j, k] = 1.0 - (rank - 1.0)/(float(len(label_sort)) - 1.0)
+                rank = float(np.where(label_sort == curr_label)[0][0])
+                rank_acc[i, j, k] = 1.0 - rank/(float(len(label_sort)) - 1.0)
 
     return rank_acc
 
