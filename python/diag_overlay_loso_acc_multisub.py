@@ -194,20 +194,20 @@ if __name__ == '__main__':
         min_time = -0.5
         max_time = 0.5*len(time[win_starts])/time_step
         label_time = np.arange(min_time, max_time, 0.5)
-        ax.axhline(y=0.25, color='k', linestyle='dashed', label='chance accuracy')
+        ax.axhline(y=chance[word], color='k', linestyle='dashed', label='chance accuracy')
         ax.set_xticklabels(label_time)
         ax.tick_params(labelsize=ticklabelsize)
         for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
             ax.axvline(x=v, color='k')
             if i_v < len(text_to_write):
-                ax.text(v + 0.15, 0.9, text_to_write[i_v])
+                ax.text(v + 0.15, 1.1, text_to_write[i_v])
         if i_sen == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.2])
         ax.set_xlim([start_line, max_line + time_step*5])
         if i_sen == 1:
-            ax.legend(loc=2, bbox_to_anchor=(0.65, 0.8), fontsize=legendfontsize)
+            ax.legend(loc=2, bbox_to_anchor=(0.65, 0.9), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     sen_fig.suptitle('Rank Accuracy Over Time\nDuring Sentence Reading', fontsize=suptitlesize)
     # sen_fig.tight_layout()
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
-    plt.subplots_adjust(top=0.85)
+    plt.subplots_adjust(top=0.8)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
