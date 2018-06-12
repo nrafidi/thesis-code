@@ -40,7 +40,7 @@ ALG_LABELS = {'lr-l1': 'Logistic L1',
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_alg_comp/'
 SAVE_FILE = '{dir}TGM-alg-comp_multisub_pooled_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{mode}'
+            'rsPerm{rsP}_{rank_str}{mode}'
 
 if __name__ == '__main__':
     alg_list = run_alg_comp.VALID_ALGS
@@ -99,20 +99,41 @@ if __name__ == '__main__':
                                         avgTst=global_avgTest,
                                         inst=global_inst,
                                         rsP=1,
+                                        rank_str='',
                                         mode='acc')
+
+        rank_fname = SAVE_FILE.format(dir=top_dir,
+                                      word=word,
+                                      win_len=global_win,
+                                      ov=overlap,
+                                      perm='F',
+                                      alg=alg,
+                                      adj=adj,
+                                      avgTm=global_avgTime,
+                                      avgTst=global_avgTest,
+                                      inst=global_inst,
+                                      rsP=1,
+                                      rank_str='rank',
+                                      mode='acc')
+
         result = np.load(load_fname + '.npz')
         print(load_fname)
         time = result['time']
         win_starts = result['win_starts']
 
-        tgm_pred = result['tgm_pred']
-        l_ints = result['l_ints']
-        cv_membership = result['cv_membership']
-        fold_labels = []
-        for i in range(len(cv_membership)):
-            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+        if os.path.isfile(rank_fname):
+            rank_result = np.load(rank_fname + '.npz')
+            acc_all = rank_result['tgm_rank']
+        else:
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
 
-        acc_all = rank_from_pred(tgm_pred, fold_labels)
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
+            np.savez_compressed(rank_fname, tgm_rank=acc_all)
 
         print(acc_all.shape)
         diag_acc = np.diag(np.mean(acc_all, axis=0))
@@ -189,16 +210,37 @@ if __name__ == '__main__':
                                           avgTst=global_avgTest,
                                           inst=global_inst,
                                           rsP=1,
+                                          rank_str='',
                                           mode='acc')
-            result = np.load(load_fname + '.npz')
-            tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            cv_membership = result['cv_membership']
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
 
-            acc_all = rank_from_pred(tgm_pred, fold_labels)
+            rank_fname = SAVE_FILE.format(dir=top_dir,
+                                          word=word,
+                                          win_len=win,
+                                          ov=overlap,
+                                          perm='F',
+                                          alg=global_alg,
+                                          adj=adj,
+                                          avgTm=avgTime,
+                                          avgTst=global_avgTest,
+                                          inst=global_inst,
+                                          rsP=1,
+                                          rank_str='rank',
+                                          mode='acc')
+
+            result = np.load(load_fname + '.npz')
+            if os.path.isfile(rank_fname):
+                rank_result = np.load(rank_fname + '.npz')
+                acc_all = rank_result['tgm_rank']
+            else:
+                tgm_pred = result['tgm_pred']
+                l_ints = result['l_ints']
+                cv_membership = result['cv_membership']
+                fold_labels = []
+                for i in range(len(cv_membership)):
+                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+                acc_all = rank_from_pred(tgm_pred, fold_labels)
+                np.savez_compressed(rank_fname, tgm_rank=acc_all)
 
             time = result['time']
             win_starts = result['win_starts']
@@ -259,15 +301,35 @@ if __name__ == '__main__':
                                       inst=global_inst,
                                       rsP=1,
                                       mode='acc')
-        result = np.load(load_fname + '.npz')
-        tgm_pred = result['tgm_pred']
-        l_ints = result['l_ints']
-        cv_membership = result['cv_membership']
-        fold_labels = []
-        for i in range(len(cv_membership)):
-            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+        rank_fname = SAVE_FILE.format(dir=top_dir,
+                                      word=word,
+                                      win_len=win,
+                                      ov=overlap,
+                                      perm='F',
+                                      alg=global_alg,
+                                      adj=adj,
+                                      avgTm=avgTime,
+                                      avgTst=global_avgTest,
+                                      inst=global_inst,
+                                      rsP=1,
+                                      rank_str='rank',
+                                      mode='acc')
 
-        acc_all = rank_from_pred(tgm_pred, fold_labels)
+        result = np.load(load_fname + '.npz')
+        if os.path.isfile(rank_fname):
+            rank_result = np.load(rank_fname + '.npz')
+            acc_all = rank_result['tgm_rank']
+        else:
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
+            np.savez_compressed(rank_fname, tgm_rank=acc_all)
+
         time = result['time']
         win_starts = result['win_starts']
 
@@ -347,15 +409,34 @@ if __name__ == '__main__':
                                           inst=inst,
                                           rsP=1,
                                           mode='acc')
-            result = np.load(load_fname + '.npz')
-            tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            cv_membership = result['cv_membership']
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+            rank_fname = SAVE_FILE.format(dir=top_dir,
+                                          word=word,
+                                          win_len=global_win,
+                                          ov=overlap,
+                                          perm='F',
+                                          alg=global_alg,
+                                          adj=adj,
+                                          avgTm=global_avgTime,
+                                          avgTst=avgTest,
+                                          inst=inst,
+                                          rsP=1,
+                                          rank_str='rank',
+                                          mode='acc')
 
-            acc_all = rank_from_pred(tgm_pred, fold_labels)
+            result = np.load(load_fname + '.npz')
+            if os.path.isfile(rank_fname):
+                rank_result = np.load(rank_fname + '.npz')
+                acc_all = rank_result['tgm_rank']
+            else:
+                tgm_pred = result['tgm_pred']
+                l_ints = result['l_ints']
+                cv_membership = result['cv_membership']
+                fold_labels = []
+                for i in range(len(cv_membership)):
+                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+                acc_all = rank_from_pred(tgm_pred, fold_labels)
+                np.savez_compressed(rank_fname, tgm_rank=acc_all)
             time = result['time']
             win_starts = result['win_starts']
             win_in_s = global_win * 0.002
