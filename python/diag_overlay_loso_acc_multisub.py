@@ -205,9 +205,9 @@ if __name__ == '__main__':
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         # ax.set_xlabel('Time Relative to Sentence Onset (s)')
         ax.set_ylim([0.0, 1.2])
-        ax.set_xlim([start_line, max_line + time_step*5])
+        ax.set_xlim([start_line, max_line + time_step*4])
         if i_sen == 1:
-            ax.legend(loc=2, bbox_to_anchor=(0.65, 0.9), fontsize=legendfontsize)
+            ax.legend(loc=2, bbox_to_anchor=(0.70, 1.0), fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
