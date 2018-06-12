@@ -69,6 +69,7 @@ if __name__ == '__main__':
             continue
         tgm_acc = []
         tgm_pred = []
+        cv_membership = []
         for fold in batch_exp.FOLDS:
             fname = NEW_SAVE_FILE.format(dir=top_dir,
                                  word=word,
@@ -94,9 +95,9 @@ if __name__ == '__main__':
             if fold == 0:
                 l_ints = result['l_ints']
                 win_starts = result['win_starts']
-                cv_membership = result['cv_membership']
                 time = result['time']
                 proc = result['proc']
+            cv_membership.append(result['cv_membership'][0])
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
 
