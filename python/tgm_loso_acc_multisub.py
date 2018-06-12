@@ -114,8 +114,6 @@ if __name__ == '__main__':
             rank_result = np.load(rank_file + '.npz')
             acc_all = rank_result['tgm_rank']
             result = np.load(multi_file + '.npz')
-            tgm_pred = result['tgm_pred']
-
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)
