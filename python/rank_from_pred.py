@@ -12,12 +12,17 @@ if __name__ == '__main__':
     result = np.load('/share/volume0/nrafidi/krns2_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_active_agent_win50_ov5_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestT_ni2_rsPerm1_acc.npz')
     tgm_pred = result['tgm_pred']
+
+    meow = np.stack(tgm_pred)
+
+    print(meow.shape)
+
     l_ints = result['l_ints']
     print(l_ints)
     cv_membership = result['cv_membership']
     print(len(cv_membership))
     fold_labels = []
     for i in range(len(cv_membership)/2):
-        fold_labels.append(l_ints)
+        fold_labels.append(np.mean(l_ints[cv_membership[i]]))
     print(cv_membership)
-    rank_from_pred(tgm_pred, l_ints)
+    # rank_from_pred(tgm_pred, fold_labels)
