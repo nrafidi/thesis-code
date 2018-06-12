@@ -101,7 +101,7 @@ if __name__ == '__main__':
                                         rsP=1,
                                         mode='acc')
         result = np.load(load_fname + '.npz')
-
+        print(load_fname)
         time = result['time']
         win_starts = result['win_starts']
 
