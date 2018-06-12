@@ -21,7 +21,7 @@ def rank_from_pred(tgm_pred, fold_labels):
 
 
 if __name__ == '__main__':
-    result = np.load('/share/volume0/nrafidi/krns2_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_active_agent_win50_ov5_prF_' \
+    result = np.load('/share/volume0/nrafidi/krns2_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_active_verb_win50_ov5_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestT_ni2_rsPerm1_acc.npz')
     tgm_pred = result['tgm_pred']
     l_ints = result['l_ints']
@@ -34,6 +34,6 @@ if __name__ == '__main__':
     # print(cv_membership)
     rank_acc = rank_from_pred(tgm_pred, fold_labels)
     fig, ax = plt.subplots()
-    im = ax.imshow(np.mean(rank_acc, axis=0), interpolation='nearest')
+    im = ax.imshow(np.mean(rank_acc, axis=0), interpolation='nearest', vmin=0.0, vmax=1.0)
     plt.colorbar(im)
     plt.show()
