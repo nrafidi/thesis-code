@@ -9,6 +9,7 @@ import os
 import run_alg_comp
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from rank_from_pred import rank_from_pred
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -78,7 +79,7 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
 
-    chance_word = {'verb': 0.25,
+    chance_word = {'verb': 0.5,
                    'voice': 0.5}
 
     fig, ax = plt.subplots(figsize=(10,10))
@@ -100,9 +101,18 @@ if __name__ == '__main__':
                                         rsP=1,
                                         mode='acc')
         result = np.load(load_fname + '.npz')
-        acc_all = result['tgm_acc']
+
         time = result['time']
         win_starts = result['win_starts']
+
+        tgm_pred = result['tgm_pred']
+        l_ints = result['l_ints']
+        cv_membership = result['cv_membership']
+        fold_labels = []
+        for i in range(len(cv_membership)):
+            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+        acc_all = rank_from_pred(tgm_pred, fold_labels)
 
         print(acc_all.shape)
         diag_acc = np.diag(np.mean(acc_all, axis=0))
@@ -120,7 +130,8 @@ if __name__ == '__main__':
     ax.tick_params(labelsize=ticklabelsize)
     ax.legend(loc=1, fontsize=legendfontsize, ncol=2)
     ax.set_ylim([0.0, 1.0])
-    fig.suptitle('Algorithm Comparison\nVerb Decoding Post-Sentence', fontsize=suptitlesize)
+    fig.suptitle('Algorithm Comparison\n{word} Decoding Post-Sentence'.format(word=PLOT_TITLE_WORD[WORD]),
+                 fontsize=suptitlesize)
     fig.subplots_adjust(top=0.85)
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.pdf')
     fig.savefig('/home/nrafidi/thesis_figs/alg_comp_over_time_multisub.png')
@@ -144,11 +155,11 @@ if __name__ == '__main__':
     bar_ax.set_xticks(ind + width) #/ 2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list]) #, fontdict={'horizontalalignment': 'center'})
     bar_ax.set_ylim([0.0, 1.0])
-    bar_fig.suptitle('Algorithm\nMax Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.suptitle('Algorithm Performance Comparison', fontsize=suptitlesize)
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(loc=1, fontsize=legendfontsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
-    bar_ax.set_ylabel('Classiciation Accuracy/Runtime Fraction', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classification Accuracy/Runtime Fraction', fontsize=axislabelsize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
@@ -180,7 +191,15 @@ if __name__ == '__main__':
                                           rsP=1,
                                           mode='acc')
             result = np.load(load_fname + '.npz')
-            acc_all = result['tgm_acc']
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
+
             time = result['time']
             win_starts = result['win_starts']
             diag_acc = np.diag(np.mean(acc_all, axis=0))
@@ -241,7 +260,14 @@ if __name__ == '__main__':
                                       rsP=1,
                                       mode='acc')
         result = np.load(load_fname + '.npz')
-        acc_all = result['tgm_acc']
+        tgm_pred = result['tgm_pred']
+        l_ints = result['l_ints']
+        cv_membership = result['cv_membership']
+        fold_labels = []
+        for i in range(len(cv_membership)):
+            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+        acc_all = rank_from_pred(tgm_pred, fold_labels)
         time = result['time']
         win_starts = result['win_starts']
 
@@ -290,7 +316,7 @@ if __name__ == '__main__':
     bar_ax.legend(loc=1, fontsize=legendfontsize)
     bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     bar_ax.set_xlabel('Window Size (s)', fontsize=axislabelsize)
-    bar_fig.suptitle('Window Size\nMax Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.suptitle('Window Size Performance Comparison', fontsize=suptitlesize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/win_comp_bar_multisub.png')
@@ -322,7 +348,14 @@ if __name__ == '__main__':
                                           rsP=1,
                                           mode='acc')
             result = np.load(load_fname + '.npz')
-            acc_all = result['tgm_acc']
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            acc_all = rank_from_pred(tgm_pred, fold_labels)
             time = result['time']
             win_starts = result['win_starts']
             win_in_s = global_win * 0.002
@@ -361,7 +394,7 @@ if __name__ == '__main__':
     bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     bar_ax.legend(loc=1, fontsize=legendfontsize)
     bar_ax.tick_params(labelsize=ticklabelsize)
-    bar_fig.suptitle('Repetition Averaging\nMax Accuracy Comparison', fontsize=suptitlesize)
+    bar_fig.suptitle('Repetition Averaging Performance Comparison', fontsize=suptitlesize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/inst_comp_bar_multisub.png')
