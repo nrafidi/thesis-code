@@ -132,17 +132,26 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                                rank_str='',
                                                 mode='acc')
+            rank_file = tgm_loso_acc_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
+                                               sen_type=sen_type,
+                                               word=word,
+                                               win_len=args.win_len,
+                                               ov=args.overlap,
+                                               perm='F',
+                                               alg=args.alg,
+                                               adj=args.adj,
+                                               avgTm=args.avgTime,
+                                               avgTst=args.avgTest,
+                                               inst=args.num_instances,
+                                               rsP=1,
+                                               rank_str='rank',
+                                               mode='acc')
 
+            rank_result = np.load(rank_file + '.npz')
+            acc_all = rank_result['tgm_rank']
             result = np.load(multi_file + '.npz')
-            tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            cv_membership = result['cv_membership']
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-
-            acc_all = rank_from_pred(tgm_pred, fold_labels)
             word_time = result['time']
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
@@ -203,7 +212,7 @@ if __name__ == '__main__':
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
-    sen_fig.suptitle('Rank Accuracy Over Time', fontsize=suptitlesize)
+    sen_fig.suptitle('Rank Accuracy Over Time\nDuring Sentence Reading', fontsize=suptitlesize)
     # sen_fig.tight_layout()
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.85)

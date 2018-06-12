@@ -73,7 +73,7 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{mode}'
+            'rsPerm{rsP}_{rank_str}{mode}'
 
 
 if __name__ == '__main__':
@@ -140,17 +140,26 @@ if __name__ == '__main__':
                                             avgTst=args.avgTest,
                                             inst=args.num_instances,
                                             rsP=1,
+                                            rank_str='',
                                             mode='acc')
+        rank_file = MULTI_SAVE_FILE.format(dir=top_dir,
+                                           sen_type=sen_type,
+                                           word=word,
+                                           win_len=args.win_len,
+                                           ov=args.overlap,
+                                           perm='F',
+                                           alg=args.alg,
+                                           adj=args.adj,
+                                           avgTm=args.avgTime,
+                                           avgTst=args.avgTest,
+                                           inst=args.num_instances,
+                                           rsP=1,
+                                           rank_str='rank',
+                                           mode='acc')
 
+        rank_result = np.load(rank_file + '.npz')
+        multi_fold_acc = rank_result['tgm_rank']
         result = np.load(multi_file + '.npz')
-        tgm_pred = result['tgm_pred']
-        l_ints = result['l_ints']
-        cv_membership = result['cv_membership']
-        fold_labels = []
-        for i in range(len(cv_membership)):
-            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-
-        multi_fold_acc = rank_from_pred(tgm_pred, fold_labels)
         time = result['time']
         win_starts = result['win_starts']
 

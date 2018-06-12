@@ -6,13 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
-from rank_from_pred import rank_from_pred
 
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{mode}'
+            'rsPerm{rsP}_{rank_str}{mode}'
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -95,17 +94,28 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                                rank_str='',
+                                                mode='acc')
+            rank_file = MULTI_SAVE_FILE.format(dir=top_dir,
+                                                sen_type=sen_type,
+                                                word=word,
+                                                win_len=args.win_len,
+                                                ov=args.overlap,
+                                                perm='F',
+                                                alg=args.alg,
+                                                adj=args.adj,
+                                                avgTm=args.avgTime,
+                                                avgTst=args.avgTest,
+                                                inst=args.num_instances,
+                                                rsP=1,
+                                                rank_str='rank',
                                                 mode='acc')
 
+            rank_result = np.load(rank_file + '.npz')
+            acc_all = rank_result['tgm_rank']
             result = np.load(multi_file + '.npz')
             tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            cv_membership = result['cv_membership']
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
 
-            acc_all = rank_from_pred(tgm_pred, fold_labels)
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)

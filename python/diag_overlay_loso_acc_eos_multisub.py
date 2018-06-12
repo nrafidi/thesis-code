@@ -141,10 +141,26 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
-                                                mode='acc')
+                                                                          rank_str='',
+                                                                          mode='acc')
+            rank_file = tgm_loso_acc_eos_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
+                                                                     sen_type=sen_type,
+                                                                     word=word,
+                                                                     win_len=args.win_len,
+                                                                     ov=args.overlap,
+                                                                     perm='F',
+                                                                     alg=args.alg,
+                                                                     adj=args.adj,
+                                                                     avgTm=args.avgTime,
+                                                                     avgTst=args.avgTest,
+                                                                     inst=args.num_instances,
+                                                                     rsP=1,
+                                                                     rank_str='rank',
+                                                                     mode='acc')
 
+            rank_result = np.load(rank_file + '.npz')
+            acc_all = rank_result['tgm_rank']
             result = np.load(multi_file + '.npz')
-            acc_all = result['tgm_acc']
             word_time = result['time']
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
@@ -185,7 +201,7 @@ if __name__ == '__main__':
         ax.set_xticklabels(label_time)
         ax.axvline(x=max_line, color='k')
         if i_sen_type == 0:
-            ax.set_ylabel('Accuracy', fontsize=axislabelsize)
+            ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
         if i_sen_type == 1:
             ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.0])
@@ -198,7 +214,7 @@ if __name__ == '__main__':
                 size=axislettersize, weight='bold')
 
     sen_fig.subplots_adjust(top=0.85)
-    sen_fig.suptitle('Mean Accuracy over Subjects\nPost-Sentence', fontsize=suptitlesize)
+    sen_fig.suptitle('Rank Accuracy Over Time\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
