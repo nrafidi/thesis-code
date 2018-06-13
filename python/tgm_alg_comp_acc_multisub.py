@@ -237,7 +237,7 @@ if __name__ == '__main__':
         ax.axhline(0.5, color='k', label='Chance')
         if i_avg == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
-        ax.legend(loc=1,  fontsize=legendfontsize, ncol=2)
+        ax.legend(loc=4,  fontsize=legendfontsize, ncol=2)
         ax.set_title(avg_time_str, fontsize=axistitlesize)
         # ax.set_xlim([0.0, 0.5])
         ax.tick_params(labelsize=ticklabelsize)
@@ -403,6 +403,16 @@ if __name__ == '__main__':
                                           mode='acc')
 
             result = np.load(load_fname + '.npz')
+
+            if avgTest == 'F':
+                tgm_pred = result['tgm_pred']
+                l_ints = result['l_ints']
+                cv_membership = result['cv_membership']
+                fold_labels = []
+                for i in range(len(cv_membership)):
+                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+                acc_all = rank_from_pred(tgm_pred, fold_labels)
+                np.savez_compressed(rank_fname, tgm_rank=acc_all)
             if os.path.isfile(rank_fname + '.npz'):
                 rank_result = np.load(rank_fname + '.npz')
                 acc_all = rank_result['tgm_rank']
