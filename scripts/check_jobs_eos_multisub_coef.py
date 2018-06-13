@@ -63,7 +63,7 @@ if __name__ == '__main__':
             successful_jobs += 1
             was_success = True
         else:
-            print(fname)
+            # print(fname)
             was_success = False
 
         if not was_success:
