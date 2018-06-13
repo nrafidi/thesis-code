@@ -153,7 +153,7 @@ if __name__ == '__main__':
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.legend(loc=1, fontsize=legendfontsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
-    bar_ax.set_ylabel('Rank Accuracy/Runtime Fraction', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classification Accuracy/Runtime Fraction', fontsize=axislabelsize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
@@ -404,15 +404,15 @@ if __name__ == '__main__':
 
             result = np.load(load_fname + '.npz')
 
-            if avgTest == 'F' and inst > 1:
-                tgm_pred = result['tgm_pred']
-                l_ints = result['l_ints']
-                cv_membership = result['cv_membership']
-                fold_labels = []
-                for i in range(len(cv_membership)):
-                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-                acc_all = rank_from_pred(tgm_pred, fold_labels)
-                np.savez_compressed(rank_fname, tgm_rank=acc_all)
+            # if avgTest == 'F' and inst > 1:
+            #     tgm_pred = result['tgm_pred']
+            #     l_ints = result['l_ints']
+            #     cv_membership = result['cv_membership']
+            #     fold_labels = []
+            #     for i in range(len(cv_membership)):
+            #         fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+            #     acc_all = rank_from_pred(tgm_pred, fold_labels)
+            #     np.savez_compressed(rank_fname, tgm_rank=acc_all)
             if os.path.isfile(rank_fname + '.npz'):
                 rank_result = np.load(rank_fname + '.npz')
                 acc_all = rank_result['tgm_rank']
