@@ -82,9 +82,9 @@ if __name__ == '__main__':
                 elif os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
-                        print(job_id)
-                        print(err_file)
-                        print(grid)
+                        if 'ValueError' in err_file:
+                            print(job_id)
+                            print(grid)
                         # print(job_id)
                         # if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
                         #     if 'MemoryError' in err_file:
