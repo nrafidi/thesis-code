@@ -14,13 +14,14 @@ def rank_from_pred(tgm_pred, fold_labels):
             for k in range(curr_pred.shape[0]):
                 if curr_pred[j, k].shape[0] > 1:
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
-                    #                print(label_sort)
+                    print(label_sort)
                     label_sort = label_sort[:, ::-1]
-
+                    print(label_sort)
                     rank = np.empty((curr_pred[j, k].shape[0],))
                     for l in range(curr_pred[j, k].shape[0]):
                         rank[l] = float(np.where(label_sort[l, :] == curr_label)[0][0])
-                    rank_acc[i, j, k] = np.mean(1.0 - rank/(float(len(label_sort)) - 1.0))
+                    print(rank)
+                    rank_acc[i, j, k] = np.mean(1.0 - rank/(float(label_sort.shape[1]) - 1.0))
 
                 else:
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]))

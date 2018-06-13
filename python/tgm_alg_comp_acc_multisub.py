@@ -404,7 +404,7 @@ if __name__ == '__main__':
 
             result = np.load(load_fname + '.npz')
 
-            if avgTest == 'F' and inst > 2:
+            if avgTest == 'F' and inst > 1:
                 tgm_pred = result['tgm_pred']
                 l_ints = result['l_ints']
                 cv_membership = result['cv_membership']
