@@ -68,16 +68,17 @@ if __name__ == '__main__':
 
         if not was_success:
             print(job_id)
-            # if not os.path.isfile(err_str) or not os.path.isfile(out_str):
-            #     # print('Job {} Did Not Run'.format(job_str))
-            #     # print(job_id)
-            #     meow = 1
-            # else:
-            #     with open(out_str, 'r') as fid:
-            #         out_info = fid.read()
-            #         # print(out_info)
-            #     if 'Experiment parameters not valid.' in out_info:
-            #         skipped_jobs += 1
+            if not os.path.isfile(err_str) or not os.path.isfile(out_str):
+                # print('Job {} Did Not Run'.format(job_str))
+                # print(job_id)
+                meow = 1
+            else:
+                with open(out_str, 'r') as fid:
+                    out_info = fid.read()
+                    # print(out_info)
+                if 'Experiment parameters not valid.' in out_info:
+                    skipped_jobs += 1
+                    print('skipped')
             #     elif os.stat(err_str).st_size != 0:
             #         with open(err_str, 'r') as fid:
             #             err_file = fid.read()
