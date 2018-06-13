@@ -8,15 +8,24 @@ def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
     for i in range(tgm_pred.shape[0]):
         curr_label = fold_labels[i]
+#        print(curr_label)
         curr_pred = np.squeeze(tgm_pred[i, ...])
+        print(curr_pred.shape)
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[0]):
+                print(curr_pred[j, k].shape)
                 label_sort = np.argsort(np.squeeze(curr_pred[j, k]))
-                # print(curr_pred[j, k])
-                # print(label_sort)
+#                print(label_sort)
                 label_sort = label_sort[::-1]
-                rank = float(np.where(label_sort == curr_label)[0][0])
-                rank_acc[i, j, k] = 1.0 - rank/(float(len(label_sort)) - 1.0)
+                try:
+                    rank = float(np.where(label_sort == curr_label)[0][0])
+                    rank_acc[i, j, k] = 1.0 - rank/(float(len(label_sort)) - 1.0)
+                except:
+                    print(label_sort)
+                    print(curr_label)
+                    print(curr_label)
+                    print(fold_labels)
+                
 
     return rank_acc
 
@@ -59,6 +68,8 @@ if __name__ == '__main__':
             print(sen_type)
             for word in ['noun1', 'verb', 'agent', 'patient', 'voice', 'propid', 'senlen']:
                 print(word)
+                if word == 'propid' and sen_type != 'pooled':
+                    continue
                 fname_load = fname.format(exp=exp, sen_type=sen_type,
                                           word=word, rank_str='')
                 fname_save = fname.format(exp=exp, sen_type=sen_type,
