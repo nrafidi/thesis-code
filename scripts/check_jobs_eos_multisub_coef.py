@@ -67,7 +67,7 @@ if __name__ == '__main__':
             was_success = False
 
         if not was_success:
-            print(job_id)
+            # print(job_id)
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
                 # print('Job {} Did Not Run'.format(job_str))
                 # print(job_id)
@@ -78,11 +78,12 @@ if __name__ == '__main__':
                     # print(out_info)
                 if 'Experiment parameters not valid.' in out_info:
                     skipped_jobs += 1
-                    print('skipped')
+                    # print('skipped')
                 elif os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
-                        # print(err_file)
+                        print(job_id)
+                        print(err_file)
                         print(grid)
                         # print(job_id)
                         # if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
