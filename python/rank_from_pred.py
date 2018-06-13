@@ -92,7 +92,7 @@ if __name__ == '__main__':
                 np.savez_compressed(fname_save,
                                     tgm_rank=tgm_rank)
 
-    fname = '/share/volume0/nrafidi/krns2_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_pooled_verb_win2_ov2_prF_' \
+    fname = '/share/volume0/nrafidi/krns2_TGM_alg_comp/TGM-alg-comp_multisub_pooled_verb_win2_ov2_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestF_ni2_rsPerm1_{rank_str}acc.npz'
 
     fname_load = fname.format(rank_str='')
