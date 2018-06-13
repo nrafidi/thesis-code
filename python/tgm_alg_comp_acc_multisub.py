@@ -203,7 +203,7 @@ if __name__ == '__main__':
                                           mode='acc')
 
             result = np.load(load_fname + '.npz')
-            if os.path.isfile(rank_fname):
+            if os.path.isfile(rank_fname + '.npz'):
                 rank_result = np.load(rank_fname + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
@@ -292,7 +292,7 @@ if __name__ == '__main__':
                                       mode='acc')
 
         result = np.load(load_fname + '.npz')
-        if os.path.isfile(rank_fname):
+        if os.path.isfile(rank_fname + '.npz'):
             rank_result = np.load(rank_fname + '.npz')
             acc_all = rank_result['tgm_rank']
         else:
@@ -403,7 +403,7 @@ if __name__ == '__main__':
                                           mode='acc')
 
             result = np.load(load_fname + '.npz')
-            if os.path.isfile(rank_fname):
+            if os.path.isfile(rank_fname + '.npz'):
                 rank_result = np.load(rank_fname + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
