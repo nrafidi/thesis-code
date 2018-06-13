@@ -79,10 +79,10 @@ if __name__ == '__main__':
                 if 'Experiment parameters not valid.' in out_info:
                     skipped_jobs += 1
                     print('skipped')
-            #     elif os.stat(err_str).st_size != 0:
-            #         with open(err_str, 'r') as fid:
-            #             err_file = fid.read()
-            #             # print(err_file)
+                elif os.stat(err_str).st_size != 0:
+                    with open(err_str, 'r') as fid:
+                        err_file = fid.read()
+                        print(err_file)
             #             print(grid)
                         # print(job_id)
                         # if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
