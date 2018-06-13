@@ -69,6 +69,7 @@ if __name__ == '__main__':
         if not was_success:
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
                 # print('Job {} Did Not Run'.format(job_str))
+                print(job_id)
                 meow = 1
             else:
                 with open(out_str, 'r') as fid:
