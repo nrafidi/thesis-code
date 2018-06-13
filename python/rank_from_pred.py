@@ -10,21 +10,23 @@ def rank_from_pred(tgm_pred, fold_labels):
         curr_label = fold_labels[i]
 #        print(curr_label)
         curr_pred = np.squeeze(tgm_pred[i, ...])
-        print(curr_pred.shape)
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[0]):
-                print(curr_pred[j, k].shape)
-                label_sort = np.argsort(np.squeeze(curr_pred[j, k]))
-#                print(label_sort)
-                label_sort = label_sort[::-1]
-                try:
+                if curr_pred[j, k].shape[0] > 1:
+                    label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
+                    #                print(label_sort)
+                    label_sort = label_sort[:, ::-1]
+
+                    rank = np.empty((curr_pred[j, k].shape[0],))
+                    for l in range(curr_pred[j, k].shape[0]):
+                        rank[l] = float(np.where(label_sort[l, :] == curr_label)[0][0])
+                    rank_acc[i, j, k] = np.mean(1.0 - rank/(float(len(label_sort)) - 1.0))
+
+                else:
+                    label_sort = np.argsort(np.squeeze(curr_pred[j, k]))
+                    label_sort = label_sort[::-1]
                     rank = float(np.where(label_sort == curr_label)[0][0])
                     rank_acc[i, j, k] = 1.0 - rank/(float(len(label_sort)) - 1.0)
-                except:
-                    print(label_sort)
-                    print(curr_label)
-                    print(curr_label)
-                    print(fold_labels)
                 
 
     return rank_acc
@@ -90,6 +92,23 @@ if __name__ == '__main__':
                 np.savez_compressed(fname_save,
                                     tgm_rank=tgm_rank)
 
+    fname = '/share/volume0/nrafidi/krns2_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_pooled_verb_win2_ov2_prF_' \
+            'alglr-l2_adj-zscore_avgTimeT_avgTestF_ni2_rsPerm1_{rank_str}acc.npz'
+
+    fname_load = fname.format(rank_str='')
+    fname_save = fname.format(rank_str='rank')
+
+    result = np.load(fname_load)
+    tgm_pred = result['tgm_pred']
+    l_ints = result['l_ints']
+    cv_membership = result['cv_membership']
+    fold_labels = []
+    for i in range(len(cv_membership)):
+        fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+    tgm_rank = rank_from_pred(tgm_pred, fold_labels)
+
+    np.savez_compressed(fname_save,
+                        tgm_rank=tgm_rank)
     # fig, ax = plt.subplots()
     # im = ax.imshow(np.mean(rank_acc, axis=0), interpolation='nearest', vmin=0.5, vmax=1.0)
     # plt.colorbar(im)
