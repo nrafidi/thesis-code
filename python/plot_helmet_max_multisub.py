@@ -137,7 +137,8 @@ if __name__ == '__main__':
             mean_acc = mean_acc[post_onset]
             time_win = time_win[post_onset]
 
-            i_plot = np.where(time_win == args.time_to_plot)
+            i_plot = np.where(np.logical_and(time_win >= args.time_to_plot, time_win < args.time_to_plot + 0.005))
+            print(i_plot)
             max_acc = mean_acc[i_plot]
             map = maps[i_plot]
             # max_acc = np.argmax(mean_acc)
