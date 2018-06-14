@@ -4,7 +4,7 @@ from subprocess import call, check_output
 import time
 
 EXPERIMENTS = ['krns2', 'PassAct3']
-SEN_TYPES = ['active', 'passive', 'pooled']
+SEN_TYPES = ['pooled']
 WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
 OVERLAPS = [5]
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub -q pool2 -N {job_name} -l walltime=168:00:00,mem=16GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'adj={adj},alg={alg},doTimeAvg={tm_avg},' \
-                'num_instances={inst},force=False, ' \
+                'num_instances={inst},force=True, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos_multisub_coef.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
