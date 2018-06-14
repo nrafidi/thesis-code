@@ -135,7 +135,7 @@ if __name__ == '__main__':
             max_acc = np.argmax(np.diag(mean_acc))
             time_to_plot = time_win[max_acc]
 
-            map = maps[time_to_plot]
+            map = maps[max_acc]
             class_map = np.mean(map, axis=0)
             sub_map = np.zeros((306,))
             for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[args.experiment])):
