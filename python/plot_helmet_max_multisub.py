@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
-    combo_fig.suptitle('Classifier Importance Maps at Peak Accuracy Time',
+    combo_fig.suptitle('Classifier Importance Maps at %.2f s Post-Onset' % args.time_to_plot,
         fontsize=suptitlesize)
     combo_fig.text(0.488, 0.86, 'Active', ha='center', fontsize=axistitlesize+2)
     combo_fig.text(0.488, 0.4775, 'Passive', ha='center', fontsize=axistitlesize+2)
