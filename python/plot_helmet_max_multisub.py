@@ -144,16 +144,17 @@ if __name__ == '__main__':
                 sub_map += class_map[start_ind:end_ind]
             sub_map /= len(run_coef_TGM_multisub.VALID_SUBS[args.experiment])
             sub_map = sub_map[sensors_to_keep]
+            sub_map /= np.max(np.abs(sub_map))
 
-            print(np.min(sub_map))
-            print(np.max(sub_map))
+            # print(np.min(sub_map))
+            # print(np.max(sub_map))
 
             ax = combo_grid[i_combo]
             print(i_combo)
-            im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin=-5.0e-5, vmax=3.0e-5)
+            im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin=-1.0, vmax=1.0)
             ax.set_title('%s: %.2f-%.2f' % (PLOT_TITLE_WORD[word], time_to_plot, time_to_plot + args.win_len * 0.002), fontsize=axistitlesize)
 
-            ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+            ax.text(-0.12, 1.05, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
             i_combo += 1
         
@@ -162,8 +163,8 @@ if __name__ == '__main__':
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('Classifier Importance Maps at Peak Accuracy Time',
         fontsize=suptitlesize)
-    combo_fig.text(0.488, 0.8575, 'Active', ha='center', fontsize=axistitlesize+2)
-    combo_fig.text(0.488, 0.475, 'Passive', ha='center', fontsize=axistitlesize+2)
+    combo_fig.text(0.488, 0.86, 'Active', ha='center', fontsize=axistitlesize+2)
+    combo_fig.text(0.488, 0.4775, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_helmet{id}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, id=args.sensor_type_id, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
