@@ -50,6 +50,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--time_to_plot', type=float, default=0.1)
     parser.add_argument('--sensor_type_id', type=int, default=2)
     args = parser.parse_args()
 
@@ -136,10 +137,13 @@ if __name__ == '__main__':
             mean_acc = mean_acc[post_onset]
             time_win = time_win[post_onset]
 
-            max_acc = np.argmax(mean_acc)
-            time_to_plot = time_win[max_acc]
-
-            map = maps[max_acc]
+            i_plot = np.where(time_win == args.time_to_plot)
+            max_acc = mean_acc[i_plot]
+            map = maps[i_plot]
+            # max_acc = np.argmax(mean_acc)
+            # time_to_plot = time_win[max_acc]
+            #
+            # map = maps[max_acc]
             class_map = np.mean(map, axis=0)
             sub_map = np.zeros((306,))
             for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[args.experiment])):
@@ -156,7 +160,7 @@ if __name__ == '__main__':
             ax = combo_grid[i_combo]
             # print(i_combo)
             im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin=-1.0, vmax=1.0)
-            ax.set_title('%s: %.2f-%.2f' % (PLOT_TITLE_WORD[word], time_to_plot, time_to_plot + args.win_len * 0.002), fontsize=axistitlesize)
+            ax.set_title('%s: %.2f' % (PLOT_TITLE_WORD[word], max_acc), fontsize=axistitlesize)
 
             ax.text(-0.13, 1.075, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
@@ -170,19 +174,21 @@ if __name__ == '__main__':
     combo_fig.text(0.488, 0.86, 'Active', ha='center', fontsize=axistitlesize+2)
     combo_fig.text(0.488, 0.4775, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_helmet{id}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_helmet{id}_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, id=args.sensor_type_id, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
-                    num_instances=args.num_instances
+                    num_instances=args.num_instances,
+                    tplot=args.time_to_plot
                 ), bbox_inches='tight')
 
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_helmet{id}_{sen_type}_multisub_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_helmet{id}_{sen_type}_{tplot}_multisub_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, id=args.sensor_type_id, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
-            num_instances=args.num_instances
+            num_instances=args.num_instances,
+            tplot=args.time_to_plot
         ), bbox_inches='tight')
 
     plt.show()
