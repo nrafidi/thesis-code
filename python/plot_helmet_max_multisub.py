@@ -129,10 +129,14 @@ if __name__ == '__main__':
 
             rank_result = np.load(rank_file + '.npz')
             acc_all = rank_result['tgm_rank']
-            mean_acc = np.mean(acc_all, axis=0)
+            mean_acc = np.diag(np.mean(acc_all, axis=0))
+            post_onset = time_win >= 0.0
 
+            maps = maps[post_onset]
+            mean_acc = mean_acc[post_onset]
+            time_win = time_win[post_onset]
 
-            max_acc = np.argmax(np.diag(mean_acc))
+            max_acc = np.argmax(mean_acc)
             time_to_plot = time_win[max_acc]
 
             map = maps[max_acc]
