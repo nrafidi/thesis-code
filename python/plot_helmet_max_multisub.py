@@ -150,7 +150,7 @@ if __name__ == '__main__':
 
             ax = combo_grid[i_combo]
             print(i_combo)
-            im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False)
+            im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin=-5.0e-5, vmax=3.0e-5)
             ax.set_title('%s: %.2f-%.2f' % (PLOT_TITLE_WORD[word], time_to_plot, time_to_plot + args.win_len * 0.002), fontsize=axistitlesize)
 
             ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
