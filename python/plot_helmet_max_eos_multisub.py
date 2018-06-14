@@ -184,10 +184,12 @@ if __name__ == '__main__':
         time_win = time_win[post_onset]
 
         i_plot = np.where(np.logical_and(time_win >= args.time_to_plot, time_win < args.time_to_plot + 0.1))[0][0]
-        print(i_plot)
+        # print(i_plot)
         max_acc = mean_acc[i_plot]
         map = maps[i_plot]
-        # max_acc = np.argmax(mean_acc)
+        i_max_acc = np.argmax(mean_acc)
+        max_time = time_win[i_max_acc]
+        print(max_time)
         # time_to_plot = time_win[max_acc]
         #
         # map = maps[max_acc]

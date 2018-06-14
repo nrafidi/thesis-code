@@ -141,10 +141,9 @@ if __name__ == '__main__':
             print(i_plot)
             max_acc = mean_acc[i_plot]
             map = maps[i_plot]
-            # max_acc = np.argmax(mean_acc)
-            # time_to_plot = time_win[max_acc]
-            #
-            # map = maps[max_acc]
+            i_max_acc = np.argmax(mean_acc)
+            max_time = time_win[i_max_acc]
+            print(max_time)
             class_map = np.mean(map, axis=0)
             sub_map = np.zeros((306,))
             for i_sub in range(len(run_coef_TGM_multisub.VALID_SUBS[args.experiment])):
