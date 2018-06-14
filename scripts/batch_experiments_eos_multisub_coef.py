@@ -3,9 +3,9 @@ import os.path
 from subprocess import call, check_output
 import time
 
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['krns2']
 SEN_TYPES = ['pooled']
-WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
+WORDS = ['propid']#, 'senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
 OVERLAPS = [5]
 ALGS = ['lr-l2']  # GNB
