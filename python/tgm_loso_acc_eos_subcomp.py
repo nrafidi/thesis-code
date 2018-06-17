@@ -9,11 +9,12 @@ import os
 import run_TGM_LOSO_EOS
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from rank_from_pred import rank_from_pred
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{mode}'
+            'rsPerm{rsP}_{rank_str}{mode}'
 
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
@@ -95,7 +96,7 @@ def intersect_accs(exp,
     eos_max_by_sub = []
     for sub in run_TGM_LOSO_EOS.VALID_SUBS[exp]:
         save_dir = run_TGM_LOSO_EOS.SAVE_DIR.format(top_dir=top_dir, sub=sub)
-        result_fname = run_TGM_LOSO_EOS.SAVE_FILE.format(dir=save_dir,
+        rank_fname = run_TGM_LOSO_EOS.SAVE_FILE.format(dir=save_dir,
                                                          sub=sub,
                                                          sen_type=sen_type,
                                                          word=word,
@@ -108,15 +109,42 @@ def intersect_accs(exp,
                                                          avgTst=avgTest,
                                                          inst=num_instances,
                                                          rsP=1,
-                                                         mode='acc') + '.npz'
+                                                         mode='rankacc') + '.npz'
+        result_fname = run_TGM_LOSO_EOS.SAVE_FILE.format(dir=save_dir,
+                                                              sub=sub,
+                                                              sen_type=sen_type,
+                                                              word=word,
+                                                              win_len=win_len,
+                                                              ov=overlap,
+                                                              perm='F',
+                                                              alg=alg,
+                                                              adj=adj,
+                                                              avgTm=avgTime,
+                                                              avgTst=avgTest,
+                                                              inst=num_instances,
+                                                              rsP=1,
+                                                              mode='acc') + '.npz'
         if not os.path.isfile(result_fname):
-            print(result_fname)
-            continue
+                print(result_fname)
+                continue
         result = np.load(result_fname)
         time = np.squeeze(result['time'])
         win_starts = result['win_starts']
 
-        fold_acc = result['tgm_acc']
+        if os.path.isfile(rank_fname + '.npz'):
+            rank_result = np.load(rank_fname + '.npz')
+            fold_acc = rank_result['tgm_rank']
+        else:
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            fold_acc = rank_from_pred(tgm_pred, fold_labels)
+            np.savez_compressed(rank_fname, tgm_rank=fold_acc)
+
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
@@ -196,7 +224,7 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, 2),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
                           cbar_pad=0.2)
-    chance = CHANCE[args.experiment][sen_type][word]
+    chance = 0.5
     intersection, acc_all, time, win_starts, eos_max = intersect_accs(args.experiment,
                                                                       sen_type,
                                                                       word,
@@ -211,7 +239,7 @@ if __name__ == '__main__':
     mean_acc = np.mean(acc_all, axis=0)
 
     ax = combo_grid[0]
-    im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=vmaxes[word])
+    im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.0)
 
     ax.set_title('Average over Single Subjects', fontsize=axistitlesize)
     time_win = time[win_starts]
@@ -242,10 +270,37 @@ if __name__ == '__main__':
                                     avgTst=args.avgTest,
                                     inst=args.num_instances,
                                     rsP=1,
+                                    rank_str='',
                                     mode='acc')
+    rank_fname = MULTI_SAVE_FILE.format(dir=top_dir,
+                                        sen_type=sen_type,
+                                        word=word,
+                                        win_len=args.win_len,
+                                        ov=args.overlap,
+                                        perm='F',
+                                        alg=args.alg,
+                                        adj=args.adj,
+                                        avgTm=args.avgTime,
+                                        avgTst=args.avgTest,
+                                        inst=args.num_instances,
+                                        rsP=1,
+                                        rank_str='rank',
+                                        mode='acc')
 
     result = np.load(multi_file + '.npz')
-    multi_fold_acc = result['tgm_acc']
+    if os.path.isfile(rank_fname + '.npz'):
+        rank_result = np.load(rank_fname + '.npz')
+        multi_fold_acc = rank_result['tgm_rank']
+    else:
+        tgm_pred = result['tgm_pred']
+        l_ints = result['l_ints']
+        cv_membership = result['cv_membership']
+        fold_labels = []
+        for i in range(len(cv_membership)):
+            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+        multi_fold_acc = rank_from_pred(tgm_pred, fold_labels)
+        np.savez_compressed(rank_fname, tgm_rank=multi_fold_acc)
 
     multi_mean_acc = np.mean(multi_fold_acc, axis=0)
 
@@ -265,7 +320,8 @@ if __name__ == '__main__':
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     time_adjust = args.win_len*0.002
 
-    combo_fig.suptitle('TGM decoding {word} from {sen_type}'.format(word=word, sen_type=sen_type),
+    combo_fig.suptitle('Rank Accuracy TGMs decoding {word} from {sen_type}'.format(word=PLOT_TITLE_WORD[word],
+                                                                    sen_type=PLOT_TITLE_SEN[sen_type]),
                        fontsize=suptitlesize)
     combo_fig.text(0.04, 0.275, 'Train Time Relative to Last Word Onset (s)', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
