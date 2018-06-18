@@ -109,7 +109,7 @@ def intersect_accs(exp,
                                                          avgTst=avgTest,
                                                          inst=num_instances,
                                                          rsP=1,
-                                                         mode='rankacc') + '.npz'
+                                                         mode='rankacc')
         result_fname = run_TGM_LOSO_EOS.SAVE_FILE.format(dir=save_dir,
                                                               sub=sub,
                                                               sen_type=sen_type,
@@ -135,9 +135,12 @@ def intersect_accs(exp,
             rank_result = np.load(rank_fname + '.npz')
             fold_acc = rank_result['tgm_rank']
         else:
-            tgm_pred = result['tgm_pred']
+            print(rank_fname)
             l_ints = result['l_ints']
             cv_membership = result['cv_membership']
+            #print(cv_membership)
+            #print(result_fname)
+            tgm_pred = result['tgm_pred']
             fold_labels = []
             for i in range(len(cv_membership)):
                 fold_labels.append(np.mean(l_ints[cv_membership[i]]))
@@ -239,7 +242,7 @@ if __name__ == '__main__':
     mean_acc = np.mean(acc_all, axis=0)
 
     ax = combo_grid[0]
-    im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=1.0)
+    im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=0.75)
 
     ax.set_title('Average over Single Subjects', fontsize=axistitlesize)
     time_win = time[win_starts]
@@ -305,7 +308,7 @@ if __name__ == '__main__':
     multi_mean_acc = np.mean(multi_fold_acc, axis=0)
 
     ax = combo_grid[1]
-    im = ax.imshow(np.squeeze(multi_mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=vmaxes[word])
+    im = ax.imshow(np.squeeze(multi_mean_acc), interpolation='nearest', aspect='auto', vmin=chance, vmax=0.75)
 
     ax.set_title('Multi-Subject', fontsize=axistitlesize)
     ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
