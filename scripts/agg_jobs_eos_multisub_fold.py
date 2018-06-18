@@ -19,18 +19,18 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.EXPERIMENTS,
-                                   batch_exp.OVERLAPS,
-                                   [False],
-                                   batch_exp.ALGS,
-                                   batch_exp.ADJS,
-                                   batch_exp.DO_TME_AVGS,
-                                   batch_exp.DO_TST_AVGS,
-                                   batch_exp.NUM_INSTANCESS,
-                                   [1],
-                                   batch_exp.WIN_LENS,
-                                   batch_exp.SEN_TYPES,
-                                   batch_exp.WORDS)
+    param_grid = itertools.product(['krns2'], #batch_exp.EXPERIMENTS,
+                                   [2], #batch_exp.OVERLAPS,
+                                   [False], #batch_exp.IS_PERMS,
+                                   ['lr-l2'], #batch_exp.ALGS,
+                                   ['zscore'], #batch_exp.ADJS,
+                                   [True], #batch_exp.DO_TME_AVGS,
+                                   [True],  #batch_exp.DO_TST_AVGS,
+                                   [1],  #batch_exp.NUM_INSTANCESS,
+                                   [1],  #batch_exp.RANDOM_STATES,
+                                   [2],  #batch_exp.WIN_LENS,
+                                   ['pooled'],  #batch_exp.SEN_TYPES,
+                                   ['verb'])  #batch_exp.WORDS,
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
