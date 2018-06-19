@@ -94,8 +94,8 @@ if __name__ == '__main__':
             print(data.shape)
             valid_inds = []
             for i_sen_int, sen_int in enumerate(sen_ints):
-                word_list = stimuli_voice[sen_int]['stimulus'].split()
-                if len(word_list) > 5:
+                sen_words = stimuli_voice[sen_int]['stimulus'].split()
+                if len(sen_words) > 5:
                     valid_inds.append(i_sen_int)
 
             valid_inds = np.array(valid_inds)
