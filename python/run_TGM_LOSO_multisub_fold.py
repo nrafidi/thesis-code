@@ -130,6 +130,8 @@ def run_tgm_exp(experiment,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
 
+        print(time_sub.min())
+        print(time_sub.max())
         valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
@@ -141,7 +143,7 @@ def run_tgm_exp(experiment,
                 valid_inds.append(i_sen_int)
 
         valid_inds = np.array(valid_inds)
-        print(valid_inds)
+
         data_list.append(data[valid_inds, ...])
         print(data_list[i_sub].shape)
         if i_sub == 0:
