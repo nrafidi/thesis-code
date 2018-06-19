@@ -7,7 +7,7 @@ import random
 import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
-SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_exc_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{fold}'
 NUM_SENTENCES = 16
