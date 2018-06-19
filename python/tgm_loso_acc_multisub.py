@@ -139,6 +139,8 @@ if __name__ == '__main__':
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)
+            meow = np.argmax(np.diag(mean_acc))
+            print(meow)
             time_win = time[win_starts]
 
             if sen_type == 'active':
