@@ -92,7 +92,7 @@ if __name__ == '__main__':
             ax.set_yticks(yticks_sens[1:])
             ax.set_yticklabels(uni_reg[1:])
             ax.set_xticks(range(0, num_time, 125))
-            time_labels = time[::125] + 0.5
+            time_labels = time[::125]
             time_labels[np.abs(time_labels) < 1e-10] = 0.0
             ax.set_xticklabels(time_labels)
             ax.tick_params(labelsize=ticklabelsize)
