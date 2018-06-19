@@ -94,7 +94,7 @@ if __name__ == '__main__':
             ax.set_xticks(range(0, num_time, 125))
             time_labels = time[::125]
             time_labels[np.abs(time_labels) < 1e-10] = 0.0
-            ax.set_xticklabels(time_labels)
+            ax.set_xticklabels(['%.1f' % tm for tm in time_labels])
             ax.tick_params(labelsize=ticklabelsize)
             ax.set_title(title_list[i_inst], fontsize=axistitlesize)
             if i_inst == 3:
