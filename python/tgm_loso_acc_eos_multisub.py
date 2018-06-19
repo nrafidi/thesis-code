@@ -71,7 +71,7 @@ CHANCE = {'krns2':{'pooled': {'noun1': 0.125,
                     }}
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
-MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{rank_str}{mode}'
 
@@ -88,6 +88,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--exc', action='store_true')
     args = parser.parse_args()
 
     ticklabelsize = 14
@@ -105,6 +106,11 @@ if __name__ == '__main__':
         aTst = 'Test Average'
     else:
         aTst = ''
+
+    if args.exc:
+        exc_str = '_exc'
+    else:
+        exc_str = ''
 
     sen_type = args.sen_type
     word_list = ['agent', 'patient', 'verb']
@@ -132,6 +138,7 @@ if __name__ == '__main__':
                                             sen_type=sen_type,
                                             word=word,
                                             win_len=args.win_len,
+                                            exc=exc_str,
                                             ov=args.overlap,
                                             perm='F',
                                             alg=args.alg,
@@ -146,6 +153,7 @@ if __name__ == '__main__':
                                            sen_type=sen_type,
                                            word=word,
                                            win_len=args.win_len,
+                                           exc=exc_str,
                                            ov=args.overlap,
                                            perm='F',
                                            alg=args.alg,
@@ -157,9 +165,21 @@ if __name__ == '__main__':
                                            rank_str='rank',
                                            mode='acc')
 
-        rank_result = np.load(rank_file + '.npz')
-        multi_fold_acc = rank_result['tgm_rank']
         result = np.load(multi_file + '.npz')
+        if os.path.isfile(rank_file + '.npz'):
+            rank_result = np.load(rank_file + '.npz')
+            multi_fold_acc = rank_result['tgm_rank']
+        else:
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            multi_fold_acc = rank_from_pred(tgm_pred, fold_labels)
+            np.savez_compressed(rank_file, tgm_rank=multi_fold_acc)
+
         time = result['time']
         win_starts = result['win_starts']
 
