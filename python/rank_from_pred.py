@@ -6,6 +6,9 @@ import os.path
 
 def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
+    print(len(fold_labels))
+    print(tgm_pred.shape)
+    assert len(fold_labels) == tgm_pred.shape[0]
     for i in range(tgm_pred.shape[0]):
         curr_label = fold_labels[i]
 #        print(curr_label)

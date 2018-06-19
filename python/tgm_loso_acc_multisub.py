@@ -122,7 +122,7 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            if os.path.isfile(rank_file + '.npz') and word != 'noun2':
+            if os.path.isfile(rank_file + '.npz'): # and word != 'noun2':
                 rank_result = np.load(rank_file + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
                 acc_all = rank_from_pred(tgm_pred, fold_labels)
                 np.savez_compressed(rank_file, tgm_rank=acc_all)
-
+           # acc_all = result['tgm_acc']
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)
@@ -186,6 +186,9 @@ if __name__ == '__main__':
             ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
             i_combo += 1
+            #fig, meow_ax = plt.subplots()
+            #meow_ax.plot(np.diag(mean_acc))
+            #meow_ax.set_title('{}: {}'.format(sen_type, word))
         
 
 
