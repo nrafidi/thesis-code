@@ -67,6 +67,8 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
 
+    stimuli_voice = list(load_data.read_stimuli(experiment))
+
     sorted_inds, sorted_reg = sort_sensors()
     uni_reg = np.unique(sorted_reg)
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
@@ -89,10 +91,18 @@ if __name__ == '__main__':
                                                                                            is_region_sorted=False,
                                                                                            tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                            tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
+            valid_inds = []
+            for i_sen_int, sen_int in enumerate(sen_ints):
+                word_list = stimuli_voice[sen_int]['stimulus'].split()
+                if len(word_list) > 5:
+                    valid_inds.append(i_sen_int)
+
+            valid_inds = np.array(valid_inds)
+
             # time_to_plot = range(180, 254)
             # data = data[:, :, time_to_plot]
             # time = time[time_to_plot]
-            data_to_plot = np.squeeze(np.mean(data[:, sorted_inds, ::2], axis=0))
+            data_to_plot = np.squeeze(np.mean(data[valid_inds, sorted_inds, ::2], axis=0))
             print(np.max(data_to_plot))
             print(np.min(data_to_plot))
             time = time[::2]
