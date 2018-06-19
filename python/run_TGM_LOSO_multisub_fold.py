@@ -132,6 +132,7 @@ def run_tgm_exp(experiment,
 
         # print(time_sub.min())
         # print(time_sub.max())
+        print(data.shape)
         valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
