@@ -54,8 +54,8 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     sen_type_list = ['active', 'passive']
-    sen_list = [1, 18]
-    inst_list = [10, 5, 2, 1]
+    sen_list = [0, 8]
+    inst_list = [2]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
         for sen_id in sen_list:
@@ -73,11 +73,11 @@ if __name__ == '__main__':
                                                                                                reps_filter=lambda x: [i for i in range(x) if i < 10],
                                                                                                sensor_type=None,
                                                                                                is_region_sorted=False,
-                                                                                               tmin=None,
-                                                                                               tmax=None)
-                time_to_plot = time < 4.0
-                data = data[:, :, time_to_plot]
-                time = time[time_to_plot]
+                                                                                               tmin=-4.0,
+                                                                                               tmax=3.0)
+                # time_to_plot = time < 4.0
+                # data = data[:, :, time_to_plot]
+                # time = time[time_to_plot]
                 if num_instances == 1:
                     data_to_plot = np.squeeze(data[sen_list[0], sorted_inds, ::2])
                 else:
