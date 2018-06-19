@@ -55,8 +55,8 @@ if __name__ == '__main__':
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     sen_type_list = ['active', 'passive']
     sen_list = [0, 8]
-    inst_list = [2]
-    title_list = ['2 Trial Average', 'Single Trial', '5 Trial Average', '10 Trial Average']
+    inst_list = [1]
+    title_list = ['10 Trial Average', '2 Trial Average', 'Single Trial', '5 Trial Average']
     for sen_type in sen_type_list:
         for sen_id in sen_list:
             inst_fig = plt.figure(figsize=(16, 22))
