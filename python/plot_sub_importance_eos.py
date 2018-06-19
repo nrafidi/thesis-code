@@ -82,7 +82,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment')
     parser.add_argument('--sen_type', choices=run_TGM_LOSO_EOS.VALID_SEN_TYPE)
-    # parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient'])
+    parser.add_argument('--word', choices = ['noun1', 'verb', 'voice', 'agent', 'patient', 'senlen', 'propid'])
     parser.add_argument('--win_len', type=int, default=50)
     parser.add_argument('--overlap', type=int, default=5)
     parser.add_argument('--alg', default='lr-l2', choices=['lr-l2', 'lr-l1'])
@@ -110,103 +110,84 @@ if __name__ == '__main__':
         aTst = ''
 
     sen_type = args.sen_type
-    word_list = ['agent', 'patient', 'verb']
-    if args.experiment == 'krns2':
-        if sen_type == 'pooled':
-            word_list.extend(['noun1', 'voice', 'propid'])
-    else:
-        if sen_type == 'pooled':
-            word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
-    if sen_type == 'pooled':
-        n_rows=2
-    else:
-        n_rows=1
-
+    word = args.word
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
-
-    colors = ['r', 'g', 'b', 'm', 'c', 'y', 'k']
 
     combo_fig, ax = plt.subplots()
 
     ind = np.arange(len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment]))  # the x locations for the groups
-    width = 0.8 / len(word_list)  # the width of the bars
+    width = 0.8
 
-    subject_scores = np.empty((len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment]),
-                               len(word_list)))
-    accs = np.empty((len(word_list),))
-    for i_word, word in enumerate(word_list):
-        top_dir = TOP_DIR.format(exp=args.experiment)
-        fname = run_coef_TGM_EOS_multisub.SAVE_FILE.format(dir=top_dir,
-                                                       sen_type=sen_type,
-                                                       word=word,
-                                                       win_len=args.win_len,
-                                                       ov=args.overlap,
-                                                       alg=args.alg,
-                                                       adj=args.adj,
-                                                       avgTm=args.avgTime,
-                                                       inst=args.num_instances)
+    subject_scores = np.empty((len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment]),))
+    top_dir = TOP_DIR.format(exp=args.experiment)
+    fname = run_coef_TGM_EOS_multisub.SAVE_FILE.format(dir=top_dir,
+                                                   sen_type=sen_type,
+                                                   word=word,
+                                                   win_len=args.win_len,
+                                                   ov=args.overlap,
+                                                   alg=args.alg,
+                                                   adj=args.adj,
+                                                   avgTm=args.avgTime,
+                                                   inst=args.num_instances)
 
-        result = np.load(fname + '.npz')
-        maps = result['haufe_maps']
-        win_starts = result['win_starts']
-        time_win = result['time'][win_starts]
+    result = np.load(fname + '.npz')
+    maps = result['haufe_maps']
+    win_starts = result['win_starts']
+    time_win = result['time'][win_starts]
 
-        rank_file = MULTI_SAVE_FILE.format(dir=top_dir,
-                                           sen_type=sen_type,
-                                           word=word,
-                                           win_len=args.win_len,
-                                           ov=args.overlap,
-                                           perm='F',
-                                           alg=args.alg,
-                                           adj=args.adj,
-                                           avgTm=args.avgTime,
-                                           avgTst=args.avgTest,
-                                           inst=args.num_instances,
-                                           rsP=1,
-                                           rank_str='rank',
-                                           mode='acc')
+    rank_file = MULTI_SAVE_FILE.format(dir=top_dir,
+                                       sen_type=sen_type,
+                                       word=word,
+                                       win_len=args.win_len,
+                                       ov=args.overlap,
+                                       perm='F',
+                                       alg=args.alg,
+                                       adj=args.adj,
+                                       avgTm=args.avgTime,
+                                       avgTst=args.avgTest,
+                                       inst=args.num_instances,
+                                       rsP=1,
+                                       rank_str='rank',
+                                       mode='acc')
 
-        rank_result = np.load(rank_file + '.npz')
-        multi_fold_acc = rank_result['tgm_rank']
-        mean_acc = np.diag(np.mean(multi_fold_acc, axis=0))
-        post_onset = time_win >= 0.0
+    rank_result = np.load(rank_file + '.npz')
+    multi_fold_acc = rank_result['tgm_rank']
+    mean_acc = np.diag(np.mean(multi_fold_acc, axis=0))
+    post_onset = time_win >= 0.0
 
-        maps = maps[post_onset]
-        mean_acc = mean_acc[post_onset]
-        time_win = time_win[post_onset]
+    maps = maps[post_onset]
+    mean_acc = mean_acc[post_onset]
+    time_win = time_win[post_onset]
 
-        i_plot = np.where(np.logical_and(time_win >= args.time_to_plot, time_win < args.time_to_plot + 0.1))[0][0]
-        # print(i_plot)
-        max_acc = mean_acc[i_plot]
-        map = maps[i_plot]
-        i_max_acc = np.argmax(mean_acc)
-        max_time = time_win[i_max_acc]
-        print(max_time)
+    i_plot = np.where(np.logical_and(time_win >= args.time_to_plot, time_win < args.time_to_plot + 0.1))[0][0]
+    # print(i_plot)
+    max_acc = mean_acc[i_plot]
+    map = maps[i_plot]
+    i_max_acc = np.argmax(mean_acc)
+    max_time = time_win[i_max_acc]
+    print(max_time)
 
-        accs[i_word] = max_acc
-        # time_to_plot = time_win[max_acc]
-        #
-        # map = maps[max_acc]
-        class_map = np.mean(map, axis=0)
-        sub_map = np.zeros((306,))
-        for i_sub in range(len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment])):
-            start_ind = i_sub * 306
-            end_ind = start_ind + 306
-            sub_map = class_map[start_ind:end_ind]
-            subject_scores[i_sub, i_word] = np.sum(np.abs(sub_map))
+    class_map = np.mean(map, axis=0)
+    sub_map = np.zeros((306,))
+    for i_sub in range(len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment])):
+        start_ind = i_sub * 306
+        end_ind = start_ind + 306
+        sub_map = class_map[start_ind:end_ind]
+        subject_scores[i_sub] = np.sum(np.abs(sub_map))
 
-        ax.bar(ind + i_word * width, subject_scores[:, i_word], width,
-               color=colors[i_word], label='%s: %.2f' % (PLOT_TITLE_WORD[word], max_acc))
+    ax.bar(ind, subject_scores, width)
 
+    word_score = '%s: %.2f' % (PLOT_TITLE_WORD[word], max_acc)
     ax.legend(fontsize=legendfontsize)
     ax.set_ylabel('Importance Score', fontsize=axislabelsize)
     ax.set_xlabel('Subject', fontsize=axislabelsize)
     ax.set_xticks(ind + 0.4)
     ax.set_xticklabels(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment])
     ax.tick_params(labelsize=ticklabelsize)
-    combo_fig.suptitle('Subject Importance Scores at %.2f s Post-Onset' % args.time_to_plot,
+    combo_fig.suptitle('Subject Importance Scores at %.2f s Post-Onset\n%s' % (args.time_to_plot, word_score),
         fontsize=suptitlesize)
+    combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
