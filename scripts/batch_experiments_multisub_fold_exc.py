@@ -5,7 +5,7 @@ import time
 
 FOLDS = range(16) #, 'coef']
 EXPERIMENTS = ['PassAct3']
-SEN_TYPES = ['passive']
+SEN_TYPES = ['passive', 'active']
 WORDS = ['noun2', 'verb', 'noun1']
 WIN_LENS = [50]
 OVERLAPS = [5]
