@@ -117,7 +117,7 @@ def run_tgm_exp(experiment,
     sen_ints = []
     time = []
     labels = []
-    for i_sub, subject in enumerate(['A']): #enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(['A', 'Z']): #enumerate(VALID_SUBS[experiment]):
         data, labels_sub, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                        align_to=word,
                                                                                        voice=sen_type,
@@ -130,14 +130,14 @@ def run_tgm_exp(experiment,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
 
-        print(labels_sub)
-        print(data.shape)
+        # print(labels_sub)
+        # print(data.shape)
         valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             if word == 'noun2':
                 if len(word_list) > 5:
-                    print(word_list)
+                    # print(word_list)
                     valid_inds.append(i_sen_int)
             else:
                 valid_inds.append(i_sen_int)

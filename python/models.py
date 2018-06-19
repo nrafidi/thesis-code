@@ -1466,8 +1466,6 @@ def lr_tgm_loso_multisub_fold(data_list,
 
     for wi in xrange(n_w):
         train_time = test_windows[wi]
-        if wi in [7, 8, 9, 10, 11]:
-            print(np.where(train_time))
         train_data = [data[:, :, train_time] for data in train_data_full]
         if doTimeAvg:
             train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
@@ -1542,9 +1540,12 @@ def lr_tgm_loso_multisub_fold(data_list,
                 test_data -= mu_train[None, :]
                 test_data /= std_train[None, :]
 
-
             tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
             tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
+            if wi in [7, 8, 9, 10, 11]:
+                if wj in [7, 8, 9, 10, 11]:
+                    print(tgm_acc[0, wi, wj])
+                    print(tgm_pred[0, wi, wj])
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
