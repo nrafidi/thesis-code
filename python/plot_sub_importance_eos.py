@@ -114,7 +114,7 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
-    combo_fig, ax = plt.subplots()
+    combo_fig, ax = plt.subplots(figsize=(15, 15))
 
     ind = np.arange(len(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment]))  # the x locations for the groups
     width = 0.8
@@ -179,7 +179,7 @@ if __name__ == '__main__':
     ax.bar(ind, subject_scores, width)
 
     word_score = '%s: %.2f' % (PLOT_TITLE_WORD[word], max_acc)
-    ax.legend(fontsize=legendfontsize)
+    # ax.legend(fontsize=legendfontsize)
     ax.set_ylabel('Importance Score', fontsize=axislabelsize)
     ax.set_xlabel('Subject', fontsize=axislabelsize)
     ax.set_xticks(ind + 0.4)
