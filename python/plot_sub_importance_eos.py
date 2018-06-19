@@ -205,4 +205,31 @@ if __name__ == '__main__':
             num_instances=args.num_instances,
             tplot=args.time_to_plot
         ), bbox_inches='tight')
+
+    hist_fig, hist_ax = plt.subplots((15,15))
+    plt.hist(subject_scores)
+    ax.set_xlabel('Importance Score', fontsize=axislabelsize)
+    ax.set_ylabel('Number of Subjects', fontsize=axislabelsize)
+    hist_fig.suptitle('Histogram of Importance Scores at %.2f s Post-Onset\n%s' % (args.time_to_plot, word_score),
+                       fontsize=suptitlesize)
+    hist_fig.subplots_adjust(top=0.85)
+    hist_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_hist_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
+            avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances,
+            tplot=args.time_to_plot
+        ), bbox_inches='tight')
+    hist_fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_hist_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
+            avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances,
+            tplot=args.time_to_plot
+        ), bbox_inches='tight')
+
     plt.show()
