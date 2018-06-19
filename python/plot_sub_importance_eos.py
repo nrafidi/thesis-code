@@ -204,7 +204,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Subject', fontsize=axislabelsize)
     ax.set_xticks(ind + 0.4)
     ax.set_xticklabels(run_coef_TGM_EOS_multisub.VALID_SUBS[args.experiment])
-    ax.tick_params(fontsize=ticklabelsize)
+    ax.tick_params(labelsize=ticklabelsize)
     combo_fig.suptitle('Subject Importance Scores at %.2f s Post-Onset' % args.time_to_plot,
         fontsize=suptitlesize)
     combo_fig.savefig(
