@@ -117,7 +117,7 @@ def run_tgm_exp(experiment,
     sen_ints = []
     time = []
     labels = []
-    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in ['A']: #enumerate(VALID_SUBS[experiment]):
         data, labels_sub, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                        align_to=word,
                                                                                        voice=sen_type,
@@ -164,7 +164,7 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
-    # print(win_starts)
+    print(win_starts)
 
 
     if isPerm:
