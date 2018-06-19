@@ -32,9 +32,9 @@ def sort_sensors():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment')
-    parser.add_argument('--subject')
-    parser.add_argument('--word', choices=['noun1', 'noun2', 'verb'])
+    parser.add_argument('--experiment', default='PassAct3')
+    parser.add_argument('--subject', default='Z')
+    parser.add_argument('--word', default = 'noun2', choices=['noun1', 'noun2', 'verb'])
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
     args = parser.parse_args()
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     sen_type_list = ['active', 'passive']
     sen_list = [0, 8]
     inst_list = [2]
-    title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
+    title_list = ['2 Trial Average', 'Single Trial', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
         for sen_id in sen_list:
             inst_fig = plt.figure(figsize=(16, 22))
