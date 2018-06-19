@@ -208,8 +208,9 @@ if __name__ == '__main__':
 
     hist_fig, hist_ax = plt.subplots(figsize=(15,15))
     plt.hist(subject_scores, bins='auto')
-    ax.set_xlabel('Importance Score', fontsize=axislabelsize)
-    ax.set_ylabel('Number of Subjects', fontsize=axislabelsize)
+    hist_ax.set_xlabel('Importance Score', fontsize=axislabelsize)
+    hist_ax.set_ylabel('Number of Subjects', fontsize=axislabelsize)
+    hist_ax.tick_params(labelsize=ticklabelsize)
     hist_fig.suptitle('Histogram of Importance Scores at %.2f s Post-Onset\n%s' % (args.time_to_plot, word_score),
                        fontsize=suptitlesize)
     hist_fig.subplots_adjust(top=0.85)
