@@ -130,8 +130,7 @@ def run_tgm_exp(experiment,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
 
-        # print(time_sub.min())
-        # print(time_sub.max())
+        print(labels_sub)
         print(data.shape)
         valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):

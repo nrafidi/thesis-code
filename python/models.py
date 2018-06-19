@@ -1466,6 +1466,8 @@ def lr_tgm_loso_multisub_fold(data_list,
 
     for wi in xrange(n_w):
         train_time = test_windows[wi]
+        if wi in [7, 8, 9, 10, 11]:
+            print(np.where(train_time))
         train_data = [data[:, :, train_time] for data in train_data_full]
         if doTimeAvg:
             train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
