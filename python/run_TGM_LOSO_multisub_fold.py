@@ -167,7 +167,7 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
-    print(win_starts)
+    # print(win_starts)
     print(sen_ints)
     print(labels)
     print(data_list[0].shape)
