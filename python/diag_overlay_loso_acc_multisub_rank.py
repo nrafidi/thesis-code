@@ -69,6 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--exc', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -79,6 +80,11 @@ if __name__ == '__main__':
         aTst = 'Test Average'
     else:
         aTst = ''
+
+    if args.exc:
+        exc_str = '_exc'
+    else:
+        exc_str = ''
 
     sen_type_list = ['active', 'passive']
     if args.experiment == 'PassAct3':
@@ -125,6 +131,7 @@ if __name__ == '__main__':
                                                 word=word,
                                                 win_len=args.win_len,
                                                 ov=args.overlap,
+                                              exc=exc_str,
                                                 perm='F',
                                                 alg=args.alg,
                                                 adj=args.adj,
