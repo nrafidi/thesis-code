@@ -135,12 +135,13 @@ def run_tgm_exp(experiment,
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             if word == 'noun2':
                 if len(word_list) > 5:
+                    print(word_list)
                     valid_inds.append(i_sen_int)
             else:
                 valid_inds.append(i_sen_int)
 
         valid_inds = np.array(valid_inds)
-
+        print(valid_inds)
         data_list.append(data[valid_inds, ...])
         print(data_list[i_sub].shape)
         if i_sub == 0:
