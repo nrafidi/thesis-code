@@ -20,7 +20,7 @@ ALGS = ['lr-l2']  # GNB
 ADJS = ['zscore']
 DO_TIME_AVGS = [True]
 DO_TEST_AVGS = [False]
-NUM_INSTANCESS = [10]
+NUM_INSTANCESS = [2, 10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
