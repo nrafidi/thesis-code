@@ -132,26 +132,29 @@ def run_tgm_exp(experiment,
         # print(data.shape)
         valid_inds = []
         labels_sub = []
+        new_sen_ints_sub = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             if word == 'noun2':
                 if len(word_list) > 5:
                     labels_sub.append(word_list[WORD_COLS[sen_type][word]])
                     valid_inds.append(i_sen_int)
+                    new_sen_ints_sub.append(sen_int)
             else:
                 labels_sub.append(word_list[WORD_COLS[sen_type][word]])
                 valid_inds.append(i_sen_int)
+                new_sen_ints_sub.append(sen_int)
 
         valid_inds = np.array(valid_inds)
         print(labels_sub)
         data_list.append(data[valid_inds, ...])
         print(data_list[i_sub].shape)
         if i_sub == 0:
-            sen_ints = sen_ints_sub
+            sen_ints = new_sen_ints_sub
             time = time_sub
             labels = labels_sub
         else:
-            assert np.all(sen_ints == sen_ints_sub)
+            assert np.all(sen_ints == new_sen_ints_sub)
             assert np.all(time == time_sub)
             assert np.all(np.array(labels) == np.array(labels_sub))
 
