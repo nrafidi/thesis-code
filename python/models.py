@@ -1471,7 +1471,7 @@ def lr_tgm_loso_multisub_fold(data_list,
             train_data = np.concatenate([np.mean(data, axis=2) for data in train_data], axis=1)
         else:
             train_data = np.concatenate([np.reshape(data, (np.sum(in_train), -1)) for data in train_data], axis=1)
-        print(train_data.shape)
+        # print(train_data.shape)
 
         if adj == 'mean_center':
             mu_train = np.mean(train_data, axis=0)
@@ -1542,8 +1542,8 @@ def lr_tgm_loso_multisub_fold(data_list,
 
             tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
             tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
-            if wi in [7, 8, 9, 10, 11]:
-                if wj in [7, 8, 9, 10, 11]:
+            if wi in [7, 8]:
+                if wj in [7, 8]:
                     print(tgm_acc[0, wi, wj])
                     print(tgm_pred[0, wi, wj])
 
