@@ -196,18 +196,20 @@ if __name__ == '__main__':
     combo_fig.text(0.488, 0.8575, 'Active', ha='center', fontsize=axistitlesize+2)
     combo_fig.text(0.488, 0.475, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_multisub{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
+                    exc=exc_str,
                     num_instances=args.num_instances
                 ), bbox_inches='tight')
 
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_multisub_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_multisub{exc}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
+            exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
 

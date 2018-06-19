@@ -218,18 +218,20 @@ if __name__ == '__main__':
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
-            '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                 win_len=args.win_len,
                 overlap=args.overlap,
-                num_instances=args.num_instances
+                num_instances=args.num_instances,
+                exc=exc_str
             ), bbox_inches='tight')
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_avg-tgm_multisub{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
+            exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
     plt.show()
