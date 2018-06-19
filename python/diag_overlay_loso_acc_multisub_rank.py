@@ -130,8 +130,8 @@ if __name__ == '__main__':
                                                 sen_type=sen_type,
                                                 word=word,
                                                 win_len=args.win_len,
+                                                exc=exc_str,
                                                 ov=args.overlap,
-                                              exc=exc_str,
                                                 perm='F',
                                                 alg=args.alg,
                                                 adj=args.adj,
@@ -139,10 +139,39 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                                rank_str='',
                                                 mode='acc')
+            rank_file = tgm_loso_acc_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
+                                               sen_type=sen_type,
+                                               word=word,
+                                               win_len=args.win_len,
+                                               exc=exc_str,
+                                               ov=args.overlap,
+                                               perm='F',
+                                               alg=args.alg,
+                                               adj=args.adj,
+                                               avgTm=args.avgTime,
+                                               avgTst=args.avgTest,
+                                               inst=args.num_instances,
+                                               rsP=1,
+                                               rank_str='rank',
+                                               mode='acc')
 
             result = np.load(multi_file + '.npz')
-            acc_all = result['tgm_acc']
+            if os.path.isfile(rank_file + '.npz') and word != 'noun2':
+                rank_result = np.load(rank_file + '.npz')
+                acc_all = rank_result['tgm_rank']
+            else:
+                tgm_pred = result['tgm_pred']
+                l_ints = result['l_ints']
+                cv_membership = result['cv_membership']
+                fold_labels = []
+                for i in range(len(cv_membership)):
+                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+                acc_all = rank_from_pred(tgm_pred, fold_labels)
+                np.savez_compressed(rank_file, tgm_rank=acc_all)
+
             word_time = result['time']
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
