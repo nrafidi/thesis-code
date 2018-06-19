@@ -19,8 +19,8 @@ IS_PERMS = [False]  # True
 ALGS = ['lr-l2']  # GNB
 ADJS = ['zscore']
 DO_TIME_AVGS = [True]
-DO_TEST_AVGS = [True]
-NUM_INSTANCESS = [2]
+DO_TEST_AVGS = [False]
+NUM_INSTANCESS = [10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
