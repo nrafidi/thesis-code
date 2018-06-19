@@ -190,7 +190,7 @@ if __name__ == '__main__':
     combo_fig.subplots_adjust(top=0.85)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-                exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+                exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                 win_len=args.win_len,
                 overlap=args.overlap,
                 num_instances=args.num_instances,
@@ -198,7 +198,7 @@ if __name__ == '__main__':
             ), bbox_inches='tight')
     combo_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
+            exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
@@ -216,7 +216,7 @@ if __name__ == '__main__':
     hist_fig.subplots_adjust(top=0.85)
     hist_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_hist_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
+            exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
@@ -225,7 +225,7 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
     hist_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos_sub_import_hist_{tplot}_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type=sen_type, word='all', alg=args.alg, avgTime=args.avgTime,
+            exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
