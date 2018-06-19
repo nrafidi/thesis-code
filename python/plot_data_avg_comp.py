@@ -134,8 +134,8 @@ if __name__ == '__main__':
             inst_fig.text(0.04, 0.45, 'Sensors', va='center',
                            rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
-        diff_fig, diff_ax = plt.subplots()
-        im = diff_ax.imshow(word_data[1] - word_data[0])
+        diff_fig, diff_ax = plt.subplots(figsize=(10, 10))
+        im = diff_ax.imshow(word_data[1] - word_data[0], aspect='auto')
         diff_fig.suptitle(sen_type)
         diff_ax.set_yticks(yticks_sens[1:])
         diff_ax.set_yticklabels(uni_reg[1:])
@@ -145,6 +145,7 @@ if __name__ == '__main__':
         diff_ax.tick_params(labelsize=ticklabelsize)
         diff_ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
         diff_fig.colorbar(im)
+        diff_fig.suptitle('Difference Image: {}'.format(sen_type))
             # inst_fig.subplots_adjust(top=0.85)
             # inst_fig.savefig(
             #     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.pdf'.format(
