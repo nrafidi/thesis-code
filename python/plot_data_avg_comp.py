@@ -79,6 +79,7 @@ if __name__ == '__main__':
         inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(word_list), 1),
                                 axes_pad=0.7, cbar_mode='single', cbar_location='right',
                                 cbar_pad=0.5, cbar_size='2%', share_all=True)
+        word_data = []
         for i_word, word in enumerate(word_list):
             data, labels, sen_ints, time, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                            align_to=word,
@@ -105,6 +106,7 @@ if __name__ == '__main__':
             # time = time[time_to_plot]
             data = data[valid_inds, ...]
             data_to_plot = np.squeeze(np.mean(data[:, sorted_inds, ::2], axis=0))
+            word_data.append(data_to_plot)
             print(np.max(data_to_plot))
             print(np.min(data_to_plot))
             time = time[::2]
@@ -127,11 +129,22 @@ if __name__ == '__main__':
 
             cbar = inst_grid.cbar_axes[0].colorbar(im)
             print(cbar)
-            # inst_fig.suptitle('MEG Data for {sen_type} sentence {sen_id}, Subject {subject}'.format(sen_type=sen_type, sen_id=sen_id, subject=subject),
-            #                    fontsize=suptitlesize)
+            inst_fig.suptitle('MEG Data for {sen_type}, Subject {subject}'.format(sen_type=sen_type, subject=subject),
+                               fontsize=suptitlesize)
             inst_fig.text(0.04, 0.45, 'Sensors', va='center',
                            rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
+        diff_fig, diff_ax = plt.subplots()
+        im = diff_ax.imshow(word_data[1] - word_data[0])
+        diff_fig.suptitle(sen_type)
+        diff_ax.set_yticks(yticks_sens[1:])
+        diff_ax.set_yticklabels(uni_reg[1:])
+        diff_ax.set_xticks(range(0, num_time, 125))
+        time_labels = time[::125]
+        diff_ax.set_xticklabels(['%.1f' % tm for tm in time_labels])
+        diff_ax.tick_params(labelsize=ticklabelsize)
+        diff_ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
+        diff_fig.colorbar(im)
             # inst_fig.subplots_adjust(top=0.85)
             # inst_fig.savefig(
             #     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.pdf'.format(
