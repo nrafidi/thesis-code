@@ -1542,8 +1542,9 @@ def lr_tgm_loso_multisub_fold(data_list,
 
             tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
             tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
-            if wi in [7, 8]:
-                if wj in [7, 8]:
+            if wi in [39, 40, 41]:
+                if wj in [39, 40, 41]:
+                    print(test_time)
                     print(tgm_acc[0, wi, wj])
                     print(tgm_pred[0, wi, wj])
 
