@@ -115,7 +115,7 @@ def run_tgm_exp(experiment,
     sen_ints = []
     time = []
     labels = []
-    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(['A', 'Z']):#enumerate(VALID_SUBS[experiment]):
         data, _, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                        align_to='noun1',
                                                                                        voice=sen_type,
@@ -167,7 +167,10 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
-    # print(win_starts)
+    print(win_starts)
+    print(sen_ints)
+    print(labels)
+    print(data_list[0].shape)
 
 
     if isPerm:
@@ -184,6 +187,7 @@ def run_tgm_exp(experiment,
                                                                                 adj=adj,
                                                                                 doTimeAvg=doTimeAvg,
                                                                                 doTestAvg=doTestAvg)
+
     np.savez_compressed(fname,
                         l_ints=l_ints,
                         cv_membership=cv_membership,

@@ -1440,6 +1440,8 @@ def lr_tgm_loso_multisub_fold(data_list,
     print(penalty)
     uni_sen_ints = np.unique(sen_ints)
 
+    print(l_ints)
+    print(uni_sen_ints)
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
 
     # for tw in test_windows:
@@ -1460,9 +1462,11 @@ def lr_tgm_loso_multisub_fold(data_list,
 
     train_data_full = [data[in_train, ...] for data in data_list]
     train_labels = np.ravel(l_ints[in_train])
+    print(train_labels)
 
     test_data_full = [data[in_test, ...] for data in data_list]
     test_labels = np.ravel(l_ints[in_test])
+    print(test_labels)
 
     for wi in xrange(n_w):
         train_time = test_windows[wi]
@@ -1522,9 +1526,11 @@ def lr_tgm_loso_multisub_fold(data_list,
 
             if doTestAvg:
                 uni_test_labels = np.unique(test_labels)
+                print(uni_test_labels)
                 new_test_data = []
                 for label in uni_test_labels:
                     is_label = test_labels == label
+                    print(is_label)
                     dat = np.mean(test_data[is_label, :], axis=0)
                     new_test_data.append(np.reshape(dat, (1, -1)))
                 test_data = np.concatenate(new_test_data, axis=0)
@@ -1532,7 +1538,7 @@ def lr_tgm_loso_multisub_fold(data_list,
                     test_data = np.reshape(test_data, (1, -1))
             else:
                 uni_test_labels = test_labels
-
+            print(test_data.shape)
 
             if adj == 'mean_center':
                 test_data -= mu_train[None, :]
