@@ -9,19 +9,19 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'nr{rep}_rsPerm{rsP}_{mode}'
 
-FOLDS = range(16) #, 'coef']
+FOLDS = range(8) #, 'coef']
 EXPERIMENTS = ['PassAct3']
-SEN_TYPES = ['active', 'passive']
-WORDS = ['noun1', 'verb', 'noun2']
+SEN_TYPES = ['passive']
+WORDS = ['noun2']
 WIN_LENS = [50]
 OVERLAPS = [5]
-IS_PERMS = [False]  # True
+IS_PERMS = [True]  # True
 ALGS = ['lr-l2']  # GNB
 ADJS = ['zscore']
 DO_TIME_AVGS = [True]
-DO_TEST_AVGS = [True, False]
-NUM_INSTANCESS = [2, 10]
-RANDOM_STATES = [1]
+DO_TEST_AVGS = [True]
+NUM_INSTANCESS = [2]
+RANDOM_STATES = range(100)
 
 JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
