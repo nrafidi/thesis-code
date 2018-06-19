@@ -131,7 +131,7 @@ def run_tgm_exp(experiment,
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
 
         valid_inds = []
-        for i_sen_int, sen_int in enumerate(sen_ints):
+        for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             if word == 'noun2':
                 if len(word_list) > 5:
