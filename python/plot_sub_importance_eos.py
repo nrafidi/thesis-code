@@ -213,7 +213,6 @@ if __name__ == '__main__':
                 win_len=args.win_len,
                 overlap=args.overlap,
                 num_instances=args.num_instances,
-                id=args.sensor_type_id,
                 tplot=args.time_to_plot
             ), bbox_inches='tight')
     combo_fig.savefig(
@@ -223,7 +222,6 @@ if __name__ == '__main__':
             win_len=args.win_len,
             overlap=args.overlap,
             num_instances=args.num_instances,
-            id=args.sensor_type_id,
             tplot=args.time_to_plot
         ), bbox_inches='tight')
     plt.show()
