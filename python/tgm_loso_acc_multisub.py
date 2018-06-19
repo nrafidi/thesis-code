@@ -6,10 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+import os
+from rank_from_pred import rank_from_pred
 
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
-MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{rank_str}{mode}'
 
@@ -40,6 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--exc', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -70,6 +73,11 @@ if __name__ == '__main__':
 
     top_dir = TOP_DIR.format(exp=args.experiment)
 
+    if args.exc:
+        exc_str = '_exc'
+    else:
+        exc_str = ''
+
     word_list = ['noun1', 'verb', 'noun2']
     num_plots = len(word_list)
     time_step = int(250 / args.overlap)
@@ -86,6 +94,7 @@ if __name__ == '__main__':
                                                 sen_type=sen_type,
                                                 word=word,
                                                 win_len=args.win_len,
+                                                exc=exc_str,
                                                 ov=args.overlap,
                                                 perm='F',
                                                 alg=args.alg,
@@ -100,6 +109,7 @@ if __name__ == '__main__':
                                                 sen_type=sen_type,
                                                 word=word,
                                                 win_len=args.win_len,
+                                                exc=exc_str,
                                                 ov=args.overlap,
                                                 perm='F',
                                                 alg=args.alg,
@@ -111,9 +121,21 @@ if __name__ == '__main__':
                                                 rank_str='rank',
                                                 mode='acc')
 
-            rank_result = np.load(rank_file + '.npz')
-            acc_all = rank_result['tgm_rank']
             result = np.load(multi_file + '.npz')
+            if os.path.isfile(rank_file + '.npz'):
+                rank_result = np.load(rank_file + '.npz')
+                acc_all = rank_result['tgm_rank']
+            else:
+                tgm_pred = result['tgm_pred']
+                l_ints = result['l_ints']
+                cv_membership = result['cv_membership']
+                fold_labels = []
+                for i in range(len(cv_membership)):
+                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+                acc_all = rank_from_pred(tgm_pred, fold_labels)
+                np.savez_compressed(rank_file, tgm_rank=acc_all)
+
             time = result['time']
             win_starts = result['win_starts']
             mean_acc = np.mean(acc_all, axis=0)
