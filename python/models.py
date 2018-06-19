@@ -1441,7 +1441,10 @@ def lr_tgm_loso_multisub_fold(data_list,
     uni_sen_ints = np.unique(sen_ints)
 
     test_windows = [np.array([i >= w_s and i < w_s + win_len for i in xrange(n_time)]) for w_s in win_starts]
-    print(test_windows)
+
+    for tw in test_windows:
+        print(np.where(tw))
+
     n_w = len(test_windows)
 
     cv_membership = []

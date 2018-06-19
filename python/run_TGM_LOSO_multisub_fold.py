@@ -130,8 +130,8 @@ def run_tgm_exp(experiment,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
 
-        print(time_sub.min())
-        print(time_sub.max())
+        # print(time_sub.min())
+        # print(time_sub.max())
         valid_inds = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
@@ -164,7 +164,7 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
-    print(win_starts)
+    # print(win_starts)
 
 
     if isPerm:
