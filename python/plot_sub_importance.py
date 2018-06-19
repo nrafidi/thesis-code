@@ -120,11 +120,11 @@ if __name__ == '__main__':
     rank_result = np.load(rank_file + '.npz')
     acc_all = rank_result['tgm_rank']
     mean_acc = np.diag(np.mean(acc_all, axis=0))
-    post_onset = time_win >= 0.0
-
-    maps = maps[post_onset]
-    mean_acc = mean_acc[post_onset]
-    time_win = time_win[post_onset]
+    # post_onset = time_win >= 0.0
+    #
+    # maps = maps[post_onset]
+    # mean_acc = mean_acc[post_onset]
+    # time_win = time_win[post_onset]
 
     i_plot = np.where(np.logical_and(time_win >= args.time_to_plot, time_win < args.time_to_plot + 0.1))[0][0]
     print(i_plot)
