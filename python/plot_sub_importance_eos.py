@@ -122,10 +122,6 @@ if __name__ == '__main__':
     else:
         n_rows=1
 
-    sensor_layout = sensor_metadata.read_sensor_metadata()
-    coordinates = _make_coordinates(sensor_layout, args.sensor_type_id)
-    sensors_to_keep = [i_s for i_s, s in enumerate(sensor_layout) if s.sensor_type_id == args.sensor_type_id]
-
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
