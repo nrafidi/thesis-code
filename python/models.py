@@ -1549,7 +1549,7 @@ def lr_tgm_loso_multisub_fold(data_list,
             if wi == 40:
                 if wj == 40:
                     print(uni_test_labels)
-                    print(is_label)
+                    # print(is_label)
                     print(test_data.shape)
                     print(np.where(test_time))
                     print(tgm_acc[0, wi, wj])
