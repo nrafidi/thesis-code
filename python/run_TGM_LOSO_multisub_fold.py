@@ -111,6 +111,8 @@ def run_tgm_exp(experiment,
         print(fname)
         return
 
+    stimuli_voice = list(load_data.read_stimuli(experiment))
+
     data_list = []
     sen_ints = []
     time = []
@@ -127,11 +129,20 @@ def run_tgm_exp(experiment,
                                                                                        is_region_sorted=False,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
-        print(labels_sub)
-        print(data.shape)
-        print(time_sub.min())
-        print(time_sub.max())
-        data_list.append(data)
+
+        valid_inds = []
+        for i_sen_int, sen_int in enumerate(sen_ints):
+            word_list = stimuli_voice[sen_int]['stimulus'].split()
+            if word == 'noun2':
+                if len(word_list) > 5:
+                    valid_inds.append(i_sen_int)
+            else:
+                valid_inds.append(i_sen_int)
+
+        valid_inds = np.array(valid_inds)
+
+        data_list.append(data[valid_inds, ...])
+        print(data_list[i_sub].shape)
         if i_sub == 0:
             sen_ints = sen_ints_sub
             time = time_sub
@@ -150,7 +161,7 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
-    print(win_starts)
+    # print(win_starts)
 
 
     if isPerm:
