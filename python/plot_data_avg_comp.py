@@ -91,6 +91,7 @@ if __name__ == '__main__':
                                                                                            is_region_sorted=False,
                                                                                            tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                            tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
+            print(data.shape)
             valid_inds = []
             for i_sen_int, sen_int in enumerate(sen_ints):
                 word_list = stimuli_voice[sen_int]['stimulus'].split()
@@ -98,11 +99,12 @@ if __name__ == '__main__':
                     valid_inds.append(i_sen_int)
 
             valid_inds = np.array(valid_inds)
-
+            print(valid_inds)
             # time_to_plot = range(180, 254)
             # data = data[:, :, time_to_plot]
             # time = time[time_to_plot]
-            data_to_plot = np.squeeze(np.mean(data[valid_inds, sorted_inds, ::2], axis=0))
+            data = data[valid_inds, ...]
+            data_to_plot = np.squeeze(np.mean(data[:, sorted_inds, ::2], axis=0))
             print(np.max(data_to_plot))
             print(np.min(data_to_plot))
             time = time[::2]
