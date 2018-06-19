@@ -110,13 +110,13 @@ if __name__ == '__main__':
                            rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
             # inst_fig.subplots_adjust(top=0.85)
-            inst_fig.savefig(
-                '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.pdf'.format(
-                    subject=subject, exp=experiment, sen_type=sen_type, word=word, sen_id=sen_id
-                ), bbox_inches='tight')
-
-            inst_fig.savefig(
-                '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.png'.format(
-                    subject=subject, exp=experiment, sen_type=sen_type, word=word, sen_id=sen_id
-                ), bbox_inches='tight')
+            # inst_fig.savefig(
+            #     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.pdf'.format(
+            #         subject=subject, exp=experiment, sen_type=sen_type, word=word, sen_id=sen_id
+            #     ), bbox_inches='tight')
+            #
+            # inst_fig.savefig(
+            #     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{word}_{sen_id}.png'.format(
+            #         subject=subject, exp=experiment, sen_type=sen_type, word=word, sen_id=sen_id
+            #     ), bbox_inches='tight')
     plt.show()
