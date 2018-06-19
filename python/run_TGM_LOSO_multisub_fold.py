@@ -127,6 +127,10 @@ def run_tgm_exp(experiment,
                                                                                        is_region_sorted=False,
                                                                                        tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
                                                                                        tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
+        print(labels_sub)
+        print(data.shape)
+        print(time_sub.min())
+        print(time_sub.max())
         data_list.append(data)
         if i_sub == 0:
             sen_ints = sen_ints_sub
@@ -146,6 +150,7 @@ def run_tgm_exp(experiment,
         win_len = total_win - overlap
 
     win_starts = range(0, total_win - win_len, overlap)
+    print(win_starts)
 
 
     if isPerm:
