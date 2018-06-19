@@ -18,18 +18,16 @@ VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
 VALID_ALGS = ['lr-l2', 'lr-l1']
 VALID_SEN_TYPE = ['active', 'passive']
 
-WORD_COLS = {'krns2': {'art1': 0,
-                       'noun1': 1,
-                       'verb': 2,
-                       'art2': 3,
-                       'noun2': 4},
-             'PassAct2': {'noun1': 0,
-                          'verb': 1,
-                          'noun2': 2},
-             'PassAct3': {'noun1': 0,
-                          'verb': 1,
-                          'noun2': 2}
-             }
+WORD_COLS = {'active': {'noun1': 1,
+                        'verb': 2,
+                        'noun2': 4,
+                        'agent': 1,
+                        'patient': 4},
+             'passive': {'noun1': 1,
+                         'verb': 3,
+                         'noun2': 6,
+                         'agent': 6,
+                         'patient': 1}}
 
 TIME_LIMITS = {'PassAct3':
     {'active': {
@@ -118,8 +116,8 @@ def run_tgm_exp(experiment,
     time = []
     labels = []
     for i_sub, subject in enumerate(['A', 'Z']): #enumerate(VALID_SUBS[experiment]):
-        data, labels_sub, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
-                                                                                       align_to=word,
+        data, _, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
+                                                                                       align_to='noun1',
                                                                                        voice=sen_type,
                                                                                        experiment=experiment,
                                                                                        proc=proc,
@@ -127,23 +125,25 @@ def run_tgm_exp(experiment,
                                                                                        reps_filter=lambda x: [i for i in range(x) if i < 10],
                                                                                        sensor_type=None,
                                                                                        is_region_sorted=False,
-                                                                                       tmin=TIME_LIMITS[experiment][sen_type][word]['tmin'],
-                                                                                       tmax=TIME_LIMITS[experiment][sen_type][word]['tmax'])
+                                                                                       tmin=TIME_LIMITS[experiment][sen_type]['noun1']['tmin'],
+                                                                                       tmax=TIME_LIMITS[experiment][sen_type]['noun1']['tmax'])
 
         # print(labels_sub)
         # print(data.shape)
         valid_inds = []
+        labels_sub = []
         for i_sen_int, sen_int in enumerate(sen_ints_sub):
             word_list = stimuli_voice[sen_int]['stimulus'].split()
             if word == 'noun2':
                 if len(word_list) > 5:
-                    # print(word_list)
+                    labels_sub.append(word_list[WORD_COLS[sen_type][word]])
                     valid_inds.append(i_sen_int)
             else:
+                labels_sub.append(word_list[WORD_COLS[sen_type][word]])
                 valid_inds.append(i_sen_int)
 
         valid_inds = np.array(valid_inds)
-
+        print(labels_sub)
         data_list.append(data[valid_inds, ...])
         print(data_list[i_sub].shape)
         if i_sub == 0:
