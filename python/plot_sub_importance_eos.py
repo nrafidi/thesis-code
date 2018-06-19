@@ -206,7 +206,7 @@ if __name__ == '__main__':
             tplot=args.time_to_plot
         ), bbox_inches='tight')
 
-    hist_fig, hist_ax = plt.subplots((15,15))
+    hist_fig, hist_ax = plt.subplots(figsize=(15,15))
     plt.hist(subject_scores)
     ax.set_xlabel('Importance Score', fontsize=axislabelsize)
     ax.set_ylabel('Number of Subjects', fontsize=axislabelsize)
