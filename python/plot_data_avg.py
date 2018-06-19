@@ -75,9 +75,9 @@ if __name__ == '__main__':
                                                                                            is_region_sorted=False,
                                                                                            tmin=-4.0,
                                                                                            tmax=3.0)
-            # time_to_plot = time < 4.0
-            # data = data[:, :, time_to_plot]
-            # time = time[time_to_plot]
+            time_to_plot = range(180, 254)
+            data = data[:, :, time_to_plot]
+            time = time[time_to_plot]
             if num_instances == 1:
                 data_to_plot = np.squeeze(np.mean(data[:, sorted_inds, ::2], axis=0))
             else:
