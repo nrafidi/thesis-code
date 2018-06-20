@@ -3,10 +3,10 @@ import os.path
 from subprocess import call, check_output
 import time
 
-FOLDS = range(8) #, 'coef']
+FOLDS = range(16) #, 'coef']
 EXPERIMENTS = ['PassAct3']
 SEN_TYPES = ['passive', 'active']
-WORDS = ['noun2']
+WORDS = ['noun1', 'verb']
 WIN_LENS = [50]
 OVERLAPS = [5]
 IS_PERMS = [False]  # True
