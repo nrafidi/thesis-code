@@ -1,15 +1,15 @@
 import itertools
 import os.path
-import batch_experiments_multisub_fold_short as batch_exp
+import batch_experiments_multisub_fold_tSSS as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 
-SAVE_FILE = '{dir}TGM-LOSO_multisub_short_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+SAVE_FILE = '{dir}TGM-LOSO_tsss_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{mode}'
 
 
-NEW_SAVE_FILE = '{dir}TGM-LOSO_multisub_short_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+NEW_SAVE_FILE = '{dir}TGM-LOSO_tsss_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{fold}'
 
