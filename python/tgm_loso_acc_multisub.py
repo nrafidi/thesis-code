@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
             # if args.short:
             min_time = 1.0
-            text_to_write = text_to_write[2:]
+            text_to_write = text_to_write[4:]
             max_line -= 3 * time_step
 
             if not args.short:
