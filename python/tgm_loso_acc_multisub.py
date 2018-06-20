@@ -171,7 +171,7 @@ if __name__ == '__main__':
             if args.short:
                 min_time = 1.0
                 text_to_write = text_to_write[2:]
-                max_line -= 4 * time_step
+                max_line -= 3 * time_step
                 if word != 'noun2':
                     mean_acc = mean_acc[4 * time_step:, :]
                     mean_acc = mean_acc[:, 4 * time_step:]
