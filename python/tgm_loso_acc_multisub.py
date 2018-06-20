@@ -11,7 +11,7 @@ from rank_from_pred import rank_from_pred
 
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
-MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub{short}{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{rank_str}{mode}'
 
@@ -43,6 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--exc', action='store_true')
+    parser.add_argument('--short', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -89,11 +90,17 @@ if __name__ == '__main__':
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
         for i_word, word in enumerate(word_list):
+            if args.short and word == 'noun2':
+                short_str = '_short'
+            else:
+                short_str = ''
+
 
             multi_file = MULTI_SAVE_FILE.format(dir=top_dir,
                                                 sen_type=sen_type,
                                                 word=word,
                                                 win_len=args.win_len,
+                                                short=short_str,
                                                 exc=exc_str,
                                                 ov=args.overlap,
                                                 perm='F',
@@ -110,6 +117,7 @@ if __name__ == '__main__':
                                                 word=word,
                                                 win_len=args.win_len,
                                                 exc=exc_str,
+                                                short=short_str,
                                                 ov=args.overlap,
                                                 perm='F',
                                                 alg=args.alg,
@@ -201,19 +209,27 @@ if __name__ == '__main__':
     combo_fig.text(0.488, 0.8575, 'Active', ha='center', fontsize=axistitlesize+2)
     combo_fig.text(0.488, 0.475, 'Passive', ha='center', fontsize=axistitlesize+2)
     combo_fig.subplots_adjust(top=0.85)
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_multisub{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+
+    if args.short:
+        short_str = '_short'
+    else:
+        short_str = ''
+
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
+                    short=short_str,
                     exc=exc_str,
                     num_instances=args.num_instances
                 ), bbox_inches='tight')
 
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_multisub{exc}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_multisub{short}{exc}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
+            short=short_str,
             exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
