@@ -138,7 +138,7 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            if os.path.isfile(rank_file + '.npz'): # and word != 'noun2':
+            if os.path.isfile(rank_file + '.npz') and word != 'noun2':
                 rank_result = np.load(rank_file + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
