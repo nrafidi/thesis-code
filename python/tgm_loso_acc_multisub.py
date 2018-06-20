@@ -169,14 +169,14 @@ if __name__ == '__main__':
                 start_line = - time_adjust
 
             # if args.short:
-            min_time = 1.0
-            text_to_write = text_to_write[2:]
-            max_line -= 2 * time_step
-
-            if not args.short:
-                mean_acc = mean_acc[2 * time_step:, :]
-                mean_acc = mean_acc[:, 2 * time_step:]
-                time_win = time_win[2 * time_step:]
+            min_time = 0.0
+            # text_to_write = text_to_write[2:]
+            # max_line -= 2 * time_step
+            #
+            # if not args.short:
+            #     mean_acc = mean_acc[2 * time_step:, :]
+            #     mean_acc = mean_acc[:, 2 * time_step:]
+            #     time_win = time_win[2 * time_step:]
             # elif word != 'noun2':
             #     mean_acc = mean_acc[2 * time_step:, :]
             #     mean_acc = mean_acc[:, 2 * time_step:]
