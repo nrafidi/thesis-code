@@ -69,6 +69,9 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--exc', action='store_true')
+    parser.add_argument('--short', action='store_true')
+    parser.add_argument('--tsss', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -102,7 +105,15 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
+    if args.exc:
+        exc_str = '_exc'
+    else:
+        exc_str = ''
 
+    if args.tsss:
+        tsss_str = '_tsss'
+    else:
+        tsss_str = ''
 
     sen_accs = []
     sen_stds = []
@@ -119,11 +130,18 @@ if __name__ == '__main__':
         win_starts = []
         sub_word_diags = []
         for word in word_list:
+            if args.short and word == 'noun2':
+                short_str = '_short'
+            else:
+                short_str = ''
             top_dir = tgm_loso_acc_multisub.TOP_DIR.format(exp=args.experiment)
             multi_file = tgm_loso_acc_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
                                                 sen_type=sen_type,
                                                 word=word,
                                                 win_len=args.win_len,
+                                              exc=exc_str,
+                                              tsss=tsss_str,
+                                              short=short_str,
                                                 ov=args.overlap,
                                                 perm='F',
                                                 alg=args.alg,
@@ -138,6 +156,9 @@ if __name__ == '__main__':
                                                sen_type=sen_type,
                                                word=word,
                                                win_len=args.win_len,
+                                             exc=exc_str,
+                                             tsss=tsss_str,
+                                             short=short_str,
                                                ov=args.overlap,
                                                perm='F',
                                                alg=args.alg,
@@ -218,18 +239,30 @@ if __name__ == '__main__':
     # sen_fig.tight_layout()
     sen_fig.text(0.5, 0.04, 'Time Relative to Sentence Onset (s)', ha='center', fontsize=axislabelsize)
     plt.subplots_adjust(top=0.8)
+
+    if args.short:
+        short_str = '_short'
+    else:
+        short_str = ''
+
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc{tsss}{short}{exc}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
+            short=short_str,
+            tsss=tsss_str,
+            exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_diag_acc{tsss}{short}{exc}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
+            short=short_str,
+            tsss=tsss_str,
+            exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
 

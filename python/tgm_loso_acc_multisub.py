@@ -223,21 +223,23 @@ if __name__ == '__main__':
     else:
         short_str = ''
 
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
                     short=short_str,
+                    tsss=tsss_str,
                     exc=exc_str,
                     num_instances=args.num_instances
                 ), bbox_inches='tight')
 
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm_{sen_type}_multisub{short}{exc}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
             short=short_str,
+            tsss=tsss_str,
             exc=exc_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
