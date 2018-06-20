@@ -11,7 +11,7 @@ from rank_from_pred import rank_from_pred
 
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
-MULTI_SAVE_FILE = '{dir}TGM-LOSO_multisub{short}{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+MULTI_SAVE_FILE = '{dir}TGM-LOSO{tsss}_multisub{short}{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{rank_str}{mode}'
 
@@ -44,6 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--exc', action='store_true')
     parser.add_argument('--short', action='store_true')
+    parser.add_argument('--tsss', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -79,6 +80,11 @@ if __name__ == '__main__':
     else:
         exc_str = ''
 
+    if args.tsss:
+        tsss_str = '_tsss'
+    else:
+        tsss_str = ''
+
     word_list = ['noun1', 'verb', 'noun2']
     num_plots = len(word_list)
     time_step = int(250 / args.overlap)
@@ -102,6 +108,7 @@ if __name__ == '__main__':
                                                 win_len=args.win_len,
                                                 short=short_str,
                                                 exc=exc_str,
+                                                tsss=tsss_str,
                                                 ov=args.overlap,
                                                 perm='F',
                                                 alg=args.alg,
@@ -117,6 +124,7 @@ if __name__ == '__main__':
                                                 word=word,
                                                 win_len=args.win_len,
                                                 exc=exc_str,
+                                                tsss=tsss_str,
                                                 short=short_str,
                                                 ov=args.overlap,
                                                 perm='F',
