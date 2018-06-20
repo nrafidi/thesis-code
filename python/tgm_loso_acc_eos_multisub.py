@@ -182,8 +182,17 @@ if __name__ == '__main__':
 
         time = result['time']
         win_starts = result['win_starts']
-
+        time_win = time[win_starts]
         mean_acc = np.mean(multi_fold_acc, axis=0)
+
+        if args.short:
+            min_time = 1.0
+            if word != 'noun2':
+                mean_acc = mean_acc[2*time_step:, :]
+                mean_acc = mean_acc[:, 2 * time_step:]
+                time_win = time_win[2*time_step:]
+        else:
+            min_time = 0.0
 
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto',
@@ -191,10 +200,10 @@ if __name__ == '__main__':
 
         ax.set_title('{word}'.format(
             word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
-        time_win = time[win_starts]
+
         num_time = len(time_win)
         ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-        min_time = 0.0
+
         max_time = 0.5 * len(time_win) / time_step
         label_time = np.arange(min_time, max_time, 0.5)
 
