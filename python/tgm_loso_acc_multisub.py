@@ -159,24 +159,28 @@ if __name__ == '__main__':
             print(meow)
             time_win = time[win_starts]
 
+            if sen_type == 'active':
+                text_to_write = np.array(['Det', 'Noun', 'Verb', 'Det', 'Noun.'])
+                max_line = 2.51 * 2 * time_step - time_adjust
+                start_line = - time_adjust
+            else:
+                text_to_write = np.array(['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.'])
+                max_line = 3.51 * 2 * time_step - time_adjust
+                start_line = - time_adjust
+
             if args.short:
                 min_time = 1.0
+                text_to_write = text_to_write[2:]
+                start_line += 4*time_step
                 if word != 'noun2':
-                    mean_acc = mean_acc[2 * time_step:, :]
-                    mean_acc = mean_acc[:, 2 * time_step:]
-                    time_win = time_win[2 * time_step:]
+                    mean_acc = mean_acc[4 * time_step:, :]
+                    mean_acc = mean_acc[:, 4 * time_step:]
+                    time_win = time_win[4 * time_step:]
             else:
                 min_time = 0.0
 
 
-            if sen_type == 'active':
-                text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
-                max_line = 2.51 * 2 * time_step - time_adjust
-                start_line = - time_adjust
-            else:
-                text_to_write = ['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.']
-                max_line = 3.51 * 2 * time_step - time_adjust
-                start_line = - time_adjust
+
             print(mean_acc.shape)
             print(np.max(mean_acc))
             num_time = len(time_win)
