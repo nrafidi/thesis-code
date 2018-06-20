@@ -138,7 +138,7 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            if os.path.isfile(rank_file + '.npz'): # and word != 'noun2':
+            if os.path.isfile(rank_file + '.npz') and not args.short:
                 rank_result = np.load(rank_file + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
@@ -177,10 +177,10 @@ if __name__ == '__main__':
                 mean_acc = mean_acc[2 * time_step:, :]
                 mean_acc = mean_acc[:, 2 * time_step:]
                 time_win = time_win[2 * time_step:]
-            elif word != 'noun2':
-                mean_acc = mean_acc[2 * time_step:, :]
-                mean_acc = mean_acc[:, 2 * time_step:]
-                time_win = time_win[2 * time_step:]
+            # elif word != 'noun2':
+            #     mean_acc = mean_acc[2 * time_step:, :]
+            #     mean_acc = mean_acc[:, 2 * time_step:]
+            #     time_win = time_win[2 * time_step:]
             # else:
             #     min_time = 0.0
 
