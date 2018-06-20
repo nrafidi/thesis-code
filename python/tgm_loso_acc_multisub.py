@@ -159,6 +159,16 @@ if __name__ == '__main__':
             print(meow)
             time_win = time[win_starts]
 
+            if args.short:
+                min_time = 1.0
+                if word != 'noun2':
+                    mean_acc = mean_acc[2 * time_step:, :]
+                    mean_acc = mean_acc[:, 2 * time_step:]
+                    time_win = time_win[2 * time_step:]
+            else:
+                min_time = 0.0
+
+
             if sen_type == 'active':
                 text_to_write = ['Det', 'Noun', 'Verb', 'Det', 'Noun.']
                 max_line = 2.51 * 2 * time_step - time_adjust
@@ -184,7 +194,7 @@ if __name__ == '__main__':
                 ax.set_xlim([0.0, float(num_time)])
                 ax.set_ylim([float(num_time), 0.0])
 
-            min_time = 0.0
+
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.5)
             ax.set_xticklabels(label_time)
