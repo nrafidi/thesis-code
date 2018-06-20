@@ -44,6 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--exc', action='store_true')
     parser.add_argument('--short', action='store_true')
+    parser.add_argument('--long', action='store_true')
     parser.add_argument('--tsss', action='store_true')
     args = parser.parse_args()
 
@@ -98,6 +99,8 @@ if __name__ == '__main__':
         for i_word, word in enumerate(word_list):
             if args.short: # and word == 'noun2':
                 short_str = '_short'
+            elif args.long:
+                short_str = '_long'
             else:
                 short_str = ''
 
@@ -241,6 +244,8 @@ if __name__ == '__main__':
 
     if args.short:
         short_str = '_short'
+    elif args.long:
+        short_str = '_long'
     else:
         short_str = ''
 

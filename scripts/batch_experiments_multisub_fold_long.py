@@ -3,17 +3,11 @@ import os.path
 from subprocess import call, check_output
 import time
 
-TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
-SAVE_DIR = '{top_dir}/{sub}/'
-SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
-            'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'nr{rep}_rsPerm{rsP}_{mode}'
-
 FOLDS = range(16) #, 'coef']
 EXPERIMENTS = ['PassAct3']
 SEN_TYPES = ['active', 'passive']
 WORDS = ['noun1', 'verb', 'noun2']
-WIN_LENS = [5, 10]
+WIN_LENS = [50]
 OVERLAPS = [5]
 IS_PERMS = [False]  # True
 ALGS = ['lr-l2']  # GNB
@@ -43,8 +37,8 @@ if __name__ == '__main__':
     qsub_call = 'qsub -q default -N {job_name} -l walltime=168:00:00,mem=16GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
-                '-e {errfile} -o {outfile} submit_experiment_multisub_fold.sh'
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                '-e {errfile} -o {outfile} submit_experiment_multisub_fold_long.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
                                    OVERLAPS,

@@ -7,7 +7,7 @@ import random
 import warnings
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
-SAVE_FILE = '{dir}TGM-LOSO_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+SAVE_FILE = '{dir}TGM-LOSO_multisub_long_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{fold}'
 NUM_SENTENCES = 16
@@ -31,13 +31,13 @@ WORD_COLS = {'active': {'noun1': 1,
 
 TIME_LIMITS = {'PassAct3':
     {'active': {
-            'noun1': {'tmin': -0.5, 'tmax': 5.0},
-            'verb': {'tmin': -1.0, 'tmax': 4.5},
-            'noun2': {'tmin': -3.0, 'tmax': 3.5}},
+            'noun1': {'tmin': -0.5, 'tmax': 6.0},
+            'verb': {'tmin': 0.0, 'tmax': 3.5},
+            'noun2': {'tmin': -1.0, 'tmax': 2.5}},
         'passive': {
-            'noun1': {'tmin': -0.5, 'tmax': 5.0},
-            'verb': {'tmin': -1.5, 'tmax': 4.0},
-            'noun2': {'tmin': -3.0, 'tmax': 2.5}}},
+            'noun1': {'tmin': -0.5, 'tmax': 6.0},
+            'verb': {'tmin': -0.5, 'tmax': 3.0},
+            'noun2': {'tmin': -1.0, 'tmax': 2.5}}},
 'krns2': {
         'active': {
             'noun1': {'tmin': -0.5, 'tmax': 3.8},
