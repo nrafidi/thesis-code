@@ -96,7 +96,7 @@ if __name__ == '__main__':
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
         for i_word, word in enumerate(word_list):
-            if args.short and word == 'noun2':
+            if args.short: # and word == 'noun2':
                 short_str = '_short'
             else:
                 short_str = ''
