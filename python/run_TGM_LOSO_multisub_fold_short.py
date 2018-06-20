@@ -115,7 +115,7 @@ def run_tgm_exp(experiment,
     sen_ints = []
     time = []
     labels = []
-    for i_sub, subject in enumerate(['A', 'Z']):#enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
         data, _, sen_ints_sub, time_sub, sensor_regions = load_data.load_sentence_data_v2(subject=subject,
                                                                                        align_to='noun1',
                                                                                        voice=sen_type,
