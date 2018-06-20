@@ -31,11 +31,11 @@ WORD_COLS = {'active': {'noun1': 1,
 
 TIME_LIMITS = {'PassAct3':
     {'active': {
-            'noun1': {'tmin': 0.5, 'tmax': 4.0},
+            'noun1': {'tmin': 0.5, 'tmax': 5.0},
             'verb': {'tmin': 0.0, 'tmax': 3.5},
             'noun2': {'tmin': -1.0, 'tmax': 2.5}},
         'passive': {
-            'noun1': {'tmin': 0.5, 'tmax': 4.0},
+            'noun1': {'tmin': 0.5, 'tmax': 5.0},
             'verb': {'tmin': -0.5, 'tmax': 3.0},
             'noun2': {'tmin': -1.0, 'tmax': 2.5}}},
 'krns2': {
