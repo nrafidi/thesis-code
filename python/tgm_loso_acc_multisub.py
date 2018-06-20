@@ -171,7 +171,7 @@ if __name__ == '__main__':
             if args.short:
                 min_time = 1.0
                 text_to_write = text_to_write[2:]
-                max_line -= 4 * time_step + 1
+                max_line -= 4 * time_step
                 if word != 'noun2':
                     mean_acc = mean_acc[4 * time_step:, :]
                     mean_acc = mean_acc[:, 4 * time_step:]
@@ -205,7 +205,7 @@ if __name__ == '__main__':
 
             ax.set_yticklabels(label_time)
             ax.tick_params(labelsize=ticklabelsize)
-            for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+            for i_v, v in enumerate(np.arange(start_line, max_line + 5, time_step)):
                 ax.axvline(x=v, color='w')
                 if i_v == 0:
                     buff_space = 0.125
