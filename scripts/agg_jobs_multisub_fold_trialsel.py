@@ -71,9 +71,9 @@ if __name__ == '__main__':
                                         rsP=rs,
                                         nr=nr,
                                         mode='acc')
-        # if os.path.isfile(complete_job + '.npz'):
-        #     print(complete_job)
-        #     continue
+        if os.path.isfile(complete_job + '.npz'):
+            print(complete_job)
+            continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
