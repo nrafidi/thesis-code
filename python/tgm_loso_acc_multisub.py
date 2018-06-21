@@ -13,7 +13,7 @@ from rank_from_pred import rank_from_pred
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO{tsss}_multisub{short}{exc}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{rank_str}{mode}'
+            'rsPerm{rsP}{rep_str}_{rank_str}{mode}'
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
 
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('--short', action='store_true')
     parser.add_argument('--long', action='store_true')
     parser.add_argument('--tsss', action='store_true')
+    parser.add_argument('--num_reps', type=int, default=10)
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -86,6 +87,11 @@ if __name__ == '__main__':
     else:
         tsss_str = ''
 
+    if args.num_reps < 10:
+        rep_str = '_nr{nr}'.format(nr=args.num_reps)
+    else:
+        rep_str = ''
+
     word_list = ['noun1', 'verb', 'noun2']
     num_plots = len(word_list)
     time_step = int(250 / args.overlap)
@@ -120,6 +126,7 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                                rep_str=rep_str,
                                                 rank_str='',
                                                 mode='acc')
             rank_file = MULTI_SAVE_FILE.format(dir=top_dir,
@@ -137,6 +144,7 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                               rep_str=rep_str,
                                                 rank_str='rank',
                                                 mode='acc')
 
@@ -254,24 +262,26 @@ if __name__ == '__main__':
     else:
         short_str = ''
 
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}{rep_str}.pdf'.format(
                     exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
                     short=short_str,
                     tsss=tsss_str,
                     exc=exc_str,
+                    rep_str=rep_str,
                     num_instances=args.num_instances
                 ), bbox_inches='tight')
 
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_avg-tgm{tsss}_multisub{short}{exc}_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}{rep_str}.png'.format(
             exp=args.experiment, sen_type='both', word='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=args.win_len,
             overlap=args.overlap,
             short=short_str,
             tsss=tsss_str,
             exc=exc_str,
+            rep_str=rep_str,
             num_instances=args.num_instances
         ), bbox_inches='tight')
 
