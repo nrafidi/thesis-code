@@ -34,8 +34,8 @@ if __name__ == '__main__':
                                    [1],
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
-                                   batch_exp.NUM_REPS,
-                                   batch_exp.WORDS)
+                                   batch_exp.WORDS,
+                                   batch_exp.NUM_REPS)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
