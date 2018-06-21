@@ -93,7 +93,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(6*num_plots, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(2, num_plots),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5, share_all=True)
+                          cbar_pad=0.5, share_all=False)
     i_combo = 0
     for i_sen, sen_type in enumerate(['active', 'passive']):
         for i_word, word in enumerate(word_list):
@@ -141,7 +141,8 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            if os.path.isfile(rank_file + '.npz') and not args.short:
+            rerun = args.long and sen_type == 'passive'
+            if os.path.isfile(rank_file + '.npz') and not rerun:
                 rank_result = np.load(rank_file + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
@@ -225,10 +226,7 @@ if __name__ == '__main__':
                     ax.text(v + buff_space * 2*time_step, num_time - 0.1*time_step, text_to_write[i_v], color='w', fontsize=10)
 
             if args.long:
-                if sen_type == 'active':
-                    ax.axvline(x=max_line+6*time_step, color='w')
-                else:
-                    ax.axvline(x=max_line + 4 * time_step, color='w')
+                ax.axvline(x=max_line+6*time_step, color='w')
 
             ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')

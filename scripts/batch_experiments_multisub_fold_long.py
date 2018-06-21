@@ -5,7 +5,7 @@ import time
 
 FOLDS = range(16) #, 'coef']
 EXPERIMENTS = ['PassAct3']
-SEN_TYPES = ['active', 'passive']
+SEN_TYPES = ['passive']
 WORDS = ['noun1', 'verb', 'noun2']
 WIN_LENS = [50]
 OVERLAPS = [5]
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub -q default -N {job_name} -l walltime=168:00:00,mem=16GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
                 '-e {errfile} -o {outfile} submit_experiment_multisub_fold_long.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
