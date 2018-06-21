@@ -67,7 +67,7 @@ if __name__ == '__main__':
     else:
         avg_test_str = 'No Test Sample Average'
 
-    ticklabelsize = 14
+    ticklabelsize = 12
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
