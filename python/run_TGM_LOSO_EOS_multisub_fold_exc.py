@@ -12,7 +12,7 @@ SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_exc_{sen_type}_{word}_win{win_len}_ov{ov
             'rsPerm{rsP}_{fold}'
 NUM_SENTENCES = 16
 NUM_REPS = {'krns2': 15, 'PassAct2': 10, 'PassAct3': 10}
-VALID_SUBS = {'krns2': ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+VALID_SUBS = {'krns2': ['C', 'D', 'E', 'G', 'I'],
               'PassAct2': ['A', 'B', 'C'],
               'PassAct3': ['A', 'B', 'C', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'N', 'O', 'S', 'U', 'V', 'Z']}
 VALID_ALGS = ['lr-l2', 'lr-l1']

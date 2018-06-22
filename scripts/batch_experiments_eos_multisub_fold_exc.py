@@ -17,17 +17,17 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['PassAct3']
+EXPERIMENTS = ['krns2']
 SEN_TYPES = ['pooled']
-WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
-WIN_LENS = [50]
-OVERLAPS = [5]
+WORDS = ['verb']
+WIN_LENS = [2]
+OVERLAPS = [2]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
 DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [2]
+NUM_INSTANCESS = [1]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
