@@ -153,15 +153,15 @@ if __name__ == '__main__':
                                                        tmin=-1.0,
                                                        tmax=4.5)
     fig, ax = plt.subplots()
-    other_sub_data = np.squeeze(data[sen_list[0], :, :])
+    other_sub_data = np.squeeze(other_sub_data[sen_list[0], :, :])
 
     data_to_plot = data_to_plot - other_sub_data[sorted_inds, ::2]
     print(np.max(data_to_plot))
     print(np.min(data_to_plot))
     time = time[::2] + 0.5
     num_time = time.size
-    im = ax.imshow(data_to_plot, aspect='auto', interpolation='nearest', vmin=-1.6e-11,
-                   vmax=1.6e-11)
+    im = ax.imshow(data_to_plot, aspect='auto', interpolation='nearest', vmin=-1.6e-12,
+                   vmax=1.6e-12)
     ax.set_yticks(yticks_sens[1:])
     ax.set_yticklabels(uni_reg[1:])
     ax.set_xticks(range(0, num_time, time_step))
