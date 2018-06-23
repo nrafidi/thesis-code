@@ -40,7 +40,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     experiment = args.experiment
     subject = args.subject
-    word = args.word
+    # word = args.word
     proc = args.proc
 
     ticklabelsize = 14
