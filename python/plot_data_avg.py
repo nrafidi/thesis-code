@@ -92,7 +92,7 @@ if __name__ == '__main__':
                 else:
                     data = np.squeeze(data[sen_id, :, :])
 
-                data_to_plot = data[:, sorted_inds, ::2]
+                data_to_plot = data[sorted_inds, ::2]
                 print(np.max(data_to_plot))
                 print(np.min(data_to_plot))
                 time = time[::2]
