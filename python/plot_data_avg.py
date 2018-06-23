@@ -153,7 +153,7 @@ if __name__ == '__main__':
                                                        tmin=-1.0,
                                                        tmax=4.5)
     fig, ax = plt.subplots()
-    other_sub_data = np.squeeze(other_sub_data[sen_list[0], :, :])
+    other_sub_data = np.squeeze(other_sub_data[sen_id, :, :])
 
     data_to_plot = data_to_plot - other_sub_data[sorted_inds, ::2]
     print(np.max(data_to_plot))
