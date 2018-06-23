@@ -188,7 +188,7 @@ if __name__ == '__main__':
     fig.colorbar(im)
     fig.subplots_adjust(top=0.85)
     fig.suptitle(
-        'MEG Data Difference between Subjects {subject} and I\nfor {sen_type} sentence {sen_id}'.format(sen_type=sen_type, sen_id=sen_id,
+        'MEG Data Difference between Subjects {subject} and I\nfor {sen_type} sentence {sen_id}, 10 trial average'.format(sen_type=sen_type, sen_id=sen_id,
                                                                               subject=subject),
         fontsize=suptitlesize)
 
