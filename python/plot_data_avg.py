@@ -129,7 +129,7 @@ if __name__ == '__main__':
                 inst_fig.text(0.04, 0.45, 'Sensors', va='center',
                                rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
-                inst_fig.subplots_adjust(top=0.95)
+                inst_fig.subplots_adjust(top=0.98)
                 inst_fig.savefig(
                     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.pdf'.format(
                         subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
