@@ -61,11 +61,11 @@ if __name__ == '__main__':
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
         if sen_type == 'active':
-            text_to_write = np.array(['Det', 'Noun', 'Verb', 'Det', 'Noun.'])
+            text_to_write = np.array(['A', 'dog', 'found', 'the', 'peach.'])
             max_line = 2.51 * 2 * time_step
 
         else:
-            text_to_write = np.array(['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.'])
+            text_to_write = np.array(['The', 'peach', 'was', 'found', 'by', 'the', 'dog.'])
             max_line = 3.51 * 2 * time_step
         for sen_id in sen_list:
             inst_fig = plt.figure(figsize=(16, 19))
@@ -139,4 +139,62 @@ if __name__ == '__main__':
                     '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.png'.format(
                         subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
                     ), bbox_inches='tight')
+
+
+    other_sub_data = load_data.load_sentence_data_v2(subject='I',
+                                                       align_to='noun1',
+                                                       voice=['active'],
+                                                       experiment=experiment,
+                                                       proc=proc,
+                                                       num_instances=1,
+                                                       reps_filter=lambda x: [i for i in range(x) if i < 10],
+                                                       sensor_type=None,
+                                                       is_region_sorted=False,
+                                                       tmin=-1.0,
+                                                       tmax=4.5)
+    fig, ax = plt.subplots()
+    other_sub_data = np.squeeze(data[sen_list[0], :, :])
+
+    data_to_plot = data_to_plot - other_sub_data[sorted_inds, ::2]
+    print(np.max(data_to_plot))
+    print(np.min(data_to_plot))
+    time = time[::2] + 0.5
+    num_time = time.size
+    im = ax.imshow(data_to_plot, aspect='auto', interpolation='nearest', vmin=-1.6e-11,
+                   vmax=1.6e-11)
+    ax.set_yticks(yticks_sens[1:])
+    ax.set_yticklabels(uni_reg[1:])
+    ax.set_xticks(range(0, num_time, time_step))
+    time_labels = time[::time_step]
+    time_labels[np.abs(time_labels) < 1e-10] = 0.0
+    ax.set_xticklabels(['%.1f' % tm for tm in time_labels])
+    ax.tick_params(labelsize=ticklabelsize)
+
+    for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
+        ax.axvline(x=v, color='k')
+
+        buff_space = 0.025
+        if i_v < len(text_to_write):
+            ax.text(v + buff_space * 2 * time_step, 30, text_to_write[i_v],
+                    color='k', fontsize=14)
+
+
+    ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
+    ax.set_ylabel('Sensors', fontsize=axislabelsize)
+
+    fig.suptitle(
+        'MEG Data Difference between Subjects {subject} and I\nfor {sen_type} sentence {sen_id}'.format(sen_type=sen_type, sen_id=sen_id,
+                                                                              subject=subject),
+        fontsize=suptitlesize)
+
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.pdf'.format(
+            subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
+        ), bbox_inches='tight')
+
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_{subject}-I_avg-data-diff_{sen_type}_{sen_id}.png'.format(
+            subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
+        ), bbox_inches='tight')
+
     plt.show()
