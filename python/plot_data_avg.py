@@ -126,7 +126,7 @@ if __name__ == '__main__':
                 print(cbar)
                 inst_fig.suptitle('MEG Data for {sen_type} sentence {sen_id}, Subject {subject}'.format(sen_type=sen_type, sen_id=sen_id, subject=subject),
                                    fontsize=suptitlesize)
-                inst_fig.text(0.04, 0.65, 'Sensors', va='center',
+                inst_fig.text(0.04, 0.5, 'Sensors', va='center',
                                rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
                 inst_fig.subplots_adjust(top=0.98)
