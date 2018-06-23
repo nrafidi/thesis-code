@@ -68,7 +68,7 @@ if __name__ == '__main__':
             text_to_write = np.array(['Det', 'Noun', 'was', 'Verb', 'by', 'Det', 'Noun.'])
             max_line = 3.51 * 2 * time_step
         for sen_id in sen_list:
-            inst_fig = plt.figure(figsize=(16, 20))
+            inst_fig = plt.figure(figsize=(16, 19))
             inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                                     axes_pad=0.7, cbar_mode='single', cbar_location='right',
                                     cbar_pad=0.5, cbar_size='2%', share_all=True)
@@ -126,7 +126,7 @@ if __name__ == '__main__':
                 print(cbar)
                 inst_fig.suptitle('MEG Data for {sen_type} sentence {sen_id}, Subject {subject}'.format(sen_type=sen_type, sen_id=sen_id, subject=subject),
                                    fontsize=suptitlesize)
-                inst_fig.text(0.04, 0.45, 'Sensors', va='center',
+                inst_fig.text(0.04, 0.6, 'Sensors', va='center',
                                rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
 
                 inst_fig.subplots_adjust(top=0.98)
