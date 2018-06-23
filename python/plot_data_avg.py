@@ -54,7 +54,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     time_step = int(250 / 2)
-    start_line = 0.5
+    start_line = time_step
     sen_type_list = ['active'] #, 'passive']
     sen_list = [0] #, 16]
     inst_list = [10, 5, 2, 1]
