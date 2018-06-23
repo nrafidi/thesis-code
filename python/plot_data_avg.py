@@ -55,8 +55,8 @@ if __name__ == '__main__':
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     time_step = int(250 / 2)
     start_line = 0.0
-    sen_type_list = ['active', 'passive']
-    sen_list = [0, 16]
+    sen_type_list = ['active'] #, 'passive']
+    sen_list = [0] #, 16]
     inst_list = [10, 5, 2, 1]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
@@ -109,14 +109,14 @@ if __name__ == '__main__':
                 ax.tick_params(labelsize=ticklabelsize)
 
                 for i_v, v in enumerate(np.arange(start_line, max_line + 5, time_step)):
-                    ax.axvline(x=v, color='w')
+                    ax.axvline(x=v, color='k')
                     if i_v == 0:
                         buff_space = 0.125
                     else:
                         buff_space = 0.025
                     if i_v < len(text_to_write):
-                        ax.text(v + buff_space * 2 * time_step, num_time - 0.1 * time_step, text_to_write[i_v],
-                                color='r', fontsize=12)
+                        ax.text(v + buff_space * 2 * time_step, 10, text_to_write[i_v],
+                                color='k', fontsize=12)
 
                 ax.set_title(title_list[i_inst], fontsize=axistitlesize)
                 if i_inst == 3:
