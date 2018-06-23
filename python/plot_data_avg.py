@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Sensors', fontsize=axislabelsize)
-
+    fig.colorbar(im)
     fig.suptitle(
         'MEG Data Difference between Subjects {subject} and I\nfor {sen_type} sentence {sen_id}'.format(sen_type=sen_type, sen_id=sen_id,
                                                                               subject=subject),
