@@ -110,10 +110,8 @@ if __name__ == '__main__':
 
                 for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                     ax.axvline(x=v, color='k')
-                    if i_v == 0:
-                        buff_space = 0.125
-                    else:
-                        buff_space = 0.025
+
+                    buff_space = 0.025
                     if i_v < len(text_to_write):
                         ax.text(v + buff_space * 2 * time_step, 30, text_to_write[i_v],
                                 color='k', fontsize=14)
