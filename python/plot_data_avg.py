@@ -54,7 +54,7 @@ if __name__ == '__main__':
     uni_reg = np.unique(sorted_reg)
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     time_step = int(250 / 2)
-    start_line = 0.0
+    start_line = 0.5
     sen_type_list = ['active'] #, 'passive']
     sen_list = [0] #, 16]
     inst_list = [10, 5, 2, 1]
@@ -108,7 +108,7 @@ if __name__ == '__main__':
                 ax.set_xticklabels(['%.1f' % tm for tm in time_labels])
                 ax.tick_params(labelsize=ticklabelsize)
 
-                for i_v, v in enumerate(np.arange(start_line, max_line + 5, time_step)):
+                for i_v, v in enumerate(np.arange(start_line, max_line, time_step)):
                     ax.axvline(x=v, color='k')
                     if i_v == 0:
                         buff_space = 0.125
