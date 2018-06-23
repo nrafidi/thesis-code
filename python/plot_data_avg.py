@@ -153,6 +153,10 @@ if __name__ == '__main__':
                                                        tmin=-1.0,
                                                        tmax=4.5)
     fig, ax = plt.subplots()
+    print(type(other_sub_data))
+    other_sub_data = other_sub_data[0]
+    print(other_sub_data.shape)
+    print(sen_id)
     other_sub_data = np.squeeze(other_sub_data[sen_id, :, :])
 
     data_to_plot = data_to_plot - other_sub_data[sorted_inds, ::2]
