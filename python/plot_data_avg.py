@@ -152,7 +152,7 @@ if __name__ == '__main__':
                                                        is_region_sorted=False,
                                                        tmin=-1.0,
                                                        tmax=4.5)
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(16, 10))
     print(type(other_sub_data))
     other_sub_data = other_sub_data[0]
     print(other_sub_data.shape)
@@ -164,8 +164,8 @@ if __name__ == '__main__':
     print(np.min(data_to_plot))
     time = time[::2] + 0.5
     num_time = time.size
-    im = ax.imshow(data_to_plot, aspect='auto', interpolation='nearest', vmin=-1.6e-12,
-                   vmax=1.6e-12)
+    im = ax.imshow(data_to_plot, aspect='auto', interpolation='nearest', vmin=-1.6e-11,
+                   vmax=1.6e-11)
     ax.set_yticks(yticks_sens[1:])
     ax.set_yticklabels(uni_reg[1:])
     ax.set_xticks(range(0, num_time, time_step))
@@ -186,13 +186,14 @@ if __name__ == '__main__':
     ax.set_xlabel('Time Relative to Sentence Onset (s)', fontsize=axislabelsize)
     ax.set_ylabel('Sensors', fontsize=axislabelsize)
     fig.colorbar(im)
+    fig.subplots_adjust(top=0.85)
     fig.suptitle(
         'MEG Data Difference between Subjects {subject} and I\nfor {sen_type} sentence {sen_id}'.format(sen_type=sen_type, sen_id=sen_id,
                                                                               subject=subject),
         fontsize=suptitlesize)
 
     fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_{subject}-I_avg-data-diff_{sen_type}_{sen_id}.pdf'.format(
             subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
         ), bbox_inches='tight')
 
