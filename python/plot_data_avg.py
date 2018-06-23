@@ -95,15 +95,15 @@ if __name__ == '__main__':
                 data_to_plot = data[sorted_inds, ::2]
                 print(np.max(data_to_plot))
                 print(np.min(data_to_plot))
-                time = time[::2]
+                time = time[::2] + 0.5
                 num_time = time.size
                 ax = inst_grid[i_inst]
                 im = ax.imshow(data_to_plot, interpolation='nearest', vmin=-1.6e-11,
                               vmax=1.6e-11)
                 ax.set_yticks(yticks_sens[1:])
                 ax.set_yticklabels(uni_reg[1:])
-                ax.set_xticks(range(0, num_time, 125))
-                time_labels = time[::125]
+                ax.set_xticks(range(0, num_time, time_step))
+                time_labels = time[::time_step]
                 time_labels[np.abs(time_labels) < 1e-10] = 0.0
                 ax.set_xticklabels(['%.1f' % tm for tm in time_labels])
                 ax.tick_params(labelsize=ticklabelsize)
@@ -115,8 +115,8 @@ if __name__ == '__main__':
                     else:
                         buff_space = 0.025
                     if i_v < len(text_to_write):
-                        ax.text(v + buff_space * 2 * time_step, 10, text_to_write[i_v],
-                                color='k', fontsize=12)
+                        ax.text(v + buff_space * 2 * time_step, 30, text_to_write[i_v],
+                                color='k', fontsize=14)
 
                 ax.set_title(title_list[i_inst], fontsize=axistitlesize)
                 if i_inst == 3:
