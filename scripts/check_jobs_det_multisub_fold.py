@@ -79,14 +79,17 @@ if __name__ == '__main__':
             meow = 1
         else:
             if os.stat(err_str).st_size != 0 and (not was_success):
-                with open(out_str, 'r') as fid:
-                    out_info = fid.read()
-                    print(out_info)
-                with open(err_str, 'r') as fid:
-                    err_file = fid.read()
-                    print('Job {} Failed'.format(job_str))
-                    print(err_file)
-                    print(grid)
+                if fold > 25 and 'dog' in analysis:
+                    skipped_jobs += 1
+                else:
+                    with open(out_str, 'r') as fid:
+                        out_info = fid.read()
+                        print(out_info)
+                    with open(err_str, 'r') as fid:
+                        err_file = fid.read()
+                        print('Job {} Failed'.format(job_str))
+                        print(err_file)
+                        print(grid)
 
         job_id += 1
 
