@@ -27,7 +27,7 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
-                'subject={sub},sen_type={sen},analysis={analysis},win_len={win_len},overlap={overlap},' \
+                'sen_type={sen},analysis={analysis},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_det_multisub_fold.sh'
