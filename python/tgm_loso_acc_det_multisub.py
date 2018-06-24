@@ -150,6 +150,7 @@ if __name__ == '__main__':
     max_time = 0.5 * num_time / time_step
     label_time = np.arange(min_time, max_time, 0.1)
     diag_ax.set_xticklabels(label_time)
+    diag_ax.set_ylim([0.5, 1.2])
     diag_ax.set_xlabel('Time from Word Onset (s)', fontsize=16)
     diag_ax.legend(loc=4, fontsize=legendfontsize)
     diag_ax.tick_params(labelsize=ticklabelsize)
