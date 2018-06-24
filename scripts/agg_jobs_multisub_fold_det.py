@@ -30,8 +30,7 @@ if __name__ == '__main__':
                                    batch_exp.RANDOM_STATES,
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
-                                   batch_exp.ANALYSES,
-                                   batch_exp.FOLDS)
+                                   batch_exp.ANALYSES)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
@@ -47,7 +46,6 @@ if __name__ == '__main__':
         win_len = grid[8]
         sen = grid[9]
         analysis = grid[10]
-        fold = grid[11]
 
         complete_job = SAVE_FILE.format(dir=TOP_DIR,
                                         sen_type=sen,
@@ -91,7 +89,6 @@ if __name__ == '__main__':
                 l_ints = result['l_ints']
                 win_starts = result['win_starts']
                 time = result['time']
-                proc = result['proc']
             cv_membership.append(result['cv_membership'][0])
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
@@ -111,5 +108,4 @@ if __name__ == '__main__':
                                 tgm_acc=tgm_acc,
                                 tgm_pred=tgm_pred,
                                 win_starts=win_starts,
-                                time=time,
-                                proc=proc)
+                                time=time)
