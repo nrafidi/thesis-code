@@ -97,7 +97,7 @@ if __name__ == '__main__':
         multi_file = run_TGM_LOSO_det_multisub_fold.SAVE_FILE.format(dir=run_TGM_LOSO_det_multisub_fold.TOP_DIR,
                              sen_type=args.sen_type,
                              analysis=analysis,
-                             win_len=args.win_lenwin_len,
+                             win_len=args.win_len,
                              ov=args.overlap,
                              perm='F',
                              alg=args.alg,
