@@ -21,8 +21,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.FOLDS,
-                                   batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.ALGS,
@@ -37,17 +36,16 @@ if __name__ == '__main__':
     skipped_jobs = 0
     for grid in param_grid:
 
-        fold = grid[0]
-        exp = grid[1]
-        overlap = grid[2]
-        isPerm = grid[3]
-        alg = grid[4]
-        adj = grid[5]
-        tm_avg = grid[6]
-        tst_avg = grid[7]
-        ni = grid[8]
-        rs = grid[9]
-        win_len = grid[10]
+        exp = grid[0]
+        overlap = grid[1]
+        isPerm = grid[2]
+        alg = grid[3]
+        adj = grid[4]
+        tm_avg = grid[5]
+        tst_avg = grid[6]
+        ni = grid[7]
+        rs = grid[8]
+        win_len = grid[9]
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
