@@ -131,8 +131,8 @@ if __name__ == '__main__':
             analysis=PLOT_TITLE_ANALYSIS[analysis]), fontsize=axistitlesize)
 
         ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-        min_time = 0.0
         max_time = 0.5 * len(time_win) / time_step
+        min_time = 0.0 + args.win_len * 0.002
         label_time = np.arange(min_time, max_time, 0.1)
         ax.set_xticklabels(label_time)
         ax.set_yticks(np.arange(0, num_time, time_step) - time_adjust)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         diag_ax.plot(np.diag(mean_f1), label=PLOT_TITLE_ANALYSIS[analysis])
 
     diag_ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
-    min_time = 0.0
+    min_time = 0.0 + args.win_len*0.002
     max_time = 0.5 * num_time / time_step
     label_time = np.arange(min_time, max_time, 0.1)
     diag_ax.set_xticklabels(label_time)
