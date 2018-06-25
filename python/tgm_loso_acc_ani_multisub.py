@@ -139,7 +139,7 @@ if __name__ == '__main__':
         ax.set_xlim([0.0, float(len(time_win_x) - 1)])
         ax.set_ylim([float(len(time_win_y)) - 1, 0.0])
 
-        min_time = 0.0
+        min_time = 0.0 + args.win_len*0.002
         max_time_x = 0.1 * len(time_win_x) / time_step
         label_time_x = np.arange(min_time, max_time_x, 0.1)
         ax.set_xticklabels(label_time_x)
