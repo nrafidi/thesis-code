@@ -145,7 +145,7 @@ if __name__ == '__main__':
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Test Time Relative to Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.subplots_adjust(top=0.85)
-    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm-ani_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+    combo_fig.savefig('/home/nrafidi/thesis_figs/{exp}_avg-tgm-ani_multisub_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                     exp=args.experiment, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                     win_len=args.win_len,
                     overlap=args.overlap,
