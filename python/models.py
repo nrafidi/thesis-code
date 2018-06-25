@@ -1808,7 +1808,10 @@ def lr_cross_tgm_loso_multisub_fold(data_list,
         train_win_starts = win_starts_list[i_data]
         train_sen_ints = sen_ints_list[i_data]
         n_train_time = train_data_all[0].shape[2]
-
+        print('LOOK HERE')
+        print(n_train_time)
+        print(len(train_data_all))
+        print(train_data_all[0].shape)
         l_set = np.unique(train_labels_full)
         n_l = len(l_set)
         l_index = {l_set[i]: i for i in xrange(n_l)}
