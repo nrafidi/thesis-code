@@ -79,15 +79,30 @@ if __name__ == '__main__':
         tgm_pred_n2n1 = result['tgm_pred_n2n1']
         tgm_pred_n2n2 = result['tgm_pred_n2n2']
         l_ints = result['l_ints']
+        l_ints_n1n1 = l_ints[0][0]
+        l_ints_n1n2 = l_ints[0][1]
+        l_ints_n2n1 = l_ints[1][0]
+        l_ints_n2n2 = l_ints[1][1]
         cv_membership = result['cv_membership']
-        fold_labels = []
-        for i in range(len(cv_membership)):
-            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+        cv_membership_n1n1 = [cv[0][0] for cv in cv_membership]
+        cv_membership_n1n2 = [cv[0][1] for cv in cv_membership]
+        cv_membership_n2n1 = [cv[1][0] for cv in cv_membership]
+        cv_membership_n2n2 = [cv[1][1] for cv in cv_membership]
 
-        tgm_rank_n1n1 = rank_from_pred(tgm_pred_n1n1, fold_labels)
-        tgm_rank_n1n2 = rank_from_pred(tgm_pred_n1n2, fold_labels)
-        tgm_rank_n2n1 = rank_from_pred(tgm_pred_n2n1, fold_labels)
-        tgm_rank_n2n2 = rank_from_pred(tgm_pred_n2n2, fold_labels)
+        fold_labels_n1n1 = []
+        fold_labels_n1n2 = []
+        fold_labels_n2n1 = []
+        fold_labels_n2n2 = []
+        for i in range(len(cv_membership_n1n1)):
+            fold_labels_n1n1.append(np.mean(l_ints_n1n1[cv_membership_n1n1[i]]))
+            fold_labels_n1n2.append(np.mean(l_ints_n1n2[cv_membership_n1n2[i]]))
+            fold_labels_n2n1.append(np.mean(l_ints_n2n1[cv_membership_n2n1[i]]))
+            fold_labels_n2n2.append(np.mean(l_ints_n2n2[cv_membership_n2n2[i]]))
+
+        tgm_rank_n1n1 = rank_from_pred(tgm_pred_n1n1, fold_labels_n1n1)
+        tgm_rank_n1n2 = rank_from_pred(tgm_pred_n1n2, fold_labels_n1n2)
+        tgm_rank_n2n1 = rank_from_pred(tgm_pred_n2n1, fold_labels_n2n1)
+        tgm_rank_n2n2 = rank_from_pred(tgm_pred_n2n2, fold_labels_n2n2)
         np.savez_compressed(rank_file,
                             tgm_rank_n1n1=tgm_rank_n1n1,
                             tgm_rank_n1n2=tgm_rank_n1n2,
