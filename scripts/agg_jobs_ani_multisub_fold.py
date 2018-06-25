@@ -119,7 +119,7 @@ if __name__ == '__main__':
             tgm_pred_n2n2 = np.concatenate(tgm_pred_n2n2, axis=0)
             
 
-            print(tgm_acc.shape)
+            print(tgm_acc_n1n1.shape)
 
             np.savez_compressed(complete_job + '.npz',
                                 l_ints=l_ints,
