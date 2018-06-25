@@ -1807,7 +1807,7 @@ def lr_cross_tgm_loso_multisub_fold(data_list,
         train_labels_full = np.array(labels_list[i_data])
         train_win_starts = win_starts_list[i_data]
         train_sen_ints = sen_ints_list[i_data]
-        n_train_time = train_data_all[0][0].shape[2]
+        n_train_time = train_data_all[0].shape[2]
 
         l_set = np.unique(train_labels_full)
         n_l = len(l_set)
@@ -1824,7 +1824,7 @@ def lr_cross_tgm_loso_multisub_fold(data_list,
             test_labels_full = np.array(labels_list[j_data])
             test_win_starts = win_starts_list[j_data]
             test_sen_ints = sen_ints_list[j_data]
-            n_test_time = test_data_all[0][0].shape[2]
+            n_test_time = test_data_all[0].shape[2]
 
             l_set = np.unique(test_labels_full)
             n_l = len(l_set)
