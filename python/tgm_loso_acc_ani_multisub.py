@@ -69,10 +69,10 @@ if __name__ == '__main__':
                                   mode='rankacc')
     if os.path.isfile(rank_file + '.npz'):
         rank_result = np.load(rank_file + '.npz')
-        acc_all = [result['tgm_rank_n1n1'],
-                   result['tgm_rank_n1n2'],
-                   result['tgm_rank_n2n1'],
-                   result['tgm_rank_n2n2']]
+        acc_all = [rank_result['tgm_rank_n1n1'],
+                   rank_result['tgm_rank_n1n2'],
+                   rank_result['tgm_rank_n2n1'],
+                   rank_result['tgm_rank_n2n2']]
     else:
         tgm_pred_n1n1 = result['tgm_pred_n1n1']
         tgm_pred_n1n2 = result['tgm_pred_n1n2']
