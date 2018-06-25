@@ -93,10 +93,11 @@ if __name__ == '__main__':
                 # print('Job {} Did Not Run'.format(job_str))
                 meow = 1
             else:
-                with open(out_str, 'r') as fid:
-                    out_info = fid.read()
                 if os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
+                        with open(out_str, 'r') as fid:
+                            out_info = fid.read()
+                        print(out_info)
                         err_file = fid.read()
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
                             if 'MemoryError' in err_file:
