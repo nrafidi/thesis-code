@@ -56,11 +56,7 @@ if __name__ == '__main__':
         out_str = batch_exp.OUT_FILE.format(dir=dir_str, job_name=job_str)
 
         top_dir = TOP_DIR.format(exp=exp)
-        if not os.path.exists(top_dir):
-            os.mkdir(top_dir)
-        save_dir = SAVE_DIR.format(top_dir=top_dir, sub=sub)
-        old_job = SAVE_FILE.format(dir=save_dir,
-                                 sub=sub,
+        old_job = SAVE_FILE.format(dir=top_dir,
                                  win_len=win_len,
                                  ov=overlap,
                                  perm=bool_to_str(isPerm),
@@ -71,8 +67,7 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-        fname = NEW_SAVE_FILE.format(dir=save_dir,
-                                 sub=sub,
+        fname = NEW_SAVE_FILE.format(dir=top_dir,
                                  win_len=win_len,
                                  ov=overlap,
                                  perm=bool_to_str(isPerm),
@@ -100,9 +95,7 @@ if __name__ == '__main__':
             else:
                 with open(out_str, 'r') as fid:
                     out_info = fid.read()
-                if 'Experiment parameters not valid.' in out_info:
-                    skipped_jobs += 1
-                elif os.stat(err_str).st_size != 0:
+                if os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
                         err_file = fid.read()
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n') and not ('Killed' in err_file):
