@@ -94,7 +94,8 @@ def run_tgm_exp(experiment,
         print('Job already completed. Skipping Job.')
         print(fname)
         return
-    data_list = []
+    n1_data_list = []
+    n2_data_list = []
     labels_list = []
     win_starts_list = []
     sen_ints_list = []
@@ -144,7 +145,8 @@ def run_tgm_exp(experiment,
 
         n2_win_starts = range(0, n2_total_win - win_len, overlap)
 
-        data_list.append([n1_data, n2_data])
+        n1_data_list.append(n1_data)
+        n2_data_list.append(n2_data)
         if isPerm:
             random.seed(random_state_perm)
             random.shuffle(n1_labels)
@@ -161,6 +163,7 @@ def run_tgm_exp(experiment,
             assert np.all(np.array(win_starts_list) == np.array(win_starts_list_sub))
             assert np.all(np.array(sen_ints_list) == np.array(sen_ints_list_sub))
 
+    data_list = [n1_data_list, n2_data_list]
     l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_cross_tgm_loso_multisub_fold(data_list=data_list,
                             labels_list=labels_list,
                             win_starts_list=win_starts_list,
