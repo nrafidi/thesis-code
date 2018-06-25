@@ -150,8 +150,12 @@ if __name__ == '__main__':
         ax.set_yticklabels(label_time_y)
 
         ax.tick_params(labelsize=ticklabelsize)
-        ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
-                                size=axislettersize, weight='bold')
+        if i_combo == 0 or i_combo == 2:
+            ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+                                    size=axislettersize, weight='bold')
+        else:
+            ax.text(-0.06, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
+                    size=axislettersize, weight='bold')
 
     cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.suptitle('Animacy Rank Accuracy TGMs',
