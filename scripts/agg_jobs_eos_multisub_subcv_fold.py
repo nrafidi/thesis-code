@@ -154,11 +154,11 @@ if __name__ == '__main__':
                 tgm_pred.append(tgm_pred_sub[None, ...])
                 cv_membership.append(cv_membership_sub)
 
-                if i_sub == 0:
-                    l_ints = l_ints_sub
-                    win_starts = win_starts_sub
-                    time = time_sub
-                    proc = proc_sub
+                # if i_sub == 0:
+                #     l_ints = l_ints_sub
+                #     win_starts = win_starts_sub
+                #     time = time_sub
+                #     proc = proc_sub
         if len(tgm_acc) == NUM_SUBS[exp]:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
             tgm_pred = np.concatenate(tgm_pred, axis=0)
@@ -166,10 +166,10 @@ if __name__ == '__main__':
             print(tgm_acc.shape)
 
             np.savez_compressed(total_job + '.npz',
-                                l_ints=l_ints,
+                                l_ints=l_ints_sub,
                                 cv_membership=cv_membership,
                                 tgm_acc=tgm_acc,
                                 tgm_pred=tgm_pred,
-                                win_starts=win_starts,
-                                time=time,
-                                proc=proc)
+                                win_starts=win_starts_sub,
+                                time=time_sub,
+                                proc=proc_sub)
