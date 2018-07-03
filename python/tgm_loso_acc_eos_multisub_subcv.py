@@ -169,6 +169,8 @@ if __name__ == '__main__':
             multi_fold_acc = rank_result['tgm_rank']
         else:
             tgm_pred = result['tgm_pred']
+            print(word)
+            assert len(tgm_pred.shape) == 4
             num_sub = tgm_pred.shape[0]
             l_ints = result['l_ints']
             cv_membership_all = result['cv_membership']
