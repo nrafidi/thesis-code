@@ -81,7 +81,8 @@ if __name__ == '__main__':
                                  rsP=rs,
                                  mode='acc')
         if os.path.isfile(total_job + '.npz'):
-            print(total_job)
+            if sen == 'active' and word == 'verb':
+                print(total_job)
             continue
         tgm_acc = []
         tgm_pred = []
@@ -104,7 +105,8 @@ if __name__ == '__main__':
                                             rsP=rs,
                                             mode='acc')
             if os.path.isfile(complete_job + '.npz'):
-                print(complete_job)
+                if sen == 'active' and word == 'verb':
+                    print(complete_job)
                 continue
             tgm_acc_sub = []
             tgm_pred_sub = []
