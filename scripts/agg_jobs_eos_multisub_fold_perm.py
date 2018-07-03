@@ -1,7 +1,7 @@
 import itertools
 import os.path
 import numpy as np
-import batch_experiments_multisub_fold as batch_exp
+import batch_experiments_eos_multisub_fold as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 
@@ -140,8 +140,8 @@ if __name__ == '__main__':
 
                 print(tgm_acc_perm.shape)
 
-                tgm_acc.append(tgm_acc_perm)
-                tgm_pred.append(tgm_pred_perm)
+                tgm_acc.append(tgm_acc_perm[None, ...])
+                tgm_pred.append(tgm_pred_perm[None, ...])
                 cv_membership.append(cv_membership_perm)
 
                 np.savez_compressed(complete_job + '.npz',
@@ -152,6 +152,8 @@ if __name__ == '__main__':
                                     win_starts=win_starts,
                                     time=time,
                                     proc=proc)
+            else:
+                break
         if len(tgm_acc) == len(perm_list):
             tgm_acc = np.concatenate(tgm_acc, axis=0)
             tgm_pred = np.concatenate(tgm_pred, axis=0)
