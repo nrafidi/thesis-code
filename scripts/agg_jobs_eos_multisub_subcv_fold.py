@@ -63,8 +63,8 @@ if __name__ == '__main__':
             if word in ['noun1', 'voice', 'senlen', 'propid']:
                 continue
 
-        if sen == 'active' and word == 'verb':
-            print('wtf')
+        rerun =  sen == 'active' and word == 'verb'
+
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
         total_job = TOTAL_SAVE_FILE.format(dir=top_dir,
@@ -80,9 +80,7 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-        if os.path.isfile(total_job + '.npz'):
-            if sen == 'active' and word == 'verb':
-                print(total_job)
+        if os.path.isfile(total_job + '.npz') and not rerun:
             continue
         tgm_acc = []
         tgm_pred = []
@@ -112,8 +110,8 @@ if __name__ == '__main__':
                 time_sub = total_result['time']
                 proc_sub = total_result['proc']
                 cv_membership.append(total_result['cv_membership'][0])
-                tgm_acc.append(total_result['tgm_acc'])
-                tgm_pred.append(total_result['tgm_pred'])
+                tgm_acc.append(total_result['tgm_acc'][None, ...])
+                tgm_pred.append(total_result['tgm_pred'][None, ...])
                 continue
             tgm_acc_sub = []
             tgm_pred_sub = []
