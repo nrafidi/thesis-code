@@ -192,11 +192,8 @@ if __name__ == '__main__':
                                                            mode='rankacc')
             rank_result_frac = np.load(rank_file_frac + '.npz')
             multi_fold_acc = rank_result_frac['tgm_rank']
-            print(multi_fold_acc.shape)
             mean_acc = np.mean(multi_fold_acc, axis=1)
-            print(mean_acc.shape)
             frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
-            print(frac_above.shape)
             frac_diags.append(np.diag(frac_above))
 
             if i_word == 0:
@@ -211,13 +208,12 @@ if __name__ == '__main__':
             color = colors[i_word]
             acc = acc_diags[i_word]
             diag_frac = frac_diags[i_word]
-            print(diag_frac.shape)
 
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
 
             for i_pt in range(num_time):
                 if  diag_frac[i_pt]  > 0.5:
-                    ax.scatter(i_pt, 0.98 - float(i_word)*0.02, color=color, marker='o')
+                    ax.scatter(i_pt, 1.0 - float(i_word)*0.02, color=color, marker='o')
 
             # pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
             # for i_pt in range(num_time):
