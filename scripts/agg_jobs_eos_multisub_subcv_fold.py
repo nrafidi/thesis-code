@@ -104,6 +104,7 @@ if __name__ == '__main__':
                                             rsP=rs,
                                             mode='acc')
             if os.path.isfile(complete_job + '.npz'):
+                print(complete_job)
                 continue
             tgm_acc_sub = []
             tgm_pred_sub = []
