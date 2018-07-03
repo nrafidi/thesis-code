@@ -194,7 +194,7 @@ if __name__ == '__main__':
             multi_fold_acc = rank_result['tgm_rank']
             mean_acc = np.mean(multi_fold_acc, axis=1)
             frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
-
+            print(frac_above.shape)
             frac_diags.append(np.diag(frac_above))
 
             if i_word == 0:
@@ -209,6 +209,7 @@ if __name__ == '__main__':
             color = colors[i_word]
             acc = acc_diags[i_word]
             diag_frac = frac_diags[i_word]
+            print(diag_frac.shape)
 
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
 
