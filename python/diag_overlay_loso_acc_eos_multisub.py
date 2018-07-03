@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import string
 import tgm_loso_acc_eos_multisub
+import tgm_loso_acc_eos_multisub_subcv as subcv
 
 PLOT_TITLE_WORD = {'noun1': 'First Noun',
                   'verb': 'Verb',
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
 
 
-    sen_type_list = ['active', 'passive', 'pooled']
+    sen_type_list = ['passive'] #['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         time_adjust = win_len * 0.002
@@ -129,6 +130,7 @@ if __name__ == '__main__':
         # sen_fig, ax = plt.subplots(figsize=(15, 12))
         ax = sen_axs[i_sen_type]
         acc_diags = []
+        frac_diags = []
         time = []
         win_starts = []
         for i_word, word in enumerate(word_list):
@@ -169,6 +171,27 @@ if __name__ == '__main__':
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
 
+            rank_file_frac = subcv.MULTI_SAVE_FILE.format(dir=top_dir,
+                                                           sen_type=sen_type,
+                                                           word=word,
+                                                           win_len=args.win_len,
+                                                           exc='',
+                                                           ov=args.overlap,
+                                                           perm='F',
+                                                           alg=args.alg,
+                                                           adj=args.adj,
+                                                           avgTm=args.avgTime,
+                                                           avgTst=args.avgTest,
+                                                           inst=args.num_instances,
+                                                           rsP=1,
+                                                           mode='rankacc')
+            rank_result_frac = np.load(rank_file_frac + '.npz')
+            multi_fold_acc = rank_result['tgm_rank']
+            mean_acc = np.mean(multi_fold_acc, axis=1)
+            frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
+
+            frac_diags.append(np.diag(frac_above))
+
             if i_word == 0:
                 time = word_time
                 win_starts = word_win_starts
@@ -180,9 +203,13 @@ if __name__ == '__main__':
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+            diag_frac = frac_diags[i_word]
 
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
 
+            for i_pt in range(num_time):
+                if  diag_frac[i_pt]  > 0.5:
+                    ax.scatter(i_pt, 0.98 - float(i_word)*0.02, color=color, marker='o')
 
             # pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
             # for i_pt in range(num_time):
@@ -206,13 +233,13 @@ if __name__ == '__main__':
         ax.axvline(x=max_line, color='k')
         if i_sen_type == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
-        if i_sen_type == 1:
-            ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
+        # if i_sen_type == 1:
+        ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.1])
         ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
-        if sen_type == 'pooled':
-            ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
+        # if sen_type == 'pooled':
+        ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
@@ -220,14 +247,14 @@ if __name__ == '__main__':
     sen_fig.subplots_adjust(top=0.85)
     sen_fig.suptitle('Rank Accuracy Over Time\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
             num_instances=num_instances
         ), bbox_inches='tight')
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
