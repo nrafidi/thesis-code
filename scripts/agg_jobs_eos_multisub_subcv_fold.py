@@ -105,8 +105,15 @@ if __name__ == '__main__':
                                             rsP=rs,
                                             mode='acc')
             if os.path.isfile(complete_job + '.npz'):
-                if sen == 'active' and word == 'verb':
-                    print(complete_job)
+                total_result = np.load(complete_job + '.npz')
+                l_ints_sub = total_result['l_ints']
+                win_starts_sub = total_result['win_starts']
+
+                time_sub = total_result['time']
+                proc_sub = total_result['proc']
+                cv_membership.append(total_result['cv_membership'][0])
+                tgm_acc.append(total_result['tgm_acc'])
+                tgm_pred.append(total_result['tgm_pred'])
                 continue
             tgm_acc_sub = []
             tgm_pred_sub = []
