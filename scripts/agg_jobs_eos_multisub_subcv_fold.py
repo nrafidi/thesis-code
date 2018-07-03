@@ -63,7 +63,7 @@ if __name__ == '__main__':
             if word in ['noun1', 'voice', 'senlen', 'propid']:
                 continue
 
-        rerun =  sen == 'active' and word == 'verb'
+        rerun =  sen == 'pooled'
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
