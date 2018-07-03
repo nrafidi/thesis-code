@@ -27,7 +27,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(['krns2'], #batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(['PassAct3'], #batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.ALGS,
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             if word in ['noun1', 'voice', 'senlen', 'propid']:
                 continue
 
-        rerun =  sen == 'pooled' and word == 'patient'
+        # rerun =  sen == 'pooled' and word == 'patient'
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
@@ -80,14 +80,14 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-        if os.path.isfile(total_job + '.npz') and not rerun:
+        if os.path.isfile(total_job + '.npz'): # and not rerun:
             continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
         for i_sub, sub in enumerate(batch_exp.SUBJECTS):
-            if sub not in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
-                continue
+            # if sub not in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+            #     continue
             complete_job = SAVE_FILE.format(dir=top_dir,
                                             sen_type=sen,
                                             word=word,
