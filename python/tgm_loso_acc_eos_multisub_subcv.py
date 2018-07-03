@@ -193,15 +193,7 @@ if __name__ == '__main__':
 
         frac_above = np.sum(mean_acc > 0.5, axis=0)/float(mean_acc.shape[0])
 
-        if args.short:
-            min_time = 1.0
-            if word != 'noun2':
-                frac_above = frac_above[2*time_step:, :]
-                frac_above = frac_above[:, 2 * time_step:]
-                time_win = time_win[2*time_step:]
-        else:
-            min_time = 0.0
-
+        min_time = 0.0
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(frac_above), interpolation='nearest', aspect='auto',
                        vmin=0.5, vmax=1.0)
