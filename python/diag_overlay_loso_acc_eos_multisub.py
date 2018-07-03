@@ -192,7 +192,9 @@ if __name__ == '__main__':
                                                            mode='rankacc')
             rank_result_frac = np.load(rank_file_frac + '.npz')
             multi_fold_acc = rank_result['tgm_rank']
+            print(multi_fold_acc.shape)
             mean_acc = np.mean(multi_fold_acc, axis=1)
+            print(mean_acc.shape)
             frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
             print(frac_above.shape)
             frac_diags.append(np.diag(frac_above))
