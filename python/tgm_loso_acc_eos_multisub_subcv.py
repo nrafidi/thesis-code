@@ -169,14 +169,18 @@ if __name__ == '__main__':
             multi_fold_acc = rank_result['tgm_rank']
         else:
             tgm_pred = result['tgm_pred']
+            print(tgm_pred.shape)
             print(word)
             assert len(tgm_pred.shape) == 4
             num_sub = tgm_pred.shape[0]
             l_ints = result['l_ints']
+            print(l_ints.shape)
             cv_membership_all = result['cv_membership']
+            print(len(cv_membership_all))
             multi_fold_acc = []
             for i_sub in range(num_sub):
                 cv_membership = cv_membership_all[i_sub]
+                print(len(cv_membership))
                 fold_labels = []
                 for i in range(len(cv_membership)):
                     fold_labels.append(np.mean(l_ints[cv_membership[i]]))
