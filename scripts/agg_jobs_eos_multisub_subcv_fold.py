@@ -80,6 +80,8 @@ if __name__ == '__main__':
         tgm_pred = []
         cv_membership = []
         for i_sub, sub in enumerate(batch_exp.SUBJECTS):
+            if sub not in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+                continue
             complete_job = SAVE_FILE.format(dir=top_dir,
                                             sen_type=sen,
                                             word=word,
