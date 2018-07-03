@@ -79,6 +79,7 @@ if __name__ == '__main__':
                                  rsP=rs,
                                  mode='acc')
         if os.path.isfile(total_job + '.npz'):
+            print(total_job)
             continue
         tgm_acc = []
         tgm_pred = []
