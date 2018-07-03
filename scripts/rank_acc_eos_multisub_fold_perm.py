@@ -122,16 +122,19 @@ if __name__ == '__main__':
         if not os.path.isfile(complete_job_perm_rank + '.npz'):
             result = np.load(complete_job_perm + '.npz')
             tgm_pred = result['tgm_pred']
+            print(tgm_pred.shape)
             num_perm = tgm_pred.shape[0]
             l_ints = result['l_ints']
             cv_membership_all = result['cv_membership']
+            print(len(cv_membership_all))
             multi_fold_acc = []
             for i_perm in range(num_perm):
+                print(i_perm)
                 cv_membership = cv_membership_all[i_perm]
                 fold_labels = []
                 for i in range(len(cv_membership)):
                     fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-
+                print(len(fold_labels))
                 tgm_rank = rank_from_pred(tgm_pred[i_perm, ...], fold_labels)
                 multi_fold_acc.append(tgm_rank[None, ...])
             multi_fold_acc = np.concatenate(multi_fold_acc, axis=0)
