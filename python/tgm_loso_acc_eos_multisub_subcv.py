@@ -162,9 +162,9 @@ if __name__ == '__main__':
                                            inst=args.num_instances,
                                            rsP=1,
                                            mode='rankacc')
-        rerun = True
+        # rerun = True
         result = np.load(multi_file + '.npz')
-        if os.path.isfile(rank_file + '.npz') and not rerun:
+        if os.path.isfile(rank_file + '.npz'): # and not rerun:
             rank_result = np.load(rank_file + '.npz')
             multi_fold_acc = rank_result['tgm_rank']
         else:

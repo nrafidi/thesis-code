@@ -27,7 +27,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(['PassAct3'], #batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(['krns2', 'PassAct3'], #batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    batch_exp.IS_PERMS,
                                    batch_exp.ALGS,
@@ -63,7 +63,9 @@ if __name__ == '__main__':
             if word in ['noun1', 'voice', 'senlen', 'propid']:
                 continue
 
-        # rerun =  sen == 'pooled' and word == 'patient'
+        rerun =  exp == 'krns2'
+        rerun = rerun or (sen == 'pooled' and word == 'patient')
+        rerun = rerun or (sen == 'active' and word == 'verb')
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
@@ -80,7 +82,7 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-        if os.path.isfile(total_job + '.npz'): # and not rerun:
+        if os.path.isfile(total_job + '.npz') and not rerun:
             continue
         tgm_acc = []
         tgm_pred = []
@@ -109,73 +111,73 @@ if __name__ == '__main__':
 
                 time_sub = total_result['time']
                 proc_sub = total_result['proc']
-                cv_membership.append(total_result['cv_membership'][0])
+                cv_membership.append(total_result['cv_membership'])
                 tgm_acc.append(total_result['tgm_acc'][None, ...])
                 tgm_pred.append(total_result['tgm_pred'][None, ...])
-                continue
-            tgm_acc_sub = []
-            tgm_pred_sub = []
-            cv_membership_sub = []
-            for fold in batch_exp.FOLDS:
-                fname = NEW_SAVE_FILE.format(dir=top_dir,
-                                     sen_type=sen,
-                                     word=word,
-                                     win_len=win_len,
-                                             sub=sub,
-                                     ov=overlap,
-                                     perm=bool_to_str(isPerm),
-                                     alg=alg,
-                                     adj=adj,
-                                     avgTm=bool_to_str(tm_avg),
-                                     avgTst=bool_to_str(tst_avg),
-                                     inst=ni,
-                                     rsP=rs,
-                                     fold=fold)
+            else:
+                tgm_acc_sub = []
+                tgm_pred_sub = []
+                cv_membership_sub = []
+                for fold in batch_exp.FOLDS:
+                    fname = NEW_SAVE_FILE.format(dir=top_dir,
+                                         sen_type=sen,
+                                         word=word,
+                                         win_len=win_len,
+                                                 sub=sub,
+                                         ov=overlap,
+                                         perm=bool_to_str(isPerm),
+                                         alg=alg,
+                                         adj=adj,
+                                         avgTm=bool_to_str(tm_avg),
+                                         avgTst=bool_to_str(tst_avg),
+                                         inst=ni,
+                                         rsP=rs,
+                                         fold=fold)
 
-                if not os.path.isfile(fname + '.npz'):
-                    print('{} missing'.format(fname))
-                    break
+                    if not os.path.isfile(fname + '.npz'):
+                        print('{} missing'.format(fname))
+                        break
 
-                result = np.load(fname + '.npz')
-                if fold == 0:
-                    l_ints_sub = result['l_ints']
-                    win_starts_sub = result['win_starts']
+                    result = np.load(fname + '.npz')
+                    if fold == 0:
+                        l_ints_sub = result['l_ints']
+                        win_starts_sub = result['win_starts']
 
-                    time_sub = result['time']
-                    proc_sub = result['proc']
-                cv_membership_sub.append(result['cv_membership'][0])
-                tgm_acc_sub.append(result['tgm_acc'])
-                tgm_pred_sub.append(result['tgm_pred'])
+                        time_sub = result['time']
+                        proc_sub = result['proc']
+                    cv_membership_sub.append(result['cv_membership'][0])
+                    tgm_acc_sub.append(result['tgm_acc'])
+                    tgm_pred_sub.append(result['tgm_pred'])
 
-            fold_num = len(batch_exp.FOLDS)
-            if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
-                fold_num /= 2
-            if sen in ['active', 'passive']:
-                fold_num /= 2
+                fold_num = len(batch_exp.FOLDS)
+                if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
+                    fold_num /= 2
+                if sen in ['active', 'passive']:
+                    fold_num /= 2
 
-            if len(tgm_acc_sub) == fold_num:
-                tgm_acc_sub = np.concatenate(tgm_acc_sub, axis=0)
-                tgm_pred_sub= np.concatenate(tgm_pred_sub, axis=0)
+                if len(tgm_acc_sub) == fold_num:
+                    tgm_acc_sub = np.concatenate(tgm_acc_sub, axis=0)
+                    tgm_pred_sub= np.concatenate(tgm_pred_sub, axis=0)
 
-                print(tgm_acc_sub.shape)
+                    print(tgm_acc_sub.shape)
 
-                np.savez_compressed(complete_job + '.npz',
-                                    l_ints=l_ints_sub,
-                                    cv_membership=cv_membership_sub,
-                                    tgm_acc=tgm_acc_sub,
-                                    tgm_pred=tgm_pred_sub,
-                                    win_starts=win_starts_sub,
-                                    time=time_sub,
-                                    proc=proc_sub)
-                tgm_acc.append(tgm_acc_sub[None, ...])
-                tgm_pred.append(tgm_pred_sub[None, ...])
-                cv_membership.append(cv_membership_sub)
+                    np.savez_compressed(complete_job + '.npz',
+                                        l_ints=l_ints_sub,
+                                        cv_membership=cv_membership_sub,
+                                        tgm_acc=tgm_acc_sub,
+                                        tgm_pred=tgm_pred_sub,
+                                        win_starts=win_starts_sub,
+                                        time=time_sub,
+                                        proc=proc_sub)
+                    tgm_acc.append(tgm_acc_sub[None, ...])
+                    tgm_pred.append(tgm_pred_sub[None, ...])
+                    cv_membership.append(cv_membership_sub)
 
-                # if i_sub == 0:
-                #     l_ints = l_ints_sub
-                #     win_starts = win_starts_sub
-                #     time = time_sub
-                #     proc = proc_sub
+                    # if i_sub == 0:
+                    #     l_ints = l_ints_sub
+                    #     win_starts = win_starts_sub
+                    #     time = time_sub
+                    #     proc = proc_sub
         if len(tgm_acc) == NUM_SUBS[exp]:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
             tgm_pred = np.concatenate(tgm_pred, axis=0)
