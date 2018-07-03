@@ -63,6 +63,8 @@ if __name__ == '__main__':
             if word in ['noun1', 'voice', 'senlen', 'propid']:
                 continue
 
+        if sen == 'active' and word == 'verb':
+            print('wtf')
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
         total_job = TOTAL_SAVE_FILE.format(dir=top_dir,
