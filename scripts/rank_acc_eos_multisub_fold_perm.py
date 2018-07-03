@@ -113,7 +113,7 @@ if __name__ == '__main__':
                                              mode='rankacc')
 
         if not os.path.isfile(complete_job_perm_rank + '.npz'):
-            result = np.load(complete_job_perm)
+            result = np.load(complete_job_perm + '.npz')
             tgm_pred = result['tgm_pred']
             num_perm = tgm_pred.shape[0]
             l_ints = result['l_ints']
