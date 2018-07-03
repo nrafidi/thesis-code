@@ -128,7 +128,10 @@ if __name__ == '__main__':
 
 
         # sen_fig, ax = plt.subplots(figsize=(15, 12))
-        ax = sen_axs[i_sen_type]
+        if len(sen_type_list) > 1:
+            ax = sen_axs[i_sen_type]
+        else:
+            ax = sen_axs
         acc_diags = []
         frac_diags = []
         time = []
