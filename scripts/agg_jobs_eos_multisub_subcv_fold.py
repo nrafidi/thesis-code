@@ -56,8 +56,12 @@ if __name__ == '__main__':
         sen = grid[10]
         word = grid[11]
 
-        # if ni == 1:
-        #     continue
+        if exp == 'krns2':
+            if word == 'senlen':
+                continue
+        if sen != 'pooled':
+            if word in ['noun1', 'voice', 'senlen', 'propid']:
+                continue
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
