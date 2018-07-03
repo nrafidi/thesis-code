@@ -64,8 +64,8 @@ if __name__ == '__main__':
                 continue
 
         rerun =  exp == 'krns2'
-        rerun = rerun or (sen == 'pooled' and word == 'patient')
-        rerun = rerun or (sen == 'active' and word == 'verb')
+        rerun = rerun and (sen == 'pooled' and word == 'patient')
+        # rerun = rerun or (sen == 'active' and word == 'verb')
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
