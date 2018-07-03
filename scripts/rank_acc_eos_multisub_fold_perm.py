@@ -7,7 +7,7 @@ TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 
 SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
-            'rsPerm{rsP}_{fold}'
+            'rsPerm{rsP}_{mode}'
 
 
 def rank_from_pred(tgm_pred, fold_labels):
