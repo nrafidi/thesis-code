@@ -17,7 +17,7 @@ def rank_from_pred(tgm_pred, fold_labels):
     assert len(fold_labels) == tgm_pred.shape[0]
     for i in range(tgm_pred.shape[0]):
         curr_label = fold_labels[i]
-        #        print(curr_label)
+        print(curr_label)
         curr_pred = np.squeeze(tgm_pred[i, ...])
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
@@ -25,7 +25,7 @@ def rank_from_pred(tgm_pred, fold_labels):
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
                     # print(label_sort)
                     label_sort = label_sort[:, ::-1]
-                    # print(label_sort)
+                    print(label_sort)
                     rank = np.empty((curr_pred[j, k].shape[0],))
                     for l in range(curr_pred[j, k].shape[0]):
                         rank[l] = float(np.where(label_sort[l, :] == curr_label)[0][0])
