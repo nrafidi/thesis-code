@@ -132,7 +132,9 @@ if __name__ == '__main__':
                 tgm_pred_perm.append(result['tgm_pred'])
 
             num_folds = len(batch_exp.FOLDS)
-            if exp == 'PassAct3' and word == 'noun2':
+            if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
+                num_folds /= 2
+            if sen in ['active', 'passive']:
                 num_folds /= 2
             if len(tgm_acc_perm) == num_folds:
                 tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
