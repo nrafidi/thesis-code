@@ -9,10 +9,10 @@ SAVE_FILE = '{dir}TGM-LOSO_{sub}_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'nr{rep}_rsPerm{rsP}_{mode}'
 
-FOLDS = range(8) #, 'coef']
-EXPERIMENTS = ['PassAct3']
+FOLDS = range(16) #, 'coef']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SEN_TYPES = ['active', 'passive']
-WORDS = ['noun2']
+WORDS = ['noun1', 'verb', 'noun2']
 WIN_LENS = [50]
 OVERLAPS = [5]
 IS_PERMS = [True]  # True
@@ -21,7 +21,7 @@ ADJS = ['zscore']
 DO_TIME_AVGS = [True]
 DO_TEST_AVGS = [True]
 NUM_INSTANCESS = [2]
-RANDOM_STATES = range(100)
+RANDOM_STATES = range(200)
 
 JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub -q default -N {job_name} -l walltime=168:00:00,mem=16GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_multisub_fold.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -108,5 +108,5 @@ if __name__ == '__main__':
         call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 300:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
             time.sleep(30)
