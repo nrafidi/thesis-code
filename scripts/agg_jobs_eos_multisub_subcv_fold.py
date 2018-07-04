@@ -64,7 +64,7 @@ if __name__ == '__main__':
                 continue
 
         rerun =  exp == 'PassAct3'
-        rerun = rerun and (sen == 'active' and word == 'agent')
+        rerun = rerun and (sen == 'active' and word == 'verb')
         # rerun = rerun or (sen == 'active' and word == 'verb')
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
