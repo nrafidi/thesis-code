@@ -17,7 +17,7 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['PassAct3']
 SEN_TYPES = ['active', 'passive', 'pooled']
 WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
@@ -28,7 +28,7 @@ ADJS = ['zscore']
 DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
 NUM_INSTANCESS = [2]
-RANDOM_STATES = range(1000)
+RANDOM_STATES = range(200)
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
