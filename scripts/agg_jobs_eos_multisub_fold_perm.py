@@ -95,7 +95,7 @@ if __name__ == '__main__':
                     win_starts = result['win_starts']
                     time = result['time']
                     proc = result['proc']
-                cv_membership.append(result['cv_membership'][0])
+                cv_membership.append(result['cv_membership'])
                 tgm_acc.append(result['tgm_acc'])
                 tgm_pred.append(result['tgm_pred'])
                 continue
