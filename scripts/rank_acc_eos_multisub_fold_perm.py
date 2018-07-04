@@ -12,12 +12,12 @@ SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr
 
 def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
-    print(len(fold_labels))
-    print(tgm_pred.shape)
+    # print(len(fold_labels))
+    # print(tgm_pred.shape)
     assert len(fold_labels) == tgm_pred.shape[0]
     for i in range(tgm_pred.shape[0]):
         curr_label = fold_labels[i]
-        print(curr_label)
+        # print(curr_label)
         curr_pred = np.squeeze(tgm_pred[i, ...])
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
@@ -25,7 +25,7 @@ def rank_from_pred(tgm_pred, fold_labels):
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
                     # print(label_sort)
                     label_sort = label_sort[:, ::-1]
-                    print(label_sort)
+                    # print(label_sort)
                     rank = np.empty((curr_pred[j, k].shape[0],))
                     for l in range(curr_pred[j, k].shape[0]):
                         rank[l] = float(np.where(label_sort[l, :] == curr_label)[0][0])
@@ -133,7 +133,13 @@ if __name__ == '__main__':
                 cv_membership = cv_membership_all[i_perm]
                 fold_labels = []
                 for i in range(len(cv_membership)):
-                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+                    l_set = l_ints[cv_membership[i]]
+                    if len(np.unique(l_set)) != 1:
+                        print('wtf')
+                        print(l_set)
+                        print(i)
+                        print(i_perm)
+                    fold_labels.append(l_set[0])
                 print(len(fold_labels))
                 tgm_rank = rank_from_pred(tgm_pred[i_perm, ...], fold_labels)
                 multi_fold_acc.append(tgm_rank[None, ...])
