@@ -176,12 +176,8 @@ if __name__ == '__main__':
                 max_line = 3.51 * 2 * time_step - time_adjust
                 start_line = - time_adjust
 
-            if args.short:
-                min_time = 1.0
-                text_to_write = text_to_write[2:]
-                max_line -= 2 * time_step
-            else:
-                min_time = 0.0
+
+            min_time = 0.0
             #
             # if not args.short:
             #     mean_acc = mean_acc[2 * time_step:, :]
