@@ -130,8 +130,8 @@ if __name__ == '__main__':
                                                 mode='acc')
 
             result = np.load(multi_file + '.npz')
-            rerun = args.long and sen_type == 'passive'
-            if os.path.isfile(rank_file + '.npz') and not rerun:
+            # rerun = args.long and sen_type == 'passive'
+            if os.path.isfile(rank_file + '.npz'): # and not rerun:
                 rank_result = np.load(rank_file + '.npz')
                 acc_all = rank_result['tgm_rank']
             else:
@@ -229,8 +229,8 @@ if __name__ == '__main__':
                 if i_v < len(text_to_write):
                     ax.text(v + buff_space * 2*time_step, num_time - 0.1*time_step, text_to_write[i_v], color='w', fontsize=10)
 
-            if args.long:
-                ax.axvline(x=max_line+6*time_step, color='w')
+            # if args.long:
+            #     ax.axvline(x=max_line+6*time_step, color='w')
 
             ax.text(-0.12, 1.02, string.ascii_uppercase[i_combo], transform=ax.transAxes,
                                     size=axislettersize, weight='bold')
