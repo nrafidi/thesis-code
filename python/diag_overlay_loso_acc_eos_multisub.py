@@ -88,7 +88,7 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
 
 
-    sen_type_list = ['passive'] #['active', 'passive', 'pooled']
+    sen_type_list = ['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
         time_adjust = win_len * 0.002
@@ -237,13 +237,13 @@ if __name__ == '__main__':
         ax.axvline(x=max_line, color='k')
         if i_sen_type == 0:
             ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
-        # if i_sen_type == 1:
-        ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
+        if i_sen_type == 1:
+            ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.1])
         ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
-        # if sen_type == 'pooled':
-        ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
+        if sen_type == 'pooled':
+            ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
