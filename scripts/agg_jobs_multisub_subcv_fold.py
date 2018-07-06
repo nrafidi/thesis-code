@@ -109,6 +109,7 @@ if __name__ == '__main__':
                 tgm_acc.append(total_result['tgm_acc'][None, ...])
                 tgm_pred.append(total_result['tgm_pred'][None, ...])
             else:
+                print('woof')
                 tgm_acc_sub = []
                 tgm_pred_sub = []
                 cv_membership_sub = []
@@ -117,7 +118,7 @@ if __name__ == '__main__':
                                          sen_type=sen,
                                          word=word,
                                          win_len=win_len,
-                                                 sub=sub,
+                                         sub=sub,
                                          ov=overlap,
                                          perm=bool_to_str(isPerm),
                                          alg=alg,
@@ -144,9 +145,7 @@ if __name__ == '__main__':
                     tgm_pred_sub.append(result['tgm_pred'])
 
                 fold_num = len(batch_exp.FOLDS)
-                if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
-                    fold_num /= 2
-                if sen in ['active', 'passive']:
+                if exp == 'PassAct3' and word == 'noun2':
                     fold_num /= 2
 
                 if len(tgm_acc_sub) == fold_num:
