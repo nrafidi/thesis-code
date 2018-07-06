@@ -81,8 +81,8 @@ if __name__ == '__main__':
         tgm_pred = []
         cv_membership = []
         for i_sub, sub in enumerate(batch_exp.SUBJECTS):
-            # if sub not in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
-            #     continue
+            if sub not in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+                continue
             complete_job = SAVE_FILE.format(dir=top_dir,
                                             sen_type=sen,
                                             word=word,
@@ -98,6 +98,7 @@ if __name__ == '__main__':
                                             rsP=rs,
                                             mode='acc')
             if os.path.isfile(complete_job + '.npz'):
+                print('meow')
                 total_result = np.load(complete_job + '.npz')
                 l_ints_sub = total_result['l_ints']
                 win_starts_sub = total_result['win_starts']
@@ -171,6 +172,7 @@ if __name__ == '__main__':
                     #     win_starts = win_starts_sub
                     #     time = time_sub
                     #     proc = proc_sub
+        print(len(tgm_acc))
         if len(tgm_acc) == NUM_SUBS[exp]:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
             tgm_pred = np.concatenate(tgm_pred, axis=0)
