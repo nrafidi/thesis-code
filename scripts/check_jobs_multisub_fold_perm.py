@@ -53,6 +53,9 @@ if __name__ == '__main__':
         word = grid[11]
         fold = grid[12]
 
+        if exp == 'PassAct3' and fold > 7 and word == 'noun2':
+            continue
+
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sen=sen,
                                             word=word,

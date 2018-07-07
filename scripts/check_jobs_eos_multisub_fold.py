@@ -56,6 +56,12 @@ if __name__ == '__main__':
         if exp == 'krns2' and word == 'senlen':
             continue
 
+        if word == 'propid' and sen != 'pooled':
+            continue
+
+        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 7:
+            continue
+
         job_str = batch_exp.JOB_NAME.format(exp=exp,
                                             sen=sen,
                                             word=word,

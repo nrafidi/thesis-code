@@ -51,10 +51,16 @@ if __name__ == '__main__':
         sen = grid[9]
         word = grid[10]
 
+        if exp == 'krns2' and word == 'senlen':
+            continue
+
+        if word == 'propid' and sen != 'pooled':
+            continue
+
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
 
-        perm_list = range(200)
+        perm_list = batch_exp.RANDOM_STATES
 
         complete_job_perm = SAVE_FILE.format(dir=top_dir,
                                         sen_type=sen,
