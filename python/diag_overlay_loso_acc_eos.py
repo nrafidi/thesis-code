@@ -168,7 +168,7 @@ if __name__ == '__main__':
             acc = acc_diags[i_word]
             std = std_diags[i_word]
             frac = frac_diags[i_word]
-
+            print(np.mean(acc))
             ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
             ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
                             alpha=0.3)
