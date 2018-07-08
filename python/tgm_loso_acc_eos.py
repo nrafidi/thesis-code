@@ -131,6 +131,7 @@ def intersect_accs(exp,
             tgm_pred = result['tgm_pred']
             l_ints = result['l_ints']
             cv_membership = result['cv_membership']
+            print(len(cv_membership))
             fold_labels = []
             for i in range(len(cv_membership)):
                 fold_labels.append(np.mean(l_ints[cv_membership[i]]))

@@ -20,16 +20,16 @@ def bool_to_str(bool_var):
 FOLDS = range(32)
 EXPERIMENTS = ['krns2']
 SUBJECTS = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-SEN_TYPES = ['pooled']
-WORDS = ['verb']
-WIN_LENS = [2]
-OVERLAPS = [2]
+SEN_TYPES = ['pooled', 'active', 'passive']
+WORDS = ['noun1', 'agent', 'patient', 'verb', 'voice', 'propid']
+WIN_LENS = [12]
+OVERLAPS = [12]
 IS_PERMS = [False]
 ALGS = ['lr-l2']
 ADJS = ['zscore']
-DO_TME_AVGS = [True]
+DO_TME_AVGS = [False]
 DO_TST_AVGS = [True]
-NUM_INSTANCESS = [1]
+NUM_INSTANCESS = [10]
 RANDOM_STATES = [1]
 
 JOB_NAME = '{exp}-{sub}-{sen}-{word}-{id}'
