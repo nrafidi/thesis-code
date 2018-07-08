@@ -124,21 +124,21 @@ def intersect_accs(exp,
         time = np.squeeze(result['time'])
         win_starts = result['win_starts']
 
-        if os.path.isfile(rank_fname):
-            rank_result = np.load(rank_fname)
-            fold_acc = rank_result['tgm_rank']
-        else:
-            tgm_pred = result['tgm_pred']
-            l_ints = result['l_ints']
-            # print(l_ints)
-            cv_membership = result['cv_membership']
-            # print(len(cv_membership))
-            fold_labels = []
-            for i in range(len(cv_membership)):
-                fold_labels.append(int(np.mean(l_ints[cv_membership[i]])))
-            # print(fold_labels)
-            fold_acc = rank_from_pred(tgm_pred, fold_labels)
-            np.savez_compressed(rank_fname, tgm_rank=fold_acc)
+        # if os.path.isfile(rank_fname):
+        #     rank_result = np.load(rank_fname)
+        #     fold_acc = rank_result['tgm_rank']
+        # else:
+        tgm_pred = result['tgm_pred']
+        l_ints = result['l_ints']
+        # print(l_ints)
+        cv_membership = result['cv_membership']
+        # print(len(cv_membership))
+        fold_labels = []
+        for i in range(len(cv_membership)):
+            fold_labels.append(int(np.mean(l_ints[cv_membership[i]])))
+        # print(fold_labels)
+        fold_acc = rank_from_pred(tgm_pred, fold_labels)
+        np.savez_compressed(rank_fname, tgm_rank=fold_acc)
 
         # fold_acc = result['tgm_acc']
         eos_max_fold = []
