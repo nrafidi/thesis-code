@@ -21,7 +21,7 @@ ADJS = ['zscore']
 DO_TIME_AVGS = [True]
 DO_TEST_AVGS = [True]
 NUM_INSTANCESS = [2]
-RANDOM_STATES = range(200)
+RANDOM_STATES = range(100)
 
 JOB_NAME = '{exp}-dur-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
