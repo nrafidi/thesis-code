@@ -9,7 +9,7 @@ import os
 import run_TGM_LOSO
 import tgm_loso_acc_multisub
 import string
-from rank_from_pred import rank_from_pred
+import tgm_loso_acc_multisub_subcv as subcv
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -177,6 +177,26 @@ if __name__ == '__main__':
             word_win_starts = result['win_starts']
             acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
 
+            rank_file_frac = subcv.MULTI_SAVE_FILE.format(dir=top_dir,
+                                                          sen_type=sen_type,
+                                                          word=word,
+                                                          win_len=args.win_len,
+                                                          exc='',
+                                                          ov=args.overlap,
+                                                          perm='F',
+                                                          alg=args.alg,
+                                                          adj=args.adj,
+                                                          avgTm=args.avgTime,
+                                                          avgTst=args.avgTest,
+                                                          inst=args.num_instances,
+                                                          rsP=1,
+                                                          mode='rankacc')
+            rank_result_frac = np.load(rank_file_frac + '.npz')
+            multi_fold_acc = rank_result_frac['tgm_rank']
+            mean_acc = np.mean(multi_fold_acc, axis=1)
+            frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
+            frac_diags.append(np.diag(frac_above))
+
             if word == 'noun1':
                 time = word_time
                 win_starts = word_win_starts
@@ -203,6 +223,7 @@ if __name__ == '__main__':
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
             acc = acc_diags[i_word]
+            diag_frac = frac_diags[i_word]
 
             ax.plot(range(len(acc)), acc, label='{word} accuracy'.format(word=word), color=color)
 
@@ -210,7 +231,9 @@ if __name__ == '__main__':
 
             # pval_thresh = bhy_multiple_comparisons_procedure(pvals, assume_independence=args.indep)
             #
-            # for i_pt in range(num_time):
+            for i_pt in range(num_time):
+                if  diag_frac[i_pt]  > 0.5:
+                    ax.scatter(i_pt, 1.0 + float(i_word)*0.02, color=color, marker='o')
             #     if pvals[i_pt] <= pval_thresh:
             #         ax.scatter(i_pt, 0.82 + 0.02*i_word, color=color, marker='*')
 
