@@ -190,6 +190,7 @@ if __name__ == '__main__':
                                                           avgTst=args.avgTest,
                                                           inst=args.num_instances,
                                                           rsP=1,
+                                                          rep_str='',
                                                           mode='rankacc')
             rank_result_frac = np.load(rank_file_frac + '.npz')
             multi_fold_acc = rank_result_frac['tgm_rank']
