@@ -150,6 +150,7 @@ if __name__ == '__main__':
                                                 avgTst=args.avgTest,
                                                 inst=args.num_instances,
                                                 rsP=1,
+                                                                      rep_str='',
                                                 rank_str='',
                                                 mode='acc')
             rank_file = tgm_loso_acc_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
@@ -166,6 +167,7 @@ if __name__ == '__main__':
                                                avgTm=args.avgTime,
                                                avgTst=args.avgTest,
                                                inst=args.num_instances,
+                                                                     rep_str='',
                                                rsP=1,
                                                rank_str='rank',
                                                mode='acc')
