@@ -212,7 +212,7 @@ if __name__ == '__main__':
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
 
             for i_pt in range(num_time):
-                if  diag_frac[i_pt]  > 0.5:
+                if  diag_frac[i_pt]  > 0.95:
                     ax.scatter(i_pt, 1.0 + float(i_word)*0.02, color=color, marker='o')
 
             # pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
