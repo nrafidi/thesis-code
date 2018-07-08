@@ -130,6 +130,7 @@ def intersect_accs(exp,
         else:
             tgm_pred = result['tgm_pred']
             l_ints = result['l_ints']
+            print(l_ints)
             cv_membership = result['cv_membership']
             print(len(cv_membership))
             fold_labels = []
