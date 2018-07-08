@@ -220,6 +220,7 @@ if __name__ == '__main__':
 
     all_combined = np.sum(np.concatenate(combo_scores, axis=0), axis=0)
     optimal = np.unravel_index(np.argmax(all_combined), all_combined.shape)
+    suboptimal = np.unravel_index(np.argmin(all_combined), all_combined.shape)
 
     fig, ax = plt.subplots()
     h = ax.imshow(all_combined, interpolation='nearest', vmin=0.0, vmax=9.0)
@@ -243,6 +244,12 @@ if __name__ == '__main__':
         'Optimal window size: {win}\nOptimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[optimal[0]],
                                                                                                ni=num_insts[optimal[1]],
                                                                                                score=np.max(
+                                                                                                   all_combined)))
+
+    print(
+        'Sub-Optimal window size: {win}\nSub-Optimal number of instances: {ni}\nScore: {score}'.format(win=win_lens[suboptimal[0]],
+                                                                                               ni=num_insts[suboptimal[1]],
+                                                                                               score=np.min(
                                                                                                    all_combined)))
 
     plt.show()
