@@ -126,9 +126,9 @@ if __name__ == '__main__':
                                  inst=ni,
                                  rsP=rs,
                                  mode='acc')
-
-        if not os.path.isfile(fname + '.npz'):
-            call(call_str, shell=True)
+        #
+        # if not os.path.isfile(fname + '.npz'):
+        call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 200:
