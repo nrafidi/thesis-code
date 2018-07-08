@@ -3,9 +3,9 @@ import os.path
 import numpy as np
 import batch_experiments_eos_multisub_fold as batch_exp
 
-TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
+TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 
-SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
+SAVE_FILE = '{dir}TGM-LOSO_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{mode}'
 
@@ -67,13 +67,6 @@ if __name__ == '__main__':
         win_len = grid[8]
         sen = grid[9]
         word = grid[10]
-
-        if exp == 'krns2':
-            if word == 'senlen':
-                continue
-        if sen != 'pooled':
-            if word in ['noun1', 'voice', 'senlen', 'propid']:
-                continue
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
