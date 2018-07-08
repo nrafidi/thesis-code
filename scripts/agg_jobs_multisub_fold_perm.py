@@ -128,8 +128,8 @@ if __name__ == '__main__':
                     time = result['time']
                     proc = result['proc']
                 cv_membership_perm.append(result['cv_membership'][0])
-                tgm_acc_perm.append(result['tgm_acc'][None, ...])
-                tgm_pred_perm.append(result['tgm_pred'][None, ...])
+                tgm_acc_perm.append(result['tgm_acc'])
+                tgm_pred_perm.append(result['tgm_pred'])
 
             num_folds = len(batch_exp.FOLDS)
             if exp == 'PassAct3' and word == 'noun2':
@@ -140,8 +140,8 @@ if __name__ == '__main__':
 
                 print(tgm_acc_perm.shape)
 
-                tgm_acc.append(tgm_acc_perm)
-                tgm_pred.append(tgm_pred_perm)
+                tgm_acc.append(tgm_acc_perm[None, ...])
+                tgm_pred.append(tgm_pred_perm[None, ...])
                 cv_membership.append(cv_membership_perm)
 
                 np.savez_compressed(complete_job + '.npz',
