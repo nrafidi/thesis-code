@@ -217,7 +217,7 @@ if __name__ == '__main__':
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
-            ax.legend(bbox_to_anchor=(0.6, 0.9), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
+            ax.legend(bbox_to_anchor=(0.6, 0.95), loc=2, borderaxespad=0., ncol=1, fontsize=legendfontsize)
         ax.set_title('{sen_type}'.format(sen_type=PLOT_TITLE_SEN[sen_type]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_sen_type], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
