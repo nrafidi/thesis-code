@@ -194,7 +194,8 @@ if __name__ == '__main__':
                                                           inst=args.num_instances,
                                                           rsP=1,
                                                           rep_str='',
-                                                          mode='rankacc')
+                                                          rank_str='rank',
+                                                          mode='acc')
             rank_result_frac = np.load(rank_file_frac + '.npz')
             multi_fold_acc = rank_result_frac['tgm_rank']
             mean_acc = np.mean(multi_fold_acc, axis=1)
