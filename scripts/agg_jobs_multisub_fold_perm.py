@@ -96,8 +96,8 @@ if __name__ == '__main__':
                     time = result['time']
                     proc = result['proc']
                 cv_membership.append(result['cv_membership'][0])
-                tgm_acc.append(result['tgm_acc'])
-                tgm_pred.append(result['tgm_pred'])
+                tgm_acc.append(result['tgm_acc'][None, ...])
+                tgm_pred.append(result['tgm_pred'][None, ...])
                 continue
             tgm_acc_perm = []
             tgm_pred_perm = []
@@ -128,8 +128,8 @@ if __name__ == '__main__':
                     time = result['time']
                     proc = result['proc']
                 cv_membership_perm.append(result['cv_membership'][0])
-                tgm_acc_perm.append(result['tgm_acc'])
-                tgm_pred_perm.append(result['tgm_pred'])
+                tgm_acc_perm.append(result['tgm_acc'][None, ...])
+                tgm_pred_perm.append(result['tgm_pred'][None, ...])
 
             num_folds = len(batch_exp.FOLDS)
             if exp == 'PassAct3' and word == 'noun2':
