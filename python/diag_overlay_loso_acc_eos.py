@@ -213,7 +213,7 @@ if __name__ == '__main__':
             ax.set_ylabel('Accuracy', fontsize=axislabelsize)
         if i_sen_type == 1:
             ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
-            ax.set_ylim([0.0, 1.2])
+        ax.set_ylim([0.0, 1.2])
         ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
