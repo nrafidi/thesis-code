@@ -1,7 +1,7 @@
 import itertools
 import os.path
 import numpy as np
-import batch_experiments_multisub_fold as batch_exp
+import batch_experiments_multisub_fold_perm as batch_exp
 
 TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO/'
 
