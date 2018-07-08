@@ -1,14 +1,14 @@
 import argparse
-import load_data_ordered as load_data
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
 import os
 import run_TGM_LOSO_EOS
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
+from rank_from_pred import rank_from_pred
+
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
                   'PassAct3': 'Final Experiment'}
@@ -103,6 +103,20 @@ def intersect_accs(exp,
                                                          inst=num_instances,
                                                          rsP=1,
                                                          mode='acc') + '.npz'
+        rank_fname = run_TGM_LOSO_EOS.SAVE_FILE.format(dir=save_dir,
+                                                         sub=sub,
+                                                         sen_type=sen_type,
+                                                         word=word,
+                                                         win_len=win_len,
+                                                         ov=overlap,
+                                                         perm='F',
+                                                         alg=alg,
+                                                         adj=adj,
+                                                         avgTm=avgTime,
+                                                         avgTst=avgTest,
+                                                         inst=num_instances,
+                                                         rsP=1,
+                                                         mode='rankacc') + '.npz'
         if not os.path.isfile(result_fname):
             print(result_fname)
             continue
@@ -110,7 +124,21 @@ def intersect_accs(exp,
         time = np.squeeze(result['time'])
         win_starts = result['win_starts']
 
-        fold_acc = result['tgm_acc']
+        if os.path.isfile(rank_fname + '.npz'):
+            rank_result = np.load(rank_fname)
+            fold_acc = rank_result['tgm_rank']
+        else:
+            tgm_pred = result['tgm_pred']
+            l_ints = result['l_ints']
+            cv_membership = result['cv_membership']
+            fold_labels = []
+            for i in range(len(cv_membership)):
+                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+
+            fold_acc = rank_from_pred(tgm_pred, fold_labels)
+            np.savez_compressed(rank_fname, tgm_rank=fold_acc)
+
+        # fold_acc = result['tgm_acc']
         eos_max_fold = []
         for i_fold in range(fold_acc.shape[0]):
             diag_acc = np.diag(np.squeeze(fold_acc[i_fold, :, :]))
