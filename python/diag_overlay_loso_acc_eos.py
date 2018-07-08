@@ -102,12 +102,12 @@ if __name__ == '__main__':
             if sen_type == 'pooled':
                 word_list.append('noun1')
                 word_list.append('voice')
-            chance = {'noun1': 0.125,
-                      'verb': 0.25,
-                      'agent': 0.25,
-                      'patient': 0.25,
+            chance = {'noun1': 0.5,
+                      'verb': 0.5,
+                      'agent': 0.5,
+                      'patient': 0.5,
                       'voice': 0.5,
-                      'propid': 1.0/16.0}
+                      'propid': 0.5}
         else:
             word_list = ['verb', 'agent', 'patient']
             if num_instances > 1:

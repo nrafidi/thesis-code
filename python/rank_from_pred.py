@@ -35,7 +35,7 @@ def rank_from_pred(tgm_pred, fold_labels):
                     except:
                         print(curr_label)
                         print(label_sort)
-                        rank = len(label_sort) - 1
+                        rank = len(label_sort) - 2
                     rank_acc[i, j, k] = 1.0 - rank/(float(len(label_sort)) - 1.0)
                 
 
