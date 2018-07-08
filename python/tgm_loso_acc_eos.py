@@ -124,7 +124,7 @@ def intersect_accs(exp,
         time = np.squeeze(result['time'])
         win_starts = result['win_starts']
 
-        if os.path.isfile(rank_fname + '.npz'):
+        if os.path.isfile(rank_fname):
             rank_result = np.load(rank_fname)
             fold_acc = rank_result['tgm_rank']
         else:
