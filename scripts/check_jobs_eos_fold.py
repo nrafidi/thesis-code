@@ -98,10 +98,10 @@ if __name__ == '__main__':
                                  rsP=rs,
                                  fold=fold)
 
-        if os.path.isfile(old_job + '.npz'):
-            skipped_jobs += 1
-            was_success = True
-        elif os.path.isfile(fname + '.npz'):
+        # if os.path.isfile(old_job + '.npz'):
+        #     skipped_jobs += 1
+        #     was_success = True
+        if os.path.isfile(fname + '.npz'):
             successful_jobs += 1
             was_success = True
         else:
