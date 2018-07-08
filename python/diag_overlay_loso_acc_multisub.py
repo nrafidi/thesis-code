@@ -184,6 +184,7 @@ if __name__ == '__main__':
                                                           word=word,
                                                           win_len=args.win_len,
                                                           exc='',
+                                                          tsss=tsss_str,
                                                           ov=args.overlap,
                                                           perm='F',
                                                           alg=args.alg,
