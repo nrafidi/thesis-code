@@ -30,9 +30,9 @@ TMAX={'det': 0.0,
       'third-last': -0.5,
       'third-last-full': -0.5,
       'second-last-full': 0.0,
-      'last-full': 0.5,
-      'eos': 1.0,
-      'eos-full': 1.5}
+      'last-full': 2.5,
+      'eos': 2.0,
+      'eos-full': 2.0}
 
 WORD_COLS = {'active': {'det': 3, 'noun2': 4, 'third-last': 2, 'third-last-full': -4, 'second-last-full': -3, 'last-full': -2, 'eos': 4, 'eos-full': -2},
              'passive': {'det': 5, 'noun2': 6, 'third-last': 4, 'third-last-full': -4, 'second-last-full': -3, 'last-full': -2, 'eos': 6, 'eos-full': -2}}
