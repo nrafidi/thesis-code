@@ -123,7 +123,7 @@ if __name__ == '__main__':
                             buff_space_to_use = 2*buff_space
                         else:
                             buff_space_to_use = buff_space
-                        ax.text(v + buff_space * 2 * time_step, 30, text_to_write[i_v],
+                        ax.text(v + buff_space_to_use * 2 * time_step, 30, text_to_write[i_v],
                                 color='k', fontsize=18)
 
                 ax.set_title(title_list[i_inst], fontsize=axistitlesize)
