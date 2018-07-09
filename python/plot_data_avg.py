@@ -71,7 +71,7 @@ if __name__ == '__main__':
             max_line = 3.51 * 2 * time_step
         for i_sen_id, sen_id in enumerate(sen_list):
             if i_sen_id < 2:
-                text_to_write = text_to_write_all[0, :]
+                text_to_write = text_to_write_all[1, :]
             else:
                 text_to_write = text_to_write_all[1, :]
             inst_fig = plt.figure(figsize=(16, 19))
