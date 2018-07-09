@@ -162,15 +162,15 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
             if draw == 0:
                 total_rdm = result['total_rdm']
                 subject_total_rdms.append(total_rdm[None, ...])
-                fig, ax = plt.subplots()
-                ax.imshow(total_rdm[0], interpolation='nearest')
-                fig.savefig(SAVE_FIG.format(fig_type='rdm-data',
-                                            word=word,
-                                            win_len=win_len,
-                                            ov=overlap,
-                                            dist=dist,
-                                            avgTm=doTimeAvg) + '.png', bbox_inches='tight')
-                plt.show()
+                # fig, ax = plt.subplots()
+                # ax.imshow(total_rdm[0], interpolation='nearest')
+                # fig.savefig(SAVE_FIG.format(fig_type='rdm-data',
+                #                             word=word,
+                #                             win_len=win_len,
+                #                             ov=overlap,
+                #                             dist=dist,
+                #                             avgTm=doTimeAvg) + '.png', bbox_inches='tight')
+                # plt.show()
         val_rdm = np.concatenate(val_rdms, axis=0)
         test_rdm = np.concatenate(test_rdms, axis=0)
         subject_val_rdms.append(val_rdm[None, ...])
