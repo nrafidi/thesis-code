@@ -82,11 +82,11 @@ if __name__ == '__main__':
     win_len = args.win_len
     num_instances = args.num_instances
 
-    ticklabelsize = 14
-    legendfontsize = 16
+    ticklabelsize = 16
+    legendfontsize = 20
     axislabelsize = 18
     suptitlesize = 25
-    axistitlesize = 20
+    axistitlesize = 22
     axislettersize = 20
     time_step = int(250 / args.overlap)
 
@@ -214,7 +214,7 @@ if __name__ == '__main__':
         if i_sen_type == 1:
             ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
         ax.set_ylim([0.0, 1.2])
-        ax.set_xlim([0, len(time[win_starts]) + 0.8*time_step])
+        ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
         if sen_type == 'pooled':
             ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
