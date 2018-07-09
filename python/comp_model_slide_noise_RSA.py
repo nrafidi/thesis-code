@@ -354,10 +354,20 @@ if __name__ == '__main__':
                                     ov=overlap,
                                     dist=dist,
                                     avgTm=doTimeAvg) + '.pdf', bbox_inches='tight')
-    plt.show()
+    # plt.show()
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
     test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
     total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
+
+    fig, ax = plt.subplots()
+    ax.imshow(total_avg_rdms[0], interpolation='nearest')
+    fig.savefig(SAVE_FIG.format(fig_type='rdm-data',
+                                word=word,
+                                win_len=win_len,
+                                ov=overlap,
+                                dist=dist,
+                                avgTm=doTimeAvg) + '.png', bbox_inches='tight')
+
     num_sub = sub_total_rdms.shape[0]
     print(num_sub)
     num_time = test_rdms.shape[1]
