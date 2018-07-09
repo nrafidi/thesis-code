@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 from scipy.spatial.distance import squareform, pdist
 import os
-from scipy.stats import spearmanr, kendalltau
+from scipy.stats import spearmanr, kendalltau, norm, ttest_1samp
 import run_slide_noise_RSA
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
@@ -282,6 +282,7 @@ if __name__ == '__main__':
     parser.add_argument('--dist', default='cosine', choices=['cosine', 'euclidean'])
     parser.add_argument('--doTimeAvg', default='F', choices=['T', 'F'])
     parser.add_argument('--corr', default='ktau', choices=['ktau', 'mantel-pearson', 'mantel-spearman'])
+    parser.add_argument('--noise_type', default='rep', choices=['rep', 'sub'])
     parser.add_argument('--force', action='store_true')
 
     args = parser.parse_args()
@@ -289,7 +290,7 @@ if __name__ == '__main__':
     experiment = args.experiment
     overlap = args.overlap
     dist = args.dist
-
+    noise_type = args.noise_type
     force = args.force
 
     ticklabelsize = 16
@@ -311,6 +312,8 @@ if __name__ == '__main__':
         model_corr_fn = partial(Mantel.test, method=args.corr[7:])
         noise_corr_fn = partial(Mantel.test, method=args.corr[7:], perms=2)
         corr_fn = partial(Mantel.test, method=args.corr[7:], tail='upper')
+
+
 
     sub_val_rdms, sub_test_rdms, sub_total_rdms, syn_rdm, bow_rdm, hier_rdm, time = load_all_rdms(experiment,
                                                                                                   word,
@@ -374,7 +377,8 @@ if __name__ == '__main__':
     num_time = test_rdms.shape[1]
 
     noise_rep_lb_file = SAVE_SCORES.format(exp=experiment,
-                                            score_type='noise-rep-lb-{}'.format(args.corr),
+                                            score_type='noise-{noise}-lb-{corr}'.format(noise=noise_type,
+                                                                                        corr=args.corr),
                                             word=word,
                                             win_len=win_len,
                                             ov=overlap,
@@ -384,11 +388,22 @@ if __name__ == '__main__':
         result = np.load(noise_rep_lb_file)
         noise_rep_lb_ceiling = result['scores']
     else:
-        noise_rep_lb_ceiling, _ = score_rdms(val_rdms, test_rdms, noise_corr_fn)
+        if noise_type == 'rep':
+            noise_rep_lb_ceiling, _ = score_rdms(val_rdms, test_rdms, noise_corr_fn)
+        else:
+            noise_rep_lb_ceiling = []
+            for i_sub in range(num_sub):
+                sub_inds = np.logical_not(np.arange(num_sub) == i_sub)
+                sub_score, _ = score_rdms(np.squeeze(sub_total_rdms[i_sub, ...]),
+                                       np.squeeze(np.mean(sub_total_rdms[sub_inds, ...], axis=0)),
+                                          noise_corr_fn)
+                noise_rep_lb_ceiling.append(sub_score[None, ...])
+            noise_rep_lb_ceiling = np.concatenate(noise_rep_lb_ceiling, axis=0)
         np.savez_compressed(noise_rep_lb_file, scores=noise_rep_lb_ceiling)
 
     noise_rep_ub_file = SAVE_SCORES.format(exp=experiment,
-                                           score_type='noise-rep-ub-{}'.format(args.corr),
+                                           score_type='noise-{noise}-ub-{corr}'.format(noise=noise_type,
+                                                                                        corr=args.corr),
                                            word=word,
                                            win_len=win_len,
                                            ov=overlap,
@@ -398,7 +413,16 @@ if __name__ == '__main__':
         result = np.load(noise_rep_ub_file)
         noise_rep_ub_ceiling = result['scores']
     else:
-        noise_rep_ub_ceiling, _ = score_rdms(val_rdms, total_avg_rdms, noise_corr_fn)
+        if noise_type == 'rep':
+            noise_rep_ub_ceiling, _ = score_rdms(val_rdms, total_avg_rdms, noise_corr_fn)
+        else:
+            noise_rep_ub_ceiling = []
+            for i_sub in range(num_sub):
+                sub_inds = np.logical_not(np.arange(num_sub) == i_sub)
+                sub_score, _ = score_rdms(np.squeeze(sub_total_rdms[i_sub, ...]), total_avg_rdms,
+                                       noise_corr_fn)
+                noise_rep_ub_ceiling.append(sub_score[None, ...])
+            noise_rep_ub_ceiling = np.concatenate(noise_rep_ub_ceiling, axis=0)
         np.savez_compressed(noise_rep_ub_file, scores=noise_rep_ub_ceiling)
 
     mean_noise_rep_lb = np.squeeze(np.mean(noise_rep_lb_ceiling, axis=0))
@@ -412,7 +436,8 @@ if __name__ == '__main__':
     noise_ub = np.max(mean_noise_rep_ub + std_noise_rep_ub)
 
     bow_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='bow-rep-{}'.format(args.corr),
+                                        score_type='bow-{noise}-{corr}'.format(noise=noise_type,
+                                                                                        corr=args.corr),
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -423,13 +448,28 @@ if __name__ == '__main__':
         bow_rep_scores = result['scores']
         bow_rep_pvals = result['pvals']
     else:
-        bow_rep_scores, bow_rep_pvals = score_rdms(bow_rdm, total_avg_rdms, corr_fn)
+        if noise_type == 'rep':
+            bow_rep_scores, bow_rep_pvals = score_rdms(bow_rdm, total_avg_rdms, corr_fn)
+        else:
+            bow_rep_scores = []
+            bow_rep_pvals_sub = []
+            for i_sub in range(num_sub):
+                sub_score, sub_pval = score_rdms(bow_rdm, np.squeeze(sub_total_rdms[i_sub, ...]), corr_fn)
+                bow_rep_scores.append(sub_score[None, ...])
+                bow_rep_pvals_sub.append(sub_pval[None, ...])
+            bow_rep_scores = np.mean(np.concatenate(bow_rep_scores, axis=0), axis=0)
+            bow_rep_pvals_sub = np.concatenate(bow_rep_pvals_sub, axis=0)
+            num_time = bow_rep_pvals_sub.shape[1]
+            bow_rep_pvals = np.empty((num_time,))
+            for j in range(num_time):
+                bow_rep_pvals[j] = ttest_1samp(norm.ppf(bow_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(bow_rep_file, scores=bow_rep_scores, pvals=bow_rep_pvals)
 
     bow_bh_thresh = bhy_multiple_comparisons_procedure(bow_rep_pvals)
 
     hier_rep_file = SAVE_SCORES.format(exp=experiment,
-                                      score_type='hier-rep-{}'.format(args.corr),
+                                      score_type='hier-{noise}-{corr}'.format(noise=noise_type,
+                                                                                        corr=args.corr),
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
@@ -440,13 +480,28 @@ if __name__ == '__main__':
         hier_rep_scores = result['scores']
         hier_rep_pvals = result['pvals']
     else:
-        hier_rep_scores, hier_rep_pvals = score_rdms(hier_rdm, total_avg_rdms, corr_fn)
+        if noise_type == 'rep':
+            hier_rep_scores, hier_rep_pvals = score_rdms(hier_rdm, total_avg_rdms, corr_fn)
+        else:
+            hier_rep_scores = []
+            hier_rep_pvals_sub = []
+            for i_sub in range(num_sub):
+                sub_score, sub_pval = score_rdms(hier_rdm, np.squeeze(sub_total_rdms[i_sub, ...]), corr_fn)
+                hier_rep_scores.append(sub_score[None, ...])
+                hier_rep_pvals_sub.append(sub_pval[None, ...])
+            hier_rep_scores = np.mean(np.concatenate(hier_rep_scores, axis=0), axis=0)
+            hier_rep_pvals_sub = np.concatenate(hier_rep_pvals_sub, axis=0)
+            num_time = hier_rep_pvals_sub.shape[1]
+            hier_rep_pvals = np.empty((num_time,))
+            for j in range(num_time):
+                hier_rep_pvals[j] = ttest_1samp(norm.ppf(hier_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(hier_rep_file, scores=hier_rep_scores, pvals=hier_rep_pvals)
 
     hier_bh_thresh = bhy_multiple_comparisons_procedure(hier_rep_pvals)
 
     syn_rep_file = SAVE_SCORES.format(exp=experiment,
-                                        score_type='syn-rep-{}'.format(args.corr),
+                                        score_type='syn-{noise}-{corr}'.format(noise=noise_type,
+                                                                                        corr=args.corr),
                                         word=word,
                                         win_len=win_len,
                                         ov=overlap,
@@ -457,7 +512,21 @@ if __name__ == '__main__':
         syn_rep_scores = result['scores']
         syn_rep_pvals = result['pvals']
     else:
-        syn_rep_scores, syn_rep_pvals = score_rdms(syn_rdm, total_avg_rdms, corr_fn)
+        if noise_type == 'rep':
+            syn_rep_scores, syn_rep_pvals = score_rdms(syn_rdm, total_avg_rdms, corr_fn)
+        else:
+            syn_rep_scores = []
+            syn_rep_pvals_sub = []
+            for i_sub in range(num_sub):
+                sub_score, sub_pval = score_rdms(syn_rdm, np.squeeze(sub_total_rdms[i_sub, ...]), corr_fn)
+                syn_rep_scores.append(sub_score[None, ...])
+                syn_rep_pvals_sub.append(sub_pval[None, ...])
+            syn_rep_scores = np.mean(np.concatenate(syn_rep_scores, axis=0), axis=0)
+            syn_rep_pvals_sub = np.concatenate(syn_rep_pvals_sub, axis=0)
+            num_time = syn_rep_pvals_sub.shape[1]
+            syn_rep_pvals = np.empty((num_time,))
+            for j in range(num_time):
+                syn_rep_pvals[j] = ttest_1samp(norm.ppf(syn_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(syn_rep_file, scores=syn_rep_scores, pvals=syn_rep_pvals)
 
     syn_bh_thresh = bhy_multiple_comparisons_procedure(syn_rep_pvals)
@@ -492,14 +561,16 @@ if __name__ == '__main__':
     rep_ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
 
     rep_fig.suptitle('RSA Model Comparison', fontsize=suptitlesize)
-    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
+    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{noise}-{corr}'.format(noise=noise_type,
+                                                                                               corr=args.corr),
                                       word=word,
                                       win_len=win_len,
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg) + '.png', bbox_inches='tight')
 
-    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{}'.format(args.corr),
+    rep_fig.savefig(SAVE_FIG.format(fig_type='score-overlay-comp-models-{noise}-{corr}'.format(noise=noise_type,
+                                                                                               corr=args.corr),
                                      word=word,
                                      win_len=win_len,
                                      ov=overlap,
