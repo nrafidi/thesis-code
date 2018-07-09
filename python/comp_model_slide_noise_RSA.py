@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg') # TkAgg - only works when sshing from office machine
+matplotlib.use('Agg') # TkAgg - only works when sshing from office machine
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
@@ -506,4 +506,4 @@ if __name__ == '__main__':
                                      dist=dist,
                                      avgTm=doTimeAvg) + '.pdf', bbox_inches='tight')
 
-    plt.show()
+    # plt.show()
