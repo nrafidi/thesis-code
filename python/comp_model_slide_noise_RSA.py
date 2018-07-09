@@ -160,7 +160,17 @@ def load_all_rdms(experiment, word, win_len, overlap, dist, avgTm):
             val_rdms.append(result['val_rdm'][None, ...])
             test_rdms.append(result['test_rdm'][None, ...])
             if draw == 0:
-                subject_total_rdms.append(result['total_rdm'][None, ...])
+                total_rdm = result['total_rdm']
+                subject_total_rdms.append(total_rdm[None, ...])
+                fig, ax = plt.subplots()
+                ax.imshow(total_rdm[0], interpolation='nearest')
+                fig.savefig(SAVE_FIG.format(fig_type='rdm-data',
+                                            word=word,
+                                            win_len=win_len,
+                                            ov=overlap,
+                                            dist=dist,
+                                            avgTm=doTimeAvg) + '.png', bbox_inches='tight')
+                plt.show()
         val_rdm = np.concatenate(val_rdms, axis=0)
         test_rdm = np.concatenate(test_rdms, axis=0)
         subject_val_rdms.append(val_rdm[None, ...])
@@ -358,15 +368,6 @@ if __name__ == '__main__':
     val_rdms = np.squeeze(np.mean(sub_val_rdms, axis=0))
     test_rdms = np.squeeze(np.mean(sub_test_rdms, axis=0))
     total_avg_rdms = np.squeeze(np.mean(sub_total_rdms, axis=0))
-
-    fig, ax = plt.subplots()
-    ax.imshow(total_avg_rdms[0], interpolation='nearest')
-    fig.savefig(SAVE_FIG.format(fig_type='rdm-data',
-                                word=word,
-                                win_len=win_len,
-                                ov=overlap,
-                                dist=dist,
-                                avgTm=doTimeAvg) + '.png', bbox_inches='tight')
 
     num_sub = sub_total_rdms.shape[0]
     print(num_sub)
