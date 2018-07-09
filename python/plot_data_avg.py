@@ -32,8 +32,8 @@ def sort_sensors():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment', default='PassAct3')
-    parser.add_argument('--subject', default='Z')
+    parser.add_argument('--experiment', default='krns2')
+    parser.add_argument('--subject', default='B')
     # parser.add_argument('--word', default = 'noun2', choices=['noun1', 'noun2', 'verb'])
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
 
@@ -55,19 +55,25 @@ if __name__ == '__main__':
     yticks_sens = np.array([sorted_reg.index(reg) for reg in uni_reg])
     time_step = int(250 / 2)
     start_line = time_step
-    sen_type_list = ['active'] #, 'passive']
-    sen_list = [0] #, 16]
-    inst_list = [10, 5, 2, 1]
+    sen_type_list = ['active', 'passive']
+    sen_list = [0, 16, 10, 26]
+    inst_list = [10, 5, 2]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
         if sen_type == 'active':
-            text_to_write = np.array(['A', 'dog', 'found', 'the', 'peach.'])
+            text_to_write_all = np.array([['A', 'dog', 'found', 'the', 'peach.'],
+                                      ['The', 'student', 'inspected', 'the', 'school.']])
             max_line = 2.51 * 2 * time_step
 
         else:
-            text_to_write = np.array(['The', 'peach', 'was', 'found', 'by', 'the', 'dog.'])
+            text_to_write_all = np.array([['The', 'peach', 'was', 'found', 'by', 'the', 'dog.'],
+                                      ['The', 'school', 'was', 'inspected','by', 'the', 'student.']])
             max_line = 3.51 * 2 * time_step
-        for sen_id in sen_list:
+        for i_sen_id, sen_id in enumerate(sen_list):
+            if i_sen_id < 2:
+                text_to_write = text_to_write_all[0, :]
+            else:
+                text_to_write = text_to_write_all[1, :]
             inst_fig = plt.figure(figsize=(16, 19))
             inst_grid = AxesGrid(inst_fig, 111, nrows_ncols=(len(inst_list), 1),
                                     axes_pad=0.7, cbar_mode='single', cbar_location='right',
@@ -114,7 +120,7 @@ if __name__ == '__main__':
                     buff_space = 0.025
                     if i_v < len(text_to_write):
                         ax.text(v + buff_space * 2 * time_step, 30, text_to_write[i_v],
-                                color='k', fontsize=14)
+                                color='k', fontsize=18)
 
                 ax.set_title(title_list[i_inst], fontsize=axistitlesize)
                 if i_inst == 3:
@@ -131,12 +137,12 @@ if __name__ == '__main__':
 
                 inst_fig.subplots_adjust(top=0.98)
                 inst_fig.savefig(
-                    '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.pdf'.format(
+                    '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}_new.pdf'.format(
                         subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
                     ), bbox_inches='tight')
 
                 inst_fig.savefig(
-                    '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}.png'.format(
+                    '/home/nrafidi/thesis_figs/{exp}_{subject}_avg-data_{sen_type}_{sen_id}_new.png'.format(
                         subject=subject, exp=experiment, sen_type=sen_type, sen_id=sen_id
                     ), bbox_inches='tight')
 
