@@ -56,8 +56,8 @@ if __name__ == '__main__':
     time_step = int(250 / 2)
     start_line = time_step
     sen_type_list = ['active', 'passive']
-    sen_list = [0, 16, 10, 26]
-    inst_list = [10, 5, 2]
+    sen_list = [10]
+    inst_list = [10, 5, 2, 1]
     title_list = ['Single Trial', '2 Trial Average', '5 Trial Average', '10 Trial Average']
     for sen_type in sen_type_list:
         if sen_type == 'active':
