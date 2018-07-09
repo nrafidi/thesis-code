@@ -221,7 +221,7 @@ def score_rdms(val_rdms, test_rdms, corr_fn):
     return np.squeeze(scores), np.squeeze(pvals)
 
 
-def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=False):
+def bhy_multiple_comparisons_procedure(uncorrected_pvalues, alpha=0.05, assume_independence=True):
     # Benjamini-Hochberg-Yekutieli
     # originally from Mariya Toneva
     if len(uncorrected_pvalues.shape) == 1:
