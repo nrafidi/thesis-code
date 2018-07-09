@@ -34,6 +34,7 @@ if __name__ == '__main__':
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
+    perm_list = batch_exp.RANDOM_STATES
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
@@ -60,7 +61,7 @@ if __name__ == '__main__':
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
 
-        perm_list = batch_exp.RANDOM_STATES
+
 
         complete_job_perm = SAVE_FILE.format(dir=top_dir,
                                         sen_type=sen,
@@ -76,6 +77,7 @@ if __name__ == '__main__':
                                         rsP='{}-{}'.format(np.min(perm_list),
                                                            np.max(perm_list)),
                                         mode='acc')
+        print(complete_job_perm)
 
         tgm_acc = []
         tgm_pred = []
