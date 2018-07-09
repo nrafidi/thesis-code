@@ -120,7 +120,7 @@ if __name__ == '__main__':
                     buff_space = 0.025
                     if i_v < len(text_to_write):
                         if text_to_write[i_v] == 'the':
-                            buff_space_to_use = 2*buff_space
+                            buff_space_to_use = 10*buff_space
                         else:
                             buff_space_to_use = buff_space
                         ax.text(v + buff_space_to_use * 2 * time_step, 30, text_to_write[i_v],
