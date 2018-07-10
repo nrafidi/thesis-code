@@ -462,7 +462,7 @@ if __name__ == '__main__':
             num_time = bow_rep_pvals_sub.shape[1]
             bow_rep_pvals = np.empty((num_time,))
             for j in range(num_time):
-                bow_rep_pvals[j] = ttest_1samp(norm.ppf(bow_rep_pvals_sub[:, j]), 0)
+                _, bow_rep_pvals[j] = ttest_1samp(norm.ppf(bow_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(bow_rep_file, scores=bow_rep_scores, pvals=bow_rep_pvals)
 
     bow_bh_thresh = bhy_multiple_comparisons_procedure(bow_rep_pvals)
@@ -494,7 +494,7 @@ if __name__ == '__main__':
             num_time = hier_rep_pvals_sub.shape[1]
             hier_rep_pvals = np.empty((num_time,))
             for j in range(num_time):
-                hier_rep_pvals[j] = ttest_1samp(norm.ppf(hier_rep_pvals_sub[:, j]), 0)
+                _, hier_rep_pvals[j] = ttest_1samp(norm.ppf(hier_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(hier_rep_file, scores=hier_rep_scores, pvals=hier_rep_pvals)
 
     hier_bh_thresh = bhy_multiple_comparisons_procedure(hier_rep_pvals)
@@ -526,7 +526,7 @@ if __name__ == '__main__':
             num_time = syn_rep_pvals_sub.shape[1]
             syn_rep_pvals = np.empty((num_time,))
             for j in range(num_time):
-                syn_rep_pvals[j] = ttest_1samp(norm.ppf(syn_rep_pvals_sub[:, j]), 0)
+                _, syn_rep_pvals[j] = ttest_1samp(norm.ppf(syn_rep_pvals_sub[:, j]), 0)
         np.savez_compressed(syn_rep_file, scores=syn_rep_scores, pvals=syn_rep_pvals)
 
     syn_bh_thresh = bhy_multiple_comparisons_procedure(syn_rep_pvals)
