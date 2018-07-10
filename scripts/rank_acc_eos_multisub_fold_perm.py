@@ -12,7 +12,7 @@ SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr
 
 def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
-    print(tgm_pred.shape)
+    # print(tgm_pred.shape)
     assert len(fold_labels) == tgm_pred.shape[0]
     for i in range(tgm_pred.shape[0]):
         curr_labels = fold_labels[i]
@@ -20,10 +20,10 @@ def rank_from_pred(tgm_pred, fold_labels):
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
                 curr_pred_time = curr_pred[j, k]
-                print(curr_pred_time.shape)
-                print(curr_labels)
                 if curr_pred_time.shape[0] != len(curr_labels):
-                    assert len(np.unique(curr_labels)) == 1
+                    if len(np.unique(curr_labels)) != 1:
+                        print(curr_pred_time.shape)
+                        print(curr_labels)
                 for l in range(curr_pred_time.shape[0]):
                     label_sort = np.argsort(np.squeeze(curr_pred_time[l, ...]))
                     label_sort = label_sort[::-1]
