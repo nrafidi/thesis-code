@@ -384,7 +384,7 @@ if __name__ == '__main__':
                                             ov=overlap,
                                             dist=dist,
                                             avgTm=doTimeAvg)
-    if os.path.isfile(noise_rep_lb_file) and not force:
+    if os.path.isfile(noise_rep_lb_file): # and not force:
         result = np.load(noise_rep_lb_file)
         noise_rep_lb_ceiling = result['scores']
     else:
@@ -409,7 +409,7 @@ if __name__ == '__main__':
                                            ov=overlap,
                                            dist=dist,
                                            avgTm=doTimeAvg)
-    if os.path.isfile(noise_rep_ub_file) and not force:
+    if os.path.isfile(noise_rep_ub_file): # and not force:
         result = np.load(noise_rep_ub_file)
         noise_rep_ub_ceiling = result['scores']
     else:
@@ -443,7 +443,7 @@ if __name__ == '__main__':
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvg)
-    if os.path.isfile(bow_rep_file) and not force:
+    if os.path.isfile(bow_rep_file): # and not force:
         result = np.load(bow_rep_file)
         bow_rep_scores = result['scores']
         bow_rep_pvals = result['pvals']
@@ -475,7 +475,7 @@ if __name__ == '__main__':
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg)
-    if os.path.isfile(hier_rep_file) and not force:
+    if os.path.isfile(hier_rep_file): # and not force:
         result = np.load(hier_rep_file)
         hier_rep_scores = result['scores']
         hier_rep_pvals = result['pvals']
