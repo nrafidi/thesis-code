@@ -21,6 +21,7 @@ def rank_from_pred(tgm_pred, fold_labels):
             for k in range(curr_pred.shape[1]):
                 curr_pred_time = curr_pred[j, k]
                 print(curr_pred_time.shape)
+                print(curr_labels)
                 assert curr_pred_time.shape[0] == len(curr_labels)
                 for l in range(curr_pred_time.shape[0]):
                     label_sort = np.argsort(np.squeeze(curr_pred_time[l, ...]))
