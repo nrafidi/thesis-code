@@ -384,7 +384,7 @@ if __name__ == '__main__':
                                             ov=overlap,
                                             dist=dist,
                                             avgTm=doTimeAvg)
-    if os.path.isfile(noise_rep_lb_file): # and not force:
+    if os.path.isfile(noise_rep_lb_file) and not force:
         result = np.load(noise_rep_lb_file)
         noise_rep_lb_ceiling = result['scores']
     else:
@@ -409,7 +409,7 @@ if __name__ == '__main__':
                                            ov=overlap,
                                            dist=dist,
                                            avgTm=doTimeAvg)
-    if os.path.isfile(noise_rep_ub_file): # and not force:
+    if os.path.isfile(noise_rep_ub_file) and not force:
         result = np.load(noise_rep_ub_file)
         noise_rep_ub_ceiling = result['scores']
     else:
@@ -443,7 +443,7 @@ if __name__ == '__main__':
                                         ov=overlap,
                                         dist=dist,
                                         avgTm=doTimeAvg)
-    if os.path.isfile(bow_rep_file): # and not force:
+    if os.path.isfile(bow_rep_file) and not force:
         result = np.load(bow_rep_file)
         bow_rep_scores = result['scores']
         bow_rep_pvals = result['pvals']
@@ -475,7 +475,7 @@ if __name__ == '__main__':
                                       ov=overlap,
                                       dist=dist,
                                       avgTm=doTimeAvg)
-    if os.path.isfile(hier_rep_file): # and not force:
+    if os.path.isfile(hier_rep_file) and not force:
         result = np.load(hier_rep_file)
         hier_rep_scores = result['scores']
         hier_rep_pvals = result['pvals']
@@ -544,11 +544,11 @@ if __name__ == '__main__':
 
 
     for i_t, t in enumerate(plot_time):
-        if syn_rep_pvals[i_t] < syn_bh_thresh:
+        if syn_rep_pvals[i_t] < syn_bh_thresh and syn_rep_scores[i_t] > 0.0:
             rep_ax.scatter(t, 0.85, color='r', marker='*')
-        if bow_rep_pvals[i_t] < bow_bh_thresh:
+        if bow_rep_pvals[i_t] < bow_bh_thresh and bow_rep_scores[i_t] > 0.0:
             rep_ax.scatter(t, 0.9, color='b', marker='*')
-        if hier_rep_pvals[i_t] < hier_bh_thresh:
+        if hier_rep_pvals[i_t] < hier_bh_thresh and hier_rep_scores[i_t] > 0.0:
             rep_ax.scatter(t, 0.95, color='g', marker='*')
 
 
