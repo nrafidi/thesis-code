@@ -344,4 +344,36 @@ if __name__ == '__main__':
             overlap=args.overlap,
             num_instances=args.num_instances
         ), bbox_inches='tight')
+
+    fig, ax = plt.subplots()
+    ax.plot(np.diag(mean_acc), label='Average over Subjects')
+    ax.plot(np.diag(multi_mean_acc), label='Concatenation over Subjects')
+    ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
+    ax.set_xticklabels(label_time)
+    max_line = 0.3 * 2 * time_step
+    ax.axvline(x=max_line, color='k')
+    ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
+    ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
+    ax.set_ylim([0.0, 1.2])
+    ax.set_xlim([0, len(time[win_starts])])
+    ax.tick_params(labelsize=ticklabelsize)
+    ax.axhline(y=0.5, color='k', linestyle='dashed')
+    ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
+    fig.suptitle('Comparison of Subject Combination Approaches')
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag-acc-multi-comp_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
+    fig.savefig(
+        '/home/nrafidi/thesis_figs/{exp}_eos_diag-acc-multi-comp_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+            exp=args.experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime,
+            avgTest=args.avgTest,
+            win_len=args.win_len,
+            overlap=args.overlap,
+            num_instances=args.num_instances
+        ), bbox_inches='tight')
+
     plt.show()
