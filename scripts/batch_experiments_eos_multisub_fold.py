@@ -17,7 +17,7 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['PassAct3', 'krns2']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SEN_TYPES = ['active', 'passive', 'pooled']
 WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
