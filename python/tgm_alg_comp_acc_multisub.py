@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     ticklabelsize = 18
     legendfontsize = 16
-    axislabelsize = 18
+    axislabelsize = 20
     suptitlesize = 25
     axistitlesize = 20
     axislettersize = 20
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
 
     bar_fig, bar_ax = plt.subplots(figsize=(12, 12))
-    ind = 2.0*np.arange(len(alg_list))
-    width = 0.5
+    ind = 2.2*np.arange(len(alg_list))
+    width = 0.8
     bar_ax.bar(ind, max_acc, width, color='b')
     bar_ax.axhline(chance_word[word], color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width/2.0)
@@ -169,7 +169,7 @@ if __name__ == '__main__':
     bar_fig.suptitle('Algorithm Performance Comparison', fontsize=suptitlesize)
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
-    bar_ax.set_ylabel('Classification Accuracy/Runtime Fraction', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classification Accuracy', fontsize=axislabelsize)
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub_nogreen.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub_nogreen.png')
