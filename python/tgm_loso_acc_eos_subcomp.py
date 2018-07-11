@@ -346,6 +346,11 @@ if __name__ == '__main__':
         ), bbox_inches='tight')
 
     fig, ax = plt.subplots()
+    win_time = time[win_starts]
+    win_time = win_time[::2]
+    num_time = len(win_time)
+    time_step /=2
+    time_adjust /=2
     ax.plot(np.diag(mean_acc)[::2], label='Average over Subjects')
     ax.plot(np.diag(multi_mean_acc)[::2], label='Concatenation over Subjects')
     ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
@@ -355,7 +360,7 @@ if __name__ == '__main__':
     ax.set_ylabel('Rank Accuracy', fontsize=axislabelsize)
     ax.set_xlabel('Time Relative to Last Word Onset (s)', fontsize=axislabelsize)
     ax.set_ylim([0.3, 0.8])
-    ax.set_xlim([0, len(time[win_starts])])
+    ax.set_xlim([0, num_time])
     ax.tick_params(labelsize=ticklabelsize)
     ax.axhline(y=0.5, color='k', linestyle='dashed')
     ax.legend(loc=3, fontsize=legendfontsize)
