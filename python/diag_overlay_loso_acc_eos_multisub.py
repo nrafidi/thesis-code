@@ -86,7 +86,7 @@ if __name__ == '__main__':
     num_instances = args.num_instances
 
     ticklabelsize = 14
-    legendfontsize = 16
+    legendfontsize = 20
     axislabelsize = 18
     suptitlesize = 25
     axistitlesize = 20
