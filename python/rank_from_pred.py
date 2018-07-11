@@ -148,8 +148,8 @@ if __name__ == '__main__':
                                           word='bind', rank_str='')
                 if not os.path.isfile(fname_load):
                     continue
-                if os.path.isfile(fname_save):
-                    continue
+                # if os.path.isfile(fname_save):
+                #     continue
                 result = np.load(fname_load)
                 tgm_pred = result['tgm_pred']
                 l_ints = result['l_ints']
