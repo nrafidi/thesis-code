@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     top_dir = TOP_DIR.format(exp=exp)
 
-    ticklabelsize = 14
+    ticklabelsize = 18
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
@@ -157,6 +157,23 @@ if __name__ == '__main__':
     bar_fig.subplots_adjust(top=0.85)
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.pdf')
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
+
+    bar_fig, bar_ax = plt.subplots(figsize=(10, 10))
+    ind = np.arange(len(alg_list))
+    width = 0.5
+    bar_ax.bar(ind, max_acc, width, color='b')
+    bar_ax.axhline(chance_word[word], color='k', label='Chance Accuracy')
+    bar_ax.set_xticks(ind + width/2.0)
+    bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
+    bar_ax.set_ylim([0.3, 0.8])
+    bar_fig.suptitle('Algorithm Performance Comparison', fontsize=suptitlesize)
+    bar_ax.tick_params(labelsize=ticklabelsize)
+    bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
+    bar_ax.set_ylabel('Classification Accuracy/Runtime Fraction', fontsize=axislabelsize)
+    bar_fig.subplots_adjust(top=0.85)
+    bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub_nogreen.pdf')
+    bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub_nogreen.png')
+
 
     win_fig = plt.figure(figsize=(20, 8))
     win_grid = AxesGrid(win_fig, 111, nrows_ncols=(1, 2),
