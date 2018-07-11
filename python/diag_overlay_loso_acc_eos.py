@@ -161,7 +161,7 @@ if __name__ == '__main__':
         sub_word_diags = np.concatenate(sub_word_diags, axis=0)
         num_time = len(win_starts)
         max_line = 0.3 * 2 * time_step
-        colors = ['b', 'm', 'g', 'k', 'r', 'c']
+        colors = ['b', 'm', 'g', 'k', 'y', 'r']
 
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
@@ -169,7 +169,7 @@ if __name__ == '__main__':
             std = std_diags[i_word]
             frac = frac_diags[i_word]
             print(np.mean(acc))
-            ax.plot(acc, label='{word} accuracy'.format(word=PLOT_TITLE_WORD[word]), color=color)
+            ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
             ax.fill_between(range(len(acc)), acc - std, acc + std, facecolor=color, edgecolor='w',
                             alpha=0.3)
             pvals = np.empty((num_time,))

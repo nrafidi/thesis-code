@@ -65,6 +65,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
+    parser.add_argument('--partial', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     axislettersize = 20
     time_step = int(250 / args.overlap)
 
-
+    colors = ['b', 'm', 'g', 'k', 'y', 'r', 'c']
     sen_type_list = ['active', 'passive', 'pooled']
     sen_fig, sen_axs = plt.subplots(1, len(sen_type_list), figsize=(36, 12))
     for i_sen_type, sen_type in enumerate(sen_type_list):
@@ -100,7 +101,9 @@ if __name__ == '__main__':
                     word_list.append('propid')
                 word_list.append('noun1')
                 word_list.append('voice')
-
+                if args.partial:
+                    word_list = ['verb', 'voice', 'propid']
+                    colors = ['b', 'r', 'k']
             chance = {'noun1': 0.5,
                       'verb': 0.5,
                       'agent': 0.5,
@@ -116,6 +119,9 @@ if __name__ == '__main__':
                 word_list.append('noun1')
                 word_list.append('voice')
                 word_list.append('senlen')
+                if args.partial:
+                    word_list = ['verb', 'voice', 'propid', 'senlen']
+                    colors = ['b', 'r', 'k', 'c']
 
             chance = {'noun1': 0.5,
                       'verb': 0.5,
@@ -202,7 +208,7 @@ if __name__ == '__main__':
 
         num_time = len(win_starts)
         max_line = 0.3 * 2 * time_step
-        colors = ['b', 'm', 'g', 'k', 'r', 'c', 'y']
+
 
         for i_word, word in enumerate(word_list):
             color = colors[i_word]
