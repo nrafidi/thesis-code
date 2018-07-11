@@ -143,6 +143,7 @@ def run_tgm_exp(experiment,
                      word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
         print(uni_content)
+        print(labels)
     else:
         labels = []
         valid_inds = []
