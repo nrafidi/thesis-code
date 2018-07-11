@@ -185,14 +185,14 @@ if __name__ == '__main__':
         time_win = time[win_starts]
         mean_acc = np.mean(multi_fold_acc, axis=0)
 
-        if args.short:
-            min_time = 1.0
-            if word != 'noun2':
-                mean_acc = mean_acc[2*time_step:, :]
-                mean_acc = mean_acc[:, 2 * time_step:]
-                time_win = time_win[2*time_step:]
-        else:
-            min_time = 0.0
+        # if args.short:
+        #     min_time = 1.0
+        #     if word != 'noun2':
+        #         mean_acc = mean_acc[2*time_step:, :]
+        #         mean_acc = mean_acc[:, 2 * time_step:]
+        #         time_win = time_win[2*time_step:]
+        # else:
+        min_time = 0.0
 
         ax = combo_grid[i_word]
         im = ax.imshow(np.squeeze(mean_acc), interpolation='nearest', aspect='auto',
