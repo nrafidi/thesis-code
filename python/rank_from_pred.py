@@ -144,6 +144,8 @@ if __name__ == '__main__':
                                           word=word, rank_str='')
                 fname_save = fname.format(exp=exp, sen_type=sen_type,
                                           word='bind', rank_str='rank')
+                fname_new_save = fname.format(exp=exp, sen_type=sen_type,
+                                          word='bind', rank_str='')
                 if not os.path.isfile(fname_load):
                     continue
                 if os.path.isfile(fname_save):
@@ -156,6 +158,15 @@ if __name__ == '__main__':
                 for i in range(len(cv_membership)):
                     fold_labels.append(np.mean(l_ints[cv_membership[i]]))
                 tgm_rank = rank_from_pred_bind(tgm_pred, fold_labels)
+
+                np.savez_compressed(fname_new_save,
+                                    l_ints=result['l_ints'],
+                                    cv_membership=result['cv_membership'],
+                                    tgm_acc=result['tgm_acc'],
+                                    tgm_pred=result['tgm_pred'],
+                                    win_starts=result['win_starts'],
+                                    time=result['time'],
+                                    proc=result['proc'])
 
                 np.savez_compressed(fname_save,
                                     tgm_rank=tgm_rank)
