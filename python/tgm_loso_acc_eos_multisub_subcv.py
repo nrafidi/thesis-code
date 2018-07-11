@@ -139,7 +139,7 @@ if __name__ == '__main__':
             word_to_load = 'propid'
             rank_fn = rank_from_pred_bind
         else:
-            word_to_load = 'word'
+            word_to_load = word
             rank_fn = rank_from_pred
         multi_file = MULTI_SAVE_FILE.format(dir=top_dir,
                                             sen_type=sen_type,
