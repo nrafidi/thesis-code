@@ -130,7 +130,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(num_plots*6, 12))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(n_rows, num_plots),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.2, share_all=True)
+                          cbar_pad=0.2, share_all=True, label_mode='all')
 
     for i_word, word in enumerate(word_list):
         top_dir = TOP_DIR.format(exp=args.experiment)
