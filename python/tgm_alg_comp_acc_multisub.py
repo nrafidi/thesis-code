@@ -165,7 +165,7 @@ if __name__ == '__main__':
     bar_ax.axhline(chance_word[word], color='k', label='Chance Accuracy')
     bar_ax.set_xticks(ind + width/2.0)
     bar_ax.set_xticklabels([ALG_LABELS[alg] for alg in alg_list])
-    bar_ax.set_ylim([0.3, 0.8])
+    bar_ax.set_ylim([0.2, 0.65])
     bar_fig.suptitle('Algorithm Performance Comparison', fontsize=suptitlesize)
     bar_ax.tick_params(labelsize=ticklabelsize)
     bar_ax.set_xlabel('Algorithm', fontsize=axislabelsize)
