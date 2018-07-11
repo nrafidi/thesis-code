@@ -56,7 +56,7 @@ if __name__ == '__main__':
         if exp == 'krns2' and word == 'senlen':
             continue
 
-        if word == 'propid' and sen != 'pooled':
+        if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 7:

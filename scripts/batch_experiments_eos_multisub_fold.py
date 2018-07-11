@@ -17,7 +17,7 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['krns2', 'PassAct3']
+EXPERIMENTS = ['PassAct3', 'krns2']
 SEN_TYPES = ['active', 'passive', 'pooled']
 WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         if exp == 'krns2' and word == 'senlen':
             continue
 
-        if word == 'propid' and sen != 'pooled':
+        if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 7:
