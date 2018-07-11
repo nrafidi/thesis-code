@@ -13,7 +13,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
                    'propid': 'Proposition ID',
-                   'senlen': 'Sentence Length'}
+                   'senlen': 'Sentence Length',
+                   'bind':'Argument Binding'}
 
 PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'passive': 'Passive Sentences',
@@ -121,11 +122,11 @@ if __name__ == '__main__':
             if sen_type == 'pooled':
                 if num_instances > 1:
                     word_list.append('propid')
-                word_list.append('noun1')
-                word_list.append('voice')
                 word_list.append('senlen')
+                word_list.append('voice')
+                word_list.append('bind')
                 if args.partial:
-                    word_list = ['verb', 'voice', 'propid', 'senlen']
+                    word_list = ['verb', 'voice', 'propid', 'bind', 'senlen']
                     colors = ['b', 'r', 'k', 'c']
 
             chance = {'noun1': 0.5,
