@@ -159,7 +159,7 @@ if __name__ == '__main__':
     bar_fig.savefig('/home/nrafidi/thesis_figs/alg_comp_bar_multisub.png')
 
     bar_fig, bar_ax = plt.subplots(figsize=(12, 12))
-    ind = 2.2*np.arange(len(alg_list))
+    ind = 2.5*np.arange(len(alg_list))
     width = 0.8
     bar_ax.bar(ind, max_acc, width, color='b')
     bar_ax.axhline(chance_word[word], color='k', label='Chance Accuracy')
