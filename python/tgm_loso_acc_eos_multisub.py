@@ -116,10 +116,10 @@ if __name__ == '__main__':
     word_list = ['agent', 'patient', 'verb']
     if args.experiment == 'krns2':
         if sen_type == 'pooled':
-            word_list.extend(['noun1', 'voice', 'propid'])
+            word_list = ['voice', 'verb', 'propid', 'agent', 'patient', 'noun1']
     else:
         if sen_type == 'pooled':
-            word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
+            word_list = ['senlen', 'voice', 'verb', 'propid', 'agent', 'patient', 'noun1']
     if sen_type == 'pooled':
         n_rows=2
     else:
