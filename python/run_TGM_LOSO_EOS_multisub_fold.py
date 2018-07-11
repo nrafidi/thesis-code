@@ -102,7 +102,7 @@ def run_tgm_exp(experiment,
     data_list = []
     sen_ints = []
     time = []
-    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(['A']): #VALID_SUBS[experiment]):
         data, _, sen_ints_sub, time_sub, _ = load_data.load_sentence_data_v2(subject=subject,
                                                                              align_to='last',
                                                                              voice=voice,
@@ -142,6 +142,7 @@ def run_tgm_exp(experiment,
                     [word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                      word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
+        print(np.array(content_words))
         print(uni_content)
         print(labels)
     else:
