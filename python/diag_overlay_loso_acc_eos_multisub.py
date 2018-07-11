@@ -127,7 +127,7 @@ if __name__ == '__main__':
                 word_list.append('bind')
                 if args.partial:
                     word_list = ['verb', 'voice', 'propid', 'bind', 'senlen']
-                    colors = ['b', 'r', 'k', 'c']
+                    colors = ['b', 'r', 'k', 'c', 'y']
 
             chance = {'noun1': 0.5,
                       'verb': 0.5,
