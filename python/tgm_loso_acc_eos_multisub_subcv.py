@@ -10,7 +10,7 @@ from math import ceil
 import run_TGM_LOSO_EOS
 from mpl_toolkits.axes_grid1 import AxesGrid
 import string
-from rank_from_pred import rank_from_pred
+from rank_from_pred import rank_from_pred, rank_from_pred_bind
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
                   'PassAct3': 'Final Experiment'}
@@ -24,7 +24,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
                    'propid': 'Proposition ID',
-                   'senlen': 'Sentence Length'}
+                   'senlen': 'Sentence Length',
+                   'bind': 'Argument Binding'}
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -119,7 +120,7 @@ if __name__ == '__main__':
             word_list.extend(['noun1', 'voice', 'propid'])
     else:
         if sen_type == 'pooled':
-            word_list.extend(['senlen', 'noun1', 'voice', 'propid'])
+            word_list.extend(['bind', 'senlen', 'noun1', 'voice', 'propid'])
     if sen_type == 'pooled':
         n_rows=2
     else:
@@ -134,9 +135,15 @@ if __name__ == '__main__':
 
     for i_word, word in enumerate(word_list):
         top_dir = TOP_DIR.format(exp=args.experiment)
+        if word == 'bind':
+            word_to_load = 'propid'
+            rank_fn = rank_from_pred_bind
+        else:
+            word_to_load = 'word'
+            rank_fn = rank_from_pred
         multi_file = MULTI_SAVE_FILE.format(dir=top_dir,
                                             sen_type=sen_type,
-                                            word=word,
+                                            word=word_to_load,
                                             win_len=args.win_len,
                                             exc=exc_str,
                                             ov=args.overlap,
@@ -185,7 +192,7 @@ if __name__ == '__main__':
                 for i in range(len(cv_membership)):
                     fold_labels.append(np.mean(l_ints[cv_membership[i]]))
 
-                tgm_rank = rank_from_pred(tgm_pred[i_sub, ...], fold_labels)
+                tgm_rank = rank_fn(tgm_pred[i_sub, ...], fold_labels)
                 multi_fold_acc.append(tgm_rank[None, ...])
             multi_fold_acc = np.concatenate(multi_fold_acc, axis=0)
             print(multi_fold_acc.shape)
