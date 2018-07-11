@@ -102,7 +102,7 @@ def run_tgm_exp(experiment,
     data_list = []
     sen_ints = []
     time = []
-    for i_sub, subject in enumerate(['B']): #VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
         data, _, sen_ints_sub, time_sub, _ = load_data.load_sentence_data_v2(subject=subject,
                                                                              align_to='last',
                                                                              voice=voice,
