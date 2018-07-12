@@ -81,6 +81,8 @@ if __name__ == '__main__':
 
     if args.partial:
         ps = '_part'
+    elif args.bind:
+        ps = '_bind'
     else:
         ps = ''
 
