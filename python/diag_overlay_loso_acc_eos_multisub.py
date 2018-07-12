@@ -230,7 +230,7 @@ if __name__ == '__main__':
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
 
             for i_pt in range(num_time):
-                if  diag_frac[i_pt]  >= 0.9:
+                if  diag_frac[i_pt]  == 1.0:
                     ax.scatter(i_pt, 1.05 + float(i_word)*0.02, color=color, marker='o')
                 # elif word == 'bind':
                 #     print(diag_frac[i_pt])
