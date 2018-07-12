@@ -67,6 +67,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--partial', action='store_true')
+    parser.add_argument('--bind', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -126,8 +127,11 @@ if __name__ == '__main__':
                 word_list.append('voice')
                 word_list.append('bind')
                 if args.partial:
-                    word_list = ['verb', 'voice', 'propid', 'bind', 'senlen']
-                    colors = ['b', 'r', 'k', 'c', 'y']
+                    word_list = ['verb', 'voice', 'propid', 'senlen']
+                    colors = ['b', 'r', 'k', 'y']
+                elif args.bind:
+                    word_list = ['propid', 'bind']
+                    colors = ['k', 'c']
 
             chance = {'noun1': 0.5,
                       'verb': 0.5,
