@@ -171,7 +171,8 @@ def run_tgm_exp(experiment,
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
                 valid_inds.append(i_sen_int)
-
+    print(labels)
+    print(valid_inds)
     valid_inds = np.array(valid_inds)
     data_list = [data[valid_inds, ...] for data in data_list]
     sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
