@@ -216,20 +216,22 @@ if __name__ == '__main__':
             frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
             frac_diags.append(np.diag(frac_above))
 
-            rank_file_perm = subcv.MULTI_SAVE_FILE.format(dir=top_dir,
-                                                          sen_type=sen_type,
-                                                          word=word,
-                                                          win_len=args.win_len,
-                                                          exc='',
-                                                          ov=args.overlap,
-                                                          perm='T',
-                                                          alg=args.alg,
-                                                          adj=args.adj,
-                                                          avgTm=args.avgTime,
-                                                          avgTst=args.avgTest,
-                                                          inst=args.num_instances,
-                                                          rsP='{}-{}'.format(0, 99),
-                                                          mode='rankacc')
+            rank_file_perm = tgm_loso_acc_eos_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
+                                                                         sen_type=sen_type,
+                                                                         word=word,
+                                                                         win_len=args.win_len,
+                                                                         ov=args.overlap,
+                                                                         exc='',
+                                                                         perm='T',
+                                                                         alg=args.alg,
+                                                                         adj=args.adj,
+                                                                         avgTm=args.avgTime,
+                                                                         avgTst=args.avgTest,
+                                                                         inst=args.num_instances,
+                                                                         rsP='{}-{}'.format(0, 99),
+                                                                         rank_str='rank',
+                                                                         mode='acc')
+
             rank_result_perm = np.load(rank_file_perm + '.npz')
             multi_fold_perm_acc = rank_result_perm['tgm_rank']
             mean_acc_perm = np.mean(multi_fold_perm_acc, axis=1)
