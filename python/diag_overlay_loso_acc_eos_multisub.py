@@ -154,6 +154,7 @@ if __name__ == '__main__':
         frac_diags = []
         time = []
         win_starts = []
+        pval_diags = []
         for i_word, word in enumerate(word_list):
             top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=args.experiment)
             multi_file = tgm_loso_acc_eos_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
@@ -192,7 +193,8 @@ if __name__ == '__main__':
             result = np.load(multi_file + '.npz')
             word_time = result['time']
             word_win_starts = result['win_starts']
-            acc_diags.append(np.diag(np.mean(acc_all, axis=0)))
+            diag_acc = np.diag(np.mean(acc_all, axis=0))
+            acc_diags.append(diag_acc)
 
             rank_file_frac = subcv.MULTI_SAVE_FILE.format(dir=top_dir,
                                                            sen_type=sen_type,
@@ -214,6 +216,29 @@ if __name__ == '__main__':
             frac_above = np.sum(mean_acc > 0.5, axis=0) / float(mean_acc.shape[0])
             frac_diags.append(np.diag(frac_above))
 
+            rank_file_perm = subcv.MULTI_SAVE_FILE.format(dir=top_dir,
+                                                          sen_type=sen_type,
+                                                          word=word,
+                                                          win_len=args.win_len,
+                                                          exc='',
+                                                          ov=args.overlap,
+                                                          perm='T',
+                                                          alg=args.alg,
+                                                          adj=args.adj,
+                                                          avgTm=args.avgTime,
+                                                          avgTst=args.avgTest,
+                                                          inst=args.num_instances,
+                                                          rsP='{}-{}'.format(0, 99),
+                                                          mode='rankacc')
+            rank_result_perm = np.load(rank_file_perm + '.npz')
+            multi_fold_perm_acc = rank_result_perm['tgm_rank']
+            mean_acc_perm = np.mean(multi_fold_perm_acc, axis=1)
+            pvals = np.empty((len(diag_acc),))
+            for j_pt in range(len(diag_acc)):
+                perm_dist = np.squeeze(mean_acc_perm[:, j_pt, j_pt])
+                pvals[j_pt] = np.mean(perm_dist > diag_acc[j_pt])
+            pval_diags.append(pvals)
+
             if i_word == 0:
                 time = word_time
                 win_starts = word_win_starts
@@ -226,16 +251,18 @@ if __name__ == '__main__':
             color = colors[i_word]
             acc = acc_diags[i_word]
             diag_frac = frac_diags[i_word]
+            pvals = pval_diags[i_word]
 
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color, linewidth=5.0)
 
+            pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=False)
             for i_pt in range(num_time):
-                if  diag_frac[i_pt]  == 1.0:
+                if  diag_frac[i_pt]  == 1.0 and pvals[i_pt] <= pval_thresh:
                     ax.scatter(i_pt, 1.05 + float(i_word)*0.02, color=color, marker='o')
                 # elif word == 'bind':
                 #     print(diag_frac[i_pt])
 
-            # pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
+            #
             # for i_pt in range(num_time):
             #     if  pvals[i_pt]  <= pval_thresh:
             #         ax.scatter(i_pt, 0.98 - float(i_word)*0.02, color=color, marker='*')
