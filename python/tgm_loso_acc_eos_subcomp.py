@@ -186,7 +186,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     ticklabelsize = 14
-    legendfontsize = 20
+    legendfontsize = 28
     axislabelsize = 18
     suptitlesize = 25
     axistitlesize = 20
@@ -351,8 +351,8 @@ if __name__ == '__main__':
     num_time = len(win_time)
     time_step /=2
     time_adjust /=2
-    ax.plot(np.diag(mean_acc)[::2], label='Average over Subjects')
-    ax.plot(np.diag(multi_mean_acc)[::2], label='Concatenation over Subjects')
+    ax.plot(np.diag(mean_acc)[::2], label='Average over Subjects', linewidth=5.0)
+    ax.plot(np.diag(multi_mean_acc)[::2], label='Concatenation over Subjects', linewidth=5.0)
     ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
     ax.set_xticklabels(label_time)
     max_line = 0.3 * 2 * time_step
