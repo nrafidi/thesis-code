@@ -181,7 +181,7 @@ if __name__ == '__main__':
         if word == 'propid' and exp == 'PassAct3':
             complete_job_perm_rank = SAVE_FILE.format(dir=top_dir,
                                                       sen_type=sen,
-                                                      word=word,
+                                                      word='bind',
                                                       win_len=win_len,
                                                       ov=overlap,
                                                       perm=bool_to_str(isPerm),
