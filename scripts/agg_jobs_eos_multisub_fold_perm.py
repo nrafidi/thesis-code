@@ -55,7 +55,7 @@ if __name__ == '__main__':
         if exp == 'krns2' and word == 'senlen':
             continue
 
-        if word == 'propid' and sen != 'pooled':
+        if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
