@@ -86,7 +86,7 @@ if __name__ == '__main__':
     num_instances = args.num_instances
 
     ticklabelsize = 14
-    legendfontsize = 20
+    legendfontsize = 28
     axislabelsize = 18
     suptitlesize = 25
     axistitlesize = 20
@@ -220,7 +220,7 @@ if __name__ == '__main__':
             acc = acc_diags[i_word]
             diag_frac = frac_diags[i_word]
 
-            ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color)
+            ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color, linewidth=5.0)
 
             for i_pt in range(num_time):
                 if  diag_frac[i_pt]  > 0.95:
