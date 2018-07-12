@@ -24,7 +24,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
                    'propid': 'Proposition ID',
-                   'senlen': 'Sentence Length'}
+                   'senlen': 'Sentence Length',
+                   'bind': 'Argument Binding'}
 
 
 SENSOR_MAP = '/bigbrain/bigbrain.usr1/homes/nrafidi/MATLAB/groupRepo/shared/megVis/sensormap.mat'
@@ -119,7 +120,7 @@ if __name__ == '__main__':
             word_list = ['voice', 'verb', 'propid', 'agent', 'patient', 'noun1']
     else:
         if sen_type == 'pooled':
-            word_list = ['senlen', 'voice', 'verb', 'propid', 'agent', 'patient', 'noun1']
+            word_list = ['senlen', 'voice', 'verb', 'propid', 'bind', 'agent', 'patient', 'noun1']
     if sen_type == 'pooled':
         n_rows=2
     else:

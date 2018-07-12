@@ -142,7 +142,9 @@ def run_tgm_exp(experiment,
                     [word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                      word_list[WORD_COLS[curr_voice]['patient']]])
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
+        print(np.array(content_words))
         print(uni_content)
+        print(labels)
     else:
         labels = []
         valid_inds = []
@@ -169,7 +171,8 @@ def run_tgm_exp(experiment,
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
                 valid_inds.append(i_sen_int)
-
+    print(labels)
+    print(valid_inds)
     valid_inds = np.array(valid_inds)
     data_list = [data[valid_inds, ...] for data in data_list]
     sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
@@ -213,17 +216,17 @@ def run_tgm_exp(experiment,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiment')
+    parser.add_argument('--experiment', default='PassAct3')
     parser.add_argument('--sen_type', choices=VALID_SEN_TYPE)
     parser.add_argument('--word', choices=VALID_WORDS)
-    parser.add_argument('--win_len', type=int)
-    parser.add_argument('--overlap', type=int)
+    parser.add_argument('--win_len', type=int, default=50)
+    parser.add_argument('--overlap', type=int, default=5)
     parser.add_argument('--isPerm', default='False', choices=['True', 'False'])
-    parser.add_argument('--alg', default='lr-l1', choices=VALID_ALGS)
-    parser.add_argument('--adj', default=None)
-    parser.add_argument('--doTimeAvg', default='False', choices=['True', 'False'])
-    parser.add_argument('--doTestAvg', default='False', choices=['True', 'False'])
-    parser.add_argument('--num_instances', type=int, default=1)
+    parser.add_argument('--alg', default='lr-l2', choices=VALID_ALGS)
+    parser.add_argument('--adj', default='zscore')
+    parser.add_argument('--doTimeAvg', default='True', choices=['True', 'False'])
+    parser.add_argument('--doTestAvg', default='True', choices=['True', 'False'])
+    parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--proc', default=load_data.DEFAULT_PROC)
     parser.add_argument('--perm_random_state', type=int, default=1)
     parser.add_argument('--force', default='False', choices=['True', 'False'])

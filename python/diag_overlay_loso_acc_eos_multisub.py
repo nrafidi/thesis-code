@@ -13,7 +13,8 @@ PLOT_TITLE_WORD = {'noun1': 'First Noun',
                    'patient': 'Patient',
                    'voice': 'Sentence Voice',
                    'propid': 'Proposition ID',
-                   'senlen': 'Sentence Length'}
+                   'senlen': 'Sentence Length',
+                   'bind':'Argument Binding'}
 
 PLOT_TITLE_SEN = {'active': 'Active Sentences',
                   'passive': 'Passive Sentences',
@@ -66,6 +67,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--partial', action='store_true')
+    parser.add_argument('--bind', action='store_true')
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -79,6 +81,8 @@ if __name__ == '__main__':
 
     if args.partial:
         ps = '_part'
+    elif args.bind:
+        ps = '_bind'
     else:
         ps = ''
 
@@ -121,12 +125,15 @@ if __name__ == '__main__':
             if sen_type == 'pooled':
                 if num_instances > 1:
                     word_list.append('propid')
-                word_list.append('noun1')
-                word_list.append('voice')
                 word_list.append('senlen')
+                word_list.append('voice')
+                word_list.append('bind')
                 if args.partial:
                     word_list = ['verb', 'voice', 'propid', 'senlen']
-                    colors = ['b', 'r', 'k', 'c']
+                    colors = ['b', 'r', 'k', 'y']
+                elif args.bind:
+                    word_list = ['propid', 'bind']
+                    colors = ['k', 'c']
 
             chance = {'noun1': 0.5,
                       'verb': 0.5,
@@ -223,8 +230,10 @@ if __name__ == '__main__':
             ax.plot(acc, label='{word}'.format(word=PLOT_TITLE_WORD[word]), color=color, linewidth=5.0)
 
             for i_pt in range(num_time):
-                if  diag_frac[i_pt]  > 0.95:
+                if  diag_frac[i_pt]  == 1.0:
                     ax.scatter(i_pt, 1.05 + float(i_word)*0.02, color=color, marker='o')
+                # elif word == 'bind':
+                #     print(diag_frac[i_pt])
 
             # pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=args.indep)
             # for i_pt in range(num_time):
