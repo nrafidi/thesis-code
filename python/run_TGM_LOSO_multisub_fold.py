@@ -178,7 +178,7 @@ def run_tgm_exp(experiment,
         labels = np.array(labels)
         print(sen_ints)
         print(labels)
-        uni_sen_ints, uni_inds = np.unique(sen_ints)
+        uni_sen_ints, uni_inds = np.unique(sen_ints, return_index=True)
         uni_labels = labels[uni_inds]
         random.seed(random_state_perm)
         random.shuffle(uni_labels)
