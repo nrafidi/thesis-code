@@ -109,7 +109,7 @@ def run_tgm_exp(experiment,
     data_list = []
     sen_ints = []
     time = []
-    for i_sub, subject in enumerate(VALID_SUBS[experiment]):
+    for i_sub, subject in enumerate(['B', 'C']):  #VALID_SUBS[experiment]):
         data, _, sen_ints_sub, time_sub, _ = load_data.load_sentence_data_v2(subject=subject,
                                                                              align_to='last',
                                                                              voice=voice,
@@ -204,12 +204,14 @@ def run_tgm_exp(experiment,
 
     uni_sen_ints, uni_inds = np.unique(sen_ints, return_index=True)
     uni_labels = labels[uni_inds]
+    uni_sen_ints = np.reshape(uni_sen_ints, (-1, 1))
 
     kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
 
     cv = np.empty(sen_ints.shape)
     for i_fold in range(num_folds):
-        _, test = kf.split(uni_sen_ints, uni_labels)
+        train, test = kf.split(uni_sen_ints, uni_labels)
+        print(test)
         sen_ints_in_test = uni_sen_ints[test]
         for sint in sen_ints_in_test:
             cv[sen_ints == sint] = i_fold
