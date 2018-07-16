@@ -17,9 +17,9 @@ def bool_to_str(bool_var):
 
 
 FOLDS = range(32)
-EXPERIMENTS = ['PassAct3']
+EXPERIMENTS = ['krns2', 'PassAct3']
 SEN_TYPES = ['active', 'passive', 'pooled']
-WORDS = ['senlen', 'verb', 'voice', 'agent', 'patient', 'propid']
+WORDS = ['senlen', 'noun1', 'verb', 'voice', 'agent', 'patient', 'propid']
 WIN_LENS = [50]
 OVERLAPS = [5]
 IS_PERMS = [True]
@@ -28,7 +28,7 @@ ADJS = ['zscore']
 DO_TME_AVGS = [True]
 DO_TST_AVGS = [True]
 NUM_INSTANCESS = [2]
-RANDOM_STATES = range(99, -1, -1)
+RANDOM_STATES = range(200)
 
 JOB_NAME = '{exp}-{sen}-{word}-{id}'
 JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
@@ -40,10 +40,10 @@ JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | w
 
 if __name__ == '__main__':
 
-    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=16GB -v ' \
+    qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=32GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos_multisub_fold.sh'
 
     param_grid = itertools.product(EXPERIMENTS,
@@ -135,5 +135,5 @@ if __name__ == '__main__':
             call(call_str, shell=True)
         job_id += 1
 
-        while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
+        while int(check_output(JOB_Q_CHECK, shell=True)) >= 50:
             time.sleep(30)
