@@ -60,6 +60,8 @@ def str_to_none(str_thing):
 
 def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
                      indices_in_master_experiment_stimuli):
+    print(epochs)
+    print(filtered_usi_events)
     multi_instance_usi_events = list()
     for (usi_, events_), index_in_master in zip(filtered_usi_events, indices_in_master_experiment_stimuli):
         for i in range(num_instances):
@@ -71,7 +73,7 @@ def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
                 raise ValueError('Unable to produce meg_settings.num_output_instances_per_key instances')
             multi_instance_usi_events.append((usi_, instance_events))
     filtered_usi_events = multi_instance_usi_events
-
+    print(filtered_usi_events)
     evoked = list()
     for _, ev in filtered_usi_events:
         ev_epochs = epochs[ev]
