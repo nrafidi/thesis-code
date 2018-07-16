@@ -1,5 +1,5 @@
 import argparse
-from rnng_new import load_data
+from rnng_new import load_data, source_localized_region_reference
 import models
 import numpy as np
 import os.path
@@ -58,8 +58,9 @@ def str_to_none(str_thing):
         return None
 
 
-def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
-                     indices_in_master_experiment_stimuli):
+def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
+                     num_instances, indices_in_master_experiment_stimuli,
+                     region_labels):
     print(len(epochs))
     print(len(filtered_usi_events))
     multi_instance_usi_events = list()
@@ -84,16 +85,22 @@ def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
             evoked.append(ev_epochs.average())
-    print(evoked)
+    print(len(evoked))
     source_estimates = list()
+    indices_per_region = list()
     # this for loop takes about 30 seconds. kinda intractable...
     for e in evoked:
         inv = mne.minimum_norm.prepare_inverse_operator(
                 inv_op, e.nave, lambda2=1./9., method='dSPM', verbose=False)
         source_estimates.append(
             mne.minimum_norm.apply_inverse(e, inv, prepared=True, verbose=False))
-    print(source_estimates)
-    source_data = np.concatenate([source_estimate.data[None, ...] for source_estimate in source_estimates],
+        if len(indices_per_region) == 0:
+            indices_per_region.extend([source_localized_region_reference.region_label_indices(source_estimates[-1], l)
+                                       for l in region_labels])
+    print(len(source_estimates))
+
+    index_region = region_labels.index(region_of_interest)
+    source_data = np.concatenate([source_estimate.data[None, indices_per_region[index_region], ...] for source_estimate in source_estimates],
                                  axis=0)
     print('Source data shape: {}'.format(source_data.shape))
     return source_data
@@ -165,7 +172,9 @@ def run_tgm_exp(sen_type,
                                 inv_op=inv_op,
                                 filtered_usi_events=usi_events,
                                 num_instances=num_instances,
-                                indices_in_master_experiment_stimuli=sen_ints_sub)
+                                indices_in_master_experiment_stimuli=sen_ints_sub,
+                                region_labels=region_labels,
+                                region_of_interest=region)
 
         data_list.append(data)
         if i_sub == 0:
