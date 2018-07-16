@@ -270,8 +270,8 @@ if __name__ == '__main__':
         total_valid = total_valid and is_valid
         if not is_valid:
             print('Noun1 task only valid if sen_type == pooled')
-    max_fold_num = args.num_folds - 1
-    is_valid = args.fold > max_fold_num
+
+    is_valid = args.fold < args.num_folds
     total_valid = total_valid and is_valid
     if not is_valid:
         print('Incorrect number of folds')
