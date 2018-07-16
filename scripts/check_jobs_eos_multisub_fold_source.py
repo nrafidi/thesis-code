@@ -45,9 +45,9 @@ if __name__ == '__main__':
         win_len = grid[8]
         hemi = grid[9]
         reg = grid[10]
-        sen = grid[10]
-        word = grid[11]
-        fold = grid[12]
+        sen = grid[11]
+        word = grid[12]
+        fold = grid[13]
 
         if fold > 15 and sen != 'pooled':
             continue
