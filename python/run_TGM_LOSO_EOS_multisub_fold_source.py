@@ -81,7 +81,7 @@ def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
             evoked.append(ev_epochs.average())
-
+    print(evoked)
     source_estimates = list()
     # this for loop takes about 30 seconds. kinda intractable...
     for e in evoked:
@@ -89,7 +89,7 @@ def _get_region_data(epochs, inv_op, filtered_usi_events, num_instances,
                 inv_op, e.nave, lambda2=1./9., method='dSPM', verbose=False)
         source_estimates.append(
             mne.minimum_norm.apply_inverse(e, inv, prepared=True, verbose=False))
-
+    print(source_estimates)
     source_data = np.concatenate([source_estimate.data[None, ...] for source_estimate in source_estimates],
                                  axis=0)
     print('Source data shape: {}'.format(source_data.shape))
