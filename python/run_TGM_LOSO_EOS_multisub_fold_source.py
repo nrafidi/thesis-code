@@ -165,7 +165,7 @@ def run_tgm_exp(sen_type,
                                 inv_op=inv_op,
                                 filtered_usi_events=usi_events,
                                 num_instances=num_instances,
-                                indices_in_master_experiment_stimuli=sen_ints)
+                                indices_in_master_experiment_stimuli=sen_ints_sub)
 
         data_list.append(data)
         if i_sub == 0:
