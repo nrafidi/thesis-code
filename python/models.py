@@ -1442,13 +1442,14 @@ def lr_tgm_kf_multisub_fold(data_list,
     n_w = len(test_windows)
 
     cv_membership = []
-    tgm_acc = np.empty((1, n_w, n_w))
-    tgm_pred = np.empty((1, n_w, n_w), dtype='object')
-
     in_test = cv == fold
     in_train = np.logical_not(in_test)
 
     cv_membership.append(in_test)
+
+    tgm_acc = np.empty((1, n_w, n_w))
+    tgm_pred = np.empty((1, n_w, n_w), dtype='object')
+
 
     train_data_full = [data[in_train, ...] for data in data_list]
     train_labels = np.ravel(l_ints[in_train])
@@ -1532,6 +1533,10 @@ def lr_tgm_kf_multisub_fold(data_list,
 
             tgm_acc[0, wi, wj] = model.score(test_data, uni_test_labels)
             tgm_pred[0, wi, wj] = model.predict_log_proba(test_data)
+
+            if wi == 40 and wj == 40:
+                print(tgm_acc[0, wi, wj])
+                print(tgm_pred[0, wi, wj])
 
     return l_ints, cv_membership, tgm_acc, tgm_pred
 
