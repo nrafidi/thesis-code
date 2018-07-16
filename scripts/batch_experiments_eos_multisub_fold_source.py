@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=32GB -v ' \
                 'sen_type={sen},word={word},win_len={win_len},overlap={overlap},region={reg},' \
-                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},hemi={hemi}' \
+                'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},hemi={hemi},' \
                 'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos_multisub_fold_source.sh'
 
