@@ -209,12 +209,13 @@ def run_tgm_exp(experiment,
     kf = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=random_state_cv)
 
     cv = np.empty(sen_ints.shape)
-    for i_fold in range(num_folds):
-        train, test = kf.split(uni_sen_ints, uni_labels)
+    i_fold = 0
+    for train, test in kf.split(uni_sen_ints, uni_labels):
         print(test)
         sen_ints_in_test = uni_sen_ints[test]
         for sint in sen_ints_in_test:
             cv[sen_ints == sint] = i_fold
+        i_fold += 1
 
     print(cv)
 
