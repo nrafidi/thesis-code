@@ -84,8 +84,12 @@ if __name__ == '__main__':
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
-        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid'] and fold > 7:
-            continue
+        if exp == 'PassAct3':
+            if word in ['agent', 'patient', 'propid']:
+                if sen != 'pooled' and fold > 7:
+                    continue
+                elif sen == 'pooled' and fold > 15:
+                    continue
 
         job_str = JOB_NAME.format(exp=exp,
                                   sen=sen,
