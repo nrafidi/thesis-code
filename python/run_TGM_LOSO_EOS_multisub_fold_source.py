@@ -58,11 +58,11 @@ def str_to_none(str_thing):
         return None
 
 
-def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
+def _get_region_data(epochs, inv_op, filtered_usi_events,
                      num_instances, indices_in_master_experiment_stimuli,
                      region_labels):
     print(region_labels)
-
+    assert len(region_labels) == 1
     multi_instance_usi_events = list()
     for (usi_, events_), index_in_master in zip(filtered_usi_events, indices_in_master_experiment_stimuli):
         for i in range(num_instances):
@@ -97,8 +97,8 @@ def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
             indices_per_region.extend([source_localized_region_reference.region_label_indices(source_estimates[-1], l)
                                        for l in region_labels])
 
-    index_region = region_labels.index(region_of_interest)
-    source_data = np.concatenate([source_estimate.data[None, indices_per_region[index_region], ...] for source_estimate in source_estimates],
+
+    source_data = np.concatenate([source_estimate.data[None, indices_per_region[0], ...] for source_estimate in source_estimates],
                                  axis=0)
     print('Source data shape: {}'.format(source_data.shape))
     return source_data
@@ -171,8 +171,7 @@ def run_tgm_exp(sen_type,
                                 filtered_usi_events=usi_events,
                                 num_instances=num_instances,
                                 indices_in_master_experiment_stimuli=sen_ints_sub,
-                                region_labels=region_labels,
-                                region_of_interest=region)
+                                region_labels=region_labels)
 
         data_list.append(data)
         if i_sub == 0:
