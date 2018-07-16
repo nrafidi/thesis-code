@@ -115,24 +115,24 @@ if __name__ == '__main__':
                                     rs=rs,
                                     errfile=err_str,
                                     outfile=out_str)
+        #
+        # top_dir = TOP_DIR.format(exp=exp)
+        # fname = SAVE_FILE.format(dir=top_dir,
+        #                          sen_type=sen,
+        #                          word=word,
+        #                          win_len=win_len,
+        #                          ov=overlap,
+        #                          perm=bool_to_str(isPerm),
+        #                          alg=alg,
+        #                          adj=adj,
+        #                          avgTm=bool_to_str(tm_avg),
+        #                          avgTst=bool_to_str(tst_avg),
+        #                          inst=ni,
+        #                          rsP=rs,
+        #                          mode='acc')
 
-        top_dir = TOP_DIR.format(exp=exp)
-        fname = SAVE_FILE.format(dir=top_dir,
-                                 sen_type=sen,
-                                 word=word,
-                                 win_len=win_len,
-                                 ov=overlap,
-                                 perm=bool_to_str(isPerm),
-                                 alg=alg,
-                                 adj=adj,
-                                 avgTm=bool_to_str(tm_avg),
-                                 avgTst=bool_to_str(tst_avg),
-                                 inst=ni,
-                                 rsP=rs,
-                                 mode='acc')
 
-        if not os.path.isfile(fname + '.npz'):
-            call(call_str, shell=True)
+        call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 50:
