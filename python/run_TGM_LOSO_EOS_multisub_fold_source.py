@@ -61,21 +61,20 @@ def str_to_none(str_thing):
 def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
                      num_instances, indices_in_master_experiment_stimuli,
                      region_labels):
-    print(len(epochs))
-    print(len(filtered_usi_events))
+    print(region_labels)
+
     multi_instance_usi_events = list()
     for (usi_, events_), index_in_master in zip(filtered_usi_events, indices_in_master_experiment_stimuli):
         for i in range(num_instances):
             instance_events = [
                 events_[j] for j in range(i, len(events_), num_instances)]
-            print(len(instance_events))
             if len(instance_events) == 0:
                 # we raise here because downstream analysis becomes complicated if we need to remember
                 # a jagged number of instances
                 raise ValueError('Unable to produce meg_settings.num_output_instances_per_key instances')
             multi_instance_usi_events.append((usi_, instance_events))
     filtered_usi_events = multi_instance_usi_events
-    print(len(filtered_usi_events))
+
     evoked = list()
     for _, ev in filtered_usi_events:
         ev_epochs = epochs[ev]
@@ -85,7 +84,7 @@ def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
             evoked.append(ev_epochs.average())
-    print(len(evoked))
+
     source_estimates = list()
     indices_per_region = list()
     # this for loop takes about 30 seconds. kinda intractable...
@@ -97,7 +96,6 @@ def _get_region_data(region_of_interest, epochs, inv_op, filtered_usi_events,
         if len(indices_per_region) == 0:
             indices_per_region.extend([source_localized_region_reference.region_label_indices(source_estimates[-1], l)
                                        for l in region_labels])
-    print(len(source_estimates))
 
     index_region = region_labels.index(region_of_interest)
     source_data = np.concatenate([source_estimate.data[None, indices_per_region[index_region], ...] for source_estimate in source_estimates],
