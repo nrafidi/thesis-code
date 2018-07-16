@@ -96,7 +96,7 @@ if __name__ == '__main__':
                                                 inst=ni,
                                                 rsP=rs,
                                                 mode='acc')
-                if os.path.isfile(complete_job + '.npz'):
+                if os.path.isfile(complete_job + '.npz') and rs > 99:
                     result = np.load(complete_job + '.npz')
                     if rs == 0:
                         l_ints = result['l_ints']
