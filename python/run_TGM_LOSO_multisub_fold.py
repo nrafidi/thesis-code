@@ -174,8 +174,19 @@ def run_tgm_exp(experiment,
 
 
     if isPerm:
+        sen_ints = np.array(sen_ints)
+        labels = np.array(labels)
+        print(sen_ints)
+        print(labels)
+        uni_sen_ints, uni_inds = np.unique(sen_ints)
+        uni_labels = labels[uni_inds]
         random.seed(random_state_perm)
-        random.shuffle(labels)
+        random.shuffle(uni_labels)
+        for i_uni_sen, uni_sen in enumerate(uni_sen_ints):
+            is_sen = sen_ints == uni_sen
+            labels[is_sen] = uni_labels[i_uni_sen]
+        print(sen_ints)
+        print(labels)
 
     l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso_multisub_fold(data_list,
                                                                                 labels,

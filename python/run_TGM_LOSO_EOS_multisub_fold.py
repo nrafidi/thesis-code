@@ -171,8 +171,7 @@ def run_tgm_exp(experiment,
             else:
                 labels.append(word_list[WORD_COLS[curr_voice][word]])
                 valid_inds.append(i_sen_int)
-    print(labels)
-    print(valid_inds)
+
     valid_inds = np.array(valid_inds)
     data_list = [data[valid_inds, ...] for data in data_list]
     sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
@@ -190,8 +189,19 @@ def run_tgm_exp(experiment,
     win_starts = range(0, total_win - win_len, overlap)
 
     if isPerm:
+        sen_ints = np.array(sen_ints)
+        labels = np.array(labels)
+        print(sen_ints)
+        print(labels)
+        uni_sen_ints, uni_inds = np.unique(sen_ints)
+        uni_labels = labels[uni_inds]
         random.seed(random_state_perm)
-        random.shuffle(labels)
+        random.shuffle(uni_labels)
+        for i_uni_sen, uni_sen in enumerate(uni_sen_ints):
+            is_sen = sen_ints == uni_sen
+            labels[is_sen] = uni_labels[i_uni_sen]
+        print(sen_ints)
+        print(labels)
 
 
     l_ints, cv_membership, tgm_acc, tgm_pred = models.lr_tgm_loso_multisub_fold(data_list,
