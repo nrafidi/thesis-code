@@ -98,7 +98,7 @@ def _get_region_data(epochs, inv_op, filtered_usi_events,
                                        for l in region_labels])
 
 
-    source_data = np.concatenate([source_estimate.data[None, indices_per_region[0], ...] for source_estimate in source_estimates],
+    source_data = np.concatenate([source_estimate.data[None, indices_per_region[0], ::2] for source_estimate in source_estimates],
                                  axis=0)
     print('Source data shape: {}'.format(source_data.shape))
     return source_data
