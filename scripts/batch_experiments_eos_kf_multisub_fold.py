@@ -90,7 +90,7 @@ if __name__ == '__main__':
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
-        if num_folds > 4 and word == 'propid':
+        if num_folds > 2 and word == 'propid':
             continue
 
         job_str = JOB_NAME.format(exp=exp,
