@@ -177,8 +177,8 @@ def run_tgm_exp(sen_type,
                                 region_labels=region_labels)
 
         data_list.append(data)
-        print('woof')
-        print(sen_ints_sub)
+        # print('woof')
+        # print(sen_ints_sub)
         if i_sub == 0:
             sen_ints = sen_ints_sub
             time = time_sub
