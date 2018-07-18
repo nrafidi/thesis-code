@@ -72,6 +72,16 @@ if __name__ == '__main__':
                                  mode='acc')
 
         if os.path.isfile(complete_job + '.npz'):
+
+            if word in ['agent', 'patient', 'propid']:
+                if sen != 'pooled':
+                    job_id += 8
+                elif sen == 'pooled':
+                    job_id += 16
+            elif sen != 'pooled':
+                job_id += 16
+            else:
+                job_id += 32
             continue
         tgm_acc = []
         tgm_pred = []
