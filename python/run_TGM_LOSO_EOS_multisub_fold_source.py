@@ -61,9 +61,9 @@ def str_to_none(str_thing):
 def _get_region_data(epochs, inv_op, filtered_usi_events,
                      num_instances, indices_in_master_experiment_stimuli,
                      region_labels):
-    print(region_labels)
     assert len(region_labels) == 1
     multi_instance_usi_events = list()
+    new_index_in_master = list()
     for (usi_, events_), index_in_master in zip(filtered_usi_events, indices_in_master_experiment_stimuli):
         for i in range(num_instances):
             instance_events = [
@@ -73,6 +73,9 @@ def _get_region_data(epochs, inv_op, filtered_usi_events,
                 # a jagged number of instances
                 raise ValueError('Unable to produce meg_settings.num_output_instances_per_key instances')
             multi_instance_usi_events.append((usi_, instance_events))
+            new_index_in_master.append(index_in_master)
+    print('meow')
+    print(new_index_in_master)
     filtered_usi_events = multi_instance_usi_events
 
     evoked = list()
@@ -175,18 +178,20 @@ def run_tgm_exp(sen_type,
                                 region_labels=region_labels)
 
         data_list.append(data)
+        print('woof')
+        print(sen_ints_sub)
         if i_sub == 0:
             sen_ints = sen_ints_sub
             time = time_sub
         else:
             assert np.all(sen_ints == sen_ints_sub)
             assert np.all(time == time)
-
+    # print(len(sen_ints))
     stimuli_voice = list(load_data.read_stimuli('PassAct3'))
-    print(stimuli_voice)
     if word == 'propid':
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
+        print(len(all_voices))
         content_words = []
         valid_inds = []
         for i_word_list, word_list in enumerate(all_words):
@@ -197,6 +202,7 @@ def run_tgm_exp(sen_type,
                                       word_list[WORD_COLS[curr_voice]['patient']]])
             else:
                 print(len(word_list))
+        print(len(content_words))
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
         print(np.array(content_words))
         print(uni_content)
