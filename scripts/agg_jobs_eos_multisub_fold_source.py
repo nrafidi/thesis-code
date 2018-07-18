@@ -102,7 +102,7 @@ if __name__ == '__main__':
             if not os.path.isfile(fname + '.npz'):
                 print('{} missing'.format(fname))
                 print(job_id)
-                job_id += len(batch_exp.FOLDS) - fold
+                job_id += len(batch_exp.FOLDS) - fold - 1
                 break
 
             try:
@@ -110,7 +110,7 @@ if __name__ == '__main__':
             except:
                 print('{} needs to be rerun'.format(fname))
                 print(job_id)
-                job_id += len(batch_exp.FOLDS) - fold
+                job_id += len(batch_exp.FOLDS) - fold - 1
                 break
             if fold == 0:
                 l_ints = result['l_ints']
