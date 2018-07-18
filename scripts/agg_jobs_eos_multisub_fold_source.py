@@ -85,13 +85,6 @@ if __name__ == '__main__':
         cv_membership = []
         for fold in range(fold_num):
             print('woof')
-            if fold > 15 and sen != 'pooled':
-                break
-            if word in ['agent', 'patient', 'propid']:
-                if sen != 'pooled' and fold > 7:
-                    break
-                elif sen == 'pooled' and fold > 15:
-                    break
             fname = NEW_SAVE_FILE.format(dir=top_dir,
                                  sen_type=sen,
                                  word=word,
@@ -128,8 +121,9 @@ if __name__ == '__main__':
             cv_membership.append(result['cv_membership'][0])
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
+            print('moo')
             job_id += 1
-
+        print('oink')
         if len(tgm_acc) == fold_num:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
             tgm_pred = np.concatenate(tgm_pred, axis=0)
