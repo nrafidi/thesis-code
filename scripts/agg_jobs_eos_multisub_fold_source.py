@@ -55,6 +55,12 @@ if __name__ == '__main__':
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
+        fold_num = len(batch_exp.FOLDS)
+        if word in ['agent', 'patient', 'propid']:
+            fold_num /= 2
+        if sen in ['active', 'passive']:
+            fold_num /= 2
+
         top_dir = TOP_DIR
         complete_job = SAVE_FILE.format(dir=top_dir,
                                  sen_type=sen,
@@ -72,21 +78,12 @@ if __name__ == '__main__':
                                  mode='acc')
 
         if os.path.isfile(complete_job + '.npz'):
-
-            if word in ['agent', 'patient', 'propid']:
-                if sen != 'pooled':
-                    job_id += 8
-                elif sen == 'pooled':
-                    job_id += 16
-            elif sen != 'pooled':
-                job_id += 16
-            else:
-                job_id += 32
+            job_id += fold_num
             continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
-        for fold in batch_exp.FOLDS:
+        for fold in range(fold_num):
             if fold > 15 and sen != 'pooled':
                 break
             if word in ['agent', 'patient', 'propid']:
@@ -112,7 +109,7 @@ if __name__ == '__main__':
             if not os.path.isfile(fname + '.npz'):
                 print('{} missing'.format(fname))
                 print(job_id)
-                job_id += len(batch_exp.FOLDS) - fold - 1
+                job_id += fold_num - fold
                 break
 
             try:
@@ -120,7 +117,7 @@ if __name__ == '__main__':
             except:
                 print('{} needs to be rerun'.format(fname))
                 print(job_id)
-                job_id += len(batch_exp.FOLDS) - fold - 1
+                job_id += fold_num - fold - 1
                 break
             if fold == 0:
                 l_ints = result['l_ints']
@@ -131,12 +128,6 @@ if __name__ == '__main__':
             tgm_acc.append(result['tgm_acc'])
             tgm_pred.append(result['tgm_pred'])
             job_id += 1
-
-        fold_num = len(batch_exp.FOLDS)
-        if word in ['agent', 'patient', 'propid']:
-            fold_num /= 2
-        if sen in ['active', 'passive']:
-            fold_num /= 2
 
         if len(tgm_acc) == fold_num:
             tgm_acc = np.concatenate(tgm_acc, axis=0)
