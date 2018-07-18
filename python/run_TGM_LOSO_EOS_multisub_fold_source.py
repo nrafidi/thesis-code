@@ -156,6 +156,7 @@ def run_tgm_exp(sen_type,
     sen_ints = []
     time = []
     filter_sets = [load_data.map_alignment_to_filters(v, 'last') for v in voice]
+    print(filter_sets)
     for i_sub, subject in enumerate(VALID_SUBS):
 
         inv_op, region_labels = load_data.load_inverse_operator(
@@ -182,7 +183,7 @@ def run_tgm_exp(sen_type,
             assert np.all(time == time)
 
     stimuli_voice = list(load_data.read_stimuli('PassAct3'))
-    # print(stimuli_voice)
+    print(stimuli_voice)
     if word == 'propid':
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
@@ -194,6 +195,8 @@ def run_tgm_exp(sen_type,
                 valid_inds.append(i_word_list)
                 content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                                       word_list[WORD_COLS[curr_voice]['patient']]])
+            else:
+                print(len(word_list))
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
         print(np.array(content_words))
         print(uni_content)
@@ -222,8 +225,10 @@ def run_tgm_exp(sen_type,
                 valid_inds.append(i_sen_int)
 
     valid_inds = np.array(valid_inds)
+    print(valid_inds)
     data_list = [data[valid_inds, ...] for data in data_list]
     sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
+    print(sen_ints)
 
 
     # print(labels)
