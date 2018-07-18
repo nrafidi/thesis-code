@@ -60,7 +60,7 @@ if __name__ == '__main__':
             fold_num /= 2
         if sen in ['active', 'passive']:
             fold_num /= 2
-
+        print('meow')
         top_dir = TOP_DIR
         complete_job = SAVE_FILE.format(dir=top_dir,
                                  sen_type=sen,
@@ -84,6 +84,7 @@ if __name__ == '__main__':
         tgm_pred = []
         cv_membership = []
         for fold in range(fold_num):
+            print('woof')
             if fold > 15 and sen != 'pooled':
                 break
             if word in ['agent', 'patient', 'propid']:
