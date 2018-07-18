@@ -94,6 +94,7 @@ if __name__ == '__main__':
                                  avgTst=bool_to_str(tst_avg),
                                  inst=ni,
                                  rsP=rs,
+                                 reg='{}-{}'.format(reg, hemi),
                                  fold=fold)
 
             if not os.path.isfile(fname + '.npz'):
