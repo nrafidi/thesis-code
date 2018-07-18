@@ -101,10 +101,13 @@ if __name__ == '__main__':
                         if not err_file.endswith('warnings.warn(_use_error_msg)\n'):
                             too_long = 'exceeded limit' in err_file
                             zsl = 'ValueError: Class label' in err_file
-                            if not too_long and not zsl:
+                            cc = 'corpuscallosum' in err_file
+                            if not too_long and not zsl and not cc:
                                 print('Job {} Failed'.format(job_str))
                                 print err_file
                             elif zsl:
+                                skipped_jobs += 1
+                            elif cc:
                                 skipped_jobs += 1
                             else:
                                 print('Job {} Overtime'.format(job_str))
