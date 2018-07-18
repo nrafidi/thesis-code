@@ -74,8 +74,8 @@ def _get_region_data(epochs, inv_op, filtered_usi_events,
                 raise ValueError('Unable to produce meg_settings.num_output_instances_per_key instances')
             multi_instance_usi_events.append((usi_, instance_events))
             new_index_in_master.append(index_in_master)
-    print('meow')
-    print(new_index_in_master)
+    # print('meow')
+    # print(new_index_in_master)
     filtered_usi_events = multi_instance_usi_events
 
     evoked = list()
@@ -104,7 +104,7 @@ def _get_region_data(epochs, inv_op, filtered_usi_events,
     source_data = np.concatenate([source_estimate.data[None, indices_per_region[0], ::2] for source_estimate in source_estimates],
                                  axis=0)
     print('Source data shape: {}'.format(source_data.shape))
-    return source_data
+    return source_data, new_index_in_master
 
 
 # Runs the TGM experiment
@@ -159,22 +159,21 @@ def run_tgm_exp(sen_type,
     sen_ints = []
     time = []
     filter_sets = [load_data.map_alignment_to_filters(v, 'last') for v in voice]
-    print(filter_sets)
     for i_sub, subject in enumerate(VALID_SUBS):
 
         inv_op, region_labels = load_data.load_inverse_operator(
             subject=subject, experiment='PassAct3',
             proc=proc, structural_label_regex=region)
 
-        epochs, usi_events, _, sen_ints_sub, time_sub = load_data.load_epochs(
+        epochs, usi_events, _, sen_ints_init, time_sub = load_data.load_epochs(
             subject=subject, experiment='PassAct3', filter_sets=filter_sets,
             tmin=0.0, tmax=TMAX)
 
-        data = _get_region_data(epochs=epochs,
+        data, sen_ints_sub = _get_region_data(epochs=epochs,
                                 inv_op=inv_op,
                                 filtered_usi_events=usi_events,
                                 num_instances=num_instances,
-                                indices_in_master_experiment_stimuli=sen_ints_sub,
+                                indices_in_master_experiment_stimuli=sen_ints_init,
                                 region_labels=region_labels)
 
         data_list.append(data)
@@ -191,7 +190,7 @@ def run_tgm_exp(sen_type,
     if word == 'propid':
         all_words = [stimuli_voice[sen_int]['stimulus'].split() for sen_int in sen_ints]
         all_voices = [stimuli_voice[sen_int]['voice'] for sen_int in sen_ints]
-        print(len(all_voices))
+        # print(len(all_voices))
         content_words = []
         valid_inds = []
         for i_word_list, word_list in enumerate(all_words):
@@ -200,9 +199,9 @@ def run_tgm_exp(sen_type,
                 valid_inds.append(i_word_list)
                 content_words.append([word_list[WORD_COLS[curr_voice]['agent']], word_list[WORD_COLS[curr_voice]['verb']],
                                       word_list[WORD_COLS[curr_voice]['patient']]])
-            else:
-                print(len(word_list))
-        print(len(content_words))
+            # else:
+            #     print(len(word_list))
+        # print(len(content_words))
         uni_content, labels = np.unique(np.array(content_words), axis=0, return_inverse=True)
         print(np.array(content_words))
         print(uni_content)
@@ -231,13 +230,15 @@ def run_tgm_exp(sen_type,
                 valid_inds.append(i_sen_int)
 
     valid_inds = np.array(valid_inds)
-    print(valid_inds)
+    # print(valid_inds)
     data_list = [data[valid_inds, ...] for data in data_list]
     sen_ints = [sen for i_sen, sen in enumerate(sen_ints) if i_sen in valid_inds]
-    print(sen_ints)
+    # print(sen_ints)
 
-
-    # print(labels)
+    assert data_list[0].shape[0] == len(sen_ints)
+    print(data_list[0].shape)
+    print(len(sen_ints))
+    print(len(labels))
     tmin = time.min()
     tmax = time.max()
 
