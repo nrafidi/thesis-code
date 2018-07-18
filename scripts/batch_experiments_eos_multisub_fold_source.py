@@ -28,7 +28,7 @@ REGIONS = ['superiorfrontal', 'caudalmiddlefrontal', 'rostralmiddlefrontal', 'pa
               'precuneus', 'cuneus', 'lateraloccipital', 'lingual', 'pericalcarine', 'isthmuscingulate',
               'posteriorcingulate', 'caudalanteriorcingulate', 'rostralanteriorcingulate', 'entorhinal',
               'parahippocampal', 'temporalpole', 'fusiform', 'superiortemporal', 'inferiortemporal', 'middletemporal',
-              'transversetemporal', 'bankssts', 'corpuscallosum']
+              'transversetemporal', 'bankssts']
 
 HEMIS = ['lh', 'rh']
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     qsub_call = 'qsub  -q default -N {job_name} -l walltime=192:00:00,mem=32GB -v ' \
                 'sen_type={sen},word={word},win_len={win_len},overlap={overlap},region={reg},' \
                 'isPerm={perm},adj={adj},alg={alg},doTimeAvg={tm_avg},fold={fold},hemi={hemi},' \
-                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=False, ' \
+                'doTestAvg={tst_avg},num_instances={inst},perm_random_state={rs},force=True, ' \
                 '-e {errfile} -o {outfile} submit_experiment_eos_multisub_fold_source.sh'
 
     param_grid = itertools.product(OVERLAPS,

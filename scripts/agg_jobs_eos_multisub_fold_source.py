@@ -31,8 +31,7 @@ if __name__ == '__main__':
                                    batch_exp.HEMIS,
                                    batch_exp.REGIONS,
                                    batch_exp.SEN_TYPES,
-                                   batch_exp.WORDS,
-                                   batch_exp.FOLDS)
+                                   batch_exp.WORDS)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
@@ -50,7 +49,6 @@ if __name__ == '__main__':
         reg = grid[10]
         sen = grid[11]
         word = grid[12]
-        fold = grid[13]
 
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
@@ -77,9 +75,9 @@ if __name__ == '__main__':
                                  reg='{}-{}'.format(reg, hemi),
                                  mode='acc')
 
-        if os.path.isfile(complete_job + '.npz'):
-            job_id += fold_num
-            continue
+        # if os.path.isfile(complete_job + '.npz'):
+        #     job_id += fold_num
+        #     continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
