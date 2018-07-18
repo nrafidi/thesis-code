@@ -111,7 +111,7 @@ if __name__ == '__main__':
             except:
                 print('{} needs to be rerun'.format(fname))
                 print(job_id)
-                job_id += fold_num - fold - 1
+                job_id += fold_num - fold
                 break
             if fold == 0:
                 l_ints = result['l_ints']
