@@ -106,7 +106,8 @@ if __name__ == '__main__':
                                 print('Job {} Failed'.format(job_str))
                                 print err_file
                             elif zsl:
-                                skipped_jobs += 1
+                                print('Job {} ZSL'.format(job_str))
+                                # skipped_jobs += 1
                             elif cc:
                                 skipped_jobs += 1
                             else:
