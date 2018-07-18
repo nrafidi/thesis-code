@@ -71,6 +71,8 @@ if __name__ == '__main__':
                                  reg='{}-{}'.format(reg, hemi),
                                  mode='acc')
 
+        if os.path.isfile(complete_job + '.npz'):
+            continue
         tgm_acc = []
         tgm_pred = []
         cv_membership = []
