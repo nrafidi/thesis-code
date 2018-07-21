@@ -13,6 +13,16 @@ OPPOSITES = {0:2,
              6:4,
              7:1}
 
+REGIONS = ['superiorfrontal', 'caudalmiddlefrontal', 'rostralmiddlefrontal', 'parsopercularis', 'parsorbitalis',
+              'parstriangularis', 'lateralorbitofrontal', 'medialorbitofrontal', 'frontalpole', 'paracentral',
+              'precentral', 'insula', 'postcentral', 'inferiorparietal', 'supramarginal', 'superiorparietal',
+              'precuneus', 'cuneus', 'lateraloccipital', 'lingual', 'pericalcarine', 'isthmuscingulate',
+              'posteriorcingulate', 'caudalanteriorcingulate', 'rostralanteriorcingulate', 'entorhinal',
+              'parahippocampal', 'temporalpole', 'fusiform', 'superiortemporal', 'inferiortemporal', 'middletemporal',
+              'transversetemporal', 'bankssts']
+
+HEMIS = ['lh', 'rh']
+
 def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
     print(len(fold_labels))
@@ -130,46 +140,67 @@ if __name__ == '__main__':
     #             np.savez_compressed(fname_save,
     #                                 tgm_rank=tgm_rank)
 
-    fname = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/TGM-LOSO-EOS_multisub_{sen_type}_{word}_win50_ov5_prF_' \
+    fname = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS_SOURCE/TGM-LOSO-EOS_multisub_{sen_type}_{word}_{reg}_win50_ov5_prF_' \
             'alglr-l2_adj-zscore_avgTimeT_avgTestT_ni2_rsPerm1_{rank_str}acc.npz'
     for exp in ['PassAct3']:
         print(exp)
-        for sen_type in ['pooled']:
-            print(sen_type)
-            for word in ['propid']:
-                print(word)
-                if word == 'propid' and sen_type != 'pooled':
-                    continue
-                fname_load = fname.format(exp=exp, sen_type=sen_type,
-                                          word=word, rank_str='')
-                fname_save = fname.format(exp=exp, sen_type=sen_type,
-                                          word='bind', rank_str='rank')
-                fname_new_save = fname.format(exp=exp, sen_type=sen_type,
-                                          word='bind', rank_str='')
-                if not os.path.isfile(fname_load):
-                    continue
-                # if os.path.isfile(fname_save):
-                #     continue
-                result = np.load(fname_load)
-                tgm_pred = result['tgm_pred']
-                l_ints = result['l_ints']
-                cv_membership = result['cv_membership']
-                fold_labels = []
-                for i in range(len(cv_membership)):
-                    fold_labels.append(np.mean(l_ints[cv_membership[i]]))
-                tgm_rank = rank_from_pred_bind(tgm_pred, fold_labels)
+        for hemi in HEMIS:
+            for reg in REGIONS:
+                for sen_type in ['pooled']:
+                    print(sen_type)
+                    for word in ['verb', 'voice', 'agent', 'patient', 'propid']:
+                        print(word)
+                        if word == 'propid' and sen_type != 'pooled':
+                            continue
+                        fname_load = fname.format(exp=exp, sen_type=sen_type,
+                                                  reg='{}-{}'.format(reg, hemi),
+                                                  word=word, rank_str='')
+                        if not os.path.isfile(fname_load):
+                            continue
+                        fname_save = fname.format(exp=exp, sen_type=sen_type,
+                                                  reg='{}-{}'.format(reg, hemi),
+                                                  word=word, rank_str='rank')
 
-                np.savez_compressed(fname_new_save,
-                                    l_ints=result['l_ints'],
-                                    cv_membership=result['cv_membership'],
-                                    tgm_acc=result['tgm_acc'],
-                                    tgm_pred=result['tgm_pred'],
-                                    win_starts=result['win_starts'],
-                                    time=result['time'],
-                                    proc=result['proc'])
+                        result = np.load(fname_load)
+                        tgm_pred = result['tgm_pred']
+                        l_ints = result['l_ints']
+                        cv_membership = result['cv_membership']
+                        fold_labels = []
+                        for i in range(len(cv_membership)):
+                            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+                        tgm_rank = rank_from_pred(tgm_pred, fold_labels)
 
-                np.savez_compressed(fname_save,
-                                    tgm_rank=tgm_rank)
+                        np.savez_compressed(fname_save,
+                                            tgm_rank=tgm_rank)
+
+                        if word == 'propid':
+                            fname_save = fname.format(exp=exp, sen_type=sen_type,
+                                                      reg='{}-{}'.format(reg, hemi),
+                                                      word='bind', rank_str='rank')
+                            fname_new_save = fname.format(exp=exp, sen_type=sen_type,
+                                                          reg='{}-{}'.format(reg, hemi),
+                                                          word='bind', rank_str='')
+
+                            result = np.load(fname_load)
+                            tgm_pred = result['tgm_pred']
+                            l_ints = result['l_ints']
+                            cv_membership = result['cv_membership']
+                            fold_labels = []
+                            for i in range(len(cv_membership)):
+                                fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+                            tgm_rank = rank_from_pred_bind(tgm_pred, fold_labels)
+
+                            np.savez_compressed(fname_new_save,
+                                                l_ints=result['l_ints'],
+                                                cv_membership=result['cv_membership'],
+                                                tgm_acc=result['tgm_acc'],
+                                                tgm_pred=result['tgm_pred'],
+                                                win_starts=result['win_starts'],
+                                                time=result['time'],
+                                                proc=result['proc'])
+
+                            np.savez_compressed(fname_save,
+                                                tgm_rank=tgm_rank)
 
     # fname = '/share/volume0/nrafidi/krns2_TGM_alg_comp/TGM-alg-comp_multisub_pooled_verb_win2_ov2_prF_' \
     #         'alglr-l2_adj-zscore_avgTimeT_avgTestF_ni2_rsPerm1_{rank_str}acc.npz'
