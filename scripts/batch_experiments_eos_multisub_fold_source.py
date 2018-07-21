@@ -116,8 +116,8 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
 
-
-        call(call_str, shell=True)
+        if job_id in [230, 333, 500, 857, 1711, 2450, 3250, 3705, 3847, 7305, 7566]:
+            call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 100:
