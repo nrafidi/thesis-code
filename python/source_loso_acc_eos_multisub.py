@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     cbar = combo_fig.colorbar(im)
 
-    combo_fig.text(-0.25, 0.5, 'ROI', va='center',
+    combo_fig.text(-0.2, 0.5, 'ROI', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
     combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
