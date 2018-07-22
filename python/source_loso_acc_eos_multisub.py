@@ -140,7 +140,8 @@ if __name__ == '__main__':
     ax.set_yticklabels(REGIONS + REGIONS)
     ax.tick_params(labelsize=ticklabelsize)
 
-    ax.axvline(x=0.625*time_step, color='w')
+    ax.axvline(x=0.625*time_step, color='k')
+    ax.axhline(y=len(REGIONS), color='k')
     ax.text(-0.25, 0.75, 'Left', transform=ax.transAxes,
             rotation=90, rotation_mode='anchor', size=axislettersize)
     ax.text(-0.25, 0.25, 'Right', transform=ax.transAxes,
