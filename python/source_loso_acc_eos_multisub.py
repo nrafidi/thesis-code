@@ -129,11 +129,11 @@ if __name__ == '__main__':
         word=PLOT_TITLE_WORD[word]), fontsize=suptitlesize)
 
     num_time = len(time_win)
-    ax.set_xticks(np.arange(0, num_time, time_step) - time_adjust)
+    ax.set_xticks(np.arange(0, num_time, time_step))
 
     min_time = 0.0
     max_time = 0.5 * len(time_win) / time_step
-    label_time = np.arange(min_time, max_time, 0.5)
+    label_time = np.arange(min_time, max_time, 0.5) - time_adjust
     ax.set_xticklabels(label_time)
 
     ax.set_yticks(np.arange(2*len(REGIONS)))
@@ -142,15 +142,15 @@ if __name__ == '__main__':
 
     ax.axvline(x=0.625*time_step, color='w')
     ax.text(-0.25, 0.75, 'Left', transform=ax.transAxes,
-            rotation=90, rotation_mode='anchor', size=axislettersize, weight='bold')
+            rotation=90, rotation_mode='anchor', size=axislettersize)
     ax.text(-0.25, 0.25, 'Right', transform=ax.transAxes,
-            rotation=90, rotation_mode='anchor', size=axislettersize, weight='bold')
+            rotation=90, rotation_mode='anchor', size=axislettersize)
 
     cbar = combo_fig.colorbar(im)
 
-    combo_fig.text(0.04, 0.275, 'ROI', va='center',
-                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
-    combo_fig.text(0.5, 0.04, 'Test Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
+    combo_fig.text(-0.3, 0.5, 'ROI', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
+    combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
