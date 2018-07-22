@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
     min_time = 0.0
     max_time = 0.5 * len(time_win) / time_step
-    label_time = np.arange(min_time, max_time, 0.5) - time_adjust
+    label_time = np.arange(min_time, max_time, 0.5) + args.win_len*0.002
     ax.set_xticklabels(label_time)
 
     ax.set_yticks(np.arange(2*len(REGIONS)))
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
     cbar = combo_fig.colorbar(im)
 
-    combo_fig.text(-0.3, 0.5, 'ROI', va='center',
+    combo_fig.text(-0.275, 0.5, 'ROI', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
     combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
