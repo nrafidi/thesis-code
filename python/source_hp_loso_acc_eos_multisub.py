@@ -179,7 +179,7 @@ if __name__ == '__main__':
                              tstep=1)
 
 
-    cmap = 'viridis'
+    cmap = 'jet'
 
     lims = [acc_thresh, acc_thresh + (1.0 - acc_thresh)/2.0, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
