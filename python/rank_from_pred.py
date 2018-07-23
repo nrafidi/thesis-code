@@ -32,6 +32,7 @@ def rank_from_pred(tgm_pred, fold_labels):
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
                 num_items = curr_pred[j, k].shape[0]
+                print(type(curr_label))
                 if isinstance(curr_label, list):
                     assert num_items == len(curr_label)
                 else:
