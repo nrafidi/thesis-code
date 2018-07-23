@@ -169,7 +169,7 @@ if __name__ == '__main__':
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
 
-    maxes_in_order *= 100.0
+    # maxes_in_order *= 100.0
     print(np.max(maxes_in_order))
 
     left_sorted_vertices_array = [int(ind) for ind in left_sorted_vertices_array]
@@ -182,7 +182,7 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [0.0, 50.0, 100.0]  # based on min and max avrg correlation values over all models
+    lims = [0.0, 5.0, 10.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
