@@ -162,14 +162,14 @@ if __name__ == '__main__':
     sen_fig.suptitle('Rank Accuracy Over Time\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos-test-kf_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
-            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            exp=experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
             num_instances=num_instances,
         ), bbox_inches='tight')
     sen_fig.savefig(
         '/home/nrafidi/thesis_figs/{exp}_eos-test-kf_diag_acc_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
-            exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
+            exp=experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
             num_instances=num_instances,
