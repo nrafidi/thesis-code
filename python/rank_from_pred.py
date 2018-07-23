@@ -157,7 +157,8 @@ if __name__ == '__main__':
                         fname_save = fname.format(exp=exp, sen_type=sen_type,
                                                   rsCV=rsCV, k=num_folds,
                                                   word=word, rank_str='rank')
-
+                        if os.path.isfile(fname_save):
+                            continue
                         result = np.load(fname_load)
                         tgm_pred = result['tgm_pred']
                         l_ints = result['l_ints']
