@@ -125,7 +125,7 @@ if __name__ == '__main__':
             cv_membership = result['cv_membership']
             fold_labels = []
             for i in range(len(cv_membership)):
-                fold_labels.append(l_ints[cv_membership[i]])
+                fold_labels.append(np.unique(l_ints[cv_membership[i]]))
 
             multi_fold_acc = rank_from_pred(tgm_pred, fold_labels)
             np.savez_compressed(rank_file, tgm_rank=multi_fold_acc)
