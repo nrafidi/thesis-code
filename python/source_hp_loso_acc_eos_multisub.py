@@ -37,6 +37,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--accThresh', type=float, default=0.5)
+    parser.add_argument('--plot_type', default='mean', choices=['max', 'mean'])
     args = parser.parse_args()
 
     ticklabelsize = 14
@@ -110,14 +111,12 @@ if __name__ == '__main__':
             hemi_mat.append(diag_acc[None, ...])
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
 
-    max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
-    print(np.min(max_over_time_left))
-    print(np.max(max_over_time_left))
-
-
-    max_over_time_right = np.mean(source_by_time_mat['rh'], axis=1)
-    print(np.min(max_over_time_right))
-    print(np.max(max_over_time_right))
+    if args.plot_type == 'mean':
+        max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
+        max_over_time_right = np.mean(source_by_time_mat['rh'], axis=1)
+    else:
+        max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
+        max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
@@ -185,7 +184,7 @@ if __name__ == '__main__':
     lims = [acc_thresh, acc_thresh + (1.0 - acc_thresh)/2.0, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
-    fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
+    fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
