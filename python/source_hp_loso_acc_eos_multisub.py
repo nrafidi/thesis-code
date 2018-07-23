@@ -180,26 +180,17 @@ if __name__ == '__main__':
                              tstep=1)
 
     # plot
-
-    fig, ax = plt.subplots()
-
     cmap = 'jet'
-    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
 
-    cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
-                                    norm=norm,
-                                    orientation='vertical')
-    # fig.show()
-    ax.tick_params(labelsize=ticklabelsize)
 
     meow = (1.0-acc_thresh)/2.0
     lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
-    smoothing_steps = 2
+    smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
-                                      clim={'kind': 'percent', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+                                      clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
 
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
@@ -220,3 +211,13 @@ if __name__ == '__main__':
 
 
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
+
+    fig, ax = plt.subplots()
+    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
+
+    cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
+                                           norm=norm,
+                                           orientation='vertical')
+
+    ax.tick_params(labelsize=ticklabelsize)
+    fig.show()
