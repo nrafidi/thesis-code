@@ -23,7 +23,7 @@ MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_{reg}_win{win_le
 
 STRUCTURAL = 'PassAct3_T'
 
-SUBJ_DIR = '/bigbrain/bigbrain.usr1/meg/STRUCTURAL'
+SUBJ_DIR = '/bigbrain/bigbrain.usr1/meg/structural'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
