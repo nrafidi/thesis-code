@@ -32,7 +32,10 @@ def rank_from_pred(tgm_pred, fold_labels):
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
                 num_items = curr_pred[j, k].shape[0]
-                assert num_items == len(curr_label)
+                if isinstance(curr_label, list):
+                    assert num_items == len(curr_label)
+                else:
+                    assert num_items == 1
                 if num_items > 1:
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
                     label_sort = label_sort[:, ::-1]
