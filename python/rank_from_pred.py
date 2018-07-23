@@ -29,25 +29,19 @@ def rank_from_pred(tgm_pred, fold_labels):
     for i in range(tgm_pred.shape[0]):
         curr_label = fold_labels[i]
         curr_pred = np.squeeze(tgm_pred[i, ...])
-        print('meow')
-        print(curr_pred.shape)
-        print(curr_label)
         for j in range(curr_pred.shape[0]):
             for k in range(curr_pred.shape[1]):
-                print('woof')
-                print(curr_pred[j, k].shape)
-                if curr_pred[j, k].shape[0] > 1:
+                num_items = curr_pred[j, k].shape[0]
+                assert num_items == len(curr_label)
+                if num_items > 1:
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]), axis=1)
-                    # print(label_sort)
                     label_sort = label_sort[:, ::-1]
-                    print(label_sort)
-                    rank = np.empty((curr_pred[j, k].shape[0],))
-                    for l in range(curr_pred[j, k].shape[0]):
+
+                    rank = np.empty((num_items,))
+                    for l in range(num_items):
                         rank[l] = float(np.where(label_sort[l, :] == curr_label[l])[0][0])
-                    # print(rank)
-                    # print(label_sort.shape[1])
+
                     rank_acc[i, j, k] = np.mean(1.0 - rank/(float(label_sort.shape[1]) - 1.0))
-                    # print(rank_acc[i, j, k])
                 else:
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]))
                     label_sort = label_sort[::-1]
