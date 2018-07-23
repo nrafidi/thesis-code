@@ -180,7 +180,7 @@ if __name__ == '__main__':
                              tstep=1)
 
 
-    cmap = 'mne'
+    cmap = 'jet'
 
     lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 10
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
-                                      clim={'kind': 'value', 'pos_lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+                                      clim={'kind': 'value', 'pos_lims': lims}, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
 
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
