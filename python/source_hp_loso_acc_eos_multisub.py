@@ -111,11 +111,11 @@ if __name__ == '__main__':
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
 
     max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
-    # print(max_over_time_left)
+    print(np.min(max_over_time_left))
 
 
     max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
-    # print(max_over_time_right)
+    print(np.min(max_over_time_right))
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
@@ -182,12 +182,13 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
 
     cmap = 'viridis'
-    norm = matplotlib.colors.Normalize(vmin=acc_thresh, vmax=1.0)
+    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
 
     cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
                                     norm=norm,
                                     orientation='vertical')
-    fig.show()
+    # fig.show()
+    ax.tick_params(labelsize=ticklabelsize)
 
     meow = (1.0-acc_thresh)/2.0
     lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
