@@ -69,6 +69,8 @@ if __name__ == '__main__':
                                                                              sen_type=sen_type,
                                                                              word=word,
                                                                              win_len=args.win_len,
+                                                                           k=k,
+                                                                           rsCV=rsCV,
                                                                              ov=args.overlap,
                                                                              perm='F',
                                                                              alg=args.alg,
