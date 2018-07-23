@@ -53,10 +53,11 @@ if __name__ == '__main__':
 
     sen_fig, sen_axs = plt.subplots(1, len(word_list), figsize=(36, 12))
     for i_word, word in enumerate(word_list):
-
+        print(word)
         ax = sen_axs[i_word]
 
         for i_k, k in enumerate(num_folds):
+            print(k)
             if k > 2 and word == 'propid':
                 break
             top_dir = tgm_kf_acc_eos_multisub.TOP_DIR.format(exp=experiment)
@@ -88,7 +89,7 @@ if __name__ == '__main__':
                 fold_diags.append(diag_acc[None, ...])
 
             fold_diag = np.mean(np.concatenate(fold_diags, axis=0), axis=0)
-
+            print(np.min(fold_diag))
             ax.plot(fold_diag, label=k, color=colors[i_k], linewidth=2.0)
 
         top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=experiment)
@@ -130,6 +131,8 @@ if __name__ == '__main__':
         time = result['time']
         win_starts = result['win_starts']
         diag_acc = np.diag(np.mean(acc_all, axis=0))
+        print('LOO')
+        print(np.min(diag_acc))
 
         ax.plot(diag_acc, label='LOO', color=colors[3], linewidth=2.0)
 
@@ -152,7 +155,7 @@ if __name__ == '__main__':
         ax.set_ylim([0.0, 1.2])
         ax.set_xlim([0, len(time[win_starts])])
         ax.tick_params(labelsize=ticklabelsize)
-        if i_word == 0:
+        if i_word == 1:
             ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
         ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
