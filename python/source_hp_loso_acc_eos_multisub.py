@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_instances', type=int, default=2)
     parser.add_argument('--avgTime', default='T')
     parser.add_argument('--avgTest', default='T')
-    parser.add_argument('--accThresh', type=float, default=0.75)
+    parser.add_argument('--accThresh', type=float, default=0.5)
     args = parser.parse_args()
 
     ticklabelsize = 14
@@ -180,9 +180,9 @@ if __name__ == '__main__':
                              tstep=1)
 
 
-    cmap = 'jet'
+    cmap = 'viridis'
 
-    lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [acc_thresh, acc_thresh + (1.0 - acc_thresh)/2.0, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
@@ -210,12 +210,12 @@ if __name__ == '__main__':
 
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
-    fig, ax = plt.subplots()
-    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
-
-    cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
-                                           norm=norm,
-                                           orientation='vertical')
-
-    ax.tick_params(labelsize=ticklabelsize)
-    plt.show()
+    # fig, ax = plt.subplots()
+    # norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
+    #
+    # cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
+    #                                        norm=norm,
+    #                                        orientation='vertical')
+    #
+    # ax.tick_params(labelsize=ticklabelsize)
+    # plt.show()
