@@ -43,7 +43,7 @@ def rank_from_pred(tgm_pred, fold_labels):
                     print(label_sort)
                     rank = np.empty((curr_pred[j, k].shape[0],))
                     for l in range(curr_pred[j, k].shape[0]):
-                        rank[l] = float(np.where(label_sort[l, :] == curr_label)[0][0])
+                        rank[l] = float(np.where(label_sort[l, :] == curr_label[l])[0][0])
                     # print(rank)
                     # print(label_sort.shape[1])
                     rank_acc[i, j, k] = np.mean(1.0 - rank/(float(label_sort.shape[1]) - 1.0))
@@ -170,6 +170,7 @@ if __name__ == '__main__':
                         cv_membership = result['cv_membership']
                         fold_labels = []
                         for i in range(len(cv_membership)):
+                            print(cv_membership[i])
                             fold_labels.append(l_ints[cv_membership[i]])
                         tgm_rank = rank_from_pred(tgm_pred, fold_labels)
 
