@@ -132,6 +132,9 @@ if __name__ == '__main__':
     right_vertices_per_label = []
     right_maxes_per_label = []
     for label in label_left:
+        print(label.name)
+        if label.name not in REGIONS:
+            continue
         region_index_in_results = np.where(REGIONS == label.name)[0][0]
         if max_over_time_left[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
             left_vertices_per_label = np.append(left_vertices_per_label, label.vertices)
@@ -143,6 +146,8 @@ if __name__ == '__main__':
     left_sorted_vertices_array_inds = np.argsort(left_vertices_per_label)
 
     for label in label_right:
+        if label.name not in REGIONS:
+            continue
         region_index_in_results = np.where(REGIONS == label.name)[0][0]
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
