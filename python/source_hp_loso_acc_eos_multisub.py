@@ -188,7 +188,7 @@ if __name__ == '__main__':
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
-    ax_prop = f0.axes[0].properties
+    ax_prop = f0.axes[0].get_children()
     print(ax_prop)
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
 
