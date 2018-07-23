@@ -111,11 +111,11 @@ if __name__ == '__main__':
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
 
     max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
-
+    print(max_over_time_left)
 
 
     max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
-
+    print(max_over_time_right)
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
@@ -138,8 +138,7 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_left[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            print(len(label.vertices))
-            left_vertices_per_label = np.append(left_vertices_per_label, label.vertices)
+            left_vertices_per_label = np.append(left_vertices_per_label, label.vertices.astype('int'))
             # each vertex will show the average correlation for the corresponding region
             left_maxes_per_label = np.append(left_maxes_per_label,
                                                     np.ones(len(label.vertices)) * max_over_time_left[region_index_in_results])
@@ -154,8 +153,7 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            print(len(label.vertices))
-            right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
+            right_vertices_per_label = np.append(right_vertices_per_label, label.vertices.astype('int'))
             # each vertex will show the average correlation for the corresponding region
             right_maxes_per_label = np.append(right_maxes_per_label,
                                                      np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results])
@@ -166,6 +164,8 @@ if __name__ == '__main__':
     # so sort the correlations the same way
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
+
+    print(maxes_in_order.shape)
 
     # create source estimate object with data to show for the left and right hemispheres, and corresponding locations
     src = mne.SourceEstimate(maxes_in_order, [left_sorted_vertices_array, right_sorted_vertices_array], tmin=0,
