@@ -170,7 +170,7 @@ if __name__ == '__main__':
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
 
-    # print(maxes_in_order.shape)
+    print(np.max(maxes_in_order))
 
     left_sorted_vertices_array = [int(ind) for ind in left_sorted_vertices_array]
     right_sorted_vertices_array = [int(ind) for ind in right_sorted_vertices_array]
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     ax.tick_params(labelsize=ticklabelsize)
 
     meow = (1.0-acc_thresh)/2.0
-    lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [acc_thresh,  1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
