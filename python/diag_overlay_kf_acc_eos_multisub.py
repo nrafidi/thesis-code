@@ -45,7 +45,7 @@ if __name__ == '__main__':
     colors = ['r', 'b', 'g', 'k']
     sen_type = 'pooled'
     experiment = 'krns2'
-    word_list = ['verb', 'voice', 'propid']
+    word_list = ['voice', 'verb', 'propid']
     num_folds = [2, 4, 8]
     cv_random_states = range(100)
     chance = 0.5
@@ -90,6 +90,7 @@ if __name__ == '__main__':
 
             fold_diag = np.mean(np.concatenate(fold_diags, axis=0), axis=0)
             print(np.min(fold_diag))
+            print(np.max(fold_diag))
             ax.plot(fold_diag, label=k, color=colors[i_k], linewidth=2.0)
 
         top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=experiment)
@@ -133,6 +134,7 @@ if __name__ == '__main__':
         diag_acc = np.diag(np.mean(acc_all, axis=0))
         print('LOO')
         print(np.min(diag_acc))
+        print(np.max(diag_acc))
 
         ax.plot(diag_acc, label='LOO', color=colors[3], linewidth=2.0)
 
