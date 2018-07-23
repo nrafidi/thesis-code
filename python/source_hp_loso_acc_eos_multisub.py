@@ -210,12 +210,12 @@ if __name__ == '__main__':
 
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
-    # fig, ax = plt.subplots()
-    # norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
-    #
-    # cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
-    #                                        norm=norm,
-    #                                        orientation='vertical')
-    #
-    # ax.tick_params(labelsize=ticklabelsize)
-    # plt.show()
+    fig, ax = plt.subplots()
+    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
+
+    cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
+                                           norm=norm,
+                                           orientation='vertical')
+
+    ax.tick_params(labelsize=20)
+    plt.show()
