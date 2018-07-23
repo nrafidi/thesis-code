@@ -144,10 +144,9 @@ if __name__ == '__main__':
     for exp in ['krns2']:
         for num_folds in [2, 4, 8]:
             for rsCV in range(100):
+                print('{}: {}'.format(num_folds, rsCV))
                 for sen_type in ['pooled']:
-                    print(sen_type)
                     for word in ['verb', 'voice', 'propid']:
-                        print(word)
                         if word == 'propid' and sen_type != 'pooled':
                             continue
                         if word == 'propid' and num_folds > 2:
