@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [acc_thresh, acc_thresh + (1.0 - acc_thresh)/2.0, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
@@ -209,12 +209,12 @@ if __name__ == '__main__':
 
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
-    fig, ax = plt.subplots()
-    norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
-
-    cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
-                                           norm=norm,
-                                           orientation='vertical')
-
-    ax.tick_params(labelsize=20)
-    plt.show()
+    # fig, ax = plt.subplots()
+    # norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
+    #
+    # cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
+    #                                        norm=norm,
+    #                                        orientation='vertical')
+    #
+    # ax.tick_params(labelsize=20)
+    # plt.show()
