@@ -133,7 +133,7 @@ if __name__ == '__main__':
     right_maxes_per_label = []
     for label in label_left:
         label_name = label.name[:-3]
-        print(label_name)
+        # print(label_name)
         if label_name not in REGIONS:
             continue
         region_index_in_results = REGIONS.index(label_name)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
     for label in label_right:
         label_name = label.name[:-3]
-        print(label_name)
+        # print(label_name)
         if label_name not in REGIONS:
             continue
         region_index_in_results = REGIONS.index(label_name)
@@ -171,7 +171,9 @@ if __name__ == '__main__':
 
     # plot
     cmap = 'viridis'
-    lims = [acc_thresh, (1.0-acc_thresh)/2.0, 1.0]  # based on min and max avrg correlation values over all models
+    meow = (1.0-acc_thresh)/2.0
+    print(meow)
+    lims = [acc_thresh, 0.875, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-max".format(word)
