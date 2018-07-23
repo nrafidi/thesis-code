@@ -194,7 +194,7 @@ if __name__ == '__main__':
     lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
-    fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-max".format(word)
+    fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
