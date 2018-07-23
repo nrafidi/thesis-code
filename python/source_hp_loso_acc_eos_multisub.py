@@ -168,7 +168,8 @@ if __name__ == '__main__':
     # so sort the correlations the same way
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
-    # maxes_in_order /= 2.0
+
+    maxes_in_order *= 100.0
     print(np.max(maxes_in_order))
 
     left_sorted_vertices_array = [int(ind) for ind in left_sorted_vertices_array]
@@ -181,13 +182,13 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [0.0, 50.0, 100.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
-                                      clim={'kind': 'percent', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+                                      clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
 
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
