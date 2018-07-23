@@ -138,7 +138,9 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_left[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            left_vertices_per_label = np.append(left_vertices_per_label, label.vertices.astype('int'))
+            print(type(label.vertices))
+            print(type(label.vertices[0]))
+            left_vertices_per_label = np.append(left_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             left_maxes_per_label = np.append(left_maxes_per_label,
                                                     np.ones(len(label.vertices)) * max_over_time_left[region_index_in_results])
@@ -153,12 +155,14 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            right_vertices_per_label = np.append(right_vertices_per_label, label.vertices.astype('int'))
+            right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             right_maxes_per_label = np.append(right_maxes_per_label,
                                                      np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results])
     # the vertices are required to be sorted for the plotting function
     right_sorted_vertices_array = sorted(right_vertices_per_label)
+    print(type(right_sorted_vertices_array))
+    print(type(right_sorted_vertices_array[0]))
     right_sorted_vertices_array_inds = np.argsort(right_vertices_per_label)
 
     # so sort the correlations the same way
