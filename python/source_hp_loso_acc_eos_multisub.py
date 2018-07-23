@@ -179,9 +179,8 @@ if __name__ == '__main__':
     src = mne.SourceEstimate(maxes_in_order, [left_sorted_vertices_array, right_sorted_vertices_array], tmin=0,
                              tstep=1)
 
-    # plot
-    cmap = 'jet'
 
+    cmap = 'jet'
 
     meow = (1.0-acc_thresh)/2.0
     lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
@@ -190,7 +189,7 @@ if __name__ == '__main__':
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-mean".format(word)
 
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
-                                      clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+                                      colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
 
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
@@ -220,4 +219,4 @@ if __name__ == '__main__':
                                            orientation='vertical')
 
     ax.tick_params(labelsize=ticklabelsize)
-    fig.show()
+    plt.show()
