@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
 
-    cmap = 'viridis'
+    cmap = 'jet'
     norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
 
     cb1 = matplotlib.colorbar.ColorbarBase(ax, cmap=cmap,
