@@ -110,11 +110,11 @@ if __name__ == '__main__':
             hemi_mat.append(diag_acc[None, ...])
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
 
-    max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
+    max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
     print(np.min(max_over_time_left))
 
 
-    max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
+    max_over_time_right = np.mean(source_by_time_mat['rh'], axis=1)
     print(np.min(max_over_time_right))
 
 
@@ -218,8 +218,3 @@ if __name__ == '__main__':
 
 
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
-
-
-    fig, ax = plt.subplots()
-    fig.colorbar(cmap=cmap, cax=ax)
-    plt.show()
