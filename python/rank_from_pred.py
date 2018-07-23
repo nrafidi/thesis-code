@@ -169,7 +169,7 @@ if __name__ == '__main__':
                         cv_membership = result['cv_membership']
                         fold_labels = []
                         for i in range(len(cv_membership)):
-                            fold_labels.append(np.mean(l_ints[cv_membership[i]]))
+                            fold_labels.append(l_ints[cv_membership[i]])
                         tgm_rank = rank_from_pred(tgm_pred, fold_labels)
 
                         np.savez_compressed(fname_save,
