@@ -111,11 +111,11 @@ if __name__ == '__main__':
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
 
     max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
-    print(max_over_time_left)
+    # print(max_over_time_left)
 
 
     max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
-    print(max_over_time_right)
+    # print(max_over_time_right)
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
@@ -138,8 +138,8 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_left[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            print(type(label.vertices))
-            print(type(label.vertices[0]))
+            # print(type(label.vertices))
+            # print(type(label.vertices[0]))
             left_vertices_per_label = np.append(left_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             left_maxes_per_label = np.append(left_maxes_per_label,
@@ -155,7 +155,7 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            print(label.vertices)
+            # print(label.vertices)
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             right_maxes_per_label = np.append(right_maxes_per_label,
@@ -168,7 +168,7 @@ if __name__ == '__main__':
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
 
-    print(maxes_in_order.shape)
+    # print(maxes_in_order.shape)
 
     left_sorted_vertices_array = [int(ind) for ind in left_sorted_vertices_array]
     right_sorted_vertices_array = [int(ind) for ind in right_sorted_vertices_array]
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
-    print(f0.axes)
+
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
 
     f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='med',
@@ -206,4 +206,7 @@ if __name__ == '__main__':
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
+
+    fig, ax = plt.subplots()
+    fig.colorbar(cmap=cmap, ax=ax)
     plt.show()
