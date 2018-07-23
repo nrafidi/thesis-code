@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
             fold_diag = np.mean(np.concatenate(fold_diags, axis=0), axis=0)
 
-            ax.plot(fold_diag, label=k, color=colors[i_k], linewidth=4.0)
+            ax.plot(fold_diag, label=k, color=colors[i_k], linewidth=2.0)
 
         top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=experiment)
         multi_file = tgm_loso_acc_eos_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
@@ -131,7 +131,7 @@ if __name__ == '__main__':
         win_starts = result['win_starts']
         diag_acc = np.diag(np.mean(acc_all, axis=0))
 
-        ax.plot(diag_acc, label='LOO', color=colors[3], linewidth=4.0)
+        ax.plot(diag_acc, label='LOO', color=colors[3], linewidth=2.0)
 
         num_time = len(win_starts)
         max_line = 0.3 * 2 * time_step
