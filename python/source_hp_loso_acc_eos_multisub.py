@@ -108,7 +108,7 @@ if __name__ == '__main__':
             mean_acc = np.mean(multi_fold_acc, axis=0)
             diag_acc = np.diag(mean_acc)
             source_by_time_mat[hemi].append(diag_acc[None, ...])
-            source_by_time_mat[hemi] = np.concatenate(source_by_time_mat)
+            source_by_time_mat[hemi] = np.concatenate(source_by_time_mat[hemi])
 
     max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
 
