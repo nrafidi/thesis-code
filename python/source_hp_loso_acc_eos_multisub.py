@@ -112,10 +112,12 @@ if __name__ == '__main__':
 
     max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
     print(np.min(max_over_time_left))
+    print(np.max(max_over_time_left))
 
 
     max_over_time_right = np.mean(source_by_time_mat['rh'], axis=1)
     print(np.min(max_over_time_right))
+    print(np.max(max_over_time_right))
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
