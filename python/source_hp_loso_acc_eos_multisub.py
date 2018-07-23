@@ -172,8 +172,7 @@ if __name__ == '__main__':
     # plot
     cmap = 'viridis'
     meow = (1.0-acc_thresh)/2.0
-    print(meow)
-    lims = [acc_thresh, 0.875, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [acc_thresh, acc_thresh + meow, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-max".format(word)
