@@ -188,7 +188,8 @@ if __name__ == '__main__':
     f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
-
+    ax_prop = f0.axes[0].properties
+    print(ax_prop)
     f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
 
     f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='med',
@@ -204,9 +205,11 @@ if __name__ == '__main__':
     f3 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='rh', views='med',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
+
+
     f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
 
     fig, ax = plt.subplots()
-    fig.colorbar(cmap=cmap, ax=ax)
+    fig.colorbar(cmap=cmap, cax=ax)
     plt.show()
