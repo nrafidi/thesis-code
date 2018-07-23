@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
             ax.plot(fold_diag, label=k, color=colors[i_k], linewidth=4.0)
 
-        top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=args.experiment)
+        top_dir = tgm_loso_acc_eos_multisub.TOP_DIR.format(exp=experiment)
         multi_file = tgm_loso_acc_eos_multisub.MULTI_SAVE_FILE.format(dir=top_dir,
                                                                       sen_type=sen_type,
                                                                       word=word,
