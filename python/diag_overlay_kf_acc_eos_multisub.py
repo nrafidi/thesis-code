@@ -154,7 +154,7 @@ if __name__ == '__main__':
         ax.tick_params(labelsize=ticklabelsize)
         if i_word == 0:
             ax.legend(loc=3, ncol=2, fontsize=legendfontsize)
-        ax.set_title('{word}'.format(sen_type=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
+        ax.set_title('{word}'.format(word=PLOT_TITLE_WORD[word]), fontsize=axistitlesize)
         ax.text(-0.05, 1.05, string.ascii_uppercase[i_word], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
 
