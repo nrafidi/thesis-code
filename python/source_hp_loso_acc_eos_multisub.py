@@ -168,9 +168,10 @@ if __name__ == '__main__':
     # so sort the correlations the same way
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
+    print(np.max(maxes_in_order))
     maxes_in_order[0] = 1.0
     # maxes_in_order *= 100.0
-    print(np.max(maxes_in_order))
+
 
     left_sorted_vertices_array = [int(ind) for ind in left_sorted_vertices_array]
     right_sorted_vertices_array = [int(ind) for ind in right_sorted_vertices_array]
