@@ -156,12 +156,14 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            print(label_name)
-            print(len(label.vertices))
+
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
+            maxes_to_add = np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results]
+            if label_name == 'frontalpole':
+                maxes_to_add[0] = 1.0
             right_maxes_per_label = np.append(right_maxes_per_label,
-                                                     np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results])
+                                                     maxes_to_add)
     # the vertices are required to be sorted for the plotting function
     right_sorted_vertices_array = sorted(right_vertices_per_label)
     right_sorted_vertices_array_inds = np.argsort(right_vertices_per_label)
