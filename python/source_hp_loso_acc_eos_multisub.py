@@ -170,6 +170,7 @@ if __name__ == '__main__':
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
     print(np.max(maxes_in_order))
     print(maxes_in_order.shape)
+    print(maxes_in_order[0, 0].shape)
     maxes_in_order[0, 0] = 1.0
     # maxes_in_order *= 100.0
 
