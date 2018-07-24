@@ -146,7 +146,7 @@ if __name__ == '__main__':
             # each vertex will show the average correlation for the corresponding region
             maxes_to_add = np.ones(len(label.vertices)) * max_over_time_left[region_index_in_results]
             if label_name == 'frontalpole':
-                maxes_to_add[0:10] = 1.0
+                maxes_to_add[0:20] = 1.0
             left_maxes_per_label = np.append(left_maxes_per_label,
                                                     maxes_to_add)
     # the vertices are required to be sorted for the plotting function
@@ -165,7 +165,7 @@ if __name__ == '__main__':
             # each vertex will show the average correlation for the corresponding region
             maxes_to_add = np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results]
             if label_name == 'frontalpole':
-                maxes_to_add[0:10] = 1.0
+                maxes_to_add[0:20] = 1.0
             right_maxes_per_label = np.append(right_maxes_per_label,
                                                      maxes_to_add)
     # the vertices are required to be sorted for the plotting function
