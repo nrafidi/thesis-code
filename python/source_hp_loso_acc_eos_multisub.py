@@ -169,7 +169,8 @@ if __name__ == '__main__':
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
     print(np.max(maxes_in_order))
-    maxes_in_order[0] = 1.0
+    print(maxes_in_order.shape)
+    maxes_in_order[0, 0] = 1.0
     # maxes_in_order *= 100.0
 
 
