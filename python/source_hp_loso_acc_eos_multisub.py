@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [0.5, 0.745, 0.99]  # based on min and max avrg correlation values over all models
+    lims = [0.5, 1.0, 1.5]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
