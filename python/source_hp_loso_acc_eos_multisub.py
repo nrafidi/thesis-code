@@ -156,7 +156,8 @@ if __name__ == '__main__':
             continue
         region_index_in_results = REGIONS.index(label_name)
         if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
-            # print(label.vertices)
+            print(label_name)
+            print(len(label.vertices))
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             right_maxes_per_label = np.append(right_maxes_per_label,
@@ -169,8 +170,6 @@ if __name__ == '__main__':
     maxes_in_order = np.transpose([np.append(left_maxes_per_label[left_sorted_vertices_array_inds],
                                             right_maxes_per_label[right_sorted_vertices_array_inds])])
     print(np.max(maxes_in_order))
-    print(maxes_in_order[0, 0])
-    maxes_in_order[0, 0] = 1.0
     # maxes_in_order *= 100.0
 
 
@@ -184,7 +183,7 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [0.5, 0.75, 1.0]  # based on min and max avrg correlation values over all models
+    lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
