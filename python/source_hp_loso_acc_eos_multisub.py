@@ -111,9 +111,10 @@ if __name__ == '__main__':
             time = result['time']
             win_starts = result['win_starts']
             time_win = time[win_starts]
-
+            print(np.min(time_win))
+            print(np.max(time_win))
             time_to_plot = np.logical_and(time_win >= args.tmin, time_win < args.tmax)
-
+            print(np.sum(time_to_plot))
             mean_acc = np.mean(multi_fold_acc, axis=0)
             diag_acc = np.diag(mean_acc)
             diag_acc_win = diag_acc[time_to_plot]
@@ -122,11 +123,11 @@ if __name__ == '__main__':
 
 
     if args.plot_type == 'mean':
-        max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
-        max_over_time_right = np.mean(source_by_time_mat['rh'], axis=1)
+        max_over_time_left = np.nanmean(source_by_time_mat['lh'], axis=1)
+        max_over_time_right = np.nanmean(source_by_time_mat['rh'], axis=1)
     else:
-        max_over_time_left = np.max(source_by_time_mat['lh'], axis=1)
-        max_over_time_right = np.max(source_by_time_mat['rh'], axis=1)
+        max_over_time_left = np.nanmax(source_by_time_mat['lh'], axis=1)
+        max_over_time_right = np.nanmax(source_by_time_mat['rh'], axis=1)
 
 
     # the left and right data and vertices are required to be in different arrays for the plotting.. okay
