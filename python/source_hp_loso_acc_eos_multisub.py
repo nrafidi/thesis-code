@@ -207,7 +207,7 @@ if __name__ == '__main__':
     cmap = 'jet'
 
     lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
-    smoothing_steps = 10
+    smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/PassAct3_pooled_{}_eos-{}_{}_acc{}_{}".format(word, args.plot_type, time_win_str, acc_thresh_str, args.surface)
 
@@ -219,12 +219,12 @@ if __name__ == '__main__':
 
     f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='lh', views='med',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
-                                      smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
+                                      smoothing_steps=smoothing_steps, spacing='ico2', backend='matplotlib')
     f1.savefig(fname + "_lh_lat_source_plot.pdf", bbox_inches='tight')
 
     f2 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='rh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
-                                      smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
+                                      smoothing_steps=smoothing_steps, spacing='ico2', backend='matplotlib')
     f2.savefig(fname + "_rh_lat_source_plot.pdf", bbox_inches='tight')
 
     # f3 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='rh', views='med',
