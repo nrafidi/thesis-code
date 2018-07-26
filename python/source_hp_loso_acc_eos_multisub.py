@@ -38,6 +38,8 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--accThresh', type=float, default=0.5)
     parser.add_argument('--plot_type', default='mean', choices=['max', 'mean'])
+    parser.add_argument('--tmin', default=0.0, type=float)
+    parser.add_argument('--tmax', default=0.5, type=float)
     args = parser.parse_args()
 
     ticklabelsize = 14
@@ -64,6 +66,8 @@ if __name__ == '__main__':
 
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
+    acc_thresh_str = '%.2f' % acc_thresh
+    time_win_str = '%.2f-%.2f' % (args.tmin, args.tmax)
 
     source_by_time_mat = {}
     for hemi in HEMIS:
@@ -107,10 +111,15 @@ if __name__ == '__main__':
             time = result['time']
             win_starts = result['win_starts']
             time_win = time[win_starts]
+
+            time_to_plot = np.logical_and(time_win >= args.tmin, time_win < args.tmax)
+
             mean_acc = np.mean(multi_fold_acc, axis=0)
             diag_acc = np.diag(mean_acc)
-            hemi_mat.append(diag_acc[None, ...])
+            diag_acc_win = diag_acc[time_to_plot]
+            hemi_mat.append(diag_acc_win[None, ...])
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
+
 
     if args.plot_type == 'mean':
         max_over_time_left = np.mean(source_by_time_mat['lh'], axis=1)
@@ -193,13 +202,13 @@ if __name__ == '__main__':
     lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
-    fname = "/home/nrafidi/thesis_figs/PassAct3_pooled_{}_eos-{}".format(word, args.plot_type)
+    fname = "/home/nrafidi/thesis_figs/PassAct3_pooled_{}_eos-{}_{}_acc{}".format(word, args.plot_type, time_win_str, acc_thresh_str)
 
-    f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
-                                      clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
-                                      smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
-
-    f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
+    # f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
+    #                                   clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+    #                                   smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
+    #
+    # f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
 
     f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='med',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
@@ -211,12 +220,12 @@ if __name__ == '__main__':
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f2.savefig(fname + "_rh_lat_source_plot.pdf", bbox_inches='tight')
 
-    f3 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='rh', views='med',
-                                      clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
-                                      smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
-
-
-    f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
+    # f3 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='rh', views='med',
+    #                                   clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
+    #                                   smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
+    #
+    #
+    # f3.savefig(fname + "_rh_med_source_plot.pdf", bbox_inches='tight')
 
     # fig, ax = plt.subplots()
     # norm = matplotlib.colors.Normalize(vmin=0.0, vmax=1.0)
