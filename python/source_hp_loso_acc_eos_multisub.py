@@ -113,7 +113,7 @@ if __name__ == '__main__':
             time_win = time[win_starts]
             min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
-            label_time = np.arange(min_time, max_time, 0.002)
+            label_time = np.arange(min_time, max_time, 0.01)
             print(min_time)
             print(max_time)
             print(len(label_time))
