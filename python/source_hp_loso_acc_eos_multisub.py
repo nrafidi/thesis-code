@@ -111,12 +111,17 @@ if __name__ == '__main__':
             time = result['time']
             win_starts = result['win_starts']
             time_win = time[win_starts]
-            print(np.min(time_win))
-            print(np.max(time_win))
-            time_to_plot = np.logical_and(time_win >= args.tmin, time_win < args.tmax)
-            print(np.sum(time_to_plot))
+            min_time = 0.0
+            max_time = 0.5 * len(time_win) / time_step
+            label_time = np.arange(min_time, max_time, 0.002)
+            print(min_time)
+            print(max_time)
+            print(len(label_time))
+            time_to_plot = np.logical_and(label_time >= args.tmin, label_time < args.tmax)
+
             mean_acc = np.mean(multi_fold_acc, axis=0)
             diag_acc = np.diag(mean_acc)
+            print(len(diag_acc))
             diag_acc_win = diag_acc[time_to_plot]
             hemi_mat.append(diag_acc_win[None, ...])
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
