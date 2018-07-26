@@ -154,7 +154,7 @@ if __name__ == '__main__':
         end_ind = start_ind + 306
         map_to_add = class_map[start_ind:end_ind]
         sub_map = map_to_add[sensors_to_keep]
-
+        sub_map /= np.max(np.abs(sub_map))
         ax = combo_grid[i_sub]
         # print(i_combo)
         im, _ = plot_topomap(sub_map, coordinates, axes=ax, show=False, vmin=-1.0, vmax=1.0)
