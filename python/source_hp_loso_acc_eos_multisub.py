@@ -145,8 +145,8 @@ if __name__ == '__main__':
             left_vertices_per_label = np.append(left_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             maxes_to_add = np.ones(len(label.vertices)) * max_over_time_left[region_index_in_results]
-            if label_name == 'frontalpole':
-                maxes_to_add[0:99] = 1.0
+            # if label_name == 'frontalpole':
+            #     maxes_to_add[0:99] = 1.0
             left_maxes_per_label = np.append(left_maxes_per_label,
                                                     maxes_to_add)
     # the vertices are required to be sorted for the plotting function
@@ -164,8 +164,8 @@ if __name__ == '__main__':
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
             maxes_to_add = np.ones(len(label.vertices)) * max_over_time_right[region_index_in_results]
-            if label_name == 'frontalpole':
-                maxes_to_add[0:200] = 1.0
+            # if label_name == 'frontalpole':
+            #     maxes_to_add[0:200] = 1.0
             right_maxes_per_label = np.append(right_maxes_per_label,
                                                      maxes_to_add)
     # the vertices are required to be sorted for the plotting function
@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     cmap = 'jet'
 
-    lims = [0.0, 0.5, 0.99]  # based on min and max avrg correlation values over all models
+    lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
     fname = "/home/nrafidi/thesis_figs/krns2_pooled_{}_eos-{}".format(word, args.plot_type)
