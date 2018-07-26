@@ -154,7 +154,7 @@ if __name__ == '__main__':
         if label_name not in REGIONS:
             continue
         region_index_in_results = REGIONS.index(label_name)
-        if max_over_time_left[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
+        if max_over_time_left[region_index_in_results] >= acc_thresh:  # include this regiion in the plotting
             # print(type(label.vertices))
             # print(type(label.vertices[0]))
 
@@ -175,7 +175,7 @@ if __name__ == '__main__':
         if label_name not in REGIONS:
             continue
         region_index_in_results = REGIONS.index(label_name)
-        if max_over_time_right[region_index_in_results] > acc_thresh:  # include this regiion in the plotting
+        if max_over_time_right[region_index_in_results] >= acc_thresh:  # include this regiion in the plotting
 
             right_vertices_per_label = np.append(right_vertices_per_label, label.vertices)
             # each vertex will show the average correlation for the corresponding region
