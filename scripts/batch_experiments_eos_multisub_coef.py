@@ -18,8 +18,8 @@ JOB_DIR = '/share/volume0/nrafidi/{exp}_jobFiles/'
 ERR_FILE = '{dir}{job_name}.e'
 OUT_FILE = '{dir}{job_name}.o'
 
-# JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
-JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+JOB_Q_CHECK = 'expr $(qselect -q default -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
+# JOB_Q_CHECK = 'expr $(qselect -q pool2 -u nrafidi | xargs qstat -u nrafidi | wc -l) - 5'
 
 def bool_to_str(bool_var):
     if bool_var:
@@ -30,7 +30,7 @@ def bool_to_str(bool_var):
 if __name__ == '__main__':
 
     # -q default -N {job_name} -l walltime=72:00:00,mem=2GB -v ' \
-    qsub_call = 'qsub -q pool2 -N {job_name} -l walltime=168:00:00,mem=32GB -v ' \
+    qsub_call = 'qsub -q default -N {job_name} -l walltime=168:00:00,mem=32GB -v ' \
                 'experiment={exp},sen_type={sen},word={word},win_len={win_len},overlap={overlap},' \
                 'adj={adj},alg={alg},doTimeAvg={tm_avg},' \
                 'num_instances={inst},force=True, ' \
