@@ -47,6 +47,7 @@ if __name__ == '__main__':
     axistitlesize = 20
     axislettersize = 20
 
+    print(mne.__version__)
     if args.avgTime == 'T':
         aT = 'Time Average '
     else:
