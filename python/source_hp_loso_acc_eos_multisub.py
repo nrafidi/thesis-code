@@ -40,6 +40,7 @@ if __name__ == '__main__':
     parser.add_argument('--plot_type', default='mean', choices=['max', 'mean'])
     parser.add_argument('--tmin', default=0.0, type=float)
     parser.add_argument('--tmax', default=0.5, type=float)
+    parser.add_argument('--surface', default='inflated', choices=['brain', 'inflated'])
     args = parser.parse_args()
 
     ticklabelsize = 14
@@ -208,7 +209,7 @@ if __name__ == '__main__':
     lims = [0.0, 0.5, 1.0]  # based on min and max avrg correlation values over all models
     smoothing_steps = 1
     bk = 'white'
-    fname = "/home/nrafidi/thesis_figs/PassAct3_pooled_{}_eos-{}_{}_acc{}".format(word, args.plot_type, time_win_str, acc_thresh_str)
+    fname = "/home/nrafidi/thesis_figs/PassAct3_pooled_{}_eos-{}_{}_acc{}_{}".format(word, args.plot_type, time_win_str, acc_thresh_str, args.surface)
 
     # f0 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='lat',
     #                                   clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
@@ -216,12 +217,12 @@ if __name__ == '__main__':
     #
     # f0.savefig(fname + "_lh_med_source_plot.pdf", bbox_inches='tight')
 
-    f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='lh', views='med',
+    f1 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='lh', views='med',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f1.savefig(fname + "_lh_lat_source_plot.pdf", bbox_inches='tight')
 
-    f2 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface='inflated', hemi='rh', views='lat',
+    f2 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='rh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f2.savefig(fname + "_rh_lat_source_plot.pdf", bbox_inches='tight')
