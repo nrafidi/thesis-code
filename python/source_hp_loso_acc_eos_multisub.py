@@ -223,7 +223,8 @@ if __name__ == '__main__':
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f1.savefig(fname + "_lh_lat_source_plot.pdf", bbox_inches='tight')
 
-    f2 = mne.viz.plot_source_estimates(src, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='rh', views='lat',
+    f2 = plt.figure(figsize=(15, 15))
+    f2 = mne.viz.plot_source_estimates(src, figure=f2, subject=STRUCTURAL, background=bk, surface=args.surface, hemi='rh', views='lat',
                                       clim={'kind': 'value', 'lims': lims}, colormap=cmap, subjects_dir=SUBJ_DIR,
                                       smoothing_steps=smoothing_steps, spacing='ico4', backend='matplotlib')
     f2.savefig(fname + "_rh_lat_source_plot.pdf", bbox_inches='tight')
