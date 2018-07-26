@@ -114,14 +114,14 @@ if __name__ == '__main__':
             min_time = 0.0
             max_time = 0.5 * len(time_win) / time_step
             label_time = np.arange(min_time, max_time, 0.01)
-            print(min_time)
-            print(max_time)
-            print(len(label_time))
+            # print(min_time)
+            # print(max_time)
+            # print(len(label_time))
             time_to_plot = np.logical_and(label_time >= args.tmin, label_time < args.tmax)
 
             mean_acc = np.mean(multi_fold_acc, axis=0)
             diag_acc = np.diag(mean_acc)
-            print(len(diag_acc))
+            # print(len(diag_acc))
             diag_acc_win = diag_acc[time_to_plot]
             hemi_mat.append(diag_acc_win[None, ...])
         source_by_time_mat[hemi] = np.concatenate(hemi_mat, axis=0)
@@ -163,8 +163,8 @@ if __name__ == '__main__':
             maxes_to_add = np.ones(len(label.vertices)) * max_over_time_left[region_index_in_results]
             left_maxes_per_label = np.append(left_maxes_per_label,
                                                     maxes_to_add)
-        else:
-            print(max_over_time_left[region_index_in_results])
+        # else:
+        #     print(max_over_time_left[region_index_in_results])
     # the vertices are required to be sorted for the plotting function
     left_sorted_vertices_array = sorted(left_vertices_per_label)
     left_sorted_vertices_array_inds = np.argsort(left_vertices_per_label)
