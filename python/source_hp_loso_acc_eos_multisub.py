@@ -40,7 +40,7 @@ if __name__ == '__main__':
     parser.add_argument('--plot_type', default='mean', choices=['max', 'mean'])
     parser.add_argument('--tmin', default=0.0, type=float)
     parser.add_argument('--tmax', default=0.5, type=float)
-    parser.add_argument('--surface', default='inflated', choices=['pial', 'inflated'])
+    parser.add_argument('--surface', default='inflated') #, choices=['pial', 'inflated'])
     args = parser.parse_args()
 
     ticklabelsize = 14
