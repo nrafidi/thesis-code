@@ -5,6 +5,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
+import string
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
                   'PassAct3': 'Final Experiment'}
@@ -140,6 +141,10 @@ if __name__ == '__main__':
         label_time = np.arange(min_time, max_time, 0.5)
         ax.set_xticklabels(label_time + args.win_len * 0.002)
         ax.set_yticks(np.arange(len(REGIONS)))
+        ax.text(-0.12, 1.02, string.ascii_uppercase[i_hemi], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
+        ax.text(-0.12, -0.12, string.ascii_uppercase[i_hemi+2], transform=ax.transAxes,
+                size=axislettersize, weight='bold')
         if i_hemi == 0:
             ax.set_yticklabels(REGIONS)
         ax.tick_params(labelsize=ticklabelsize)
