@@ -31,8 +31,8 @@ REGIONS = ['superiorfrontal', 'caudalmiddlefrontal', 'rostralmiddlefrontal', 'pa
 
 HEMIS = ['lh', 'rh']
 
-HEMI_TITLES = {'lh': 'Left',
-               'rh': 'Right'}
+HEMI_TITLES = {'lh': 'Left Hemisphere',
+               'rh': 'Right Hemisphere'}
 
 TOP_DIR = '/share/volume0/nrafidi/PassAct3_TGM_LOSO_EOS_SOURCE/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_{reg}_win{win_len}_ov{ov}_pr{perm}_' \
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     combo_fig.suptitle('Rank Accuracy over Time and Region for {word} Decoding'.format(
         word=PLOT_TITLE_WORD[word]), fontsize=suptitlesize)
 
-    cbar = combo_fig.colorbar(im)
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
     combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_horiz_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
