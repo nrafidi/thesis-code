@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 PLOT_TITLE_EXP = {'krns2': 'Pilot Experiment',
                   'PassAct3': 'Final Experiment'}
@@ -29,6 +30,9 @@ REGIONS = ['superiorfrontal', 'caudalmiddlefrontal', 'rostralmiddlefrontal', 'pa
               'transversetemporal', 'bankssts']
 
 HEMIS = ['lh', 'rh']
+
+HEMI_TITLES = {'lh': 'Left',
+               'rh': 'Right'}
 
 TOP_DIR = '/share/volume0/nrafidi/PassAct3_TGM_LOSO_EOS_SOURCE/'
 MULTI_SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_{reg}_win{win_len}_ov{ov}_pr{perm}_' \
@@ -72,9 +76,13 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
-    source_by_time_mat = []
-
-    for hemi in HEMIS:
+    combo_fig = plt.figure(figsize=(9*len(HEMIS), 8))
+    combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, len(HEMIS)),
+                          axes_pad=0.7, cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.5, share_all=True)
+    for i_hemi, hemi in enumerate(HEMIS):
+        ax = combo_grid[i_hemi]
+        source_by_time_mat = []
         for reg in REGIONS:
             multi_file = MULTI_SAVE_FILE.format(dir=TOP_DIR,
                                                 sen_type=sen_type,
@@ -118,49 +126,41 @@ if __name__ == '__main__':
             diag_acc = np.diag(mean_acc)
             source_by_time_mat.append(diag_acc[None, ...])
 
+        source_by_time_mat = np.concatenate(source_by_time_mat)
 
-    source_by_time_mat = np.concatenate(source_by_time_mat)
-
-    combo_fig, ax = plt.subplots(figsize=(12, 18))
-    im = ax.imshow(source_by_time_mat, interpolation='nearest', aspect='auto',
+        im = ax.imshow(source_by_time_mat, interpolation='nearest', aspect='auto',
                    vmin=0.0, vmax=1.0)
 
-    combo_fig.suptitle('Rank Accuracy for {word} Decoding'.format(
+        num_time = len(time_win)
+        ax.set_xticks(np.arange(0, num_time, time_step))
+
+        min_time = 0.0
+        max_time = 0.5 * len(time_win) / time_step
+        label_time = np.arange(min_time, max_time, 0.5) + args.win_len * 0.002
+        ax.set_xticklabels(label_time)
+        ax.set_yticks(np.arange(len(REGIONS)))
+        if i_hemi == 0:
+            ax.set_yticklabels(REGIONS)
+        ax.tick_params(labelsize=ticklabelsize)
+
+        for i_time in label_time:
+            ax.axvline(x=i_time * time_step, color='k')
+        ax.set_title(HEMI_TITLES[hemi], fontsize=axistitlesize)
+
+    combo_fig.suptitle('Rank Accuracy over Time and Region for {word} Decoding'.format(
         word=PLOT_TITLE_WORD[word]), fontsize=suptitlesize)
 
-    num_time = len(time_win)
-    ax.set_xticks(np.arange(0, num_time, time_step))
-
-    min_time = 0.0
-    max_time = 0.5 * len(time_win) / time_step
-    label_time = np.arange(min_time, max_time, 0.5) + args.win_len*0.002
-    ax.set_xticklabels(label_time)
-
-    ax.set_yticks(np.arange(2*len(REGIONS)))
-    ax.set_yticklabels(REGIONS + REGIONS)
-    ax.tick_params(labelsize=ticklabelsize)
-
-    ax.axvline(x=0.625*time_step, color='k')
-    ax.axhline(y=len(REGIONS) - 0.5, color='k')
-    ax.text(-0.25, 0.75, 'Left', transform=ax.transAxes,
-            rotation=90, rotation_mode='anchor', size=axislettersize)
-    ax.text(-0.25, 0.25, 'Right', transform=ax.transAxes,
-            rotation=90, rotation_mode='anchor', size=axislettersize)
-
     cbar = combo_fig.colorbar(im)
-
-    combo_fig.text(-0.2, 0.5, 'ROI', va='center',
-                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
     combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
-            '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+            '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_horiz_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
                 win_len=args.win_len,
                 overlap=args.overlap,
                 num_instances=args.num_instances
             ), bbox_inches='tight')
     combo_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_horiz_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
             exp=experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime,
             avgTest=args.avgTest,
             win_len=args.win_len,
