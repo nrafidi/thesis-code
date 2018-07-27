@@ -77,9 +77,9 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
-    combo_fig = plt.figure(figsize=(12*len(HEMIS)+1.0, 8))
+    combo_fig = plt.figure(figsize=(13.5*len(HEMIS), 8))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, len(HEMIS)),
-                          axes_pad=1.1, share_all=True, aspect=False)
+                          axes_pad=1.5, share_all=True, aspect=False)
     # cbar_mode='single', cbar_location='right',
     #                       cbar_pad=0.5,
     for i_hemi, hemi in enumerate(HEMIS):
