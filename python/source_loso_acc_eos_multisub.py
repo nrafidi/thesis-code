@@ -136,15 +136,15 @@ if __name__ == '__main__':
 
         min_time = 0.0
         max_time = 0.5 * len(time_win) / time_step
-        label_time = np.arange(min_time, max_time, 0.5) + args.win_len * 0.002
-        ax.set_xticklabels(label_time)
+        label_time = np.arange(min_time, max_time, 0.5)
+        ax.set_xticklabels(label_time + args.win_len * 0.002)
         ax.set_yticks(np.arange(len(REGIONS)))
         if i_hemi == 0:
             ax.set_yticklabels(REGIONS)
         ax.tick_params(labelsize=ticklabelsize)
 
         for i_time in label_time:
-            ax.axvline(x=i_time * time_step, color='k')
+            ax.axvline(x=i_time * 2 * time_step, color='k')
         ax.set_title(HEMI_TITLES[hemi], fontsize=axistitlesize)
 
     combo_fig.suptitle('Rank Accuracy over Time and Region for {word} Decoding'.format(
