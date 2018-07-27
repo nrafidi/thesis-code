@@ -79,7 +79,7 @@ if __name__ == '__main__':
     combo_fig = plt.figure(figsize=(9*len(HEMIS), 8))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, len(HEMIS)),
                           axes_pad=0.7, cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.5, share_all=True, aspect=True)
+                          cbar_pad=0.5, share_all=True, aspect=False)
     for i_hemi, hemi in enumerate(HEMIS):
         ax = combo_grid[i_hemi]
         source_by_time_mat = []
