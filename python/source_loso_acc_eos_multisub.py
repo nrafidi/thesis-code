@@ -161,7 +161,7 @@ if __name__ == '__main__':
     for font_objects in cbar.ax.yaxis.get_ticklabels():
         font_objects.set_size(ticklabelsize)
     combo_fig.text(0.170, 0.06, 'Max', ha='center', fontsize=axislabelsize)
-    combo_fig.text(0.85, 0.06, 'Max', ha='center', fontsize=axislabelsize)
+    combo_fig.text(0.84, 0.06, 'Max', ha='center', fontsize=axislabelsize)
     combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.text(0.04, 0.5, 'ROI', va='center',
                    rotation=90, rotation_mode='anchor', fontsize=axislabelsize)
