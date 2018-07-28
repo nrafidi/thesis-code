@@ -58,7 +58,7 @@ if __name__ == '__main__':
     legendfontsize = 16
     axislabelsize = 18
     suptitlesize = 25
-    axistitlesize = 20
+    axistitlesize = 22
     axislettersize = 20
 
     if args.avgTime == 'T':
@@ -77,11 +77,11 @@ if __name__ == '__main__':
     time_step = int(250 / args.overlap)
     time_adjust = args.win_len * 0.002 * time_step
 
-    combo_fig = plt.figure(figsize=(13.5*len(HEMIS), 8))
+    combo_fig = plt.figure(figsize=(14*len(HEMIS), 8))
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, len(HEMIS)),
-                          axes_pad=1.5, share_all=True, aspect=False)
-    # cbar_mode='single', cbar_location='right',
-    #                       cbar_pad=0.5,
+                          axes_pad=1.5, share_all=True, aspect=False,
+                          cbar_mode='single', cbar_location='right',
+                          cbar_pad=0.2, cbar_size='8%')
     for i_hemi, hemi in enumerate(HEMIS):
         ax = combo_grid[i_hemi]
         source_by_time_mat = []
@@ -153,11 +153,14 @@ if __name__ == '__main__':
             ax.axvline(x=i_time * 2 * time_step, color='k')
         ax.set_title(HEMI_TITLES[hemi], fontsize=axistitlesize)
 
-    combo_fig.suptitle('Rank Accuracy over Time and Region for {word} Decoding'.format(
+    combo_fig.suptitle('{word} Decoding'.format(
         word=PLOT_TITLE_WORD[word]), fontsize=suptitlesize)
 
-    # cbar = combo_grid.cbar_axes[0].colorbar(im)
-    # combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
+    cbar = combo_grid.cbar_axes[0].colorbar(im)
+
+    for font_objects in cbar.ax.yaxis.get_ticklabels():
+        font_objects.set_size(ticklabelsize)
+    combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_horiz_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
