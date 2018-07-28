@@ -141,9 +141,9 @@ if __name__ == '__main__':
         label_time = np.arange(min_time, max_time, 0.5)
         ax.set_xticklabels(label_time + args.win_len * 0.002)
         ax.set_yticks(np.arange(len(REGIONS)))
-        ax.text(-0.05, 1.02, string.ascii_uppercase[i_hemi], transform=ax.transAxes,
+        ax.text(-0.05, 1.00, string.ascii_uppercase[i_hemi], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
-        ax.text(-0.05, -0.09, string.ascii_uppercase[i_hemi+2], transform=ax.transAxes,
+        ax.text(-0.05, -0.15, string.ascii_uppercase[i_hemi+2], transform=ax.transAxes,
                 size=axislettersize, weight='bold')
         if i_hemi == 0:
             ax.set_yticklabels(REGIONS)
