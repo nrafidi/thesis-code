@@ -81,7 +81,7 @@ if __name__ == '__main__':
     combo_grid = AxesGrid(combo_fig, 111, nrows_ncols=(1, len(HEMIS)),
                           axes_pad=1.5, share_all=True, aspect=False,
                           cbar_mode='single', cbar_location='right',
-                          cbar_pad=0.2, cbar_size='8%')
+                          cbar_pad=0.2, cbar_size='5%')
     for i_hemi, hemi in enumerate(HEMIS):
         ax = combo_grid[i_hemi]
         source_by_time_mat = []
@@ -160,7 +160,11 @@ if __name__ == '__main__':
 
     for font_objects in cbar.ax.yaxis.get_ticklabels():
         font_objects.set_size(ticklabelsize)
-    combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize)
+    combo_fig.text(0.5, 0.04, 'Time Relative to Last Word Onset (s)', ha='center', fontsize=axislabelsize, weight='bold')
+    combo_fig.text(0.04, 0.5, 'ROI', va='center',
+                   rotation=90, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
+    combo_fig.text(-0.04, 0.5, 'Rank Accuracy', va='center',
+                   rotation=270, rotation_mode='anchor', fontsize=axislabelsize, weight='bold')
     combo_fig.savefig(
             '/home/nrafidi/thesis_figs/{exp}_eos_avg-source_horiz_multisub_{sen_type}_{word}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
                 exp=experiment, sen_type=sen_type, word=word, alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
