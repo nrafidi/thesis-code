@@ -23,7 +23,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(['krns2'],
                                    batch_exp.OVERLAPS,
                                    [True],
                                    batch_exp.ALGS,
@@ -89,17 +89,17 @@ if __name__ == '__main__':
                                                 inst=ni,
                                                 rsP=rs,
                                                 mode='acc')
-                if os.path.isfile(complete_job + '.npz') and rs > 99:
-                    result = np.load(complete_job + '.npz')
-                    if rs == 0:
-                        l_ints = result['l_ints']
-                        win_starts = result['win_starts']
-                        time = result['time']
-                        proc = result['proc']
-                    cv_membership.append(result['cv_membership'][0])
-                    tgm_acc.append(result['tgm_acc'][None, ...])
-                    tgm_pred.append(result['tgm_pred'][None, ...])
-                    continue
+                # if os.path.isfile(complete_job + '.npz'):
+                #     result = np.load(complete_job + '.npz')
+                #     if rs == 0:
+                #         l_ints = result['l_ints']
+                #         win_starts = result['win_starts']
+                #         time = result['time']
+                #         proc = result['proc']
+                #     cv_membership.append(result['cv_membership'][0])
+                #     tgm_acc.append(result['tgm_acc'][None, ...])
+                #     tgm_pred.append(result['tgm_pred'][None, ...])
+                #     continue
                 tgm_acc_perm = []
                 tgm_pred_perm = []
                 cv_membership_perm = []
