@@ -55,7 +55,8 @@ if __name__ == '__main__':
         top_dir = TOP_DIR.format(exp=exp)
 
         perm_list = batch_exp.RANDOM_STATES
-
+        print(sen)
+        print(word)
         complete_job_perm = SAVE_FILE.format(dir=top_dir,
                                         sen_type=sen,
                                         word=word,
@@ -76,6 +77,7 @@ if __name__ == '__main__':
             tgm_pred = []
             cv_membership = []
             for rs in perm_list:
+                print(rs)
                 complete_job = SAVE_FILE.format(dir=top_dir,
                                                 sen_type=sen,
                                                 word=word,
@@ -139,7 +141,7 @@ if __name__ == '__main__':
                     tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
                     tgm_pred_perm = np.concatenate(tgm_pred_perm, axis=0)
 
-                    print(tgm_acc_perm.shape)
+                    # print(tgm_acc_perm.shape)
 
                     tgm_acc.append(tgm_acc_perm[None, ...])
                     tgm_pred.append(tgm_pred_perm[None, ...])
