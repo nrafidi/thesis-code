@@ -103,7 +103,7 @@ if __name__ == '__main__':
             was_success = True
         else:
             was_success = False
-
+        skipped=False
         if not was_success:
             if not os.path.isfile(err_str) or not os.path.isfile(out_str):
                 # print('Job {} Did Not Run'.format(job_str))
@@ -112,6 +112,7 @@ if __name__ == '__main__':
                 with open(out_str, 'r') as fid:
                     out_info = fid.read()
                 if 'Experiment parameters not valid.' in out_info:
+                    skipped=True
                     skipped_jobs += 1
                 elif os.stat(err_str).st_size != 0:
                     with open(err_str, 'r') as fid:
@@ -120,11 +121,13 @@ if __name__ == '__main__':
                             if 'MemoryError' in err_file:
                                 print('Job {} Failed Memory Error'.format(job_str))
                             elif 'IndexError' in err_file and word=='noun2' and exp == 'PassAct3':
+                                skipped=True
                                 skipped_jobs += 1
                             else:
                                 print(err_file)
                                 print(grid)
-
+        if not was_success and not skipped:
+            print('job_id {} missing'.format(job_id))
         job_id += 1
 
     print('{}/{} jobs succeeded'.format(successful_jobs, job_id - skipped_jobs))
