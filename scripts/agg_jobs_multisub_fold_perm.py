@@ -23,7 +23,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(['krns2'],
+    param_grid = itertools.product(batch_exp.EXPERIMENTS,
                                    batch_exp.OVERLAPS,
                                    [True],
                                    batch_exp.ALGS,
