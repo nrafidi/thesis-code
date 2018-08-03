@@ -108,8 +108,7 @@ if __name__ == '__main__':
                                     errfile=err_str,
                                     outfile=out_str)
 
-        if job_id in [1538, 2184, 7517, 8547, 12934, 16974, 18793, 18827, 18913, 19251,
-                      19984, 20928, 23622, 24436, 25597, 29731, 29792]:
+        if job_id in [30969, 31610]:
             call(call_str, shell=True)
         job_id += 1
 
