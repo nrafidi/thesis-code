@@ -135,8 +135,8 @@ if __name__ == '__main__':
         #                          rsP=rs,
         #                          mode='acc')
 
-
-        call(call_str, shell=True)
+        if job_id > 60000:
+            call(call_str, shell=True)
         job_id += 1
 
         while int(check_output(JOB_Q_CHECK, shell=True)) >= 50:
