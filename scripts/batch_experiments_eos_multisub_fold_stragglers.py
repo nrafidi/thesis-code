@@ -135,7 +135,7 @@ if __name__ == '__main__':
         #                          rsP=rs,
         #                          mode='acc')
 
-        if job_id in [62207, 62868]:
+        if job_id in [62207, 62868, 79568, 79580, 80398]:
             print(grid)
             call(call_str, shell=True)
         job_id += 1
