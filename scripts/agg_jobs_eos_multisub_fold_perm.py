@@ -58,6 +58,12 @@ if __name__ == '__main__':
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
 
+        num_folds = len(batch_exp.FOLDS)
+        if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
+            num_folds /= 2
+        if sen in ['active', 'passive']:
+            num_folds /= 2
+
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
 
@@ -110,7 +116,7 @@ if __name__ == '__main__':
                 tgm_acc_perm = []
                 tgm_pred_perm = []
                 cv_membership_perm = []
-                for fold in batch_exp.FOLDS:
+                for fold in range(num_folds):
                     print('{}:{}'.format(rs, fold))
                     fname = NEW_SAVE_FILE.format(dir=top_dir,
                                              sen_type=sen,
@@ -127,8 +133,7 @@ if __name__ == '__main__':
                                              fold=fold)
 
                     if not os.path.isfile(fname + '.npz'):
-                        print('{} missing'.format(fname))
-                        break
+                        raise ValueError('{} missing'.format(fname))
 
                     result = np.load(fname + '.npz')
                     if fold == 0:
@@ -140,11 +145,7 @@ if __name__ == '__main__':
                     tgm_acc_perm.append(result['tgm_acc'])
                     tgm_pred_perm.append(result['tgm_pred'])
 
-                num_folds = len(batch_exp.FOLDS)
-                if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
-                    num_folds /= 2
-                if sen in ['active', 'passive']:
-                    num_folds /= 2
+
                 if len(tgm_acc_perm) == num_folds:
                     tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
                     tgm_pred_perm = np.concatenate(tgm_pred_perm, axis=0)
