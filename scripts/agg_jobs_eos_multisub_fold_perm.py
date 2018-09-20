@@ -83,7 +83,6 @@ if __name__ == '__main__':
             tgm_pred = []
             cv_membership = []
             for rs in perm_list:
-                print(rs)
                 complete_job = SAVE_FILE.format(dir=top_dir,
                                                 sen_type=sen,
                                                 word=word,
@@ -112,7 +111,7 @@ if __name__ == '__main__':
                 tgm_pred_perm = []
                 cv_membership_perm = []
                 for fold in batch_exp.FOLDS:
-                    print('\t{}'.format(fold))
+                    print('{}:{}'.format(rs, fold))
                     fname = NEW_SAVE_FILE.format(dir=top_dir,
                                              sen_type=sen,
                                              word=word,
@@ -149,7 +148,7 @@ if __name__ == '__main__':
                 if len(tgm_acc_perm) == num_folds:
                     tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
                     tgm_pred_perm = np.concatenate(tgm_pred_perm, axis=0)
-
+                    print(rs)
                     print(tgm_acc_perm.shape)
 
                     tgm_acc.append(tgm_acc_perm[None, ...])
@@ -169,7 +168,7 @@ if __name__ == '__main__':
             if len(tgm_acc) == len(perm_list):
                 tgm_acc = np.concatenate(tgm_acc, axis=0)
                 tgm_pred = np.concatenate(tgm_pred, axis=0)
-
+                print(grid)
                 print(tgm_acc.shape)
 
                 np.savez_compressed(complete_job_perm + '.npz',
