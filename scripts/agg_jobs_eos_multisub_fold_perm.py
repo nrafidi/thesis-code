@@ -35,7 +35,7 @@ if __name__ == '__main__':
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
     perm_list = batch_exp.RANDOM_STATES
-    job_id = 0
+    job_id = -1
     successful_jobs = 0
     skipped_jobs = 0
     for grid in param_grid:
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
         if word in ['propid', 'voice', 'senlen', 'noun1'] and sen != 'pooled':
             continue
-
+        job_id += 1
         num_folds = len(batch_exp.FOLDS)
         if exp == 'PassAct3' and word in ['agent', 'patient', 'propid']:
             num_folds /= 2
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                 tgm_pred_perm = []
                 cv_membership_perm = []
                 for fold in range(num_folds):
-                    print('{}:{}'.format(rs, fold))
+                    print('{}:{}:{}'.format(job_id, rs, fold))
                     fname = NEW_SAVE_FILE.format(dir=top_dir,
                                              sen_type=sen,
                                              word=word,
@@ -149,7 +149,7 @@ if __name__ == '__main__':
                 if len(tgm_acc_perm) == num_folds:
                     tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
                     tgm_pred_perm = np.concatenate(tgm_pred_perm, axis=0)
-                    print(rs)
+                    print('{}:{}'.format(job_id, rs))
                     print(tgm_acc_perm.shape)
 
                     tgm_acc.append(tgm_acc_perm[None, ...])
