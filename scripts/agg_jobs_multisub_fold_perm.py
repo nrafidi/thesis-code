@@ -34,7 +34,7 @@ if __name__ == '__main__':
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
-    job_id = 0
+    job_id = -1
     successful_jobs = 0
     skipped_jobs = 0
     for grid in param_grid:
@@ -55,8 +55,9 @@ if __name__ == '__main__':
         top_dir = TOP_DIR.format(exp=exp)
 
         perm_list = batch_exp.RANDOM_STATES
-        print(sen)
-        print(word)
+        # print(sen)
+        # print(word)
+        job_id += 1
         complete_job_perm = SAVE_FILE.format(dir=top_dir,
                                         sen_type=sen,
                                         word=word,
@@ -77,7 +78,7 @@ if __name__ == '__main__':
             tgm_pred = []
             cv_membership = []
             for rs in perm_list:
-                print(rs)
+                # print(rs)
                 complete_job = SAVE_FILE.format(dir=top_dir,
                                                 sen_type=sen,
                                                 word=word,
@@ -105,7 +106,13 @@ if __name__ == '__main__':
                 tgm_acc_perm = []
                 tgm_pred_perm = []
                 cv_membership_perm = []
-                for fold in batch_exp.FOLDS:
+
+                num_folds = len(batch_exp.FOLDS)
+                if exp == 'PassAct3' and word == 'noun2':
+                    num_folds /= 2
+
+                for fold in range(num_folds):
+                    print('{}:{}:{}'.format(job_id, rs, fold))
                     fname = NEW_SAVE_FILE.format(dir=top_dir,
                                              sen_type=sen,
                                              word=word,
@@ -134,9 +141,7 @@ if __name__ == '__main__':
                     tgm_acc_perm.append(result['tgm_acc'])
                     tgm_pred_perm.append(result['tgm_pred'])
 
-                num_folds = len(batch_exp.FOLDS)
-                if exp == 'PassAct3' and word == 'noun2':
-                    num_folds /= 2
+
                 if len(tgm_acc_perm) == num_folds:
                     tgm_acc_perm = np.concatenate(tgm_acc_perm, axis=0)
                     tgm_pred_perm = np.concatenate(tgm_pred_perm, axis=0)
@@ -159,6 +164,7 @@ if __name__ == '__main__':
                 tgm_acc = np.concatenate(tgm_acc, axis=0)
                 tgm_pred = np.concatenate(tgm_pred, axis=0)
 
+                print(job_id)
                 print(tgm_acc.shape)
 
                 np.savez_compressed(complete_job_perm + '.npz',
