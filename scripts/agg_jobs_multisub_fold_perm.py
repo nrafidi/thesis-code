@@ -152,10 +152,6 @@ if __name__ == '__main__':
                     tgm_pred.append(tgm_pred_perm[None, ...])
                     cv_membership.append(cv_membership_perm)
 
-                    tgm_acc_perm = []
-                    tgm_pred_perm = []
-                    cv_membership_perm = []
-
                     np.savez_compressed(complete_job + '.npz',
                                         l_ints=l_ints,
                                         cv_membership=cv_membership_perm,
@@ -164,6 +160,11 @@ if __name__ == '__main__':
                                         win_starts=win_starts,
                                         time=time,
                                         proc=proc)
+
+                    tgm_acc_perm = []
+                    tgm_pred_perm = []
+                    cv_membership_perm = []
+
             if len(tgm_acc) == len(perm_list):
                 tgm_acc = np.concatenate(tgm_acc, axis=0)
                 tgm_pred = np.concatenate(tgm_pred, axis=0)
