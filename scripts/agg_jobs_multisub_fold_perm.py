@@ -152,6 +152,10 @@ if __name__ == '__main__':
                     tgm_pred.append(tgm_pred_perm[None, ...])
                     cv_membership.append(cv_membership_perm)
 
+                    tgm_acc_perm = []
+                    tgm_pred_perm = []
+                    cv_membership_perm = []
+
                     np.savez_compressed(complete_job + '.npz',
                                         l_ints=l_ints,
                                         cv_membership=cv_membership_perm,
