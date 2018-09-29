@@ -161,11 +161,11 @@ if __name__ == '__main__':
                                         time=time,
                                         proc=proc)
 
-                    tgm_acc_perm = []
-                    tgm_pred_perm = []
-                    cv_membership_perm = []
 
             if len(tgm_acc) == len(perm_list):
+                tgm_acc_perm = []
+                tgm_pred_perm = []
+                cv_membership_perm = []
                 tgm_acc = np.concatenate(tgm_acc, axis=0)
                 tgm_pred = np.concatenate(tgm_pred, axis=0)
 
