@@ -54,7 +54,7 @@ if __name__ == '__main__':
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
 
-        perm_list = batch_exp.RANDOM_STATES
+        perm_list = range(100) #batch_exp.RANDOM_STATES
         # print(sen)
         # print(word)
         job_id += 1
