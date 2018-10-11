@@ -130,16 +130,19 @@ if __name__ == '__main__':
                     if not os.path.isfile(fname + '.npz'):
                         print('{} missing'.format(fname))
                         break
-
-                    result = np.load(fname + '.npz')
-                    if fold == 0:
-                        l_ints = result['l_ints']
-                        win_starts = result['win_starts']
-                        time = result['time']
-                        proc = result['proc']
-                    cv_membership_perm.append(result['cv_membership'][0])
-                    tgm_acc_perm.append(result['tgm_acc'])
-                    tgm_pred_perm.append(result['tgm_pred'])
+                    try:
+                        result = np.load(fname + '.npz')
+                        if fold == 0:
+                            l_ints = result['l_ints']
+                            win_starts = result['win_starts']
+                            time = result['time']
+                            proc = result['proc']
+                        cv_membership_perm.append(result['cv_membership'][0])
+                        tgm_acc_perm.append(result['tgm_acc'])
+                        tgm_pred_perm.append(result['tgm_pred'])
+                    except:
+                        print('{} broken'.format(fname))
+                        break
 
 
                 if len(tgm_acc_perm) == num_folds:
