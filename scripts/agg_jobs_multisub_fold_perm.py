@@ -92,7 +92,7 @@ if __name__ == '__main__':
                                                 inst=ni,
                                                 rsP=rs,
                                                 mode='acc')
-                if os.path.isfile(complete_job + '.npz') and word=='noun1' and sen=='active':
+                if os.path.isfile(complete_job + '.npz'):
                     result = np.load(complete_job + '.npz')
                     if rs == 0:
                         l_ints = result['l_ints']
