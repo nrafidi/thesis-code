@@ -100,7 +100,7 @@ if __name__ == '__main__':
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
-    perm_list = range(100)
+    perm_list = range(200)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
