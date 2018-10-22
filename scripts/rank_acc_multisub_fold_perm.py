@@ -102,7 +102,7 @@ if __name__ == '__main__':
                                                                 np.max(perm_list)),
                                              mode='rankacc')
 
-        if not os.path.isfile(complete_job_perm_rank + '.npz'):
+        if not os.path.isfile(complete_job_perm_rank + '.npz') and os.path.isfile(complete_job_perm + '.npz'):
             result = np.load(complete_job_perm + '.npz')
             tgm_pred = result['tgm_pred']
             num_perm = tgm_pred.shape[0]
