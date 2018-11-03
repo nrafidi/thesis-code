@@ -23,7 +23,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(['PassAct3'],
+    param_grid = itertools.product(['krns2', 'PassAct3'],
                                    batch_exp.OVERLAPS,
                                    [True],
                                    batch_exp.ALGS,
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         dir_str = batch_exp.JOB_DIR.format(exp=exp)
         top_dir = TOP_DIR.format(exp=exp)
 
-        perm_list = range(100, 200) #batch_exp.RANDOM_STATES
+        perm_list = range(0, 50) #batch_exp.RANDOM_STATES
         # print(sen)
         # print(word)
         job_id += 1
