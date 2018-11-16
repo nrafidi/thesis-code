@@ -40,7 +40,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(['krns2'],
+    param_grid = itertools.product(['krns2', 'PassAct3'],
                                    batch_exp.OVERLAPS,
                                    [True],
                                    batch_exp.ALGS,
@@ -51,7 +51,7 @@ if __name__ == '__main__':
                                    batch_exp.WIN_LENS,
                                    batch_exp.SEN_TYPES,
                                    batch_exp.WORDS)
-    perm_list = range(200)
+    perm_list = range(0, 50)
     job_id = 0
     successful_jobs = 0
     skipped_jobs = 0
