@@ -111,9 +111,11 @@ if __name__ == '__main__':
             multi_fold_acc = []
             for i_perm in range(num_perm):
                 cv_membership = cv_membership_all[i_perm]
+                print(cv_membership)
                 fold_labels = []
                 for i in range(len(cv_membership)):
                     l_set = l_ints[cv_membership[i]]
+                    print(l_set)
                     fold_labels.append(l_set)
                 print(len(fold_labels))
                 tgm_rank = rank_from_pred(tgm_pred[i_perm, ...], fold_labels)
