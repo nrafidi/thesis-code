@@ -107,10 +107,12 @@ if __name__ == '__main__':
             tgm_pred = result['tgm_pred']
             num_perm = tgm_pred.shape[0]
             l_ints = result['l_ints']
+            print(l_ints)
+            print(l_ints.shape)
             cv_membership_all = result['cv_membership']
             multi_fold_acc = []
             for i_perm in range(num_perm):
-                cv_membership = cv_membership_all[i_perm]
+                cv_membership = np.where(cv_membership_all[i_perm])
                 print(cv_membership)
                 print(cv_membership.shape)
                 fold_labels = []
