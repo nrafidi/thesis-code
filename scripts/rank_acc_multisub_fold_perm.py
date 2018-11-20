@@ -112,12 +112,15 @@ if __name__ == '__main__':
             for i_perm in range(num_perm):
                 cv_membership = cv_membership_all[i_perm]
                 print(cv_membership)
+                print(cv_membership.shape)
                 fold_labels = []
                 for i in range(len(cv_membership)):
+                    print(cv_membership[i])
                     l_set = l_ints[cv_membership[i]]
                     print(l_set)
                     fold_labels.append(l_set)
                 print(len(fold_labels))
+                raise
                 tgm_rank = rank_from_pred(tgm_pred[i_perm, ...], fold_labels)
                 multi_fold_acc.append(tgm_rank[None, ...])
             multi_fold_acc = np.concatenate(multi_fold_acc, axis=0)
