@@ -68,6 +68,7 @@ if __name__ == '__main__':
     parser.add_argument('--avgTest', default='T')
     parser.add_argument('--partial', action='store_true')
     parser.add_argument('--bind', action='store_true')
+    parser.add_argument('--num_perms', type=int, default=199)
     args = parser.parse_args()
 
     if args.avgTime == 'T':
@@ -88,6 +89,7 @@ if __name__ == '__main__':
 
     win_len = args.win_len
     num_instances = args.num_instances
+    num_perms = args.num_perms
 
     ticklabelsize = 14
     legendfontsize = 28
@@ -228,7 +230,7 @@ if __name__ == '__main__':
                                                                          avgTm=args.avgTime,
                                                                          avgTst=args.avgTest,
                                                                          inst=args.num_instances,
-                                                                         rsP='{}-{}'.format(0, 99),
+                                                                         rsP='{}-{}'.format(0, num_perms),
                                                                          rank_str='rank',
                                                                          mode='acc')
 
@@ -300,20 +302,22 @@ if __name__ == '__main__':
     sen_fig.subplots_adjust(top=0.85)
     sen_fig.suptitle('Rank Accuracy Over Time\nPost-Sentence', fontsize=suptitlesize)
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc{ps}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.pdf'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc{ps}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_np{num_perms}.pdf'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
             num_instances=num_instances,
-            ps=ps
+            ps=ps,
+            num_perms=num_perms
         ), bbox_inches='tight')
     sen_fig.savefig(
-        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc{ps}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}.png'.format(
+        '/home/nrafidi/thesis_figs/{exp}_eos-test_diag_acc{ps}_multisub_{sen_type}_{alg}_win{win_len}_ov{overlap}_ni{num_instances}_avgTime{avgTime}_avgTest{avgTest}_np{num_perms}.png'.format(
             exp=args.experiment, sen_type='all', alg=args.alg, avgTime=args.avgTime, avgTest=args.avgTest,
             win_len=win_len,
             overlap=args.overlap,
             num_instances=num_instances,
-            ps=ps
+            ps=ps,
+            num_perms=num_perms
         ), bbox_inches='tight')
 
     plt.show()
