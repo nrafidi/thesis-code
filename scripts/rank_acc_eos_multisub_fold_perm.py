@@ -89,7 +89,7 @@ def bool_to_str(bool_var):
 
 
 if __name__ == '__main__':
-    param_grid = itertools.product(batch_exp.EXPERIMENTS,
+    param_grid = itertools.product(['PassAct3'],
                                    batch_exp.OVERLAPS,
                                    [True],
                                    batch_exp.ALGS,
@@ -98,8 +98,8 @@ if __name__ == '__main__':
                                    batch_exp.DO_TST_AVGS,
                                    batch_exp.NUM_INSTANCESS,
                                    batch_exp.WIN_LENS,
-                                   batch_exp.SEN_TYPES,
-                                   batch_exp.WORDS)
+                                   ['pooled'],
+                                   ['propid'])
     perm_list = range(200)
     job_id = 0
     successful_jobs = 0
