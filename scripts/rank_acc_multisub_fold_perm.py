@@ -22,7 +22,10 @@ def rank_from_pred(tgm_pred, fold_labels):
                 curr_pred_time = curr_pred[j, k]
                 print(curr_pred_time.shape)
                 if curr_pred_time.shape[0] != len(curr_labels):
-                    assert len(np.unique(curr_labels)) == 1
+                    if len(np.unique(curr_labels)) != 1:
+                        print(curr_pred_time.shape)
+                        print(curr_labels)
+                    # assert len(np.unique(curr_labels)) == 1
                 for l in range(curr_pred_time.shape[0]):
                     label_sort = np.argsort(np.squeeze(curr_pred_time[l, ...]))
                     label_sort = label_sort[::-1]
@@ -112,7 +115,7 @@ if __name__ == '__main__':
             cv_membership_all = result['cv_membership']
             multi_fold_acc = []
             for i_perm in range(num_perm):
-                cv_membership = np.where(cv_membership_all[i_perm])
+                cv_membership = cv_membership_all[i_perm] #np.where(cv_membership_all[i_perm])
                 print(cv_membership)
                 print(cv_membership.shape)
                 fold_labels = []
