@@ -73,7 +73,7 @@ if __name__ == '__main__':
                                                            np.max(perm_list)),
                                         mode='acc')
 
-        if not os.path.isfile(complete_job_perm + '.npz'):
+        if True:#not os.path.isfile(complete_job_perm + '.npz'):
             tgm_acc = []
             tgm_pred = []
             cv_membership = []
@@ -166,15 +166,15 @@ if __name__ == '__main__':
 
 
             if len(tgm_acc) == len(perm_list):
-                tgm_acc_perm = []
-                tgm_pred_perm = []
-                cv_membership_perm = []
+                # tgm_acc_perm = []
+                # tgm_pred_perm = []
+                # cv_membership_perm = []
                 tgm_acc = np.concatenate(tgm_acc, axis=0)
                 tgm_pred = np.concatenate(tgm_pred, axis=0)
 
                 print(job_id)
                 print(tgm_acc.shape)
-
+                print(cv_membership)
                 np.savez_compressed(complete_job_perm + '.npz',
                                     l_ints=l_ints,
                                     cv_membership=cv_membership,
