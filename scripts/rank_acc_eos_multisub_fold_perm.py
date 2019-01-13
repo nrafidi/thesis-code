@@ -67,11 +67,13 @@ def rank_from_pred_bind(tgm_pred, fold_labels):
                     # print(rank_acc[i, j, k])
                 else:
                     print('in else')
+                    print(curr_pred[j, k].shape)
+                    assert len(np.unique(curr_label)) == 1
                     label_sort = np.argsort(np.squeeze(curr_pred[j, k]))
                     label_sort = label_sort[::-1]
                     try:
-                        rank_corr = float(np.where(label_sort == curr_label)[0][0])
-                        rank_inc = float(np.where(label_sort == OPPOSITES[curr_label])[0][0])
+                        rank_corr = float(np.where(label_sort == curr_label[0])[0][0])
+                        rank_inc = float(np.where(label_sort == OPPOSITES[curr_label[0]])[0][0])
                     except:
                         print(curr_label)
                         print(label_sort)
