@@ -8,7 +8,14 @@ TOP_DIR = '/share/volume0/nrafidi/{exp}_TGM_LOSO_EOS/'
 SAVE_FILE = '{dir}TGM-LOSO-EOS_multisub_{sen_type}_{word}_win{win_len}_ov{ov}_pr{perm}_' \
             'alg{alg}_adj-{adj}_avgTime{avgTm}_avgTest{avgTst}_ni{inst}_' \
             'rsPerm{rsP}_{mode}'
-
+OPPOSITES = {0:2,
+             1:7,
+             2:0,
+             3:5,
+             4:6,
+             5:3,
+             6:4,
+             7:1}
 
 def rank_from_pred(tgm_pred, fold_labels):
     rank_acc = np.empty(tgm_pred.shape)
