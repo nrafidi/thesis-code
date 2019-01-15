@@ -236,6 +236,7 @@ if __name__ == '__main__':
 
             rank_result_perm = np.load(rank_file_perm + '.npz')
             multi_fold_perm_acc = rank_result_perm['tgm_rank']
+            multi_fold_perm_acc = multi_fold_perm_acc[:100, ...]
             mean_acc_perm = np.mean(multi_fold_perm_acc, axis=1)
             pvals = np.empty((len(diag_acc),))
             for j_pt in range(len(diag_acc)):
@@ -261,7 +262,7 @@ if __name__ == '__main__':
 
             pval_thresh = bhy_multiple_comparisons_procedure(pvals, alpha=0.05, assume_independence=False)
             for i_pt in range(num_time):
-                if  diag_frac[i_pt]  == 1.0: # and pvals[i_pt] <= pval_thresh:
+                if  diag_frac[i_pt]  == 1.0 and pvals[i_pt] <= pval_thresh:
                     ax.scatter(i_pt, 1.05 + float(i_word)*0.02, color=color, marker='o')
                 # elif word == 'bind':
                 #     print(diag_frac[i_pt])
